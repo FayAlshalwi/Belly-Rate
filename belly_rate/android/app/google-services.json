@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "339149818580",
+    "project_id": "bellyrate",
+    "storage_bucket": "bellyrate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339149818580:android:042cb63b9022a9054f4941",
+        "android_client_info": {
+          "package_name": "com.example.belly_rate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339149818580-cdgg3fvk4bamf0mff193ve6118pfoa3s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDleltBOHKgBgqB7wFx1Mg3TuFzU-Luxto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339149818580-cdgg3fvk4bamf0mff193ve6118pfoa3s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "339149818580-89ki5mv3nf9bjk88cp6v01d4lva5v7ur.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bellyRate"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
