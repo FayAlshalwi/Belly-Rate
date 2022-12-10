@@ -51,6 +51,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController IDController = TextEditingController();
+  TextEditingController catController = TextEditingController();
   File? image;
   File? image2;
   File? image3;
@@ -275,6 +276,19 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   labelText: 'Name',
                 ),
               ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: TextField(
+                controller: catController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Categorey',
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
             ),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -548,6 +562,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                         image3!,
                         image4!,
                         nameController.text,
+                        catController.text,
                         descriptionController.text,
                         locationController.text,
                         phoneNumberController.text,
