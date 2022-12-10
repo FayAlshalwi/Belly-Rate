@@ -283,7 +283,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 controller: catController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Categorey',
+                  labelText: 'Category',
                 ),
               ),
             ),
