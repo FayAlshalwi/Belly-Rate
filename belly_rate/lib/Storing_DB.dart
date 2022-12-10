@@ -64,7 +64,7 @@ addData(String ID, File img, File img2, File img3, File img4, String name,
     'location': loc,
     'phoneNumber': phone,
     'priceAvg': price,
-    'categorey': cat,
+    'category': cat,
     "photos": [url, url2, url3, url4],
   });
 }
