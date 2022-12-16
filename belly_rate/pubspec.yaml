@@ -51,7 +51,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   firebase_core: ^2.3.0
+  url_launcher: ^6.1.7
+  carousel_slider: ^4.2.1
   cloud_firestore: ^4.1.0
+  google_fonts: ^3.0.1
   path: ^1.8.0
   image_picker: ^0.8.4
   transparent_image: ^2.0.0
@@ -68,8 +71,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+   - asset/category_img/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

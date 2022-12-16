@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -5,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'category_parts/category_slider.dart';
+import 'category_parts/restaurant_model.dart';
 import 'firebase_options.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,7 +33,7 @@ class _HomePage extends State<HomePage> {
     double displayOfWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Container(),
+      body: Center(child: listOfWidgets[currentIndex]),
       bottomNavigationBar: Container(
           margin: EdgeInsets.all(displayOfWidth * .05),
           height: displayOfWidth * .155,
@@ -149,5 +154,68 @@ class _HomePage extends State<HomePage> {
     'Favorite',
     'History',
     'Profile',
+  ];
+
+  List<Widget> listOfWidgets = [
+    //home page container
+    Container(
+        child: Column(
+      children: [
+        SizedBox(
+          height: 100,
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Recommended Restaurants",
+            style: TextStyle(
+                color: Color(0xFF5a3769),
+                fontSize: 25,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Saudi Arabia, Riyadh",
+            style: TextStyle(
+                color: Colors.grey, fontSize: 14, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(
+          height: 270,
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Discover Restaurants",
+            style: TextStyle(
+                color: Color(0xFF5a3769),
+                fontSize: 25,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        CategorySlider(),
+        SizedBox(
+          height: 10,
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Near you",
+            style: TextStyle(
+                color: Color(0xFF5a3769),
+                fontSize: 25,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+      ],
+    )),
+    //Favorite page container
+    Container(child: Text('Favorite')),
+    //History page container
+    Container(child: Text('History')),
+    //Profile page container
+    Container(child: Text('Profile')),
   ];
 }
