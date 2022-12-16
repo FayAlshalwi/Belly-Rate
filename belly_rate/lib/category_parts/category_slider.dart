@@ -111,9 +111,6 @@ class _CategorySliderState extends State<CategorySlider> {
         itemBuilder: (BuildContext context, int index) {
           return buildContainerList(txt_color, heightM, index);
         },
-
-        //   // buildContainerList(txt_color, heightM),
-        // ],
       ),
     );
   }
@@ -122,8 +119,6 @@ class _CategorySliderState extends State<CategorySlider> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        // width: 200,
-        // color: Colors.purple[600],
         child: Card(
           child: InkWell(
             onTap: () {

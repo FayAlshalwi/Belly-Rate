@@ -22,7 +22,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
   @override
   Widget build(BuildContext context) {
     double heightM = MediaQuery.of(context).size.height / 30;
-    Color txt_color = Color(0xfff06c84);
+    Color txt_color = Colors.black;
     return Scaffold(
         appBar: AppBar(
           leading: const BackButton(
