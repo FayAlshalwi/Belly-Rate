@@ -13,7 +13,6 @@ import 'Storing_DB.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -541,7 +540,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             SizedBox(
               height: 10,
             ),
-            Container(
+            Container(    
                 height: 50,
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: ElevatedButton(
@@ -619,3 +618,138 @@ showAlertDialog(BuildContext context) {
     },
   );
 }
+
+void GetRecommendation() async{
+  final _firestore = FirebaseFirestore.instance;
+  //final _firebaseAuth = FirebaseAuth.instance;
+  //final UID = FirebaseAuth.instance.currentUser!.uid
+  final UID = '';
+  
+  //List<dynamic> RecommendationsList = [];
+  
+  final res = await _firestore
+                  .collection('Recommendation')
+                  .where("UserID", isEqualTo: UID)
+                  .where("isNotified", isEqualTo: false)
+                  .get();
+
+if (res.docs.isNotEmpty) {
+// Get RestaurantId              
+String RestaurantId = res.docs[0]['RestaurantId'];
+
+//set isNotified to true 
+ /*FirebaseFirestore.instance.collection('Recommendation')
+   .doc(FirebaseAuth.instance.currentUser!.uid)
+      .update({"isNotified": true });*/
+
+ContentOfNotification(RestaurantId);
+}
+
+}//GetRecommendation 
+
+void ContentOfNotification( String RestaurantId )async{
+  print(1);
+  final _firestore = FirebaseFirestore.instance;
+  //final _firebaseAuth = FirebaseAuth.instance;
+  //final UID = FirebaseAuth.instance.currentUser!.uid
+  final UID = '';
+  String category="";
+  String name ="";
+  String Photo=""; 
+
+  final res = await _firestore
+                  .collection('Restaurants')
+                  .where("ID", isEqualTo: RestaurantId)
+                  .get();
+print(2);
+     if (res.docs.isNotEmpty) {
+      print(3);
+         // Get category, name, photo  
+         category = res.docs[0]['category'];
+        print(category);
+         name = res.docs[0]['name'];
+        print(name);
+        
+        List<dynamic> Recommendationphotos = [];
+        /*Recommendationphotos = res.docs[0]['photos'];
+         if (Recommendationphotos.length != 0) {
+          print('not empty');}*/
+
+           try {
+          Recommendationphotos = res.docs[0]['photos'];
+          if (Recommendationphotos.length != 0) {
+            Photo = Recommendationphotos[0];
+            print('not empty');
+          }else{
+             print(' empty');
+             }
+              } catch (e) {
+                Photo = "";
+                }
+                print(Photo); 
+      }
+print('last');
+
+String NotificationContent = ""; 
+// NotificationContent 
+
+switch(category.toLowerCase() ){
+  
+  case ("american restaurant") :{
+    NotificationContent = "It seems that you like American restaurant!, how about trying $name.";
+    print(NotificationContent); 
+    break;
+  }
+
+  case ('french restaurant'):{
+    NotificationContent = "It seems that you like French restaurant!, how about trying $name.";
+    print(NotificationContent); 
+    break;
+  }
+
+  case("health food restaurant"):{
+    NotificationContent = "It seems that you like Health food restaurant!, how about trying $name.";
+    print(NotificationContent); 
+    break;
+  }
+
+  case("indian restaurant"):{
+    NotificationContent = "It seems that you like Indian restaurant!, how about trying $name.";
+    print(NotificationContent); 
+    break;
+  }
+
+  case("italian restaurant"):{
+    NotificationContent = "It seems that you like Italian restaurant!, how about trying $name.";
+    print(NotificationContent); 
+    break;
+  }
+
+  case("japanese restaurant"):{
+    NotificationContent = "It seems that you like Japanese restaurant!, how about trying $name.";
+    print(NotificationContent); 
+    break;
+  }
+
+   case("lebanese restaurant"):{
+    NotificationContent = "It seems that you like Lebanese restaurant!, how about trying $name.";
+    print(NotificationContent); 
+    break;
+  }
+
+   case("seafood restaurant"):{
+     NotificationContent = "It seems that you like Seafood restaurant!, how about trying $name.";
+    print(NotificationContent); 
+    break;
+  }
+  
+}//switch 
+
+
+
+}
+
+
+
+  
+
