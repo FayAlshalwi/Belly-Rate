@@ -211,9 +211,9 @@ class _CategorySliderState extends State<CategorySlider> {
     Category(name: "seafood", icon: "asset/category_img/seafood.png"),
     Category(name: "Health food", icon: "asset/category_img/healthFood.png"),
     Category(name: "Indian", icon: "asset/category_img/indian.png"),
-    Category(name: "American", icon: "asset/category_img/burger.png"),
+    Category(name: "American", icon: "asset/category_img/American.png"),
     Category(name: "Lebanese", icon: "asset/category_img/Lebanese.png"),
-    Category(name: "Japanese", icon: "asset/category_img/Japanese .png"),
+    Category(name: "Japanese", icon: "asset/category_img/Japanese.png"),
     Category(name: "Other", icon: "asset/category_img/other.png"),
   ];
 }
