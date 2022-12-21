@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -16,6 +15,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
 import 'Storing_DB.dart';
+import 'Notification.dart';
+import 'utilities.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/material.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,6 +28,48 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
+  
+  void initState() {
+    super.initState();
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        showDialog(
+          context: this.context,
+          builder: (context) => AlertDialog(
+            title: Text('Allow Notifications'),
+            content: Text('Belly Rate would like to send you notifications'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Don\'t Allow',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              TextButton(
+                  onPressed: () => AwesomeNotifications()
+                      .requestPermissionToSendNotifications()
+                      .then((_) => Navigator.pop(context)),
+                  child: Text(
+                    'Allow',
+                    style: TextStyle(
+                      color: Colors.teal,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ))
+            ],
+          ),
+        );
+      }
+    });
+    }
+
   var currentIndex = 0;
 
   @override
@@ -209,6 +255,16 @@ class _HomePage extends State<HomePage> {
                 fontWeight: FontWeight.bold),
           ),
         ),
+         TextButton (
+  onPressed: () => {
+    print('Dalal'),
+	//do something
+  createPlantFoodNotification('It seems that you like American restaurant!, how about trying KFC.'),
+  print('Dalal')
+  },
+  child: new Text('Click me'),
+),
+       
       ],
     )),
     //Favorite page container
