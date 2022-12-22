@@ -38,6 +38,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   image_picker: 0.8.5
   firebase_storage: ^11.0.6
+  firebase_auth: ^4.2.1
+  provider: ^6.0.5
   
 
 dev_dependencies:
@@ -58,6 +60,13 @@ dev_dependencies:
   path: ^1.8.0
   image_picker: ^0.8.4
   transparent_image: ^2.0.0
+  cupertino_icons: ^1.0.2
+  get: ^4.1.4
+  get_storage: ^2.0.2
+  cached_network_image: ^3.0.0
+  shimmer: ^2.0.0
+  provider:
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
