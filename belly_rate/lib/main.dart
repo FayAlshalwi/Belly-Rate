@@ -1,4 +1,5 @@
 import 'package:belly_rate/HomePage.dart';
+import 'package:belly_rate/models/restaurantModesl.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
-import 'Storing_DB.dart';
+import 'package:belly_rate/models/restaurantModesl.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,14 +24,12 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  static const String _title = 'Belly Rate';
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: _title,
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(title: const Text(_title)),
+        appBar: null,
         body: const MyStatefulWidget(),
       ),
     );
@@ -45,41 +44,15 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      // theme: ThemeData(
-      //   iconTheme: IconThemeData(color: Color(0xff7b39ed)),
-      //   inputDecorationTheme: InputDecorationTheme(
-      //       enabledBorder: OutlineInputBorder(
-      //         borderRadius: BorderRadius.circular(10),
-      //         borderSide: BorderSide(color: Colors.grey.shade400),
-      //       ),
-      //       border: OutlineInputBorder(
-      //         borderRadius: BorderRadius.circular(10),
-      //       )),
-      //   elevatedButtonTheme: ElevatedButtonThemeData(
-      //     style: ElevatedButton.styleFrom(
-      //         minimumSize: Size(double.infinity, 50),
-      //         shape: RoundedRectangleBorder(
-      //           borderRadius: BorderRadius.circular(8),
-      //         )),
-      //   ),
-      //   textTheme: TextTheme(
-      //       headline4:
-      //           TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-      //       subtitle1: TextStyle(
-      //         color: Color.fromARGB(255, 0, 0, 0),
-      //       )),
-      //   appBarTheme: AppBarTheme(
-      //       backgroundColor: Colors.transparent,
-      //       elevation: 0,
-      //       iconTheme: IconThemeData(color: Colors.black)),
-      //   primaryColor: Color(0xff7b39ed),
-      //   primarySwatch: primarySwatch,
-      // ),
       home: HomePage(),
     );
   }
