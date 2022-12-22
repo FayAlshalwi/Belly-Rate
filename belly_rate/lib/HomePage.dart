@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -68,7 +69,38 @@ class _HomePage extends State<HomePage> {
         );
       }
     });
+
+    
+    AwesomeNotifications().actionStream.listen((notification) {
+      if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
+        AwesomeNotifications().getGlobalBadgeCounter().then(
+              (value) =>
+                  AwesomeNotifications().setGlobalBadgeCounter(value - 1),
+            );
+      }
+
+      String? resID = notification.summary;
+      print(resID);
+
+      /*Navigator.pushAndRemoveUntil(
+        this.context,
+        MaterialPageRoute(
+          builder: (_) => HomePage(),
+        ),
+        (route) => route.isFirst,
+      );*/
     }
+    );
+
+    
+    }
+
+     @override
+  void dispose() {
+    AwesomeNotifications().actionSink.close();
+    AwesomeNotifications().createdSink.close();
+    super.dispose();
+  }
 
   var currentIndex = 0;
 
@@ -259,7 +291,7 @@ class _HomePage extends State<HomePage> {
   onPressed: () => {
     print('Dalal'),
 	//do something
-  createPlantFoodNotification('It seems that you like American restaurant!, how about trying KFC.'),
+  createPlantFoodNotification('It seems that you like American restaurant!, how about trying KFC.' , '134992'),
   print('Dalal')
   },
   child: new Text('Click me'),
