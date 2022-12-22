@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -37,8 +39,22 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  
+
+  final periodicTimer = Timer.periodic(
+  const Duration(seconds: 10),
+  (timer) {
+     print('Update user about remaining time');
+     //GetRecommendation();
+     ContentOfNotification('134992');
+
+  },
+);
+
   runApp(MyApp());
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -232,6 +248,8 @@ switch(category.toLowerCase() ){
 }//switch 
 
 //createPlantFoodNotification(NotificationContent , Photo);
+NotificationContent = "hhh";
+  createPlantFoodNotification(NotificationContent , RestaurantId);
 
 }
 
