@@ -65,9 +65,8 @@ dev_dependencies:
   get_storage: ^2.0.2
   cached_network_image: ^3.0.0
   shimmer: ^2.0.0
-  provider:
-
-
+ 
+  
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -81,6 +80,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+   - asset/
    - asset/category_img/
   #   - images/a_dot_ham.jpeg
 

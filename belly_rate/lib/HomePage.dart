@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:belly_rate/models/restaurantModesl.dart';
 import 'package:belly_rate/models/user.dart';
+import 'package:belly_rate/myProfile.dart';
 import 'package:belly_rate/views/carousel_loading.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -76,7 +77,7 @@ class _HomePage extends State<HomePage> {
                 decoration: BoxDecoration(
                     color: Colors.grey,
                     borderRadius: BorderRadius.all(Radius.circular(10))),
-                margin: EdgeInsets.all(2.0),
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     child: Stack(
@@ -120,7 +121,7 @@ class _HomePage extends State<HomePage> {
           child: Column(
         children: [
           SizedBox(
-            height: 100,
+            height: 50,
           ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
@@ -130,12 +131,12 @@ class _HomePage extends State<HomePage> {
                   "Recommended Restaurants",
                   style: TextStyle(
                       color: Color(0xFF5a3769),
-                      fontSize: 25,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold),
                 ),
               )),
           Padding(
-              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -146,6 +147,9 @@ class _HomePage extends State<HomePage> {
                       fontWeight: FontWeight.bold),
                 ),
               )),
+          SizedBox(
+            height: 10,
+          ),
           (restaurants.isEmpty == true)
               ? CarouselLoading()
               : Container(
@@ -170,7 +174,7 @@ class _HomePage extends State<HomePage> {
                   "Discover Restaurants",
                   style: TextStyle(
                       color: Color(0xFF5a3769),
-                      fontSize: 25,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold),
                 ),
               )),
@@ -186,7 +190,7 @@ class _HomePage extends State<HomePage> {
                   "Near you",
                   style: TextStyle(
                       color: Color(0xFF5a3769),
-                      fontSize: 25,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold),
                 ),
               )),
@@ -197,7 +201,7 @@ class _HomePage extends State<HomePage> {
       //History page container
       Container(child: Text('History')),
       //Profile page container
-      Container(child: Text('Profile')),
+      Container(child: myProfile()),
     ];
     List<IconData> listOfIcons = [
       Icons.home_rounded,
