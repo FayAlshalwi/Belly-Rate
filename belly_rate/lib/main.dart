@@ -194,61 +194,66 @@ print(2);
       }
 print('last');
 
-String NotificationContent = ""; 
+String NotificationContent = " "; 
 // NotificationContent 
 switch(category.toLowerCase() ){
   
   case ("american restaurant") :{
-    NotificationContent = "It seems that you like American restaurant!, how about trying $name.";
+    NotificationContent = "Fast and yummy, Good food for your belly!, lets go and try $name.";
+    // NotificationContent = "Burgers! Because no great story started with salad. lets go and try $name.";
     print(NotificationContent); 
     break;
   }
 
   case ('french restaurant'):{
-    NotificationContent = "It seems that you like French restaurant!, how about trying $name.";
+    NotificationContent = "It's time to enjoy the finer things in life!, how about trying $name.";
+    //  NotificationContent = "A genuine fine-dining experience awaits!, how about trying $name.";
     print(NotificationContent); 
-    break;
+    break; 
   }
 
   case("health food restaurant"):{
-    NotificationContent = "It seems that you like Health food restaurant!, how about trying $name.";
+    NotificationContent = "Choose healthy. Be strong. Live long!, Run to try $name.";
+    //  NotificationContent = "We’re fresher! We’re tastier! We’re recommending $name!";
     print(NotificationContent); 
     break;
   }
 
   case("indian restaurant"):{
-    NotificationContent = "It seems that you like Indian restaurant!, how about trying $name.";
+    NotificationContent = "We suggest something hut, somthing tasty!, go and taste $name.";
+    //NotificationContent = "Spice it up!, and try $name.";
     print(NotificationContent); 
     break;
   }
 
   case("italian restaurant"):{
-    NotificationContent = "It seems that you like Italian restaurant!, how about trying $name.";
+    NotificationContent = "Delicious Italian food, just the way it should be!, $name is a must.";
     print(NotificationContent); 
     break;
   }
 
   case("japanese restaurant"):{
-    NotificationContent = "It seems that you like Japanese restaurant!, how about trying $name.";
+    NotificationContent = "Roll with us, and go to try $name. where sushi lovers rejoice!";
     print(NotificationContent); 
     break;
   }
 
    case("lebanese restaurant"):{
-    NotificationContent = "It seems that you like Lebanese restaurant!, how about trying $name.";
+    NotificationContent = "Celebrating the pure, simple pleasures of Authentic lebanese cuisine.!, try  $name.";
     print(NotificationContent); 
     break;
   }
 
    case("seafood restaurant"):{
-     NotificationContent = "It seems that you like Seafood restaurant!, how about trying $name.";
+     NotificationContent = "Try $name, and Keep The Waves of Seafood Coming!";
+     // Fresh From The Net, You Won’t Regret!
     print(NotificationContent); 
     break;
   }
 }//switch 
 
 //createPlantFoodNotification(NotificationContent , Photo);
-NotificationContent = "hhh";
+NotificationContent = "because we Know what you love, we recommend San Carlo!, go and tast";
   createPlantFoodNotification(NotificationContent , RestaurantId);
 
 }
