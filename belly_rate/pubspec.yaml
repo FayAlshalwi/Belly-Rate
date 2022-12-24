@@ -38,7 +38,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   image_picker: 0.8.5
   firebase_storage: ^11.0.6
-  
+  google_fonts: ^3.0.1
+  firebase_auth: ^4.2.1
+  flag: ^5.0.1
+  flutter_verification_code: ^1.1.6
+  cool_alert: ^1.1.0
+  country_picker: ^2.0.18
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +78,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
    - asset/category_img/
+   - assets/auth/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
