@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -42,13 +42,12 @@ void main() async {
   
 
   final periodicTimer = Timer.periodic(
-  const Duration(seconds: 10),
+    // 
+  const Duration(seconds: 5),
   (timer) {
-     print('Update user about remaining time');
      //GetRecommendation();
-     ContentOfNotification('134992');
-
-  },
+     print('Update user about remaining time');
+     },
 );
 
   runApp(MyApp());
@@ -124,39 +123,45 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
 
 void GetRecommendation() async{
+
+print('inside GetRecommendation');
   final _firestore = FirebaseFirestore.instance;
-  //final _firebaseAuth = FirebaseAuth.instance;
-  //final UID = FirebaseAuth.instance.currentUser!.uid
-  final UID = '';
-  
-  //List<dynamic> RecommendationsList = [];
+  final _firebaseAuth = FirebaseAuth.instance;
+  //final UID = FirebaseAuth.instance.currentUser!.uid;
+  final UID = '111';
   
   final res = await _firestore
                   .collection('Recommendation')
-                  .where("UserID", isEqualTo: UID)
-                  .where("isNotified", isEqualTo: false)
+                  .where("userId", isEqualTo: UID)
+                  .where("Notified", isEqualTo: false)
                   .get();
 
+
 if (res.docs.isNotEmpty) {
+  print('recommendation is here');
 // Get RestaurantId              
 String RestaurantId = res.docs[0]['RestaurantId'];
-
+print('RestaurantId is = $RestaurantId');
+String docid = res.docs[0].id;
+print('docid is = $docid' );
 //set isNotified to true 
- /*FirebaseFirestore.instance.collection('Recommendation')
-   .doc(FirebaseAuth.instance.currentUser!.uid)
-      .update({"isNotified": true });*/
+ FirebaseFirestore.instance.collection('Recommendation')
+   .doc(docid).update({"Notified": true });
 
 ContentOfNotification(RestaurantId);
+}
+else{
+  print('no recommendation!');
 }
 
 }//GetRecommendation 
 
 void ContentOfNotification( String RestaurantId )async{
+
   print(1);
   final _firestore = FirebaseFirestore.instance;
-  //final _firebaseAuth = FirebaseAuth.instance;
-  //final UID = FirebaseAuth.instance.currentUser!.uid
-  final UID = '';
+  final _firebaseAuth = FirebaseAuth.instance;
+
   String category="";
   String name ="";
   String Photo=""; 
@@ -167,7 +172,11 @@ void ContentOfNotification( String RestaurantId )async{
                   .get();
 print(2);
      if (res.docs.isNotEmpty) {
+
+      String docid = res.docs[0].id;
+      print(docid);
       print(3);
+
          // Get category, name, photo  
          category = res.docs[0]['category'];
         print(category);
@@ -175,9 +184,6 @@ print(2);
         print(name);
         
         List<dynamic> Recommendationphotos = [];
-        /*Recommendationphotos = res.docs[0]['photos'];
-         if (Recommendationphotos.length != 0) {
-          print('not empty');}*/
 
            try {
           Recommendationphotos = res.docs[0]['photos'];
@@ -194,7 +200,7 @@ print(2);
       }
 print('last');
 
-String NotificationContent = " "; 
+String NotificationContent = ""; 
 // NotificationContent 
 switch(category.toLowerCase() ){
   
@@ -252,10 +258,8 @@ switch(category.toLowerCase() ){
   }
 }//switch 
 
-//createPlantFoodNotification(NotificationContent , Photo);
-NotificationContent = "because we Know what you love, we recommend San Carlo!, go and tast";
+//createPlantFoodNotification(NotificationContent ,RestaurantId, Photo);
   createPlantFoodNotification(NotificationContent , RestaurantId);
-
 }
 
 

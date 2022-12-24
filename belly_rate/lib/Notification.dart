@@ -8,7 +8,7 @@ Future<void> createPlantFoodNotification(String notificationcontent , String res
       id: createUniqueId(),
       channelKey: 'basic_channel',
       title:
-          '${Emojis.money_money_bag + Emojis.plant_cactus} Belly Rate Recommendation!',
+          'New Recommendation!',
       body: '$notificationcontent',
       summary: resID,
       //bigPicture: 'asset://assets/notification_map.png',

@@ -61,6 +61,7 @@ dev_dependencies:
   path: ^1.8.0
   image_picker: ^0.8.4
   transparent_image: ^2.0.0
+  firebase_auth: ^4.2.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
