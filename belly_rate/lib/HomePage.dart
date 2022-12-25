@@ -28,7 +28,7 @@ import 'Notification.dart';
 import 'utilities.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
+
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -165,7 +165,6 @@ if (!_serviceEnabled) {
   _serviceEnabled = await location.requestService();
   if (!_serviceEnabled) {
     return;
-    
   }
 }
 
