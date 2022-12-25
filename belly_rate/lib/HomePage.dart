@@ -134,6 +134,9 @@ class _HomePage extends State<HomePage> {
                       fontWeight: FontWeight.bold),
                 ),
               )),
+          SizedBox(
+            height: 5,
+          ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
               child: Align(
@@ -146,6 +149,9 @@ class _HomePage extends State<HomePage> {
                       fontWeight: FontWeight.bold),
                 ),
               )),
+          SizedBox(
+            height: 20,
+          ),
           (restaurants.isEmpty == true)
               ? CarouselLoading()
               : Container(
@@ -175,9 +181,6 @@ class _HomePage extends State<HomePage> {
                 ),
               )),
           CategorySlider(),
-          SizedBox(
-            height: 10,
-          ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
               child: Align(

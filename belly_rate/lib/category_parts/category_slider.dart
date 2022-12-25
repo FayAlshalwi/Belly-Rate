@@ -119,9 +119,8 @@ class _CategorySliderState extends State<CategorySlider> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        height: 120,
-        width: 120,
-        child: Card(
+        width: 111,
+        child: Container(
           child: InkWell(
             onTap: () {
               print("${categoryList[index].name}");
