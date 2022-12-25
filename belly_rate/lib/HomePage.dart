@@ -39,8 +39,14 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
   void initState() {
     super.initState();
+print('dalal');
 
-    userlocation();
+    LocationData locationData = userlocation();
+    print('currentLocation.latitude:');
+  print(locationData.latitude);
+  print('currentLocation.longitude');
+  print(locationData.longitude);
+  
 
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
@@ -153,7 +159,9 @@ class _HomePage extends State<HomePage> {
       });
     }
   }
+  /////Location 
 userlocation() async {
+
   Location location = new Location();
 
 bool _serviceEnabled;
@@ -172,11 +180,20 @@ _permissionGranted = await location.hasPermission();
 if (_permissionGranted == PermissionStatus.denied) {
   _permissionGranted = await location.requestPermission();
   if (_permissionGranted != PermissionStatus.granted) {
-    return;
+    return LocationData;
   }
 }
 
-_locationData = await location.getLocation();
+
+location.onLocationChanged.listen((LocationData currentLocation) {
+  // Use current location
+  print('currentLocation.latitude:');
+  print(currentLocation.latitude);
+  print('currentLocation.longitude');
+  print(currentLocation.longitude);
+});
+
+
 }
 
   @override
