@@ -46,7 +46,7 @@ void main() async {
   const Duration(seconds: 5),
   (timer) {
      //GetRecommendation();
-     print('Update user about remaining time');
+     //print('Update user about remaining time');
      },
 );
 

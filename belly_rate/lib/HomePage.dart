@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -36,7 +37,7 @@ class _HomePage extends State<HomePage> {
       if (!isAllowed) {
         showDialog(
           context: this.context,
-          builder: (context) => AlertDialog(
+          builder: (context) => CupertinoAlertDialog(
             title: Text('Allow Notifications'),
             content: Text('Belly Rate would like to send you notifications'),
             actions: [
