@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,6 +27,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
 import 'Notification.dart';
+import 'main.dart';
 import 'utilities.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
@@ -41,12 +44,12 @@ class _HomePage extends State<HomePage> {
     super.initState();
 print('dalal');
 
-    LocationData locationData = userlocation();
+    /*LocationData locationData = userlocation();
     print('currentLocation.latitude:');
   print(locationData.latitude);
   print('currentLocation.longitude');
-  print(locationData.longitude);
-  
+  print(locationData.longitude);*/
+  userlocation();
 
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
@@ -185,16 +188,67 @@ if (_permissionGranted == PermissionStatus.denied) {
 }
 
 
-location.onLocationChanged.listen((LocationData currentLocation) {
+/* location.onLocationChanged.listen((LocationData currentLocation) async {
   // Use current location
+  print('onLocationChanged method');
   print('currentLocation.latitude:');
   print(currentLocation.latitude);
   print('currentLocation.longitude');
   print(currentLocation.longitude);
-});
 
+  final _firestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+  //final UID = FirebaseAuth.instance.currentUser!.uid;
+  final UID = '111';
 
-}
+final Recommendation = await _firestore
+      .collection('Recommendation')
+      .where("userId", isEqualTo: UID)
+      .where("Notified", isEqualTo: true)
+      .get();
+
+  if (Recommendation.docs.isNotEmpty) {
+
+    for(){
+
+      String RestaurantId = Recommendation.docs[i]['RestaurantId'];
+      distanceInMeters(RestaurantId ,currentLocation.latitude , currentLocation.longitude);
+    
+    }
+  } 
+  else {
+    print('no recommendation!');
+  }
+
+});*/
+
+  Future<void> distanceInMeters(String RestaurantId ,double lat , double lang ) async {
+
+  final _firestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+
+  double Longitude = 0;
+  double Latitude = 0; 
+
+  final res = await _firestore
+      .collection('Restaurants')
+      .where("ID", isEqualTo: RestaurantId)
+      .get();
+
+      if (res.docs.isNotEmpty) {
+      Longitude = res.docs[0]['Longitude'];
+      Latitude = res.docs[0]['Latitude'];
+
+    double distanceInMeters = Geolocator.distanceBetween(Longitude, Latitude, lang , lat);
+
+    if(distanceInMeters <= 2000){
+      ContentOfNotification(RestaurantId);
+    }
+      }// if isNotEmpty 
+
+}//distanceInMeters
+
+}//userlocation
 
   @override
   Widget build(BuildContext context) {
