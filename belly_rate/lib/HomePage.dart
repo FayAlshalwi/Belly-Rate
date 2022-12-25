@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:location/location.dart';
 import 'category_parts/category_slider.dart';
 import 'category_parts/restaurant_model.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ import 'Notification.dart';
 import 'utilities.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -37,6 +39,9 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
   void initState() {
     super.initState();
+
+    userlocation();
+
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
         showDialog(
@@ -148,6 +153,32 @@ class _HomePage extends State<HomePage> {
       });
     }
   }
+userlocation() async {
+  Location location = new Location();
+
+bool _serviceEnabled;
+PermissionStatus _permissionGranted;
+LocationData _locationData;
+
+_serviceEnabled = await location.serviceEnabled();
+if (!_serviceEnabled) {
+  _serviceEnabled = await location.requestService();
+  if (!_serviceEnabled) {
+    return;
+    
+  }
+}
+
+_permissionGranted = await location.hasPermission();
+if (_permissionGranted == PermissionStatus.denied) {
+  _permissionGranted = await location.requestPermission();
+  if (_permissionGranted != PermissionStatus.granted) {
+    return;
+  }
+}
+
+_locationData = await location.getLocation();
+}
 
   @override
   Widget build(BuildContext context) {

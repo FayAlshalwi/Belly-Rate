@@ -42,7 +42,7 @@ void main() async {
     const Duration(seconds: 5),
     (timer) {
       //GetRecommendation();
-      print('Update user about remaining time');
+      //print('Update user about remaining time');
     },
   );
 
@@ -77,7 +77,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: MyApp._title,
-        home: user?.uid == null ? SignIn() : WelcomePage()
+        //home: user?.uid == null ? SignIn() : WelcomePage()
+        home: HomePage()
 
         // Scaffold(
         //   appBar: AppBar(title: const Text(_title)),
