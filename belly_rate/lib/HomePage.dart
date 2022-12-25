@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:belly_rate/models/restaurantModesl.dart';
 import 'package:belly_rate/models/user.dart';
@@ -14,6 +18,14 @@ import 'category_parts/category_slider.dart';
 import 'category_parts/restaurant_model.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
+import 'package:path/path.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:path/path.dart' as Path;
+import 'Notification.dart';
+import 'utilities.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -22,11 +34,77 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  var currentIndex = 0;
   void initState() {
     super.initState();
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        showDialog(
+          context: this.context,
+          builder: (context) => AlertDialog(
+            title: Text('Allow Notifications'),
+            content: Text('Belly Rate would like to send you notifications'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Don\'t Allow',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              TextButton(
+                  onPressed: () => AwesomeNotifications()
+                      .requestPermissionToSendNotifications()
+                      .then((_) => Navigator.pop(context)),
+                  child: Text(
+                    'Allow',
+                    style: TextStyle(
+                      color: Colors.teal,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ))
+            ],
+          ),
+        );
+      }
+    });
+
+    AwesomeNotifications().actionStream.listen((notification) {
+      if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
+        AwesomeNotifications().getGlobalBadgeCounter().then(
+              (value) =>
+                  AwesomeNotifications().setGlobalBadgeCounter(value - 1),
+            );
+      }
+
+      String? resID = notification.summary;
+      print(resID);
+
+      /*Navigator.pushAndRemoveUntil(
+        this.context,
+        MaterialPageRoute(
+          builder: (_) => HomePage(),
+        ),
+        (route) => route.isFirst,
+      );*/
+    });
+
     get();
   }
+
+  @override
+  void dispose() {
+    AwesomeNotifications().actionSink.close();
+    AwesomeNotifications().createdSink.close();
+    super.dispose();
+  }
+
+  var currentIndex = 0;
 
   static late UserInfoModel user;
   static List<restaurantModel> restaurants = [];
