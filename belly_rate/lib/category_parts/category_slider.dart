@@ -157,6 +157,7 @@ class _CategorySliderState extends State<CategorySlider> {
                   "health food".toLowerCase()) {
                 print("${_restauranthealthRestaurant.length}");
                 selected_list = _restauranthealthRestaurant;
+                selected_category = "Health Food Restaurant";
               } else if (categoryList[index].name.toLowerCase().trim() ==
                   "lebanese".toLowerCase()) {
                 print("${_restaurantlebaneseRestaurant.length}");
