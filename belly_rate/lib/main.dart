@@ -47,68 +47,42 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   static const String _title = 'Belly Rate';
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      home: Scaffold(
-        appBar: AppBar(title: const Text(_title)),
-        body: const MyStatefulWidget(),
-      ),
-    );
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  User? user;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    try {
+      user = FirebaseAuth.instance.currentUser!;
+      print("currentUser: ${user?.uid}");
+    } catch (e) {
+      print("currentUser_Error: ${e}");
+    }
   }
-}
 
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key? key}) : super(key: key);
-
-  @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
-}
-
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      // theme: ThemeData(
-      //   iconTheme: IconThemeData(color: Color(0xff7b39ed)),
-      //   inputDecorationTheme: InputDecorationTheme(
-      //       enabledBorder: OutlineInputBorder(
-      //         borderRadius: BorderRadius.circular(10),
-      //         borderSide: BorderSide(color: Colors.grey.shade400),
-      //       ),
-      //       border: OutlineInputBorder(
-      //         borderRadius: BorderRadius.circular(10),
-      //       )),
-      //   elevatedButtonTheme: ElevatedButtonThemeData(
-      //     style: ElevatedButton.styleFrom(
-      //         minimumSize: Size(double.infinity, 50),
-      //         shape: RoundedRectangleBorder(
-      //           borderRadius: BorderRadius.circular(8),
-      //         )),
-      //   ),
-      //   textTheme: TextTheme(
-      //       headline4:
-      //           TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-      //       subtitle1: TextStyle(
-      //         color: Color.fromARGB(255, 0, 0, 0),
-      //       )),
-      //   appBarTheme: AppBarTheme(
-      //       backgroundColor: Colors.transparent,
-      //       elevation: 0,
-      //       iconTheme: IconThemeData(color: Colors.black)),
-      //   primaryColor: Color(0xff7b39ed),
-      //   primarySwatch: primarySwatch,
-      // ),
-      home: HomePage(),
-    );
+        debugShowCheckedModeBanner: false,
+        title: MyApp._title,
+        home: user?.uid == null ? SignIn() : WelcomePage()
+
+        // Scaffold(
+        //   appBar: AppBar(title: const Text(_title)),
+        //   body: const SignIn(),
+        //   // body: const MyStatefulWidget(),
+        // ),
+        );
   }
 }
 
