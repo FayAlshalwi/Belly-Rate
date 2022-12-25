@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -40,8 +41,12 @@ class _HomePage extends State<HomePage> {
       if (!isAllowed) {
         showDialog(
           context: this.context,
-          builder: (context) => AlertDialog(
-            title: Text('Allow Notifications'),
+          builder: (context) => CupertinoAlertDialog(
+            title: Text('Allow Notifications',
+            style: TextStyle(
+                          color: const Color(0xFF5a3769),
+                        ),),
+            
             content: Text('Belly Rate would like to send you notifications'),
             actions: [
               TextButton(
@@ -51,9 +56,9 @@ class _HomePage extends State<HomePage> {
                 child: Text(
                   'Don\'t Allow',
                   style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 18,
-                  ),
+                              fontSize: 15,
+                              color: const Color(0xFF5a3769),
+                            ),
                 ),
               ),
               TextButton(
@@ -63,10 +68,9 @@ class _HomePage extends State<HomePage> {
                   child: Text(
                     'Allow',
                     style: TextStyle(
-                      color: Colors.teal,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                              fontSize: 15,
+                              color: const Color(0xFF5a3769),
+                            ),
                   ))
             ],
           ),
