@@ -4,6 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:belly_rate/models/restaurantModesl.dart';
+import 'package:belly_rate/models/user.dart';
+import 'package:belly_rate/myProfile.dart';
+import 'package:belly_rate/views/carousel_loading.dart';
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,26 +17,24 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'category_parts/category_slider.dart';
 import 'category_parts/restaurant_model.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
-import 'Storing_DB.dart';
 import 'Notification.dart';
 import 'utilities.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 
-
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   _HomePage createState() => _HomePage();
 }
 
 class _HomePage extends State<HomePage> {
-  
   void initState() {
     super.initState();
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
@@ -38,7 +42,11 @@ class _HomePage extends State<HomePage> {
         showDialog(
           context: this.context,
           builder: (context) => CupertinoAlertDialog(
-            title: Text('Allow Notifications'),
+            title: Text('Allow Notifications',
+            style: TextStyle(
+                          color: const Color(0xFF5a3769),
+                        ),),
+            
             content: Text('Belly Rate would like to send you notifications'),
             actions: [
               TextButton(
@@ -48,9 +56,9 @@ class _HomePage extends State<HomePage> {
                 child: Text(
                   'Don\'t Allow',
                   style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 18,
-                  ),
+                              fontSize: 15,
+                              color: const Color(0xFF5a3769),
+                            ),
                 ),
               ),
               TextButton(
@@ -60,10 +68,9 @@ class _HomePage extends State<HomePage> {
                   child: Text(
                     'Allow',
                     style: TextStyle(
-                      color: Colors.teal,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                              fontSize: 15,
+                              color: const Color(0xFF5a3769),
+                            ),
                   ))
             ],
           ),
@@ -71,7 +78,6 @@ class _HomePage extends State<HomePage> {
       }
     });
 
-    
     AwesomeNotifications().actionStream.listen((notification) {
       if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
         AwesomeNotifications().getGlobalBadgeCounter().then(
@@ -90,13 +96,12 @@ class _HomePage extends State<HomePage> {
         ),
         (route) => route.isFirst,
       );*/
-    }
-    );
+    });
 
-    
-    }
+    get();
+  }
 
-     @override
+  @override
   void dispose() {
     AwesomeNotifications().actionSink.close();
     AwesomeNotifications().createdSink.close();
@@ -105,11 +110,194 @@ class _HomePage extends State<HomePage> {
 
   var currentIndex = 0;
 
+  static late UserInfoModel user;
+  static List<restaurantModel> restaurants = [];
+  static List<String> restaurantsImgs = [];
+
+  get() async {
+    final res = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('uid', isEqualTo: "mCfCKtGUGgWbQAEhpLtAWwMI7MG3")
+        .get();
+    user = UserInfoModel(
+        uid: res.docs[0]['uid'],
+        phoneNumber: res.docs[0]['phoneNumber'],
+        firstName: res.docs[0]['firstName'],
+        lastName: res.docs[0]['lastName'],
+        photo: res.docs[0]['picture'],
+        recommendedRestaurant: res.docs[0]['rest']);
+
+    for (int i = 0; i < user.recommendedRestaurant.length; i++) {
+      final restt = await FirebaseFirestore.instance
+          .collection('Restaurants')
+          .where('ID', isEqualTo: user.recommendedRestaurant[i])
+          .get();
+
+      restaurantModel restaurant = restaurantModel(
+          phoneNumber: restt.docs[0]['phoneNumber'],
+          category: restt.docs[0]['category'],
+          description: restt.docs[0]['description'],
+          location: restt.docs[0]['location'],
+          name: restt.docs[0]['name'],
+          photos: restt.docs[0]['photos'],
+          priceAvg: restt.docs[0]['priceAvg'],
+          resId: restt.docs[0]['ID']);
+      setState(() {
+        restaurants.add(restaurant);
+        restaurantsImgs.add(restaurant.photos[0]);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     double displayOfWidth = MediaQuery.of(context).size.width;
+    var x = 0;
+    final List<Widget> imageSliders = restaurantsImgs
+        .map((item) => Container(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    child: Stack(
+                      children: <Widget>[
+                        Image.network(item, fit: BoxFit.cover, width: 1000.0),
+                        Positioned(
+                          bottom: 0.0,
+                          left: 0.0,
+                          right: 0.0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color.fromARGB(200, 0, 0, 0),
+                                  Color.fromARGB(0, 0, 0, 0)
+                                ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              ),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 10.0),
+                            child: Text(
+                              restaurants[x++].name,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+              ),
+            ))
+        .toList();
+    List<Widget> listOfWidgets = [
+      //home page container
+      Container(
+          child: Column(
+        children: [
+          SizedBox(
+            height: 50,
+          ),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Recommended Restaurants",
+                  style: TextStyle(
+                      color: Color(0xFF5a3769),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                ),
+              )),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Saudi Arabia, Riyadh",
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold),
+                ),
+              )),
+          SizedBox(
+            height: 10,
+          ),
+          (restaurants.isEmpty == true)
+              ? CarouselLoading()
+              : Container(
+                  child: CarouselSlider(
+                  options: CarouselOptions(
+                    aspectRatio: 16 / 9,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: false,
+                    initialPage: 0,
+                    autoPlay: true,
+                  ),
+                  items: imageSliders,
+                )),
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Discover Restaurants",
+                  style: TextStyle(
+                      color: Color(0xFF5a3769),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                ),
+              )),
+          CategorySlider(),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Near you",
+                  style: TextStyle(
+                      color: Color(0xFF5a3769),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                ),
+              )),
+        ],
+      )),
+      //Favorite page container
+      Container(child: Text('Favorite')),
+      //History page container
+      Container(child: Text('History')),
+      //Profile page container
+      Container(child: myProfile()),
+    ];
+    List<IconData> listOfIcons = [
+      Icons.home_rounded,
+      Icons.favorite_rounded,
+      Icons.history_rounded,
+      Icons.person_rounded,
+    ];
+
+    List<String> listOfStrings = [
+      'Home',
+      'Favorite',
+      'History',
+      'Profile',
+    ];
 
     return Scaffold(
       body: Center(child: listOfWidgets[currentIndex]),
@@ -220,91 +408,4 @@ class _HomePage extends State<HomePage> {
                   ))),
     );
   }
-
-  List<IconData> listOfIcons = [
-    Icons.home_rounded,
-    Icons.favorite_rounded,
-    Icons.history_rounded,
-    Icons.person_rounded,
-  ];
-
-  List<String> listOfStrings = [
-    'Home',
-    'Favorite',
-    'History',
-    'Profile',
-  ];
-
-  List<Widget> listOfWidgets = [
-    //home page container
-    Container(
-        child: Column(
-      children: [
-        SizedBox(
-          height: 100,
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Recommended Restaurants",
-            style: TextStyle(
-                color: Color(0xFF5a3769),
-                fontSize: 25,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Saudi Arabia, Riyadh",
-            style: TextStyle(
-                color: Colors.grey, fontSize: 14, fontWeight: FontWeight.bold),
-          ),
-        ),
-        SizedBox(
-          height: 270,
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Discover Restaurants",
-            style: TextStyle(
-                color: Color(0xFF5a3769),
-                fontSize: 25,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-        CategorySlider(),
-        SizedBox(
-          height: 10,
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Near you",
-            style: TextStyle(
-                color: Color(0xFF5a3769),
-                fontSize: 25,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-       /*  TextButton (
-  onPressed: () => {
-    print('Dalal'),
-	//do something
-  createPlantFoodNotification('It seems that you like American restaurant!, how about trying KFC.' , '134992'),
-  print('Dalal')
-  },
-  child: new Text('Click me'),
-),*/
-       
-      ],
-    )),
-    //Favorite page container
-    Container(child: Text('Favorite')),
-    //History page container
-    Container(child: Text('History')),
-    //Profile page container
-    Container(child: Text('Profile')),
-  ];
 }

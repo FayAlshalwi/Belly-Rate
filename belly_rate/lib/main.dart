@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:belly_rate/auth/signin_page.dart';
+import 'package:belly_rate/auth/welcome_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
@@ -14,252 +16,225 @@ import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
-import 'Storing_DB.dart';
-
 
 void main() async {
-
- AwesomeNotifications().initialize(
-    // set the icon to null if you want to use the default app icon
-    null,
-    [
+  AwesomeNotifications().initialize(
+      // set the icon to null if you want to use the default app icon
+      null,
+      [
         NotificationChannel(
             channelKey: 'basic_channel',
             channelName: 'Basic notifications',
             channelDescription: 'Notification channel for basic tests',
-           importance: NotificationImportance.High,
+            importance: NotificationImportance.High,
             channelShowBadge: true,
             defaultColor: Color(0xFF9D50DD),
-            ledColor: Colors.white
-        )
-    ]
-);
+            ledColor: Colors.white)
+      ]);
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
 
   final periodicTimer = Timer.periodic(
-    // 
-  const Duration(seconds: 5),
-  (timer) {
-     //GetRecommendation();
-     //print('Update user about remaining time');
-     },
-);
+    //
+    const Duration(seconds: 5),
+    (timer) {
+      //GetRecommendation();
+      print('Update user about remaining time');
+    },
+  );
 
   runApp(MyApp());
 }
 
-
-
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   static const String _title = 'Belly Rate';
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      home: Scaffold(
-        appBar: AppBar(title: const Text(_title)),
-        body: const MyStatefulWidget(),
-      ),
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key? key}) : super(key: key);
-
+class _MyAppState extends State<MyApp> {
+  User? user;
   @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
-}
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    try {
+      user = FirebaseAuth.instance.currentUser!;
+      print("currentUser: ${user?.uid}");
+    } catch (e) {
+      print("currentUser_Error: ${e}");
+    }
+  }
 
-
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      // theme: ThemeData(
-      //   iconTheme: IconThemeData(color: Color(0xff7b39ed)),
-      //   inputDecorationTheme: InputDecorationTheme(
-      //       enabledBorder: OutlineInputBorder(
-      //         borderRadius: BorderRadius.circular(10),
-      //         borderSide: BorderSide(color: Colors.grey.shade400),
-      //       ),
-      //       border: OutlineInputBorder(
-      //         borderRadius: BorderRadius.circular(10),
-      //       )),
-      //   elevatedButtonTheme: ElevatedButtonThemeData(
-      //     style: ElevatedButton.styleFrom(
-      //         minimumSize: Size(double.infinity, 50),
-      //         shape: RoundedRectangleBorder(
-      //           borderRadius: BorderRadius.circular(8),
-      //         )),
-      //   ),
-      //   textTheme: TextTheme(
-      //       headline4:
-      //           TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-      //       subtitle1: TextStyle(
-      //         color: Color.fromARGB(255, 0, 0, 0),
-      //       )),
-      //   appBarTheme: AppBarTheme(
-      //       backgroundColor: Colors.transparent,
-      //       elevation: 0,
-      //       iconTheme: IconThemeData(color: Colors.black)),
-      //   primaryColor: Color(0xff7b39ed),
-      //   primarySwatch: primarySwatch,
-      // ),
-      home: HomePage(),
-    );
+        debugShowCheckedModeBanner: false,
+        title: MyApp._title,
+        home: user?.uid == null ? SignIn() : WelcomePage()
+
+        // Scaffold(
+        //   appBar: AppBar(title: const Text(_title)),
+        //   body: const SignIn(),
+        //   // body: const MyStatefulWidget(),
+        // ),
+        );
   }
 }
 
-
-void GetRecommendation() async{
-
-print('inside GetRecommendation');
+void GetRecommendation() async {
+  print('inside GetRecommendation');
   final _firestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
   //final UID = FirebaseAuth.instance.currentUser!.uid;
   final UID = '111';
-  
+
   final res = await _firestore
-                  .collection('Recommendation')
-                  .where("userId", isEqualTo: UID)
-                  .where("Notified", isEqualTo: false)
-                  .get();
+      .collection('Recommendation')
+      .where("userId", isEqualTo: UID)
+      .where("Notified", isEqualTo: false)
+      .get();
 
+  if (res.docs.isNotEmpty) {
+    print('recommendation is here');
+// Get RestaurantId
+    String RestaurantId = res.docs[0]['RestaurantId'];
+    print('RestaurantId is = $RestaurantId');
+    String docid = res.docs[0].id;
+    print('docid is = $docid');
+//set isNotified to true
+    FirebaseFirestore.instance
+        .collection('Recommendation')
+        .doc(docid)
+        .update({"Notified": true});
 
-if (res.docs.isNotEmpty) {
-  print('recommendation is here');
-// Get RestaurantId              
-String RestaurantId = res.docs[0]['RestaurantId'];
-print('RestaurantId is = $RestaurantId');
-String docid = res.docs[0].id;
-print('docid is = $docid' );
-//set isNotified to true 
- FirebaseFirestore.instance.collection('Recommendation')
-   .doc(docid).update({"Notified": true });
+    ContentOfNotification(RestaurantId);
+  } else {
+    print('no recommendation!');
+  }
+} //GetRecommendation
 
-ContentOfNotification(RestaurantId);
-}
-else{
-  print('no recommendation!');
-}
-
-}//GetRecommendation 
-
-void ContentOfNotification( String RestaurantId )async{
-
+void ContentOfNotification(String RestaurantId) async {
   print(1);
   final _firestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
 
-  String category="";
-  String name ="";
-  String Photo=""; 
+  String category = "";
+  String name = "";
+  String Photo = "";
 
   final res = await _firestore
-                  .collection('Restaurants')
-                  .where("ID", isEqualTo: RestaurantId)
-                  .get();
-print(2);
-     if (res.docs.isNotEmpty) {
+      .collection('Restaurants')
+      .where("ID", isEqualTo: RestaurantId)
+      .get();
+  print(2);
+  if (res.docs.isNotEmpty) {
+    String docid = res.docs[0].id;
+    print(docid);
+    print(3);
 
-      String docid = res.docs[0].id;
-      print(docid);
-      print(3);
+    // Get category, name, photo
+    category = res.docs[0]['category'];
+    print(category);
+    name = res.docs[0]['name'];
+    print(name);
 
-         // Get category, name, photo  
-         category = res.docs[0]['category'];
-        print(category);
-         name = res.docs[0]['name'];
-        print(name);
-        
-        List<dynamic> Recommendationphotos = [];
+    List<dynamic> Recommendationphotos = [];
 
-           try {
-          Recommendationphotos = res.docs[0]['photos'];
-          if (Recommendationphotos.length != 0) {
-            Photo = Recommendationphotos[0];
-            print('not empty');
-          }else{
-             print(' empty');
-             }
-              } catch (e) {
-                Photo = "";
-                }
-                print(Photo); 
+    try {
+      Recommendationphotos = res.docs[0]['photos'];
+      if (Recommendationphotos.length != 0) {
+        Photo = Recommendationphotos[0];
+        print('not empty');
+      } else {
+        print(' empty');
       }
-print('last');
-
-String NotificationContent = ""; 
-// NotificationContent 
-switch(category.toLowerCase() ){
-  
-  case ("american restaurant") :{
-    NotificationContent = "Fast and yummy, Good food for your belly!, lets go and try $name.";
-    // NotificationContent = "Burgers! Because no great story started with salad. lets go and try $name.";
-    print(NotificationContent); 
-    break;
+    } catch (e) {
+      Photo = "";
+    }
+    print(Photo);
   }
+  print('last');
 
-  case ('french restaurant'):{
-    NotificationContent = "It's time to enjoy the finer things in life!, how about trying $name.";
-    //  NotificationContent = "A genuine fine-dining experience awaits!, how about trying $name.";
-    print(NotificationContent); 
-    break; 
-  }
+  String NotificationContent = "";
+// NotificationContent
+  switch (category.toLowerCase()) {
+    case ("american restaurant"):
+      {
+        NotificationContent =
+            "Fast and yummy, Good food for your belly!, lets go and try $name.";
+        // NotificationContent = "Burgers! Because no great story started with salad. lets go and try $name.";
+        print(NotificationContent);
+        break;
+      }
 
-  case("health food restaurant"):{
-    NotificationContent = "Choose healthy. Be strong. Live long!, Run to try $name.";
-    //  NotificationContent = "We’re fresher! We’re tastier! We’re recommending $name!";
-    print(NotificationContent); 
-    break;
-  }
+    case ('french restaurant'):
+      {
+        NotificationContent =
+            "It's time to enjoy the finer things in life!, how about trying $name.";
+        //  NotificationContent = "A genuine fine-dining experience awaits!, how about trying $name.";
+        print(NotificationContent);
+        break;
+      }
 
-  case("indian restaurant"):{
-    NotificationContent = "We suggest something hut, somthing tasty!, go and taste $name.";
-    //NotificationContent = "Spice it up!, and try $name.";
-    print(NotificationContent); 
-    break;
-  }
+    case ("health food restaurant"):
+      {
+        NotificationContent =
+            "Choose healthy. Be strong. Live long!, Run to try $name.";
+        //  NotificationContent = "We’re fresher! We’re tastier! We’re recommending $name!";
+        print(NotificationContent);
+        break;
+      }
 
-  case("italian restaurant"):{
-    NotificationContent = "Delicious Italian food, just the way it should be!, $name is a must.";
-    print(NotificationContent); 
-    break;
-  }
+    case ("indian restaurant"):
+      {
+        NotificationContent =
+            "We suggest something hut, somthing tasty!, go and taste $name.";
+        //NotificationContent = "Spice it up!, and try $name.";
+        print(NotificationContent);
+        break;
+      }
 
-  case("japanese restaurant"):{
-    NotificationContent = "Roll with us, and go to try $name. where sushi lovers rejoice!";
-    print(NotificationContent); 
-    break;
-  }
+    case ("italian restaurant"):
+      {
+        NotificationContent =
+            "Delicious Italian food, just the way it should be!, $name is a must.";
+        print(NotificationContent);
+        break;
+      }
 
-   case("lebanese restaurant"):{
-    NotificationContent = "Celebrating the pure, simple pleasures of Authentic lebanese cuisine.!, try  $name.";
-    print(NotificationContent); 
-    break;
-  }
+    case ("japanese restaurant"):
+      {
+        NotificationContent =
+            "Roll with us, and go to try $name. where sushi lovers rejoice!";
+        print(NotificationContent);
+        break;
+      }
 
-   case("seafood restaurant"):{
-     NotificationContent = "Try $name, and Keep The Waves of Seafood Coming!";
-     // Fresh From The Net, You Won’t Regret!
-    print(NotificationContent); 
-    break;
-  }
-}//switch 
+    case ("lebanese restaurant"):
+      {
+        NotificationContent =
+            "Celebrating the pure, simple pleasures of Authentic lebanese cuisine.!, try  $name.";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("seafood restaurant"):
+      {
+        NotificationContent =
+            "Try $name, and Keep The Waves of Seafood Coming!";
+        // Fresh From The Net, You Won’t Regret!
+        print(NotificationContent);
+        break;
+      }
+  } //switch
 
 //createPlantFoodNotification(NotificationContent ,RestaurantId, Photo);
-  createPlantFoodNotification(NotificationContent , RestaurantId);
+  createPlantFoodNotification(NotificationContent, RestaurantId);
 }
-
-

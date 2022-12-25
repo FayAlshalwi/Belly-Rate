@@ -38,10 +38,17 @@ dependencies:
   cupertino_icons: ^1.0.2
   image_picker: 0.8.5
   firebase_storage: ^11.0.6
+  firebase_auth: ^4.2.1
+  provider: ^6.0.5
   awesome_notifications: ^0.0.6+12
   flutter_launcher_icons: ^0.11.0
   font_awesome_flutter: ^9.1.0
   
+  google_fonts: ^3.0.1
+  flag: ^5.0.1
+  flutter_verification_code: ^1.1.6
+  cool_alert: ^1.1.0
+  country_picker: ^2.0.18
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +68,13 @@ dev_dependencies:
   path: ^1.8.0
   image_picker: ^0.8.4
   transparent_image: ^2.0.0
+  cupertino_icons: ^1.0.2
+  get: ^4.1.4
+  get_storage: ^2.0.2
+  cached_network_image: ^3.0.0
+  shimmer: ^2.0.0
+ 
+  
   firebase_auth: ^4.2.3
 
 # For information on the generic Dart part of this file, see the
@@ -76,7 +90,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+   - asset/
    - asset/category_img/
+   - assets/auth/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
