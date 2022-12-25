@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:belly_rate/auth/signin_page.dart';
+import 'package:belly_rate/auth/welcome_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
