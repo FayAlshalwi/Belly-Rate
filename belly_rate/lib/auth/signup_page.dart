@@ -5,6 +5,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter/services.dart';
@@ -352,28 +353,42 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text(
-                  'Enter OTP that sends to',
-                  style: ourTextStyle(
-                      txt_color: txt_color, txt_size: heightM * 0.7),
-                ),
-                Text(
-                  '${phoneNumber}',
-                  style: ourTextStyle(
-                      txt_color: txt_color, txt_size: heightM * 0.7),
+                SizedBox(
+                  height: 15,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(0.0),
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Text(
+                        'OTP Verification',
+                        style: ourTextStyle(
+                            txt_color: txt_color, txt_size: heightM * 0.7),
+                      ),
+                    )),
+                Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Text(
+                        ' Enter the OTP you received to ${phoneNumber}',
+                        style: ourTextStyle(
+                            txt_color: txt_color, txt_size: heightM * 0.5),
+                      ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(9.0),
                   child: VerificationCode(
+                    digitsOnly: true,
                     textStyle: ourTextStyle(
-                        txt_color: txt_color, txt_size: heightM * 0.4),
+                        txt_color: txt_color, txt_size: heightM * 0.5),
                     keyboardType: TextInputType.number,
                     fullBorder: true,
                     underlineColor: button_color,
                     length: 6,
                     cursorColor: txt_color,
                     clearAll: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(0.0),
                       child: Text(
                         'clear all'.toUpperCase(),
                         style: ourTextStyle(
@@ -404,14 +419,12 @@ class _SignUpPageState extends State<SignUpPage> {
                         child: Material(
                           elevation: 10.0,
                           borderRadius: BorderRadius.circular(10.0), //12
-                          color: Colors
-                              .transparent, //Colors.cyan.withOpacity(0.5),
+                          // color: Color.fromARGB(0, 244, 67, 54),
                           child: MaterialButton(
                             minWidth: MediaQuery.of(context).size.width,
-                            color: Colors.black45.withOpacity(0.7),
+                            color: Color.fromARGB(0, 0, 0, 0).withOpacity(0.7),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),
-                            splashColor: Colors.black45,
                             onPressed: () => Navigator.of(context).pop(),
                             child: Text('Back',
                                 textAlign: TextAlign.center,
@@ -426,7 +439,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       width: MediaQuery.of(context).size.width * 0.4,
                       height: heightM * 1.9,
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Material(
                           elevation: 10.0,
                           borderRadius: BorderRadius.circular(10.0), //12
@@ -445,11 +458,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       smsCode: _code!);
                               print("user  credential!!! ");
                               print("user  !!! ");
-                              print("user  credential!!! ");
-                              print("user  credential!!! ");
-                              print("user  credential!!! ");
-                              print("user  credential!!! ");
-                              print("user  credential!!! ");
+
                               print(credential);
                               await FirebaseAuth.instance
                                   .signInWithCredential(credential);
@@ -460,13 +469,22 @@ class _SignUpPageState extends State<SignUpPage> {
                                     .signInWithCredential(
                                   credential,
                                 );
+                                print("userCredential");
+                                print(userCredential);
                                 String firebaseToken =
                                     await userCredential.user!.getIdToken();
+                                print("firebaseToken");
+                                print(firebaseToken);
                                 String userUid = userCredential.user!.uid;
                                 print("user id userUid!!! ");
                                 print(userUid);
                                 // Navigator.of(context).pop();
-
+                                print("userUid");
+                                print(userUid);
+                                print("first_name.text");
+                                print(first_name.text);
+                                print("phoneNumber");
+                                print(phoneNumber);
                                 await userSetup(
                                     userUid: userUid,
                                     firstName: first_name.text,
@@ -488,7 +506,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                   ],
-                )
+                ),
+                SizedBox(
+                  height: 25,
+                ),
               ],
             ),
           );
@@ -505,7 +526,10 @@ class _SignUpPageState extends State<SignUpPage> {
       );
       //
       String firebaseToken = await userCredential.user!.getIdToken();
+
       String userUid = userCredential.user!.uid;
+      print("userUid");
+      print(userUid);
       // final apiResponse = await authRequest.verifyFirebaseToken(
       //   accountPhoneNumber,
       //   firebaseToken,
@@ -566,157 +590,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
     return;
   }
-
-  // String getCountryCode() {
-  //   if (country_selected != null) {
-  //     return country_selected?.phoneCode ?? "";
-  //   } else {
-  //     return "$country_code";
-  //   }
-  // }
-
-  // Widget first_name_text(Color txt_color, double heightM) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Card(
-  //         child: Container(
-  //           width: MediaQuery.of(context).size.width * 0.7,
-  //           child: TextFormField(
-  //             controller: first_name,
-  //             cursorColor: Colors.black,
-  //             // keyboardType: TextInputType.number,
-  //             decoration: const InputDecoration(
-  //                 border: InputBorder.none,
-  //                 focusedBorder: InputBorder.none,
-  //                 enabledBorder: InputBorder.none,
-  //                 errorBorder: InputBorder.none,
-  //                 disabledBorder: InputBorder.none,
-  //                 contentPadding:
-  //                     EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-  //                 hintText: "Your First Name"),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget last_name_text(Color txt_color, double heightM) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Padding(
-  //         padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-  //         child: Text(
-  //           "Last Name",
-  //           style: ourTextStyle(txt_color: txt_color, txt_size: heightM * 0.6),
-  //         ),
-  //       ),
-  //       Card(
-  //         child: Container(
-  //           width: MediaQuery.of(context).size.width * 0.7,
-  //           child: TextFormField(
-  //             controller: last_name,
-  //             cursorColor: Colors.black,
-  //             // keyboardType: TextInputType.number,
-  //             decoration: const InputDecoration(
-  //                 border: InputBorder.none,
-  //                 focusedBorder: InputBorder.none,
-  //                 enabledBorder: InputBorder.none,
-  //                 errorBorder: InputBorder.none,
-  //                 disabledBorder: InputBorder.none,
-  //                 contentPadding:
-  //                     EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-  //                 hintText: "Your Last Name"),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget phone_text(Color txt_color, double heightM) {
-  //   return Column(
-  //     children: [
-  //       Text(
-  //         "Phone Number",
-  //         style: ourTextStyle(txt_color: txt_color, txt_size: heightM * 0.6),
-  //       ),
-  //       Card(
-  //         child: Container(
-  //           width: heightM * 5,
-  //           child: TextFormField(
-  //             controller: phone,
-  //             cursorColor: Colors.black,
-  //             keyboardType: TextInputType.number,
-  //             decoration: const InputDecoration(
-  //                 border: InputBorder.none,
-  //                 focusedBorder: InputBorder.none,
-  //                 enabledBorder: InputBorder.none,
-  //                 errorBorder: InputBorder.none,
-  //                 disabledBorder: InputBorder.none,
-  //                 contentPadding:
-  //                     EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-  //                 hintText: "5X XXXX XXXX"),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget phone_flag(Color txt_color, double heightM) {
-  //   return Column(
-  //     children: [
-  //       Text(
-  //         "Country Code",
-  //         style: ourTextStyle(txt_color: txt_color, txt_size: heightM * 0.6),
-  //       ),
-  //       Card(
-  //         child: InkWell(
-  //           onTap: () {
-  //             showCountryPicker(
-  //               context: context,
-  //               showPhoneCode: true,
-  //               onSelect: (Country selected) {
-  //                 print("country: ${selected.flagEmoji}");
-  //                 country_selected = selected;
-  //                 setState(() {});
-  //               },
-  //             );
-  //           },
-  //           child: Padding(
-  //             padding: const EdgeInsets.all(4.0),
-  //             child: Row(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 Text(
-  //                   getCountryData(),
-  //                   style: ourTextStyle(
-  //                       txt_color: txt_color, txt_size: heightM * 0.6),
-  //                 ),
-  //                 // SizedBox(width: heightM * 0.5,),
-  //                 const Padding(
-  //                   padding: EdgeInsets.all(2.0),
-  //                   child: Icon(Icons.keyboard_arrow_down_rounded),
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // String getCountryData() {
-  //   if (country_selected != null) {
-  //     return '${country_selected?.flagEmoji ?? ""} +${country_selected?.phoneCode ?? ""}';
-  //   } else {
-  //     return '$country_flag $country_code';
-  //   }
-  // }
 
   TextStyle ourTextStyle({required Color txt_color, required double txt_size}) {
     return GoogleFonts.cairo(

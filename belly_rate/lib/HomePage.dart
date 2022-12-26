@@ -42,11 +42,12 @@ class _HomePage extends State<HomePage> {
         showDialog(
           context: this.context,
           builder: (context) => CupertinoAlertDialog(
-            title: Text('Allow Notifications',
-            style: TextStyle(
-                          color: const Color(0xFF5a3769),
-                        ),),
-            
+            title: Text(
+              'Allow Notifications',
+              style: TextStyle(
+                color: const Color(0xFF5a3769),
+              ),
+            ),
             content: Text('Belly Rate would like to send you notifications'),
             actions: [
               TextButton(
@@ -56,9 +57,9 @@ class _HomePage extends State<HomePage> {
                 child: Text(
                   'Don\'t Allow',
                   style: TextStyle(
-                              fontSize: 15,
-                              color: const Color(0xFF5a3769),
-                            ),
+                    fontSize: 15,
+                    color: const Color(0xFF5a3769),
+                  ),
                 ),
               ),
               TextButton(
@@ -68,9 +69,9 @@ class _HomePage extends State<HomePage> {
                   child: Text(
                     'Allow',
                     style: TextStyle(
-                              fontSize: 15,
-                              color: const Color(0xFF5a3769),
-                            ),
+                      fontSize: 15,
+                      color: const Color(0xFF5a3769),
+                    ),
                   ))
             ],
           ),
@@ -203,7 +204,7 @@ class _HomePage extends State<HomePage> {
           child: Column(
         children: [
           SizedBox(
-            height: 50,
+            height: 55,
           ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),

@@ -28,9 +28,7 @@ class _SignInState extends State<SignIn> {
   bool _onEditing = true;
   String? _code;
   String phoneNumber = "";
-  // Country? country_selected;
-  // String? country_flag = "🇸🇦";
-  // String? country_code = "+966";
+
   TextEditingController phone = TextEditingController();
 
   @override
@@ -290,28 +288,42 @@ class _SignInState extends State<SignIn> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text(
-                  'Enter OTP that sends to',
-                  style: ourTextStyle(
-                      txt_color: txt_color, txt_size: heightM * 0.7),
-                ),
-                Text(
-                  '${phoneNumber}',
-                  style: ourTextStyle(
-                      txt_color: txt_color, txt_size: heightM * 0.7),
+                SizedBox(
+                  height: 15,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(0.0),
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Text(
+                        'OTP Verification',
+                        style: ourTextStyle(
+                            txt_color: txt_color, txt_size: heightM * 0.7),
+                      ),
+                    )),
+                Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Text(
+                        ' Enter the OTP you received to ${phoneNumber}',
+                        style: ourTextStyle(
+                            txt_color: txt_color, txt_size: heightM * 0.5),
+                      ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(9.0),
                   child: VerificationCode(
+                    digitsOnly: true,
                     textStyle: ourTextStyle(
-                        txt_color: txt_color, txt_size: heightM * 0.4),
+                        txt_color: txt_color, txt_size: heightM * 0.5),
                     keyboardType: TextInputType.number,
                     fullBorder: true,
                     underlineColor: button_color,
                     length: 6,
                     cursorColor: txt_color,
                     clearAll: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(0.0),
                       child: Text(
                         'clear all'.toUpperCase(),
                         style: ourTextStyle(
@@ -342,14 +354,12 @@ class _SignInState extends State<SignIn> {
                         child: Material(
                           elevation: 10.0,
                           borderRadius: BorderRadius.circular(10.0), //12
-                          color: Colors
-                              .transparent, //Colors.cyan.withOpacity(0.5),
+                          // color: Color.fromARGB(0, 244, 67, 54),
                           child: MaterialButton(
                             minWidth: MediaQuery.of(context).size.width,
-                            color: Colors.black45,
+                            color: Color.fromARGB(0, 0, 0, 0).withOpacity(0.7),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),
-                            // splashColor: Colors.black45,
                             onPressed: () => Navigator.of(context).pop(),
                             child: Text('Back',
                                 textAlign: TextAlign.center,
@@ -364,7 +374,7 @@ class _SignInState extends State<SignIn> {
                       width: MediaQuery.of(context).size.width * 0.4,
                       height: heightM * 1.9,
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Material(
                           elevation: 10.0,
                           borderRadius: BorderRadius.circular(10.0), //12
@@ -372,10 +382,10 @@ class _SignInState extends State<SignIn> {
                               .transparent, //Colors.cyan.withOpacity(0.5),
                           child: MaterialButton(
                             minWidth: MediaQuery.of(context).size.width,
-                            color: button_color.withOpacity(0.7),
+                            color: button_color,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),
-                            splashColor: button_color,
+                            // splashColor: button_color,
                             onPressed: () async {
                               PhoneAuthCredential credential =
                                   PhoneAuthProvider.credential(
