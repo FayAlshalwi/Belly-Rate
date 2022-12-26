@@ -1,3 +1,6 @@
+import 'package:belly_rate/auth/signin_page.dart';
+import 'package:belly_rate/auth/signup_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -43,12 +46,12 @@ class _myProfile extends State<myProfile> {
                       content: Text("Are you sure you want to logout?"),
                       actions: <Widget>[
                         TextButton(
-                          onPressed: () {
-                            //action code for "Yes" button
-                            // await FirebaseAuth.instance.signOut();
-                            // Navigator.of(context).pushReplacement(
-                            //   MaterialPageRoute(builder: (context) => const LoginScreen()),
-                            // );
+                          onPressed: () async {
+                            await FirebaseAuth.instance.signOut();
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const SignIn()),
+                            );
                           },
                           child: Text(
                             "Yes",

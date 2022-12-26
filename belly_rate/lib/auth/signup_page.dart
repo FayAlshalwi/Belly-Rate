@@ -1,3 +1,4 @@
+import 'package:belly_rate/HomePage.dart';
 import 'package:belly_rate/auth/signin_page.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:country_picker/country_picker.dart';
@@ -20,7 +21,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   String phoneNumber = "";
-
+  late PhoneNumber phonenum;
   TextEditingController phone = TextEditingController();
   TextEditingController first_name = TextEditingController();
   bool _onEditing = true;
@@ -172,7 +173,12 @@ class _SignUpPageState extends State<SignUpPage> {
                     onInputChanged: (PhoneNumber number) {
                       formKey.currentState?.validate();
                       setState(() {
+                        phonenum = number;
+                        print("phonenum");
+                        print(phonenum);
                         phoneNumber = number.phoneNumber!;
+                        print("phoneNumber");
+                        print(phoneNumber);
                       });
                       print(number.phoneNumber);
                     },
@@ -185,7 +191,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       }
                       // else if (value[0] != 5)
                       //   return 'Saudi numbers starts with 5 ';
-                      else if (value.length > 9 || value.length < 9) {
+                      else if (value.length > 11 || value.length < 11) {
                         return 'Please enter 9 numbers';
                       }
                     },
@@ -197,8 +203,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     autoValidateMode: AutovalidateMode.onUserInteraction,
                     selectorTextStyle: TextStyle(color: Colors.black),
                     textFieldController: phone,
-                    // formatInput: true,
-                    maxLength: 9,
+                    formatInput: true,
+                    maxLength: 11,
                     keyboardType: TextInputType.numberWithOptions(
                         signed: true, decimal: true),
                     cursorColor: Colors.black,
@@ -236,16 +242,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 ],
               ),
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     phone_flag(txt_color, heightM),
-            //     SizedBox(
-            //       width: heightM,
-            //     ),
-            //     phone_text(txt_color, heightM),
-            //   ],
-            // ),
             SizedBox(
               height: heightM * 0.5,
             ),
@@ -266,66 +262,34 @@ class _SignUpPageState extends State<SignUpPage> {
                     splashColor: button_color,
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
-                        if (first_name.text.isEmpty) {
-                          CoolAlert.show(
-                            context: context,
-                            title: "",
-                            type: CoolAlertType.error,
-                            text: "Please Enter Your First Name",
-                            confirmBtnColor: button_color,
-                          );
-                        } else if (phone.text.isEmpty) {
-                          CoolAlert.show(
-                            context: context,
-                            title: "",
-                            type: CoolAlertType.error,
-                            text: "Please Enter Correct Phone Number",
-                            confirmBtnColor: button_color,
-                          );
-                        } else {
-                          print("Done!");
+                        CoolAlert.show(
+                          context: context,
+                          type: CoolAlertType.loading,
+                          text: "Loading",
+                        );
+                        print("here the submitted phone");
+                        print(phone.text);
 
-                          //  phoneNumber =
-                          //     "+${getCountryCode()}${phone.text}";
-                          // openSheet(context, heightM, button_color, txt_color,
-                          //     phoneNumber);
-
-                          CoolAlert.show(
-                            context: context,
-                            type: CoolAlertType.loading,
-                            text: "Loading",
-                          );
-
-                          await FirebaseAuth.instance.verifyPhoneNumber(
-                            phoneNumber: '${phoneNumber}',
-                            verificationCompleted:
-                                (PhoneAuthCredential credential) {
-                              print("verificationCompleted: ${credential}");
-                            },
-                            verificationFailed: (FirebaseAuthException e) {
-                              print("verificationFailed: ${e}");
-                              Navigator.of(context).pop();
-                              CoolAlert.show(
-                                context: context,
-                                type: CoolAlertType.error,
-                                title: 'Oops...',
-                                text: '$e',
-                                loopAnimation: false,
-                              );
-                            },
-                            codeSent:
-                                (String verificationId, int? resendToken) {
-                              // print("codeSent: ${verificationId} , codeSent: ${resendToken}");
-                              Navigator.of(context).pop();
-
-                              openSheet(context, heightM, button_color,
-                                  txt_color, phoneNumber, verificationId);
-                            },
-                            codeAutoRetrievalTimeout: (String verificationId) {
-                              print("codeSent: ${verificationId}");
-                            },
-                          );
-                        }
+                        await FirebaseAuth.instance.verifyPhoneNumber(
+                          phoneNumber: phoneNumber,
+                          verificationCompleted:
+                              (PhoneAuthCredential credential) {
+                            print("verificationCompleted: ${credential}");
+                          },
+                          verificationFailed: (FirebaseAuthException e) {
+                            if (e.code == 'invalid-phone-number') {
+                              print('The provided phone number is not valid.');
+                            }
+                            print("verificationFailed: ${e}");
+                          },
+                          codeSent: (String verificationId, int? resendToken) {
+                            openSheet(context, heightM, button_color, txt_color,
+                                verificationId);
+                          },
+                          codeAutoRetrievalTimeout: (String verificationId) {
+                            print("codeSent: ${verificationId}");
+                          },
+                        );
                       }
                     },
                     child: Text('Sign Up',
@@ -373,8 +337,8 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  void openSheet(BuildContext context, heightM, button_color, txt_color,
-      phoneNumber, verificationId) {
+  void openSheet(
+      BuildContext context, heightM, button_color, txt_color, verificationId) {
     showModalBottomSheet(
         context: context,
         elevation: 20,
@@ -405,13 +369,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         txt_color: txt_color, txt_size: heightM * 0.4),
                     keyboardType: TextInputType.number,
                     fullBorder: true,
-                    underlineColor:
-                        button_color, // If this is null it will use primaryColor: Colors.red from Theme
+                    underlineColor: button_color,
                     length: 6,
-                    cursorColor:
-                        txt_color, // If this is null it will default to the ambient
-                    // clearAll is NOT required, you can delete it
-                    // takes any widget, so you can implement your design
+                    cursorColor: txt_color,
                     clearAll: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
@@ -474,27 +434,49 @@ class _SignUpPageState extends State<SignUpPage> {
                               .transparent, //Colors.cyan.withOpacity(0.5),
                           child: MaterialButton(
                             minWidth: MediaQuery.of(context).size.width,
-                            color: button_color.withOpacity(0.7),
+                            color: button_color,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),
-                            splashColor: button_color,
+                            // splashColor: button_color,
                             onPressed: () async {
-                              CoolAlert.show(
-                                context: context,
-                                type: CoolAlertType.loading,
-                                text: "Loading",
-                              );
-
-                              // Create a PhoneAuthCredential with the code
                               PhoneAuthCredential credential =
                                   PhoneAuthProvider.credential(
                                       verificationId: verificationId,
                                       smsCode: _code!);
-                              // ConfirmationResult confirmationResult = await FirebaseAuth.instance.signInWithPhoneNumber('+962786183499');
+                              print("user  credential!!! ");
+                              print("user  !!! ");
+                              print("user  credential!!! ");
+                              print("user  credential!!! ");
+                              print("user  credential!!! ");
+                              print("user  credential!!! ");
+                              print("user  credential!!! ");
+                              print(credential);
+                              await FirebaseAuth.instance
+                                  .signInWithCredential(credential);
 
-                              // print("credential ${confirmationResult}");
-                              print("credential ${credential}");
-                              await finishOTPLogin(credential, button_color);
+                              if (FirebaseAuth.instance.currentUser != null) {
+                                final userCredential = await FirebaseAuth
+                                    .instance
+                                    .signInWithCredential(
+                                  credential,
+                                );
+                                String firebaseToken =
+                                    await userCredential.user!.getIdToken();
+                                String userUid = userCredential.user!.uid;
+                                print("user id userUid!!! ");
+                                print(userUid);
+                                // Navigator.of(context).pop();
+
+                                await userSetup(
+                                    userUid: userUid,
+                                    firstName: first_name.text,
+                                    phoneNumber: phoneNumber);
+
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) => SignIn()),
+                                    (Route<dynamic> route) => false);
+                              }
                             },
                             child: Text('Sign Up',
                                 textAlign: TextAlign.center,
@@ -545,7 +527,7 @@ class _SignUpPageState extends State<SignUpPage> {
       );
 
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => SignIn()),
+          MaterialPageRoute(builder: (context) => HomePage()),
           (Route<dynamic> route) => false);
 
       // print("ddd ${apiResponse.data}");
@@ -573,13 +555,14 @@ class _SignUpPageState extends State<SignUpPage> {
       {required String firstName,
       required String userUid,
       required String phoneNumber}) async {
-    //firebase auth instance to get uuid of user
-    // FirebaseAuth auth = FirebaseAuth.instance.currentUser!;
-
-    //now below I am getting an instance of firebaseiestore then getting the user collection
-    //now I am creating the document if not already exist and setting the data.
-    FirebaseFirestore.instance.collection('Users').doc(userUid).set(
-        {'firstName': firstName, 'phoneNumber': phoneNumber, 'uid': userUid});
+    FirebaseFirestore.instance.collection('Users').doc(userUid).set({
+      'firstName': firstName,
+      'phoneNumber': phoneNumber,
+      'uid': userUid,
+      'picture':
+          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+      'rest': ["135055", "135062", "132668"]
+    });
 
     return;
   }

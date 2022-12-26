@@ -1,3 +1,4 @@
+import 'package:belly_rate/HomePage.dart';
 import 'package:belly_rate/auth/signup_page.dart';
 import 'package:belly_rate/auth/welcome_page.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -23,7 +24,7 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final formKey = GlobalKey<FormState>();
-
+  late PhoneNumber phonenum;
   bool _onEditing = true;
   String? _code;
   String phoneNumber = "";
@@ -109,10 +110,12 @@ class _SignInState extends State<SignIn> {
                   InternationalPhoneNumberInput(
                     initialValue: PhoneNumber(isoCode: 'SA', dialCode: '+966'),
                     onInputChanged: (PhoneNumber number) {
-                      setState(() {
-                        phoneNumber = number.phoneNumber!;
-                      });
-                      print(number.phoneNumber);
+                      phonenum = number;
+                      print("phonenum");
+                      print(phonenum);
+                      phoneNumber = number.phoneNumber!;
+                      print("phoneNumber");
+                      print(phoneNumber);
                     },
                     onInputValidated: (bool value) {
                       print(value);
@@ -123,7 +126,7 @@ class _SignInState extends State<SignIn> {
                       }
                       // else if (value[0] != 5)
                       //   return 'Saudi numbers starts with 5 ';
-                      else if (value.length > 9 || value.length < 9) {
+                      else if (value.length > 11 || value.length < 11) {
                         return 'Please enter 9 numbers';
                       }
                     },
@@ -136,7 +139,7 @@ class _SignInState extends State<SignIn> {
                     selectorTextStyle: TextStyle(color: Colors.black),
                     textFieldController: phone,
                     formatInput: true,
-                    maxLength: 9,
+                    maxLength: 11,
                     keyboardType: TextInputType.numberWithOptions(
                         signed: true, decimal: true),
                     cursorColor: Colors.black,
@@ -191,41 +194,39 @@ class _SignInState extends State<SignIn> {
                       formKey.currentState?.save();
                       if (formKey.currentState!.validate()) {
                         if (phone.text.isNotEmpty) {
-                          CoolAlert.show(
-                            context: context,
-                            type: CoolAlertType.loading,
-                            text: "Loading",
-                          );
+                          if (formKey.currentState!.validate()) {
+                            CoolAlert.show(
+                              context: context,
+                              type: CoolAlertType.loading,
+                              text: "Loading",
+                            );
+                            print("here the submitted phone");
+                            print(phone.text);
 
-                          await FirebaseAuth.instance.verifyPhoneNumber(
-                            phoneNumber: '${phoneNumber}',
-                            verificationCompleted:
-                                (PhoneAuthCredential credential) {
-                              print("verificationCompleted: ${credential}");
-                            },
-                            verificationFailed: (FirebaseAuthException e) {
-                              print("verificationFailed: ${e}");
-                              Navigator.of(context).pop();
-                              CoolAlert.show(
-                                context: context,
-                                type: CoolAlertType.error,
-                                title: 'Oops...',
-                                text: '$e',
-                                loopAnimation: true,
-                              );
-                            },
-                            codeSent:
-                                (String verificationId, int? resendToken) {
-                              // print("codeSent: ${verificationId} , codeSent: ${resendToken}");
-                              Navigator.of(context).pop();
-
-                              openSheet(context, heightM, button_color,
-                                  txt_color, phoneNumber, verificationId);
-                            },
-                            codeAutoRetrievalTimeout: (String verificationId) {
-                              print("codeSent: ${verificationId}");
-                            },
-                          );
+                            await FirebaseAuth.instance.verifyPhoneNumber(
+                              phoneNumber: phoneNumber,
+                              verificationCompleted:
+                                  (PhoneAuthCredential credential) {
+                                print("verificationCompleted: ${credential}");
+                              },
+                              verificationFailed: (FirebaseAuthException e) {
+                                if (e.code == 'invalid-phone-number') {
+                                  print(
+                                      'The provided phone number is not valid.');
+                                }
+                                print("verificationFailed: ${e}");
+                              },
+                              codeSent:
+                                  (String verificationId, int? resendToken) {
+                                openSheet(context, heightM, button_color,
+                                    txt_color, verificationId);
+                              },
+                              codeAutoRetrievalTimeout:
+                                  (String verificationId) {
+                                print("codeSent: ${verificationId}");
+                              },
+                            );
+                          }
                         }
                       }
                     },
@@ -245,7 +246,7 @@ class _SignInState extends State<SignIn> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: "Didn't Have an Account? ",
+                      text: "Doesn't Have an Account? ",
                       style: ourTextStyle(
                           txt_color: txt_color, txt_size: heightM * 0.55),
                     ),
@@ -274,8 +275,8 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  void openSheet(BuildContext context, heightM, button_color, txt_color,
-      phoneNumber, verificationId) {
+  void openSheet(
+      BuildContext context, heightM, button_color, txt_color, verificationId) {
     showModalBottomSheet(
         context: context,
         elevation: 20,
@@ -306,13 +307,9 @@ class _SignInState extends State<SignIn> {
                         txt_color: txt_color, txt_size: heightM * 0.4),
                     keyboardType: TextInputType.number,
                     fullBorder: true,
-                    underlineColor:
-                        button_color, // If this is null it will use primaryColor: Colors.red from Theme
+                    underlineColor: button_color,
                     length: 6,
-                    cursorColor:
-                        txt_color, // If this is null it will default to the ambient
-                    // clearAll is NOT required, you can delete it
-                    // takes any widget, so you can implement your design
+                    cursorColor: txt_color,
                     clearAll: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
@@ -349,10 +346,10 @@ class _SignInState extends State<SignIn> {
                               .transparent, //Colors.cyan.withOpacity(0.5),
                           child: MaterialButton(
                             minWidth: MediaQuery.of(context).size.width,
-                            color: Colors.black45.withOpacity(0.7),
+                            color: Colors.black45,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),
-                            splashColor: Colors.black45,
+                            // splashColor: Colors.black45,
                             onPressed: () => Navigator.of(context).pop(),
                             child: Text('Back',
                                 textAlign: TextAlign.center,
@@ -380,22 +377,20 @@ class _SignInState extends State<SignIn> {
                                 borderRadius: BorderRadius.circular(10.0)),
                             splashColor: button_color,
                             onPressed: () async {
-                              CoolAlert.show(
-                                context: context,
-                                type: CoolAlertType.loading,
-                                text: "Loading",
-                              );
-
-                              // Create a PhoneAuthCredential with the code
                               PhoneAuthCredential credential =
                                   PhoneAuthProvider.credential(
                                       verificationId: verificationId,
                                       smsCode: _code!);
-                              // ConfirmationResult confirmationResult = await FirebaseAuth.instance.signInWithPhoneNumber('+962786183499');
 
-                              // print("credential ${confirmationResult}");
-                              print("credential ${credential}");
-                              await finishOTPLogin(credential, button_color);
+                              await FirebaseAuth.instance
+                                  .signInWithCredential(credential);
+
+                              if (FirebaseAuth.instance.currentUser != null) {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) => HomePage()),
+                                    (Route<dynamic> route) => false);
+                              }
                             },
                             child: Text('Sign In',
                                 textAlign: TextAlign.center,
@@ -471,11 +466,7 @@ class _SignInState extends State<SignIn> {
       );
 
       print("ddd_222 ${error}");
-
-      // viewContext.showToast(msg: "$error", bgColor: Colors.red);
     }
-
-    // setBusyForObject(otpLogin, false);
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> userSetup(
