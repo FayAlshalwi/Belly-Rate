@@ -11,7 +11,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:animate_do/animate_do.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -21,52 +22,157 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  final formKey = GlobalKey<FormState>();
+
   bool _onEditing = true;
   String? _code;
-
-  Country? country_selected ;
-  String? country_flag = "🇸🇦" ;
-  String? country_code = "+966" ;
-  TextEditingController phone  = TextEditingController();
+  String phoneNumber = "";
+  // Country? country_selected;
+  // String? country_flag = "🇸🇦";
+  // String? country_code = "+966";
+  TextEditingController phone = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    double heightM = MediaQuery.of(context).size.height /30 ;
-     Color txt_color = Color(0xff6168A3) ;
-     Color button_color = Color(0xfff53c57) ;
+    double heightM = MediaQuery.of(context).size.height / 30;
+    Color txt_color = Color(0xFF5a3769);
+    Color button_color = Color.fromARGB(255, 216, 107, 147);
 
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
+          child: Form(
+        key: formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: heightM * 3 , ),
+            SizedBox(
+              height: heightM * 3,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 30.0, right: 30.0, top: 8.0, bottom: 0.0),
+              child: Text(
+                "Sign In",
+                style: ourTextStyle(txt_size: heightM, txt_color: txt_color),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 30.0, right: 30.0, top: 0.0, bottom: 8.0),
+              child: Text(
+                "Hi there! Nice to see you again",
+                style: ourTextStyle(
+                    txt_size: heightM * 0.7, txt_color: Colors.black45),
+              ),
+            ),
             Center(
-              child: Image.asset("assets/auth/1.jpg" ,
-               height: heightM * 10 ,
-              fit: BoxFit.fill),
+              child: Image.network(
+                  "https://my.messa.online/images_all/2022-login.gif",
+                  height: heightM * 8.50,
+                  fit: BoxFit.fill),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left:  30.0 , right: 30.0 , top: 8.0 ,bottom: 0.0),
-              child: Text("Sign In" , style: ourTextStyle(txt_size: heightM, txt_color: txt_color ),),
+            Container(
+              margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                child: Text(
+                  "Phone Number",
+                  style: ourTextStyle(
+                      txt_color: txt_color, txt_size: heightM * 0.6),
+                ),
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left:  30.0 , right: 30.0 , top: 0.0 ,bottom: 8.0),
-              child: Text("Hi there! Nice to see you again" , style: ourTextStyle(txt_size: heightM * 0.7, txt_color: Colors.black45 ),),
+            Container(
+              alignment: AlignmentDirectional.center,
+              width: 380,
+              height: 60,
+              margin: EdgeInsets.fromLTRB(23, 02, 10, 10),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black.withOpacity(0.13)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffeeeeee),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  InternationalPhoneNumberInput(
+                    initialValue: PhoneNumber(isoCode: 'SA', dialCode: '+966'),
+                    onInputChanged: (PhoneNumber number) {
+                      setState(() {
+                        phoneNumber = number.phoneNumber!;
+                      });
+                      print(number.phoneNumber);
+                    },
+                    onInputValidated: (bool value) {
+                      print(value);
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your phone number';
+                      }
+                      // else if (value[0] != 5)
+                      //   return 'Saudi numbers starts with 5 ';
+                      else if (value.length > 9 || value.length < 9) {
+                        return 'Please enter 9 numbers';
+                      }
+                    },
+                    selectorConfig: SelectorConfig(
+                      useEmoji: true,
+                      selectorType: PhoneInputSelectorType.DIALOG,
+                    ),
+                    ignoreBlank: false,
+                    autoValidateMode: AutovalidateMode.onUserInteraction,
+                    selectorTextStyle: TextStyle(color: Colors.black),
+                    textFieldController: phone,
+                    formatInput: true,
+                    maxLength: 9,
+                    keyboardType: TextInputType.numberWithOptions(
+                        signed: true, decimal: true),
+                    cursorColor: Colors.black,
+                    inputDecoration: InputDecoration(
+                      errorStyle: TextStyle(height: 0),
+                      contentPadding: EdgeInsets.only(bottom: 15, left: 0),
+                      border: InputBorder.none,
+                      hintText: '5XXXXXXXX',
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      hintStyle: TextStyle(
+                          color: Color.fromRGBO(158, 158, 158, 1),
+                          fontSize: 16),
+                    ),
+                    onSaved: (PhoneNumber number) {
+                      print('On Saved: $number');
+                    },
+                  ),
+                  Positioned(
+                    left: 90,
+                    top: 8,
+                    bottom: 8,
+                    child: Container(
+                      height: 40,
+                      width: 1,
+                      color: Colors.black.withOpacity(0.13),
+                    ),
+                  )
+                ],
+              ),
             ),
-
-             Row(
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-                 phone_flag(txt_color, heightM),
-                 SizedBox(width: heightM,),
-                 phone_text(txt_color, heightM),
-               ],
-             ),
-            SizedBox(height: heightM,),
+            SizedBox(
+              height: heightM * 0.5,
+            ),
             Center(
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
@@ -77,110 +183,105 @@ class _SignInState extends State<SignIn> {
                   color: Colors.transparent, //Colors.cyan.withOpacity(0.5),
                   child: MaterialButton(
                     minWidth: MediaQuery.of(context).size.width,
-                    color: button_color.withOpacity(0.7),
+                    color: button_color,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0)),
                     splashColor: button_color,
                     onPressed: () async {
-                      if (phone.text.isNotEmpty) {
-                        // print("phone: ${phone.text}");
-                        String phoneNumber =
-                           "+${getCountryCode()}${phone.text}";
-                        // openSheet(context, heightM, button_color, txt_color,
-                        //     phoneNumber);
+                      formKey.currentState?.save();
+                      if (formKey.currentState!.validate()) {
+                        if (phone.text.isNotEmpty) {
+                          CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.loading,
+                            text: "Loading",
+                          );
 
-                        CoolAlert.show(
-                          context: context,
-                          type: CoolAlertType.loading,
-                          text: "Loading",
-                        );
+                          await FirebaseAuth.instance.verifyPhoneNumber(
+                            phoneNumber: '${phoneNumber}',
+                            verificationCompleted:
+                                (PhoneAuthCredential credential) {
+                              print("verificationCompleted: ${credential}");
+                            },
+                            verificationFailed: (FirebaseAuthException e) {
+                              print("verificationFailed: ${e}");
+                              Navigator.of(context).pop();
+                              CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.error,
+                                title: 'Oops...',
+                                text: '$e',
+                                loopAnimation: true,
+                              );
+                            },
+                            codeSent:
+                                (String verificationId, int? resendToken) {
+                              // print("codeSent: ${verificationId} , codeSent: ${resendToken}");
+                              Navigator.of(context).pop();
 
-                        await FirebaseAuth.instance.verifyPhoneNumber(
-                          phoneNumber: '${phoneNumber}',
-                          verificationCompleted: (PhoneAuthCredential credential) {
-                            print("verificationCompleted: ${credential}");
-                          },
-                          verificationFailed: (FirebaseAuthException e) {
-                            print("verificationFailed: ${e}");
-                            Navigator.of(context).pop();
-                            CoolAlert.show(
-                              context: context,
-                              type: CoolAlertType.error,
-                              title: 'Oops...',
-                              text: '$e',
-                              loopAnimation: false,
-                            );
-                          },
-                          codeSent: (String verificationId, int? resendToken) {
-                            // print("codeSent: ${verificationId} , codeSent: ${resendToken}");
-                            Navigator.of(context).pop();
-
-
-                            openSheet(context, heightM, button_color, txt_color, phoneNumber , verificationId);
-
-                          },
-                          codeAutoRetrievalTimeout: (String verificationId) {
-                            print("codeSent: ${verificationId}");
-                          },
-                        );
-
-
-                      } else {
-                        CoolAlert.show(
-                          context: context,
-                          title: "",
-                        type: CoolAlertType.error,
-                        text: "Please Enter Correct Phone Number",
-                        confirmBtnColor: button_color,
-                    );
-                  }
-
-                },
-                child: Text('Sign In',
-                    textAlign: TextAlign.center,
-                    style: ourTextStyle(txt_color: Colors.white, txt_size: heightM * 0.6)),
+                              openSheet(context, heightM, button_color,
+                                  txt_color, phoneNumber, verificationId);
+                            },
+                            codeAutoRetrievalTimeout: (String verificationId) {
+                              print("codeSent: ${verificationId}");
+                            },
+                          );
+                        }
+                      }
+                    },
+                    child: Text('Sign In',
+                        textAlign: TextAlign.center,
+                        style: ourTextStyle(
+                            txt_color: Colors.white, txt_size: heightM * 0.6)),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-            SizedBox(height: heightM * 0.5,),
+            SizedBox(
+              height: heightM * 0.5,
+            ),
             Center(
               child: RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
                       text: "Didn't Have an Account? ",
-                      style: ourTextStyle(txt_color: txt_color, txt_size: heightM * 0.55),
+                      style: ourTextStyle(
+                          txt_color: txt_color, txt_size: heightM * 0.55),
                     ),
                     TextSpan(
                       text: ' Sign Up',
-                      style: ourTextStyle(txt_color: button_color, txt_size: heightM * 0.55),
-                      recognizer: TapGestureRecognizer()..onTap = () {
-                        print("Sign Up");
-                        // SignUpPage
-                        Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => SignUpPage()));
-                        // Long Pressed.
-                      },
+                      style: ourTextStyle(
+                          txt_color: button_color, txt_size: heightM * 0.55),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          print("Sign Up");
+                          // SignUpPage
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SignUpPage()));
+                          // Long Pressed.
+                        },
                     ),
                   ],
                 ),
               ),
             )
-
           ],
         ),
-      ),
+      )),
     );
   }
 
-  void openSheet(BuildContext context , heightM , button_color ,txt_color , phoneNumber , verificationId ){
+  void openSheet(BuildContext context, heightM, button_color, txt_color,
+      phoneNumber, verificationId) {
     showModalBottomSheet(
         context: context,
         elevation: 20,
         isDismissible: false,
         enableDrag: false,
-        isScrollControlled : true,
+        isScrollControlled: true,
         builder: (context) {
           return Padding(
             padding: EdgeInsets.only(
@@ -188,34 +289,36 @@ class _SignInState extends State<SignIn> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-
                 Text(
                   'Enter OTP that sends to',
-                  style: ourTextStyle(txt_color: txt_color, txt_size: heightM * 0.7),
+                  style: ourTextStyle(
+                      txt_color: txt_color, txt_size: heightM * 0.7),
                 ),
-
                 Text(
                   '${phoneNumber}',
-                  style: ourTextStyle(txt_color: txt_color, txt_size: heightM * 0.7),
+                  style: ourTextStyle(
+                      txt_color: txt_color, txt_size: heightM * 0.7),
                 ),
-
-
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: VerificationCode(
-                    textStyle: ourTextStyle(txt_color: txt_color, txt_size: heightM * 0.4),
+                    textStyle: ourTextStyle(
+                        txt_color: txt_color, txt_size: heightM * 0.4),
                     keyboardType: TextInputType.number,
                     fullBorder: true,
-                    underlineColor: button_color, // If this is null it will use primaryColor: Colors.red from Theme
+                    underlineColor:
+                        button_color, // If this is null it will use primaryColor: Colors.red from Theme
                     length: 6,
-                    cursorColor: txt_color, // If this is null it will default to the ambient
+                    cursorColor:
+                        txt_color, // If this is null it will default to the ambient
                     // clearAll is NOT required, you can delete it
                     // takes any widget, so you can implement your design
                     clearAll: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         'clear all'.toUpperCase(),
-                        style: ourTextStyle(txt_color: txt_color, txt_size: heightM * 0.5),
+                        style: ourTextStyle(
+                            txt_color: txt_color, txt_size: heightM * 0.5),
                       ),
                     ),
                     onCompleted: (String value) {
@@ -231,7 +334,6 @@ class _SignInState extends State<SignIn> {
                     },
                   ),
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -242,23 +344,25 @@ class _SignInState extends State<SignIn> {
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
                           elevation: 10.0,
-                          borderRadius: BorderRadius.circular(10.0),//12
-                          color: Colors.transparent,//Colors.cyan.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(10.0), //12
+                          color: Colors
+                              .transparent, //Colors.cyan.withOpacity(0.5),
                           child: MaterialButton(
                             minWidth: MediaQuery.of(context).size.width,
                             color: Colors.black45.withOpacity(0.7),
-                            shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10.0) ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
                             splashColor: Colors.black45,
                             onPressed: () => Navigator.of(context).pop(),
                             child: Text('Back',
                                 textAlign: TextAlign.center,
-                                style: ourTextStyle(txt_color: Colors.white, txt_size: heightM * 0.6)),
+                                style: ourTextStyle(
+                                    txt_color: Colors.white,
+                                    txt_size: heightM * 0.6)),
                           ),
                         ),
                       ),
                     ),
-
-
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
                       height: heightM * 1.9,
@@ -266,12 +370,14 @@ class _SignInState extends State<SignIn> {
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
                           elevation: 10.0,
-                          borderRadius: BorderRadius.circular(10.0),//12
-                          color: Colors.transparent,//Colors.cyan.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(10.0), //12
+                          color: Colors
+                              .transparent, //Colors.cyan.withOpacity(0.5),
                           child: MaterialButton(
                             minWidth: MediaQuery.of(context).size.width,
                             color: button_color.withOpacity(0.7),
-                            shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10.0) ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
                             splashColor: button_color,
                             onPressed: () async {
                               CoolAlert.show(
@@ -281,36 +387,38 @@ class _SignInState extends State<SignIn> {
                               );
 
                               // Create a PhoneAuthCredential with the code
-                              PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: _code!);
+                              PhoneAuthCredential credential =
+                                  PhoneAuthProvider.credential(
+                                      verificationId: verificationId,
+                                      smsCode: _code!);
                               // ConfirmationResult confirmationResult = await FirebaseAuth.instance.signInWithPhoneNumber('+962786183499');
 
                               // print("credential ${confirmationResult}");
                               print("credential ${credential}");
-                              await finishOTPLogin(credential ,button_color);
-
+                              await finishOTPLogin(credential, button_color);
                             },
                             child: Text('Sign In',
                                 textAlign: TextAlign.center,
-                                style: ourTextStyle(txt_color: Colors.white, txt_size: heightM * 0.6)),
+                                style: ourTextStyle(
+                                    txt_color: Colors.white,
+                                    txt_size: heightM * 0.6)),
                           ),
                         ),
                       ),
                     ),
                   ],
                 )
-
               ],
             ),
           );
         });
   }
 
-  finishOTPLogin(AuthCredential authCredential ,button_color) async {
+  finishOTPLogin(AuthCredential authCredential, button_color) async {
     //
     // setBusyForObject(otpLogin, true);
     // Sign the user in (or link) with the credential
     try {
-
       final userCredential = await FirebaseAuth.instance.signInWithCredential(
         authCredential,
       );
@@ -324,7 +432,8 @@ class _SignInState extends State<SignIn> {
 
       Navigator.of(context).pop();
 
-      final user = await userSetup(userUid: userUid , firstName:  "" , lastName: "");
+      final user =
+          await userSetup(userUid: userUid, firstName: "", lastName: "");
 
       // print("ddd ${userCredential.user?.email}");
       // print("ddd ${firebaseToken}");
@@ -337,23 +446,20 @@ class _SignInState extends State<SignIn> {
         text: 'Transaction completed successfully!',
       );
 
-
       /// WelcomePage
 
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => WelcomePage()));
-
-
     } catch (error) {
       Navigator.of(context).pop();
-      String Error = "" ;
+      String Error = "";
       print("e ${error}");
 
-
-      if(error.toString().contains("does not exist")) {
-        Error = "User Not Exist! , Please Go to Sign Up Page" ;
-      }else  if(error.toString().contains("The sms verification code used to create the phone auth credential is invalid")) {
-        Error = "Code Error !" ;
+      if (error.toString().contains("does not exist")) {
+        Error = "User Not Exist! , Please Go to Sign Up Page";
+      } else if (error.toString().contains(
+          "The sms verification code used to create the phone auth credential is invalid")) {
+        Error = "Code Error !";
       }
 
       CoolAlert.show(
@@ -364,7 +470,6 @@ class _SignInState extends State<SignIn> {
         confirmBtnColor: button_color,
       );
 
-
       print("ddd_222 ${error}");
 
       // viewContext.showToast(msg: "$error", bgColor: Colors.red);
@@ -373,10 +478,10 @@ class _SignInState extends State<SignIn> {
     // setBusyForObject(otpLogin, false);
   }
 
-
   Future<DocumentSnapshot<Map<String, dynamic>>> userSetup(
-      {required String firstName, required String lastName, required String userUid}) async {
-
+      {required String firstName,
+      required String lastName,
+      required String userUid}) async {
     // FirebaseFirestore.instance.collection('Users').doc(userUid).get(
     //     {
     //       'firstName': firstName,
@@ -384,105 +489,14 @@ class _SignInState extends State<SignIn> {
     //       'uid': userUid
     //     });
 
-    final user = await FirebaseFirestore.instance.collection('Users').doc(userUid).get();
+    final user =
+        await FirebaseFirestore.instance.collection('Users').doc(userUid).get();
 
-
-    return user ;
+    return user;
   }
 
-
-  Widget phone_flag(Color txt_color, double heightM) {
-    return Column(
-      children: [
-        Text("Country Code" ,  style: ourTextStyle(
-            txt_color: txt_color, txt_size: heightM * 0.6), ),
-        Card(
-          child: InkWell(
-            onTap: (){
-              showCountryPicker(
-                context: context,
-                showPhoneCode: true,
-                onSelect: (Country selected){
-                  print("country: ${selected.flagEmoji}");
-                  country_selected = selected ;
-                  setState(() {});
-                },
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                                  getCountryData(),
-                                  style: ourTextStyle(
-                                      txt_color: txt_color, txt_size: heightM * 0.6),
-                                ),
-                  // SizedBox(width: heightM * 0.5,),
-                  const Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: Icon(Icons.keyboard_arrow_down_rounded),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget phone_text(Color txt_color, double heightM) {
-    return Column(
-      children: [
-        Text("Phone Number" ,  style: ourTextStyle(
-            txt_color: txt_color, txt_size: heightM * 0.6), ),
-        Card(
-          child: Container(
-            width: heightM * 5,
-            child: TextFormField(
-              controller: phone,
-              cursorColor: Colors.black,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  contentPadding:
-                  EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                  hintText: "5X XXXX XXXX"),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  String getCountryData(){
-    if(country_selected != null){
-      return '${country_selected?.flagEmoji?? ""} +${country_selected?.phoneCode?? ""}' ;
-    }else{
-      return '$country_flag $country_code' ;
-    }
-  }
-
-  String getCountryCode(){
-    if(country_selected != null){
-      return country_selected?.phoneCode?? "" ;
-    }else{
-      return "$country_code" ;
-    }
-  }
-
-
-  TextStyle ourTextStyle({required Color txt_color  ,required double txt_size }) {
+  TextStyle ourTextStyle({required Color txt_color, required double txt_size}) {
     return GoogleFonts.cairo(
-          color: txt_color ,
-          fontWeight: FontWeight.bold,
-          fontSize: txt_size
-        );
+        color: txt_color, fontWeight: FontWeight.bold, fontSize: txt_size);
   }
 }

@@ -49,6 +49,8 @@ dependencies:
   flutter_verification_code: ^1.1.6
   cool_alert: ^1.1.0
   country_picker: ^2.0.18
+  intl_phone_number_input: ^0.7.1
+  animate_do: ^3.0.2
 
 dev_dependencies:
   flutter_test:
@@ -92,7 +94,7 @@ flutter:
   assets:
    - asset/
    - asset/category_img/
-   - assets/auth/
+   - asset/auth/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
