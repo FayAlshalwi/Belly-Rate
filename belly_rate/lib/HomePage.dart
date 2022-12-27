@@ -42,13 +42,9 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
   void initState() {
     super.initState();
-print('dalal');
+     print('dalal');
 
-    /*LocationData locationData = userlocation();
-    print('currentLocation.latitude:');
-  print(locationData.latitude);
-  print('currentLocation.longitude');
-  print(locationData.longitude);*/
+  /////LOCATION Tracking 
   userlocation();
 
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
@@ -96,10 +92,9 @@ print('dalal');
       if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
         AwesomeNotifications().getGlobalBadgeCounter().then(
               (value) =>
-                  AwesomeNotifications().setGlobalBadgeCounter(value - 1),
+                  AwesomeNotifications().setGlobalBadgeCounter(0),
             );
       }
-
       String? resID = notification.summary;
       print(resID);
 
@@ -164,6 +159,7 @@ print('dalal');
   }
   /////Location 
 userlocation() async {
+  print('inside userlocation method');
 
   Location location = new Location();
 
@@ -187,8 +183,47 @@ if (_permissionGranted == PermissionStatus.denied) {
   }
 }
 
+/*Future<void> distanceInMeters(String RestaurantId ,double userlat , double userlong , String RecommendationDocID) async {
 
-/* location.onLocationChanged.listen((LocationData currentLocation) async {
+  print('inside distanceInMeters method');
+
+  final _firestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+
+
+  final Restaurants = await _firestore
+      .collection('Restaurants')
+      .where("ID", isEqualTo: RestaurantId)
+      .get();
+
+      if (Restaurants.docs.isNotEmpty) {
+     double  RLongitude = double.parse(Restaurants.docs[0]['long']);
+     double RLatitude = double.parse(Restaurants.docs[0]['lat']);
+
+    double distanceInMeters = Geolocator.distanceBetween(RLatitude , RLongitude , userlat , userlong);
+
+    if(distanceInMeters <= 2000){
+      print('$distanceInMeters');
+      print('less than 2km');
+
+       print('docid is = $RecommendationDocID');
+        FirebaseFirestore.instance
+        .collection('Recommendation')
+        .doc(RecommendationDocID)
+        .update({"Notified_location": true});
+
+        ContentOfLocationNotification(RestaurantId);
+    }
+    else{
+       print('$distanceInMeters');
+      print('More than 2km');
+    }
+      }// if isNotEmpty 
+
+}//distanceInMeters*/
+
+
+location.onLocationChanged.listen((LocationData currentLocation) async {
   // Use current location
   print('onLocationChanged method');
   print('currentLocation.latitude:');
@@ -204,49 +239,55 @@ if (_permissionGranted == PermissionStatus.denied) {
 final Recommendation = await _firestore
       .collection('Recommendation')
       .where("userId", isEqualTo: UID)
-      .where("Notified", isEqualTo: true)
+      .where("Notified_location", isEqualTo: false)
       .get();
 
   if (Recommendation.docs.isNotEmpty) {
 
-    for(){
+    for (int i = 0; i < Recommendation.docs.length; i++){
 
       String RestaurantId = Recommendation.docs[i]['RestaurantId'];
-      distanceInMeters(RestaurantId ,currentLocation.latitude , currentLocation.longitude);
-    
-    }
-  } 
-  else {
-    print('no recommendation!');
-  }
+      double? userlat = currentLocation.latitude; 
+      double? userlong = currentLocation.longitude;
+      String RecommendationDocID = Recommendation.docs[i].id;
 
-});*/
-
-  Future<void> distanceInMeters(String RestaurantId ,double lat , double lang ) async {
-
-  final _firestore = FirebaseFirestore.instance;
-  final _firebaseAuth = FirebaseAuth.instance;
-
-  double Longitude = 0;
-  double Latitude = 0; 
-
-  final res = await _firestore
+      final Restaurants = await _firestore
       .collection('Restaurants')
       .where("ID", isEqualTo: RestaurantId)
       .get();
 
-      if (res.docs.isNotEmpty) {
-      Longitude = res.docs[0]['Longitude'];
-      Latitude = res.docs[0]['Latitude'];
+      if (Restaurants.docs.isNotEmpty) {
 
-    double distanceInMeters = Geolocator.distanceBetween(Longitude, Latitude, lang , lat);
+     double Restaurantlong = double.parse(Restaurants.docs[0]['long']);
+     double Restaurantlat = double.parse(Restaurants.docs[0]['lat']);
+
+    double distanceInMeters = Geolocator.distanceBetween(Restaurantlat , Restaurantlong , userlat! , userlong!);
 
     if(distanceInMeters <= 2000){
-      ContentOfNotification(RestaurantId);
-    }
-      }// if isNotEmpty 
+      print('$distanceInMeters');
+      print('less than 2km');
 
-}//distanceInMeters
+       print('docid is = $RecommendationDocID');
+        FirebaseFirestore.instance
+        .collection('Recommendation')
+        .doc(RecommendationDocID)
+        .update({"Notified_location": true});
+
+        ContentOfLocationNotification(RestaurantId);
+    }
+    else{
+       print('$distanceInMeters');
+      print('More than 2km');
+    }
+      }
+      //distanceInMeters(RestaurantId ,lat! , long! , RecommendationDocID );
+    }
+  } 
+  else {
+    print('no recommendation for this user!');
+  }
+
+});
 
 }//userlocation
 
@@ -509,4 +550,129 @@ final Recommendation = await _firestore
                   ))),
     );
   }
+}
+
+void ContentOfLocationNotification(String RestaurantId) async {
+  print('inside ContentOfLocationNotification');
+  final _firestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+
+  String category = "";
+  String name = "";
+  String Photo = "";
+
+  final res = await _firestore
+      .collection('Restaurants')
+      .where("ID", isEqualTo: RestaurantId)
+      .get();
+  print(2);
+  if (res.docs.isNotEmpty) {
+    String docid = res.docs[0].id;
+    print(docid);
+    print(3);
+
+    // Get category, name, photo
+    category = res.docs[0]['category'];
+    print(category);
+    name = res.docs[0]['name'];
+    print(name);
+
+    List<dynamic> Recommendationphotos = [];
+
+    try {
+      Recommendationphotos = res.docs[0]['photos'];
+      if (Recommendationphotos.length != 0) {
+        Photo = Recommendationphotos[0];
+        print('Photo not empty');
+      } else {
+        print('Photo empty');
+      }
+    } catch (e) {
+      Photo = "";
+    }
+    print(Photo);
+  }
+  print('last');
+
+  String NotificationContent = "";
+// NotificationContent
+  switch (category.toLowerCase()) {
+    case ("american restaurant"):
+      {
+        NotificationContent =
+            "Fast and yummy, Good food for your belly!, lets go and try $name.";
+        // NotificationContent = "Burgers! Because no great story started with salad. lets go and try $name.";
+        print(NotificationContent);
+        break;
+      }
+
+    case ('french restaurant'):
+      {
+        NotificationContent =
+            "It's time to enjoy the finer things in life!, how about trying $name.";
+        //  NotificationContent = "A genuine fine-dining experience awaits!, how about trying $name.";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("health food restaurant"):
+      {
+        NotificationContent =
+            "Choose healthy. Be strong. Live long!, Run to try $name.";
+        //  NotificationContent = "We’re fresher! We’re tastier! We’re recommending $name!";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("indian restaurant"):
+      {
+        NotificationContent =
+            "We suggest something hut, somthing tasty!, go and taste $name.";
+        //NotificationContent = "Spice it up!, and try $name.";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("italian restaurant"):
+      {
+        NotificationContent =
+            "Delicious Italian food, just the way it should be!, $name is a must.";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("japanese restaurant"):
+      {
+        NotificationContent =
+            "Roll with us, and go to try $name. where sushi lovers rejoice!";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("lebanese restaurant"):
+      {
+        NotificationContent =
+            "Celebrating the pure, simple pleasures of Authentic lebanese cuisine.!, try  $name.";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("seafood restaurant"):
+      {
+        NotificationContent =
+            "Try $name, and Keep The Waves of Seafood Coming!";
+        // Fresh From The Net, You Won’t Regret!
+        print(NotificationContent);
+        break;
+      }
+      default:
+      print('DEFAULT case ');
+      NotificationContent =
+            "New recommendations match your test!, lets go to try $name.";
+        print(NotificationContent);
+
+  } //switch
+
+//createPlantFoodNotification(NotificationContent ,RestaurantId, Photo);
+  createPlantFoodNotification(NotificationContent, RestaurantId);
 }

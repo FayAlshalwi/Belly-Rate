@@ -39,9 +39,9 @@ void main() async {
 
   final periodicTimer = Timer.periodic(
     //
-    const Duration(seconds: 5),
+    const Duration(seconds: 15),
     (timer) {
-      //GetRecommendation();
+     // GetRecommendation();
       //print('Update user about remaining time');
     },
   );
@@ -234,6 +234,11 @@ void ContentOfNotification(String RestaurantId) async {
         print(NotificationContent);
         break;
       }
+       default:
+      print('DEFAULT case ');
+      NotificationContent =
+            "New recommendations match your test!, lets go to try $name.";
+        print(NotificationContent);
   } //switch
 
 //createPlantFoodNotification(NotificationContent ,RestaurantId, Photo);
