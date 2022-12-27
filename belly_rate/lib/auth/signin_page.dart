@@ -1,6 +1,5 @@
 import 'package:belly_rate/HomePage.dart';
 import 'package:belly_rate/auth/signup_page.dart';
-import 'package:belly_rate/auth/welcome_page.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -119,7 +118,9 @@ class _SignInState extends State<SignIn> {
                       print(value);
                     },
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value!.isEmpty ||
+                          value == null ||
+                          value.trim() == '') {
                         return 'Please enter your phone number';
                       }
                       // else if (value[0] != 5)
@@ -244,7 +245,7 @@ class _SignInState extends State<SignIn> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: "Doesn't Have an Account? ",
+                      text: "Doesn't have an account? ",
                       style: ourTextStyle(
                           txt_color: txt_color, txt_size: heightM * 0.55),
                     ),
@@ -454,7 +455,7 @@ class _SignInState extends State<SignIn> {
       /// WelcomePage
 
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => WelcomePage()));
+          context, MaterialPageRoute(builder: (context) => HomePage()));
     } catch (error) {
       Navigator.of(context).pop();
       String Error = "";

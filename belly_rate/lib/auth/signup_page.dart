@@ -25,9 +25,23 @@ class _SignUpPageState extends State<SignUpPage> {
   late PhoneNumber phonenum;
   TextEditingController phone = TextEditingController();
   TextEditingController first_name = TextEditingController();
+  List<String> rest = ["135055", "135062", "132668"];
   bool _onEditing = true;
   String? _code;
+  late QuerySnapshot<Map<String, dynamic>> res;
   final formKey = GlobalKey<FormState>();
+
+  void initState() {
+    super.initState();
+
+    getUsers();
+  }
+
+  getUsers() async {
+    setState(() async {
+      res = await FirebaseFirestore.instance.collection('Users').get();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,14 +119,17 @@ class _SignUpPageState extends State<SignUpPage> {
                   keyboardType: TextInputType.text,
                   onChanged: (value) {
                     formKey.currentState?.validate();
+                    print(first_name.text);
                   },
                   validator: (value) {
                     final regExp = RegExp(r'^[a-zA-Z]+$');
                     String text = first_name.text;
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your phone number';
+                      return 'Please enter your name';
                     } else if (!regExp.hasMatch(text.trim())) {
                       return 'You cannot enter special characters !@#\%^&*()';
+                    } else if (value.length <= 2) {
+                      return "Please enter at least 3 characters";
                     }
                   },
 
@@ -175,25 +192,34 @@ class _SignUpPageState extends State<SignUpPage> {
                       formKey.currentState?.validate();
                       setState(() {
                         phonenum = number;
-                        print("phonenum");
-                        print(phonenum);
+
                         phoneNumber = number.phoneNumber!;
                         print("phoneNumber");
                         print(phoneNumber);
                       });
+
                       print(number.phoneNumber);
                     },
                     onInputValidated: (bool value) {
                       print(value);
                     },
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value!.isEmpty ||
+                          value == null ||
+                          value.trim() == '') {
                         return 'Please enter your phone number';
                       }
                       // else if (value[0] != 5)
                       //   return 'Saudi numbers starts with 5 ';
                       else if (value.length > 11 || value.length < 11) {
                         return 'Please enter 9 numbers';
+                      } else if (true) {
+                        for (int i = 0; i < res.docs.length; i++) {
+                          print(res.docs[i]);
+                          if (res.docs[i]['phoneNumber'] == phoneNumber) {
+                            return 'You already have an account';
+                          }
+                        }
                       }
                     },
                     selectorConfig: SelectorConfig(
@@ -309,7 +335,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: "Have an Account? ",
+                      text: "Have an account? ",
                       style: ourTextStyle(
                           txt_color: txt_color, txt_size: heightM * 0.55),
                     ),
@@ -452,48 +478,65 @@ class _SignUpPageState extends State<SignUpPage> {
                                 borderRadius: BorderRadius.circular(10.0)),
                             // splashColor: button_color,
                             onPressed: () async {
-                              PhoneAuthCredential credential =
-                                  PhoneAuthProvider.credential(
-                                      verificationId: verificationId,
-                                      smsCode: _code!);
-                              print("user  credential!!! ");
-                              print("user  !!! ");
+                              try {
+                                PhoneAuthCredential credential =
+                                    PhoneAuthProvider.credential(
+                                        verificationId: verificationId,
+                                        smsCode: _code!);
 
-                              print(credential);
-                              await FirebaseAuth.instance
-                                  .signInWithCredential(credential);
+                                print("user  credential!!! ");
+                                print("user  !!! ");
 
-                              if (FirebaseAuth.instance.currentUser != null) {
+                                print(credential);
+
+                                print("hiiiiiii");
                                 final userCredential = await FirebaseAuth
                                     .instance
-                                    .signInWithCredential(
-                                  credential,
-                                );
-                                print("userCredential");
-                                print(userCredential);
+                                    .signInWithCredential(credential);
+
                                 String firebaseToken =
                                     await userCredential.user!.getIdToken();
                                 print("firebaseToken");
                                 print(firebaseToken);
+
                                 String userUid = userCredential.user!.uid;
-                                print("user id userUid!!! ");
+                                print("user id userUid!!! @@@@");
                                 print(userUid);
-                                // Navigator.of(context).pop();
-                                print("userUid");
-                                print(userUid);
-                                print("first_name.text");
+                                print("firstName");
                                 print(first_name.text);
-                                print("phoneNumber");
-                                print(phoneNumber);
-                                await userSetup(
-                                    userUid: userUid,
-                                    firstName: first_name.text,
-                                    phoneNumber: phoneNumber);
+
+                                FirebaseFirestore.instance
+                                    .collection('Users')
+                                    .doc(userUid)
+                                    .set({
+                                  'name': first_name.text,
+                                  'phoneNumber': phoneNumber,
+                                  'uid': userUid,
+                                  'picture':
+                                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+                                  'rest': rest,
+                                });
+                                CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.success,
+                                  text: 'Sign Up completed successfully!',
+                                );
 
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (context) => SignIn()),
                                     (Route<dynamic> route) => false);
+                              } catch (error) {
+                                CoolAlert.show(
+                                  context: context,
+                                  title: "",
+                                  type: CoolAlertType.error,
+                                  text: "Code Error !",
+                                  confirmBtnColor: button_color,
+                                );
+                                print("ddd_222 ${error}");
+
+                                // viewContext.showToast(msg: "$error", bgColor: Colors.red);
                               }
                             },
                             child: Text('Sign Up',
@@ -514,81 +557,6 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
           );
         });
-  }
-
-  finishOTPLogin(AuthCredential authCredential, button_color) async {
-    //
-    // setBusyForObject(otpLogin, true);
-    // Sign the user in (or link) with the credential
-    try {
-      final userCredential = await FirebaseAuth.instance.signInWithCredential(
-        authCredential,
-      );
-      //
-      String firebaseToken = await userCredential.user!.getIdToken();
-
-      String userUid = userCredential.user!.uid;
-      print("userUid");
-      print(userUid);
-      // final apiResponse = await authRequest.verifyFirebaseToken(
-      //   accountPhoneNumber,
-      //   firebaseToken,
-      // );
-
-      Navigator.of(context).pop();
-
-      await userSetup(
-          userUid: userUid,
-          firstName: first_name.text,
-          phoneNumber: phoneNumber);
-
-      print("ddd ${firebaseToken}");
-
-      CoolAlert.show(
-        context: context,
-        type: CoolAlertType.success,
-        text: 'SignUp completed successfully!',
-      );
-
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => HomePage()),
-          (Route<dynamic> route) => false);
-
-      // print("ddd ${apiResponse.data}");
-      // print("ddd ${apiResponse.message}");
-      //
-      // await handleDeviceLogin(apiResponse);
-    } catch (error) {
-      Navigator.of(context).pop();
-      CoolAlert.show(
-        context: context,
-        title: "",
-        type: CoolAlertType.error,
-        text: "Code Error !",
-        confirmBtnColor: button_color,
-      );
-      print("ddd_222 ${error}");
-
-      // viewContext.showToast(msg: "$error", bgColor: Colors.red);
-    }
-
-    // setBusyForObject(otpLogin, false);
-  }
-
-  Future<void> userSetup(
-      {required String firstName,
-      required String userUid,
-      required String phoneNumber}) async {
-    FirebaseFirestore.instance.collection('Users').doc(userUid).set({
-      'firstName': firstName,
-      'phoneNumber': phoneNumber,
-      'uid': userUid,
-      'picture':
-          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-      'rest': ["135055", "135062", "132668"]
-    });
-
-    return;
   }
 
   TextStyle ourTextStyle({required Color txt_color, required double txt_size}) {
