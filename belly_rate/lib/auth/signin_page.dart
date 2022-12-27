@@ -29,6 +29,19 @@ class _SignInState extends State<SignIn> {
   String phoneNumber = "";
 
   TextEditingController phone = TextEditingController();
+  late QuerySnapshot<Map<String, dynamic>> res;
+
+  void initState() {
+    super.initState();
+
+    getUsers();
+  }
+
+  getUsers() async {
+    setState(() async {
+      res = await FirebaseFirestore.instance.collection('Users').get();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +131,8 @@ class _SignInState extends State<SignIn> {
                       print(value);
                     },
                     validator: (value) {
+                      bool x = false;
+
                       if (value!.isEmpty ||
                           value == null ||
                           value.trim() == '') {
@@ -125,8 +140,17 @@ class _SignInState extends State<SignIn> {
                       }
                       // else if (value[0] != 5)
                       //   return 'Saudi numbers starts with 5 ';
+
                       else if (value.length > 11 || value.length < 11) {
                         return 'Please enter 9 numbers';
+                      } else if (true) {
+                        for (int i = 0; i < res.docs.length; i++) {
+                          print(res.docs[i]);
+                          if (res.docs[i]['phoneNumber'] == phoneNumber) {
+                            break;
+                          }
+                          return 'You don\'t have an account, try to sign up';
+                        }
                       }
                     },
                     selectorConfig: SelectorConfig(

@@ -217,7 +217,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         for (int i = 0; i < res.docs.length; i++) {
                           print(res.docs[i]);
                           if (res.docs[i]['phoneNumber'] == phoneNumber) {
-                            return 'You already have an account';
+                            return 'You already have an account, try to sign in';
                           }
                         }
                       }
