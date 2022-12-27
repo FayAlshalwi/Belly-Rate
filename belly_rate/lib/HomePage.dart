@@ -166,10 +166,12 @@ userlocation() async {
 bool _serviceEnabled;
 PermissionStatus _permissionGranted;
 LocationData _locationData;
+bool _enableBackgroundMode; 
 
 _serviceEnabled = await location.serviceEnabled();
 if (!_serviceEnabled) {
   _serviceEnabled = await location.requestService();
+ _enableBackgroundMode =  await location.enableBackgroundMode(); 
   if (!_serviceEnabled) {
     return;
   }
@@ -178,6 +180,11 @@ if (!_serviceEnabled) {
 _permissionGranted = await location.hasPermission();
 if (_permissionGranted == PermissionStatus.denied) {
   _permissionGranted = await location.requestPermission();
+  _enableBackgroundMode =  await location.enableBackgroundMode(); 
+  if (_enableBackgroundMode != _enableBackgroundMode) {
+    location.enableBackgroundMode(enable: true);
+    print('BackgroundMode is off');
+  }
   if (_permissionGranted != PermissionStatus.granted) {
     return LocationData;
   }
@@ -670,7 +677,6 @@ void ContentOfLocationNotification(String RestaurantId) async {
       NotificationContent =
             "New recommendations match your test!, lets go to try $name.";
         print(NotificationContent);
-
   } //switch
 
 //createPlantFoodNotification(NotificationContent ,RestaurantId, Photo);
