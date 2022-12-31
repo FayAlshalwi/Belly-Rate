@@ -673,6 +673,6 @@ void ContentOfLocationNotification(String RestaurantId) async {
 
   } //switch
 
-//createPlantFoodNotification(NotificationContent ,RestaurantId, Photo);
-  createPlantFoodNotification(NotificationContent, RestaurantId);
+createNotification(NotificationContent ,RestaurantId, Photo);
+  //createPlantFoodNotification(NotificationContent, RestaurantId);
 }

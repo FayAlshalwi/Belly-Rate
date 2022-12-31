@@ -1,7 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'utilities.dart';
 
-Future<void> createPlantFoodNotification(String notificationcontent , String resID  ) async {
+Future<void> createNotification(String notificationcontent , String resID , String photo  ) async {
   print('Dalalllllllll');
   await AwesomeNotifications().createNotification(
     content: NotificationContent(
@@ -11,8 +11,8 @@ Future<void> createPlantFoodNotification(String notificationcontent , String res
           'New Recommendation!',
       body: '$notificationcontent',
       summary: resID,
-      //bigPicture: 'asset://assets/notification_map.png',
-      //notificationLayout: NotificationLayout.BigPicture,
+      bigPicture: photo,
+      notificationLayout: NotificationLayout.BigPicture,
     ),
     
   );

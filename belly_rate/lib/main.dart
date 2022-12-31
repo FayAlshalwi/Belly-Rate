@@ -39,9 +39,9 @@ void main() async {
 
   final periodicTimer = Timer.periodic(
     //
-    const Duration(seconds: 15),
+    const Duration(seconds:60),
     (timer) {
-     // GetRecommendation();
+     GetRecommendation();
       //print('Update user about remaining time');
     },
   );
@@ -221,7 +221,7 @@ void ContentOfNotification(String RestaurantId) async {
     case ("lebanese restaurant"):
       {
         NotificationContent =
-            "Celebrating the pure, simple pleasures of Authentic lebanese cuisine.!, try  $name.";
+            "Celebrating the pure, simple pleasures of Authentic lebanese cuisine!, lets go and try $name.";
         print(NotificationContent);
         break;
       }
@@ -235,12 +235,12 @@ void ContentOfNotification(String RestaurantId) async {
         break;
       }
        default:
-      print('DEFAULT case ');
+      print('DEFAULT case');
       NotificationContent =
-            "New recommendations match your test!, lets go to try $name.";
+            "New recommendation match your test!, lets go to try $name.";
         print(NotificationContent);
   } //switch
 
-//createPlantFoodNotification(NotificationContent ,RestaurantId, Photo);
-  createPlantFoodNotification(NotificationContent, RestaurantId);
+createNotification(NotificationContent ,RestaurantId, Photo);
+  //createPlantFoodNotification(NotificationContent, RestaurantId);
 }
