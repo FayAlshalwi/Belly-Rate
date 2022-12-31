@@ -46,17 +46,10 @@ class _HomePage extends State<HomePage> {
 
   /////LOCATION Tracking 
   userlocation();
-  
- AwesomeNotifications().getGlobalBadgeCounter().then(
-              (value) =>
-                  AwesomeNotifications().setGlobalBadgeCounter(0),
-            );
-            
+
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
-        AwesomeNotifications()
-                      .requestPermissionToSendNotifications();
-        /*showDialog(
+        showDialog(
           context: this.context,
           builder: (context) => CupertinoAlertDialog(
             title: Text('Allow Notifications',
@@ -91,7 +84,7 @@ class _HomePage extends State<HomePage> {
                   ))
             ],
           ),
-        );*/
+        );
       }
     });
 
