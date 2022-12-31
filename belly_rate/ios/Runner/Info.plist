@@ -36,8 +36,6 @@
 	<string>Location needed</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location needed</string>
-	<key>UIBackgroundModes</key>
-	<string>location</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Post videos to profile</string>
 	<key>NSPhotoLibraryUsageDescription</key>
