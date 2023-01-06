@@ -12,9 +12,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
 import 'package:belly_rate/models/restaurantModesl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+SharedPreferences? UserData ;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  UserData = await SharedPreferences.getInstance();
+
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

@@ -16,8 +16,11 @@ class Restaurant {
     this.description,
     this.location,
     this.id,
+    this.long,
+    this.lat,
     this.category,
     this.photos,
+    this.far,
   });
 
   String? priceAvg;
@@ -26,6 +29,9 @@ class Restaurant {
   String? description;
   String? location;
   String? id;
+  double? far;
+  String? lat ;
+  String? long ;
   String? category;
   List<String>? photos;
 
@@ -36,6 +42,9 @@ class Restaurant {
     description: json["description"] == null ? null : json["description"],
     location: json["location"] == null ? null : json["location"],
     id: json["ID"] == null ? null : json["ID"],
+    far: json["far"],
+    lat: json["lat"] == null ? null : json["lat"],
+    long: json["long"] == null ? null : json["long"],
     category: json["category"] == null ? null : json["category"],
     photos: json["photos"] == null ? null : List<String>.from(json["photos"].map((x) => x)),
   );
@@ -47,7 +56,10 @@ class Restaurant {
     "description": description == null ? null : description,
     "location": location == null ? null : location,
     "ID": id == null ? null : id,
+    "lat": lat == null ? null : lat,
+    "long": long == null ? null : long,
     "category": category == null ? null : category,
+    "far": far,
     "photos": photos == null ? null : List<dynamic>.from(photos!.map((x) => x)),
   };
 }

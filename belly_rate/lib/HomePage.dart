@@ -6,13 +6,16 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'category_parts/category_slider.dart';
+import 'category_parts/category_slider_homepage.dart';
 import 'category_parts/restaurant_model.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
+import 'main.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -24,6 +27,8 @@ class _HomePage extends State<HomePage> {
   var currentIndex = 0;
   void initState() {
     super.initState();
+    // getLocation(context);
+    _determinePosition();
     get();
   }
 
@@ -150,7 +155,7 @@ class _HomePage extends State<HomePage> {
                 ),
               )),
           SizedBox(
-            height: 20,
+            height: 5,
           ),
           (restaurants.isEmpty == true)
               ? CarouselLoading()
@@ -181,6 +186,9 @@ class _HomePage extends State<HomePage> {
                 ),
               )),
           CategorySlider(),
+          SizedBox(
+            height: 10,
+          ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
               child: Align(
@@ -193,6 +201,10 @@ class _HomePage extends State<HomePage> {
                       fontWeight: FontWeight.bold),
                 ),
               )),
+          SizedBox(
+            height: 10,
+          ),
+          RestaurantSlider()
         ],
       )),
       //Favorite page container
@@ -217,7 +229,8 @@ class _HomePage extends State<HomePage> {
     ];
 
     return Scaffold(
-      body: Center(child: listOfWidgets[currentIndex]),
+      body: Center(
+          child: SingleChildScrollView(child: listOfWidgets[currentIndex])),
       bottomNavigationBar: Container(
           margin: EdgeInsets.all(displayOfWidth * .05),
           height: displayOfWidth * .155,
@@ -324,5 +337,84 @@ class _HomePage extends State<HomePage> {
                     ]),
                   ))),
     );
+  }
+  // void getLocation(context) async {
+  //   Geolocator geolocator = Geolocator();
+  //   // Position position = Position();
+  //   var isGpsEnabled = await Geolocator.isLocationServiceEnabled();
+  //   // var isGpsEnabled = await Geolocator().isLocationServiceEnabled();
+  //   if(isGpsEnabled == false){
+  //     Onclick(context);
+  //   }else if (isGpsEnabled == true) {
+  //     var moh = Geolocator.checkPermission() ;
+  //     // var moh = Geolocator().checkGeolocationPermissionStatus() ;
+  //
+  //
+  //     // ignore: unrelated_type_equality_checks
+  //     // position = await Geolocator.getCurrentPosition();
+  //     // position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  //     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  //     print(position);
+  //     UserData!.setDouble('locationLat', position.latitude);
+  //     UserData!.setDouble('locationLon', position.longitude);
+  //   }
+  //
+  // }
+  // void Onclick(BuildContext context) {
+  //   AlertDialog alertDialog = AlertDialog(
+  //       title:
+  //       Text("Error", style: TextStyle(fontFamily: "Eng1", fontSize: 22)),
+  //       content: Text(
+  //         "Please Turn the GPS",
+  //         style: TextStyle(
+  //             fontFamily: "Eng1", fontSize: 25, fontWeight: FontWeight.bold),
+  //       ));
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return alertDialog;
+  //       });
+  // }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    Position position = await Geolocator.getCurrentPosition();
+    print(position);
+    UserData!.setDouble('locationLat', position.latitude);
+    UserData!.setDouble('locationLon', position.longitude);
+
+    return position;
   }
 }
