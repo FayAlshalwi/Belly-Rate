@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:belly_rate/history.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -282,7 +283,7 @@ class _HomePage extends State<HomePage> {
       //Favorite page container
       Container(child: Text('Favorite')),
       //History page container
-      Container(child: Text('History')),
+      Container(child: history()),
       //Profile page container
       Container(child: myProfile()),
     ];
