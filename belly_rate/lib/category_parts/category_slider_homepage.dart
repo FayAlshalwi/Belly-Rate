@@ -112,12 +112,12 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 FittedBox(
-                                  child: Text("${item.name}",
+                                  child: Text("${item.name} ",
                                       style: ourTextStyle(
                                           txt_color: Color(0xFF5a3769),
                                           txt_size: heightM * 0.7)),
                                 ),
-                                Text("Price Average: ${item.priceAvg}",
+                                Text("${getBuildPriceAvg(item)}",
                                     style: ourTextStyle(
                                         txt_color: Colors.black,
                                         txt_size: heightM * 0.5)),
@@ -180,6 +180,20 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
         ),
       ),
     );
+  }
+
+  String? getBuildPriceAvg(Restaurant item) {
+    if (item.priceAvg?.toLowerCase().trim() == "High".toLowerCase().trim()) {
+      return "\$\$\$";
+    } else if (item.priceAvg?.toLowerCase().trim() ==
+        "Medium".toLowerCase().trim()) {
+      return "\$\$";
+    } else if (item.priceAvg?.toLowerCase().trim() ==
+        "Low".toLowerCase().trim()) {
+      return "\$";
+    } else {
+      return "";
+    }
   }
 
   TextStyle ourTextStyle({required Color txt_color, required double txt_size}) {
