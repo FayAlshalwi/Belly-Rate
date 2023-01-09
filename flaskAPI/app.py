@@ -81,9 +81,8 @@ pred_data = pd.DataFrame(all_user_predicted_ratings, columns=pivot_data.columns)
 pred_data.head()
 
 
-
+num_recommendations = 3
 userID = 120
-num_recommedations = 5
 print(pred_data)
 print(userID)
 print(userID)
@@ -91,7 +90,7 @@ print(userID)
 print(pivot_data)
 
 @app.route('/ratings', methods=['GET', 'POST'])
-def recommend(userID, pivot_data, pred_data, num_recommendations):  # put application's code here
+def recommend():  # put application's code here
     global response
     if(request.method == 'POST'):
         request_data = request.data
@@ -113,8 +112,11 @@ def recommend(userID, pivot_data, pred_data, num_recommendations):  # put applic
         temp = temp.sort_values('user_predictions', ascending=False)
         print('\n Below are the recommended places for user(user_id = {}):\n'.format(userID))
         RecommendedPlaces = temp.head(num_recommendations)
-        print(temp.head(num_recommendations))
-        return jsonify({'recommeneded': temp.head(num_recommendations)})
+        Recommended = [RecommendedPlaces.index[0], RecommendedPlaces.index[1], RecommendedPlaces.index[2]]
+
+        print(Recommended)
+        # print(temp.head(num_recommendations))
+        return jsonify({'recommeneded': Recommended})
         # return temp.head(num_recommendations)
 
 userID = 120
@@ -124,7 +126,7 @@ print(userID)
 print(userID)
 print(userID)
 print(pivot_data)
-recommend(userID, pivot_data, pred_data, num_recommedations)
+# recommend(userID, pivot_data, pred_data, num_recommedations)
 
 def write(new):
     with open("rating_final.csv", "a") as f:

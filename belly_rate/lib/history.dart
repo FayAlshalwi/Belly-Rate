@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:belly_rate/auth/our_user_model.dart';
 import 'package:belly_rate/auth/signin_page.dart';
 import 'package:belly_rate/auth/signup_page.dart';
@@ -73,22 +72,33 @@ class _history extends State<history> {
             Text("Mobile Number :  ${ourUser?.phone_number}"),
             ElevatedButton(
                 onPressed: () async {
-                  final url = 'http://127.0.0.1:5000/ratings';
-                  final response =
-                      await get(Uri.https('http://127.0.0.1:5000/ratings'));
+                  print("here1");
+
+                  final url = 'http://127.0.0.1:5000';
+                  final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+                  print("here2");
+
+                  final response = await get(uri);
+                  print("here3");
+                  print(response.body);
+                  print("here");
+
                   final decoded =
                       json.decode(response.body) as Map<String, dynamic>;
+                  print("here4");
+
                   print(decoded['recommeneded']);
                 },
                 child: Text("print")),
             ElevatedButton(
                 onPressed: () async {
-                  final url = 'http://127.0.0.1:5000/ratings';
-                  final response =
-                      await post(Uri.https('http://127.0.0.1:5000/ratings'),
-                          body: json.encode({
-                            'rating': ["U115", "RD", 5, 5, 5]
-                          }));
+                  final url = 'http://127.0.0.1:5000/';
+                  final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+
+                  final response = await post(uri,
+                      body: json.encode({
+                        'rating': ["U115", "RD", 5, 5, 5]
+                      }));
                 },
                 child: Text("Add Rate"))
           ],

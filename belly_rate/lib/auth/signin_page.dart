@@ -147,9 +147,8 @@ class _SignInState extends State<SignIn> {
                         for (int i = 0; i < res.docs.length; i++) {
                           print(res.docs[i]);
                           if (res.docs[i]['phoneNumber'] == phoneNumber) {
-                            break;
+                            return 'You don\'t have an account, try to sign up';
                           }
-                          return 'You don\'t have an account, try to sign up';
                         }
                       }
                     },
