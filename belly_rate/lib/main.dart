@@ -15,8 +15,12 @@ import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
+import 'package:shared_preferences/shared_preferences.dart';
+
+SharedPreferences? UserData;
 
 void main() async {
+  UserData = await SharedPreferences.getInstance();
   AwesomeNotifications().initialize(
       // set the icon to null if you want to use the default app icon
       null,
