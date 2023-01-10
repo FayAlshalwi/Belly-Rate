@@ -20,6 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 SharedPreferences? UserData;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   UserData = await SharedPreferences.getInstance();
   AwesomeNotifications().initialize(
       // set the icon to null if you want to use the default app icon
