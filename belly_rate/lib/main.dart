@@ -1,129 +1,130 @@
-import 'package:belly_rate/HomePage.dart';
-import 'package:belly_rate/models/restaurantModesl.dart';
+import 'dart:async';
+import 'package:belly_rate/auth/signin_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'HomePage.dart';
+import 'Notification.dart';
 import 'firebase_options.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
-import 'package:belly_rate/models/restaurantModesl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-SharedPreferences? UserData ;
 
 void main() async {
+  AwesomeNotifications().initialize(
+      // set the icon to null if you want to use the default app icon
+      null,
+      [
+        NotificationChannel(
+            channelKey: 'basic_channel',
+            channelName: 'Basic notifications',
+            channelDescription: 'Notification channel for basic tests',
+            importance: NotificationImportance.High,
+            channelShowBadge: true,
+            defaultColor: Color(0xFF9D50DD),
+            ledColor: Colors.white)
+      ]);
+
   WidgetsFlutterBinding.ensureInitialized();
-  UserData = await SharedPreferences.getInstance();
-
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  final periodicTimer = Timer.periodic(
+    //
+    const Duration(seconds: 5),
+    (timer) {
+      //GetRecommendation();
+      print('Update user about remaining time');
+    },
+  );
+
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: null,
-        body: const MyStatefulWidget(),
-      ),
-    );
-  }
-}
-
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key? key}) : super(key: key);
+  static const String _title = 'Belly Rate';
 
   @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+class _MyAppState extends State<MyApp> {
+  User? user;
+  @override
   void initState() {
+    // TODO: implement initState
     super.initState();
+
+    try {
+      user = FirebaseAuth.instance.currentUser!;
+      print("currentUser: ${user?.uid}");
+    } catch (e) {
+      print("currentUser_Error: ${e}");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      home: HomePage(),
-    );
+        debugShowCheckedModeBanner: false,
+        title: MyApp._title,
+        home: user?.uid == null ? SignIn() : HomePage()
+
+        // Scaffold(
+        //   appBar: AppBar(title: const Text(_title)),
+        //   body: const SignIn(),
+        //   // body: const MyStatefulWidget(),
+        // ),
+        );
   }
-}
-
-showAlertDialog(BuildContext context) {
-  // Create button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  );
-
-  // Create AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Added"),
-    content: Text("Restaurant added successfully"),
-    actions: [
-      okButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }
 
 void GetRecommendation() async {
+  print('inside GetRecommendation');
   final _firestore = FirebaseFirestore.instance;
-  //final _firebaseAuth = FirebaseAuth.instance;
-  //final UID = FirebaseAuth.instance.currentUser!.uid
-  final UID = '';
-
-  //List<dynamic> RecommendationsList = [];
+  final _firebaseAuth = FirebaseAuth.instance;
+  //final UID = FirebaseAuth.instance.currentUser!.uid;
+  final UID = '111';
 
   final res = await _firestore
       .collection('Recommendation')
-      .where("UserID", isEqualTo: UID)
-      .where("isNotified", isEqualTo: false)
+      .where("userId", isEqualTo: UID)
+      .where("Notified", isEqualTo: false)
       .get();
 
   if (res.docs.isNotEmpty) {
+    print('recommendation is here');
 // Get RestaurantId
     String RestaurantId = res.docs[0]['RestaurantId'];
-
+    print('RestaurantId is = $RestaurantId');
+    String docid = res.docs[0].id;
+    print('docid is = $docid');
 //set isNotified to true
-    /*FirebaseFirestore.instance.collection('Recommendation')
-   .doc(FirebaseAuth.instance.currentUser!.uid)
-      .update({"isNotified": true });*/
+    FirebaseFirestore.instance
+        .collection('Recommendation')
+        .doc(docid)
+        .update({"Notified": true});
 
     ContentOfNotification(RestaurantId);
+  } else {
+    print('no recommendation!');
   }
 } //GetRecommendation
 
 void ContentOfNotification(String RestaurantId) async {
   print(1);
   final _firestore = FirebaseFirestore.instance;
-  //final _firebaseAuth = FirebaseAuth.instance;
-  //final UID = FirebaseAuth.instance.currentUser!.uid
-  final UID = '';
+  final _firebaseAuth = FirebaseAuth.instance;
+
   String category = "";
   String name = "";
   String Photo = "";
@@ -134,7 +135,10 @@ void ContentOfNotification(String RestaurantId) async {
       .get();
   print(2);
   if (res.docs.isNotEmpty) {
+    String docid = res.docs[0].id;
+    print(docid);
     print(3);
+
     // Get category, name, photo
     category = res.docs[0]['category'];
     print(category);
@@ -142,9 +146,6 @@ void ContentOfNotification(String RestaurantId) async {
     print(name);
 
     List<dynamic> Recommendationphotos = [];
-    /*Recommendationphotos = res.docs[0]['photos'];
-         if (Recommendationphotos.length != 0) {
-          print('not empty');}*/
 
     try {
       Recommendationphotos = res.docs[0]['photos'];
@@ -163,12 +164,12 @@ void ContentOfNotification(String RestaurantId) async {
 
   String NotificationContent = "";
 // NotificationContent
-
   switch (category.toLowerCase()) {
     case ("american restaurant"):
       {
         NotificationContent =
-            "It seems that you like American restaurant!, how about trying $name.";
+            "Fast and yummy, Good food for your belly!, lets go and try $name.";
+        // NotificationContent = "Burgers! Because no great story started with salad. lets go and try $name.";
         print(NotificationContent);
         break;
       }
@@ -176,7 +177,8 @@ void ContentOfNotification(String RestaurantId) async {
     case ('french restaurant'):
       {
         NotificationContent =
-            "It seems that you like French restaurant!, how about trying $name.";
+            "It's time to enjoy the finer things in life!, how about trying $name.";
+        //  NotificationContent = "A genuine fine-dining experience awaits!, how about trying $name.";
         print(NotificationContent);
         break;
       }
@@ -184,7 +186,8 @@ void ContentOfNotification(String RestaurantId) async {
     case ("health food restaurant"):
       {
         NotificationContent =
-            "It seems that you like Health food restaurant!, how about trying $name.";
+            "Choose healthy. Be strong. Live long!, Run to try $name.";
+        //  NotificationContent = "We’re fresher! We’re tastier! We’re recommending $name!";
         print(NotificationContent);
         break;
       }
@@ -192,7 +195,8 @@ void ContentOfNotification(String RestaurantId) async {
     case ("indian restaurant"):
       {
         NotificationContent =
-            "It seems that you like Indian restaurant!, how about trying $name.";
+            "We suggest something hut, somthing tasty!, go and taste $name.";
+        //NotificationContent = "Spice it up!, and try $name.";
         print(NotificationContent);
         break;
       }
@@ -200,7 +204,7 @@ void ContentOfNotification(String RestaurantId) async {
     case ("italian restaurant"):
       {
         NotificationContent =
-            "It seems that you like Italian restaurant!, how about trying $name.";
+            "Delicious Italian food, just the way it should be!, $name is a must.";
         print(NotificationContent);
         break;
       }
@@ -208,7 +212,7 @@ void ContentOfNotification(String RestaurantId) async {
     case ("japanese restaurant"):
       {
         NotificationContent =
-            "It seems that you like Japanese restaurant!, how about trying $name.";
+            "Roll with us, and go to try $name. where sushi lovers rejoice!";
         print(NotificationContent);
         break;
       }
@@ -216,7 +220,7 @@ void ContentOfNotification(String RestaurantId) async {
     case ("lebanese restaurant"):
       {
         NotificationContent =
-            "It seems that you like Lebanese restaurant!, how about trying $name.";
+            "Celebrating the pure, simple pleasures of Authentic lebanese cuisine.!, try  $name.";
         print(NotificationContent);
         break;
       }
@@ -224,9 +228,13 @@ void ContentOfNotification(String RestaurantId) async {
     case ("seafood restaurant"):
       {
         NotificationContent =
-            "It seems that you like Seafood restaurant!, how about trying $name.";
+            "Try $name, and Keep The Waves of Seafood Coming!";
+        // Fresh From The Net, You Won’t Regret!
         print(NotificationContent);
         break;
       }
   } //switch
+
+//createPlantFoodNotification(NotificationContent ,RestaurantId, Photo);
+  createPlantFoodNotification(NotificationContent, RestaurantId);
 }

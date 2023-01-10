@@ -1,21 +1,32 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:belly_rate/models/restaurantModesl.dart';
 import 'package:belly_rate/models/user.dart';
+import 'package:belly_rate/myProfile.dart';
 import 'package:belly_rate/views/carousel_loading.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'category_parts/category_slider.dart';
-import 'category_parts/category_slider_homepage.dart';
 import 'category_parts/restaurant_model.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'main.dart';
+import 'package:path/path.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:path/path.dart' as Path;
+import 'Notification.dart';
+import 'utilities.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -24,13 +35,81 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  var currentIndex = 0;
   void initState() {
     super.initState();
-    // getLocation(context);
-    _determinePosition();
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        showDialog(
+          context: this.context,
+          builder: (context) => CupertinoAlertDialog(
+            title: Text(
+              'Allow Notifications',
+              style: TextStyle(
+                color: const Color(0xFF5a3769),
+              ),
+            ),
+            content: Text('Belly Rate would like to send you notifications'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Don\'t Allow',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: const Color(0xFF5a3769),
+                  ),
+                ),
+              ),
+              TextButton(
+                  onPressed: () => AwesomeNotifications()
+                      .requestPermissionToSendNotifications()
+                      .then((_) => Navigator.pop(context)),
+                  child: Text(
+                    'Allow',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: const Color(0xFF5a3769),
+                    ),
+                  ))
+            ],
+          ),
+        );
+      }
+    });
+
+    AwesomeNotifications().actionStream.listen((notification) {
+      if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
+        AwesomeNotifications().getGlobalBadgeCounter().then(
+              (value) =>
+                  AwesomeNotifications().setGlobalBadgeCounter(value - 1),
+            );
+      }
+
+      String? resID = notification.summary;
+      print(resID);
+
+      /*Navigator.pushAndRemoveUntil(
+        this.context,
+        MaterialPageRoute(
+          builder: (_) => HomePage(),
+        ),
+        (route) => route.isFirst,
+      );*/
+    });
+
     get();
   }
+
+  @override
+  void dispose() {
+    AwesomeNotifications().actionSink.close();
+    AwesomeNotifications().createdSink.close();
+    super.dispose();
+  }
+
+  var currentIndex = 0;
 
   static late UserInfoModel user;
   static List<restaurantModel> restaurants = [];
@@ -81,7 +160,7 @@ class _HomePage extends State<HomePage> {
                 decoration: BoxDecoration(
                     color: Colors.grey,
                     borderRadius: BorderRadius.all(Radius.circular(10))),
-                margin: EdgeInsets.all(2.0),
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     child: Stack(
@@ -125,7 +204,7 @@ class _HomePage extends State<HomePage> {
           child: Column(
         children: [
           SizedBox(
-            height: 100,
+            height: 55,
           ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
@@ -135,15 +214,12 @@ class _HomePage extends State<HomePage> {
                   "Recommended Restaurants",
                   style: TextStyle(
                       color: Color(0xFF5a3769),
-                      fontSize: 25,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold),
                 ),
               )),
-          SizedBox(
-            height: 5,
-          ),
           Padding(
-              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -155,7 +231,7 @@ class _HomePage extends State<HomePage> {
                 ),
               )),
           SizedBox(
-            height: 5,
+            height: 10,
           ),
           (restaurants.isEmpty == true)
               ? CarouselLoading()
@@ -181,7 +257,7 @@ class _HomePage extends State<HomePage> {
                   "Discover Restaurants",
                   style: TextStyle(
                       color: Color(0xFF5a3769),
-                      fontSize: 25,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold),
                 ),
               )),
@@ -197,14 +273,10 @@ class _HomePage extends State<HomePage> {
                   "Near you",
                   style: TextStyle(
                       color: Color(0xFF5a3769),
-                      fontSize: 25,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold),
                 ),
               )),
-          SizedBox(
-            height: 10,
-          ),
-          RestaurantSlider()
         ],
       )),
       //Favorite page container
@@ -212,7 +284,7 @@ class _HomePage extends State<HomePage> {
       //History page container
       Container(child: Text('History')),
       //Profile page container
-      Container(child: Text('Profile')),
+      Container(child: myProfile()),
     ];
     List<IconData> listOfIcons = [
       Icons.home_rounded,
@@ -229,8 +301,7 @@ class _HomePage extends State<HomePage> {
     ];
 
     return Scaffold(
-      body: Center(
-          child: SingleChildScrollView(child: listOfWidgets[currentIndex])),
+      body: Center(child: listOfWidgets[currentIndex]),
       bottomNavigationBar: Container(
           margin: EdgeInsets.all(displayOfWidth * .05),
           height: displayOfWidth * .155,
@@ -337,84 +408,5 @@ class _HomePage extends State<HomePage> {
                     ]),
                   ))),
     );
-  }
-  // void getLocation(context) async {
-  //   Geolocator geolocator = Geolocator();
-  //   // Position position = Position();
-  //   var isGpsEnabled = await Geolocator.isLocationServiceEnabled();
-  //   // var isGpsEnabled = await Geolocator().isLocationServiceEnabled();
-  //   if(isGpsEnabled == false){
-  //     Onclick(context);
-  //   }else if (isGpsEnabled == true) {
-  //     var moh = Geolocator.checkPermission() ;
-  //     // var moh = Geolocator().checkGeolocationPermissionStatus() ;
-  //
-  //
-  //     // ignore: unrelated_type_equality_checks
-  //     // position = await Geolocator.getCurrentPosition();
-  //     // position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  //     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  //     print(position);
-  //     UserData!.setDouble('locationLat', position.latitude);
-  //     UserData!.setDouble('locationLon', position.longitude);
-  //   }
-  //
-  // }
-  // void Onclick(BuildContext context) {
-  //   AlertDialog alertDialog = AlertDialog(
-  //       title:
-  //       Text("Error", style: TextStyle(fontFamily: "Eng1", fontSize: 22)),
-  //       content: Text(
-  //         "Please Turn the GPS",
-  //         style: TextStyle(
-  //             fontFamily: "Eng1", fontSize: 25, fontWeight: FontWeight.bold),
-  //       ));
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return alertDialog;
-  //       });
-  // }
-
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    Position position = await Geolocator.getCurrentPosition();
-    print(position);
-    UserData!.setDouble('locationLat', position.latitude);
-    UserData!.setDouble('locationLon', position.longitude);
-
-    return position;
   }
 }

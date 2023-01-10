@@ -210,7 +210,7 @@ class _CategorySliderState extends State<CategorySlider> {
 
   List<Category> categoryList = [
     Category(name: "Italian", icon: "asset/category_img/italian.png"),
-    Category(name: "seafood", icon: "asset/category_img/seafood.png"),
+    Category(name: "Seafood", icon: "asset/category_img/seafood.png"),
     Category(name: "Health food", icon: "asset/category_img/healthFood.png"),
     Category(name: "Indian", icon: "asset/category_img/indian.png"),
     Category(name: "American", icon: "asset/category_img/American.png"),

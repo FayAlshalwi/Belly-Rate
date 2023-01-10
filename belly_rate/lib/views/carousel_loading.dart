@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class CarouselLoading extends StatelessWidget {
   const CarouselLoading({Key? key}) : super(key: key);
@@ -12,6 +14,8 @@ class CarouselLoading extends StatelessWidget {
       child: Column(
         children: [
           Container(
+            height: 230,
+            width: 100000,
             margin: EdgeInsets.fromLTRB(35, 10, 30, 0),
             decoration: BoxDecoration(
                 color: Colors.grey,
@@ -29,56 +33,6 @@ class CarouselLoading extends StatelessWidget {
           SizedBox(
             height: 8,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 8,
-                width: 8,
-                decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-              ),
-              SizedBox(
-                width: 3,
-              ),
-              Container(
-                height: 8,
-                width: 8,
-                decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-              ),
-              SizedBox(
-                width: 3,
-              ),
-              Container(
-                height: 8,
-                width: 8,
-                decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-              ),
-              SizedBox(
-                width: 3,
-              ),
-              Container(
-                height: 8,
-                width: 8,
-                decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-              ),
-              SizedBox(
-                width: 3,
-              ),
-              Container(
-                height: 8,
-                width: 8,
-                decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-              ),
-              SizedBox(
-                width: 3,
-              ),
-            ],
-          )
         ],
       ),
     );
