@@ -1,13 +1,12 @@
-from flask import Flask
-
-app = Flask(__name__)
+from urllib import response
+from flask import Flask, jsonify, request
+import json
 import numpy as np
 import pandas as pd
+import csv
 
-
-import warnings
-
-warnings.simplefilter('ignore')
+response = ''
+app = Flask(__name__)
 
 data = pd.read_csv('rating_final.csv')
 
@@ -82,6 +81,43 @@ pred_data = pd.DataFrame(all_user_predicted_ratings, columns=pivot_data.columns)
 pred_data.head()
 
 
+num_recommendations = 3
+userID = 120
+print(pred_data)
+print(userID)
+print(userID)
+print(userID)
+print(pivot_data)
+
+@app.route('/ratings', methods=['GET', 'POST'])
+def recommend():  # put application's code here
+    global response
+    if(request.method == 'POST'):
+        request_data = request.data
+        request_data = json.loads(request_data.decode('utf-8'))
+        rate = request_data['rating']
+        response = f'hi {rate} this is python!'
+        with open("rating_final.csv", "a") as f:
+            csv.writer(f).writerow(rate)
+            f.close()
+        return " "
+    if(request.method == 'GET'):
+        user_index = userID - 1  # index starts at 0
+        sorted_user_ratings = pivot_data.iloc[user_index].sort_values(ascending=False)  # sort user ratings
+        sorted_user_predictions = pred_data.iloc[user_index].sort_values(ascending=False)  # sorted_user_predictions
+        temp = pd.concat([sorted_user_ratings, sorted_user_predictions], axis=1)
+        temp.index.name = 'Recommended Places'
+        temp.columns = ['user_ratings', 'user_predictions']
+        temp = temp.loc[temp.user_ratings == 0]
+        temp = temp.sort_values('user_predictions', ascending=False)
+        print('\n Below are the recommended places for user(user_id = {}):\n'.format(userID))
+        RecommendedPlaces = temp.head(num_recommendations)
+        Recommended = [RecommendedPlaces.index[0], RecommendedPlaces.index[1], RecommendedPlaces.index[2]]
+
+        print(Recommended)
+        # print(temp.head(num_recommendations))
+        return jsonify({'recommeneded': Recommended})
+        # return temp.head(num_recommendations)
 
 userID = 120
 num_recommedations = 5
@@ -90,29 +126,17 @@ print(userID)
 print(userID)
 print(userID)
 print(pivot_data)
+# recommend(userID, pivot_data, pred_data, num_recommedations)
 
-@app.route('/')
-def hello_world(userID, pivot_data, pred_data, num_recommendations):  # put application's code here
-    user_index = userID - 1  # index starts at 0
+def write(new):
+    with open("rating_final.csv", "a") as f:
+        ## add data to csv file
+        csv.writer(f).writerow(new)
+        ## close the opened csv file
+        f.close()
 
-    sorted_user_ratings = pivot_data.iloc[user_index].sort_values(ascending=False)  # sort user ratings
+# newData = ["U115", "RAD", 5, 5, 5]
+# write(newData)
 
-    sorted_user_predictions = pred_data.iloc[user_index].sort_values(ascending=False)  # sorted_user_predictions
-
-    temp = pd.concat([sorted_user_ratings, sorted_user_predictions], axis=1)
-
-    temp.index.name = 'Recommended Places'
-    temp.columns = ['user_ratings', 'user_predictions']
-
-    temp = temp.loc[temp.user_ratings == 0]
-    temp = temp.sort_values('user_predictions', ascending=False)
-    print('\n Below are the recommended places for user(user_id = {}):\n'.format(userID))
-    RecommendedPlaces = temp.head(num_recommendations)
-    print(temp.head(num_recommendations))
-    return temp.head(num_recommendations)
-
-hello_world(userID, pivot_data, pred_data, num_recommedations)
-
-
-if __name__ == 'Belly Rate':
+if __name__ == '__main__':
     app.run()
