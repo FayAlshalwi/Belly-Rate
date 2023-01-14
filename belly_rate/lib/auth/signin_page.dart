@@ -30,6 +30,7 @@ class _SignInState extends State<SignIn> {
 
   TextEditingController phone = TextEditingController();
   late QuerySnapshot<Map<String, dynamic>> res;
+  List numbers = [];
 
   void initState() {
     super.initState();
@@ -37,10 +38,16 @@ class _SignInState extends State<SignIn> {
     getUsers();
   }
 
-  getUsers() async {
-    setState(() async {
-      res = await FirebaseFirestore.instance.collection('Users').get();
-    });
+  Future getUsers() async {
+    await new Future.delayed(const Duration(seconds: 2));
+    res = await FirebaseFirestore.instance.collection('Users').get();
+    print(res.docs.length);
+    for (int i = 0; i < res.docs.length; i++) {
+      setState(() {
+        numbers.add(res.docs[i]['phoneNumber']);
+      });
+      print(numbers[i]);
+    }
   }
 
   @override
@@ -144,12 +151,13 @@ class _SignInState extends State<SignIn> {
                       else if (value.length > 11 || value.length < 11) {
                         return 'Please enter 9 numbers';
                       } else if (true) {
-                        for (int i = 0; i < res.docs.length; i++) {
-                          print(res.docs[i]);
-                          if (res.docs[i]['phoneNumber'] == phoneNumber) {
-                            return 'You don\'t have an account, try to sign up';
+                        for (int i = 0; i < numbers.length; i++) {
+                          print(numbers[i]);
+                          if (numbers[i] == phoneNumber) {
+                            return '';
                           }
                         }
+                        return 'You don\'t have an account, try to sign up';
                       }
                     },
                     selectorConfig: SelectorConfig(

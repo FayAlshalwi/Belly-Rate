@@ -34,8 +34,7 @@ class _myProfile extends State<myProfile> {
       print("currentUser: ${vari.data()}");
 
       ourUser = OurUser(
-        first_name: vari.data()!['firstName'],
-        last_name: vari.data()!['lastName'],
+        first_name: vari.data()!['name'],
         phone_number: vari.data()!['phoneNumber'],
       );
       setState(() {});
@@ -79,6 +78,18 @@ class _myProfile extends State<myProfile> {
                       content: Text("Are you sure you want to logout?"),
                       actions: <Widget>[
                         TextButton(
+                          onPressed: () {
+                            Navigator.pop(context); //close Dialog
+                          },
+                          child: Text(
+                            "Close",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: const Color(0xFF5a3769),
+                            ),
+                          ),
+                        ),
+                        TextButton(
                           onPressed: () async {
                             await FirebaseAuth.instance.signOut();
                             Navigator.of(context).pushReplacement(
@@ -88,18 +99,6 @@ class _myProfile extends State<myProfile> {
                           },
                           child: Text(
                             "Yes",
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: const Color(0xFF5a3769),
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context); //close Dialog
-                          },
-                          child: Text(
-                            "Close",
                             style: TextStyle(
                               fontSize: 15,
                               color: const Color(0xFF5a3769),

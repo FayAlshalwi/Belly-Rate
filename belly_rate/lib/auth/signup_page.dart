@@ -29,6 +29,8 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _onEditing = true;
   String? _code;
   late QuerySnapshot<Map<String, dynamic>> res;
+  List numbers = [];
+
   final formKey = GlobalKey<FormState>();
 
   void initState() {
@@ -38,9 +40,15 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   getUsers() async {
-    setState(() async {
-      res = await FirebaseFirestore.instance.collection('Users').get();
-    });
+    await new Future.delayed(const Duration(seconds: 2));
+    res = await FirebaseFirestore.instance.collection('Users').get();
+    print(res.docs.length);
+    for (int i = 0; i < res.docs.length; i++) {
+      setState(() {
+        numbers.add(res.docs[i]['phoneNumber']);
+      });
+      print(numbers[i]);
+    }
   }
 
   @override
@@ -214,9 +222,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       else if (value.length > 11 || value.length < 11) {
                         return 'Please enter 9 numbers';
                       } else if (true) {
-                        for (int i = 0; i < res.docs.length; i++) {
-                          print(res.docs[i]);
-                          if (res.docs[i]['phoneNumber'] == phoneNumber) {
+                        for (int i = 0; i < numbers.length; i++) {
+                          print(numbers[i]);
+                          if (numbers[i] == phoneNumber) {
                             return 'You already have an account, try to sign in';
                           }
                         }

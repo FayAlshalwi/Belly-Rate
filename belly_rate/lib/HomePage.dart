@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:belly_rate/history.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -119,13 +120,19 @@ class _HomePage extends State<HomePage> {
   get() async {
     final res = await FirebaseFirestore.instance
         .collection('Users')
-        .where('uid', isEqualTo: "mCfCKtGUGgWbQAEhpLtAWwMI7MG3")
+        .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
+    print(FirebaseAuth.instance.currentUser!.uid);
+    print("info");
+    print(res.docs[0]['uid']);
+    print(res.docs[0]['phoneNumber']);
+    print(res.docs[0]['name']);
+    print(res.docs[0]['picture']);
+    print(res.docs[0]['rest']);
     user = UserInfoModel(
         uid: res.docs[0]['uid'],
         phoneNumber: res.docs[0]['phoneNumber'],
-        firstName: res.docs[0]['firstName'],
-        lastName: res.docs[0]['lastName'],
+        name: res.docs[0]['name'],
         photo: res.docs[0]['picture'],
         recommendedRestaurant: res.docs[0]['rest']);
 

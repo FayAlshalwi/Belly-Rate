@@ -34,11 +34,11 @@ class _history extends State<history> {
       // Map<String,dynamic> userData = vari as Map<String,dynamic>;
       print("currentUser: ${vari.data()}");
 
-      ourUser = OurUser(
-        first_name: vari.data()!['firstName'],
-        last_name: vari.data()!['lastName'],
-        phone_number: vari.data()!['phoneNumber'],
-      );
+      // ourUser = OurUser(
+      //   first_name: vari.data()!['firstName'],
+      //   last_name: vari.data()!['lastName'],
+      //   phone_number: vari.data()!['phoneNumber'],
+      // );
       setState(() {});
     });
 
@@ -74,8 +74,7 @@ class _history extends State<history> {
                 onPressed: () async {
                   print("here1");
 
-                  final url = 'http://127.0.0.1:5000';
-                  final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+                  final uri = Uri.parse('https://gpapi.herokuapp.com/ratings');
                   print("here2");
 
                   final response = await get(uri);
@@ -93,11 +92,11 @@ class _history extends State<history> {
             ElevatedButton(
                 onPressed: () async {
                   final url = 'http://127.0.0.1:5000/';
-                  final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+                  final uri = Uri.parse('https://gpapi.herokuapp.com/ratings');
 
                   final response = await post(uri,
                       body: json.encode({
-                        'rating': ["U115", "RD", 5, 5, 5]
+                        'rating': ["U22", "ty", 8, 5, 9]
                       }));
                 },
                 child: Text("Add Rate"))
