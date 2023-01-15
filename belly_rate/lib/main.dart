@@ -37,14 +37,14 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  final periodicTimer = Timer.periodic(
+  /*final periodicTimer = Timer.periodic(
     //
     const Duration(seconds:60),
     (timer) {
      GetRecommendation();
       //print('Update user about remaining time');
     },
-  );
+  );*/
 
   runApp(MyApp());
 }

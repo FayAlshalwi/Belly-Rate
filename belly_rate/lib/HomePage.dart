@@ -178,6 +178,7 @@ if (!_serviceEnabled) {
 _permissionGranted = await location.hasPermission();
 if (_permissionGranted == PermissionStatus.denied) {
   _permissionGranted = await location.requestPermission();
+  location.enableBackgroundMode(enable: true);
   if (_permissionGranted != PermissionStatus.granted) {
     return LocationData;
   }
@@ -265,7 +266,7 @@ final Recommendation = await _firestore
 
     if(distanceInMeters <= 2000){
       print('$distanceInMeters');
-      print('less than 2km');
+      print('less or equal than 2km');
 
        print('docid is = $RecommendationDocID');
         FirebaseFirestore.instance
