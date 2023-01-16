@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'HomePage.dart';
 import 'Notification.dart';
 import 'firebase_options.dart';
@@ -16,7 +17,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
 
+SharedPreferences? UserData;
+
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  UserData = await SharedPreferences.getInstance();
   AwesomeNotifications().initialize(
       // set the icon to null if you want to use the default app icon
       null,

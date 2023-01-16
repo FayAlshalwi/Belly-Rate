@@ -143,14 +143,6 @@ class _SignInState extends State<SignIn> {
 
                       else if (value.length > 11 || value.length < 11) {
                         return 'Please enter 9 numbers';
-                      } else if (true) {
-                        for (int i = 0; i < res.docs.length; i++) {
-                          print(res.docs[i]);
-                          if (res.docs[i]['phoneNumber'] == phoneNumber) {
-                            break;
-                          }
-                          return 'You don\'t have an account, try to sign up';
-                        }
                       }
                     },
                     selectorConfig: SelectorConfig(
