@@ -38,10 +38,11 @@ class _SignInState extends State<SignIn> {
     getUsers();
   }
 
-  Future getUsers() async {
-    await new Future.delayed(const Duration(seconds: 2));
+  getUsers() async {
+    // await new Future.delayed(const Duration(seconds: 2));
     res = await FirebaseFirestore.instance.collection('Users').get();
     print(res.docs.length);
+
     for (int i = 0; i < res.docs.length; i++) {
       setState(() {
         numbers.add(res.docs[i]['phoneNumber']);
@@ -151,13 +152,15 @@ class _SignInState extends State<SignIn> {
                       else if (value.length > 11 || value.length < 11) {
                         return 'Please enter 9 numbers';
                       } else if (true) {
+                        bool flag = false;
                         for (int i = 0; i < numbers.length; i++) {
                           print(numbers[i]);
                           if (numbers[i] == phoneNumber) {
-                            return '';
+                            flag = true;
                           }
                         }
-                        return 'You don\'t have an account, try to sign up';
+                        if (flag == false)
+                          return 'You don\'t have an account, please sign up';
                       }
                     },
                     selectorConfig: SelectorConfig(
@@ -177,7 +180,7 @@ class _SignInState extends State<SignIn> {
                       errorStyle: TextStyle(height: 0),
                       contentPadding: EdgeInsets.only(bottom: 15, left: 0),
                       border: InputBorder.none,
-                      hintText: '5XXXXXXXX',
+                      hintText: '5X XXX XXXX',
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       errorBorder: InputBorder.none,
@@ -221,42 +224,52 @@ class _SignInState extends State<SignIn> {
                         borderRadius: BorderRadius.circular(10.0)),
                     splashColor: button_color,
                     onPressed: () async {
+                      print('rrrrr');
                       formKey.currentState?.save();
+                      print('rrrrr');
+
                       if (formKey.currentState!.validate()) {
                         if (phone.text.isNotEmpty) {
-                          if (formKey.currentState!.validate()) {
-                            CoolAlert.show(
-                              context: context,
-                              type: CoolAlertType.loading,
-                              text: "Loading",
-                            );
-                            print("here the submitted phone");
-                            print(phone.text);
+                          // if (formKey.currentState!.validate()) {
+                          // CoolAlert.show(
+                          //   context: context,
+                          //   type: CoolAlertType.loading,
+                          //   text: "Loading",
+                          // );
+                          print("here the submitted phone");
+                          print(phone.text);
 
-                            await FirebaseAuth.instance.verifyPhoneNumber(
-                              phoneNumber: phoneNumber,
-                              verificationCompleted:
-                                  (PhoneAuthCredential credential) {
-                                print("verificationCompleted: ${credential}");
-                              },
-                              verificationFailed: (FirebaseAuthException e) {
-                                if (e.code == 'invalid-phone-number') {
-                                  print(
-                                      'The provided phone number is not valid.');
-                                }
-                                print("verificationFailed: ${e}");
-                              },
-                              codeSent:
-                                  (String verificationId, int? resendToken) {
-                                openSheet(context, heightM, button_color,
-                                    txt_color, verificationId);
-                              },
-                              codeAutoRetrievalTimeout:
-                                  (String verificationId) {
-                                print("codeSent: ${verificationId}");
-                              },
-                            );
-                          }
+                          await FirebaseAuth.instance.verifyPhoneNumber(
+                            phoneNumber: phoneNumber,
+                            verificationCompleted:
+                                (PhoneAuthCredential credential) {
+                              print("verificationCompleted: ${credential}");
+                            },
+                            verificationFailed: (FirebaseAuthException e) {
+                              if (e.code == 'invalid-phone-number') {
+                                CoolAlert.show(
+                                  context: context,
+                                  title: "Invalid phone number",
+                                  type: CoolAlertType.error,
+                                  text:
+                                      "The provided phone number is not valid",
+                                  confirmBtnColor: button_color,
+                                );
+                                print(
+                                    'The provided phone number is not valid.');
+                              }
+                              print("verificationFailed: ${e}");
+                            },
+                            codeSent:
+                                (String verificationId, int? resendToken) {
+                              openSheet(context, heightM, button_color,
+                                  txt_color, verificationId);
+                            },
+                            codeAutoRetrievalTimeout: (String verificationId) {
+                              print("codeSent: ${verificationId}");
+                            },
+                          );
+                          // }
                         }
                       }
                     },
@@ -423,10 +436,59 @@ class _SignInState extends State<SignIn> {
                                   PhoneAuthProvider.credential(
                                       verificationId: verificationId,
                                       smsCode: _code!);
+                              try {
+                                await FirebaseAuth.instance
+                                    .signInWithCredential(credential);
+                              } on FirebaseAuthException catch (error) {
+                                Navigator.of(context).pop();
+                                String Error = "";
+                                print("e ${error}");
 
-                              await FirebaseAuth.instance
-                                  .signInWithCredential(credential);
+                                if (error
+                                    .toString()
+                                    .contains("does not exist")) {
+                                  CoolAlert.show(
+                                    context: context,
+                                    title: "No user correspond",
+                                    type: CoolAlertType.error,
+                                    text:
+                                        "User Not Exist! , Please Go to Sign Up Page",
+                                    confirmBtnColor: button_color,
+                                  );
+                                } else if (error.toString().contains(
+                                    "The sms verification code used to create the phone auth credential is invalid")) {
+                                  CoolAlert.show(
+                                    context: context,
+                                    title: "Wrong OTP",
+                                    type: CoolAlertType.error,
+                                    text: "Invalid verification code",
+                                    confirmBtnColor: button_color,
+                                  );
+                                  Error = "Code Error !";
+                                } else if (error.code ==
+                                    'invalid-verification-code') {
+                                  CoolAlert.show(
+                                    context: context,
+                                    title: "Wrong OTP",
+                                    type: CoolAlertType.error,
+                                    text: "Invalid verification code",
+                                    confirmBtnColor: button_color,
+                                  );
+                                  Error = "Wrong OTP entered";
+                                }
 
+                                print("ddd_222 ${error}");
+
+                                // if (e.code == 'invalid-verification-code') {
+                                //   CoolAlert.show(
+                                //     context: context,
+                                //     title: "",
+                                //     type: CoolAlertType.error,
+                                //     text: "Error",
+                                //     confirmBtnColor: button_color,
+                                //   );
+                                // }
+                              }
                               if (FirebaseAuth.instance.currentUser != null) {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
@@ -444,7 +506,10 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                   ],
-                )
+                ),
+                SizedBox(
+                  height: 45,
+                ),
               ],
             ),
           );

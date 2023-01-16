@@ -225,7 +225,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         for (int i = 0; i < numbers.length; i++) {
                           print(numbers[i]);
                           if (numbers[i] == phoneNumber) {
-                            return 'You already have an account, try to sign in';
+                            return 'You already have an account, please sign in';
                           }
                         }
                       }
@@ -297,11 +297,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     splashColor: button_color,
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
-                        CoolAlert.show(
-                          context: context,
-                          type: CoolAlertType.loading,
-                          text: "Loading",
-                        );
                         print("here the submitted phone");
                         print(phone.text);
 
@@ -313,6 +308,13 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           verificationFailed: (FirebaseAuthException e) {
                             if (e.code == 'invalid-phone-number') {
+                              CoolAlert.show(
+                                context: context,
+                                title: "Invalid phone number",
+                                type: CoolAlertType.error,
+                                text: "The provided phone number is not valid",
+                                confirmBtnColor: button_color,
+                              );
                               print('The provided phone number is not valid.');
                             }
                             print("verificationFailed: ${e}");
@@ -524,6 +526,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
                                   'rest': rest,
                                 });
+
                                 CoolAlert.show(
                                   context: context,
                                   type: CoolAlertType.success,
@@ -559,7 +562,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ],
                 ),
                 SizedBox(
-                  height: 25,
+                  height: 45,
                 ),
               ],
             ),
