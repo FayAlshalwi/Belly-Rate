@@ -45,7 +45,11 @@ void main() async {
       print('GetRecommendation timer');
     },
   );
-
+ AwesomeNotifications().getGlobalBadgeCounter().then(
+              (value) =>
+                  AwesomeNotifications().setGlobalBadgeCounter(0),
+            );
+      
   runApp(MyApp());
 }
 
