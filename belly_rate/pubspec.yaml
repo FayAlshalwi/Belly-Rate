@@ -51,6 +51,9 @@ dependencies:
   country_picker: ^2.0.18
   location: ^4.4.0
   geolocator: ^9.0.2
+  intl_phone_number_input: ^0.7.1
+  animate_do: ^3.0.2
+
 
 dev_dependencies:
   flutter_test:

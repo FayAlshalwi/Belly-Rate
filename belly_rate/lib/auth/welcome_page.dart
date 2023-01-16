@@ -34,6 +34,7 @@ class _WelcomePageState extends State<WelcomePage> {
         first_name:  vari.data()!['firstName'],
         last_name: vari.data()!['lastName'],
         phone_number: vari.data()!['phoneNumber'],
+        picture : vari.data()!['picture'],
       );
       setState(() {});
       });
