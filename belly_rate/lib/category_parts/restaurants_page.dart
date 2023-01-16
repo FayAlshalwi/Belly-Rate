@@ -133,7 +133,9 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                             children: [
                               InkWell(
                                   onTap: () {
-                                    launchPhoneDialer(item.phoneNumber!);
+                                    item.phoneNumber != "No phone number"
+                                        ? launchPhoneDialer(item.phoneNumber!)
+                                        : "";
                                   },
                                   child: Icon(
                                     Icons.call,

@@ -48,61 +48,61 @@ class _history extends State<history> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        centerTitle: true,
-        title: const Text(
-          "My Profile",
-          style: TextStyle(
-            fontSize: 22,
-            color: const Color(0xFF5a3769),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text("Welcome "),
-            Text("Name :  ${ourUser?.first_name}"),
-            Text("Mobile Number :  ${ourUser?.phone_number}"),
-            ElevatedButton(
-                onPressed: () async {
-                  print("here1");
+        // resizeToAvoidBottomInset: false,
+        // appBar: AppBar(
+        //   backgroundColor: Colors.white,
+        //   elevation: 0.0,
+        //   centerTitle: true,
+        //   title: const Text(
+        //     "My Profile",
+        //     style: TextStyle(
+        //       fontSize: 22,
+        //       color: const Color(0xFF5a3769),
+        //       fontWeight: FontWeight.bold,
+        //     ),
+        //   ),
+        // ),
+        // body: Center(
+        //   child: Column(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     crossAxisAlignment: CrossAxisAlignment.center,
+        //     children: [
+        //       Text("Welcome "),
+        //       Text("Name :  ${ourUser?.first_name}"),
+        //       Text("Mobile Number :  ${ourUser?.phone_number}"),
+        //       ElevatedButton(
+        //           onPressed: () async {
+        //             print("here1");
 
-                  final uri = Uri.parse('https://gpapi.herokuapp.com/ratings');
-                  print("here2");
+        //             final uri = Uri.parse('https://gpapi.herokuapp.com/ratings');
+        //             print("here2");
 
-                  final response = await get(uri);
-                  print("here3");
-                  print(response.body);
-                  print("here");
+        //             final response = await get(uri);
+        //             print("here3");
+        //             print(response.body);
+        //             print("here");
 
-                  final decoded =
-                      json.decode(response.body) as Map<String, dynamic>;
-                  print("here4");
+        //             final decoded =
+        //                 json.decode(response.body) as Map<String, dynamic>;
+        //             print("here4");
 
-                  print(decoded['recommeneded']);
-                },
-                child: Text("print")),
-            ElevatedButton(
-                onPressed: () async {
-                  final url = 'http://127.0.0.1:5000/';
-                  final uri = Uri.parse('https://gpapi.herokuapp.com/ratings');
+        //             print(decoded['recommeneded']);
+        //           },
+        //           child: Text("print")),
+        //       ElevatedButton(
+        //           onPressed: () async {
+        //             final url = 'http://127.0.0.1:5000/';
+        //             final uri = Uri.parse('https://gpapi.herokuapp.com/ratings');
 
-                  final response = await post(uri,
-                      body: json.encode({
-                        'rating': ["U22", "ty", 8, 5, 9]
-                      }));
-                },
-                child: Text("Add Rate"))
-          ],
-        ),
-      ),
-    );
+        //             final response = await post(uri,
+        //                 body: json.encode({
+        //                   'rating': ["U22", "ty", 8, 5, 9]
+        //                 }));
+        //           },
+        //           child: Text("Add Rate"))
+        //     ],
+        //   ),
+        // ),
+        );
   }
 }
