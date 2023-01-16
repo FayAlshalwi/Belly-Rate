@@ -681,5 +681,4 @@ void ContentOfLocationNotification(String RestaurantId) async {
   } //switch
 
 createNotification(NotificationContent ,RestaurantId, Photo , name);
-  //createPlantFoodNotification(NotificationContent, RestaurantId);
 }

@@ -39,9 +39,9 @@ void main() async {
 
   final periodicTimer = Timer.periodic(
     //
-    const Duration(seconds:60*5),
+    const Duration(seconds:5),
     (timer) {
-     //GetRecommendation();
+     GetRecommendation();
       print('GetRecommendation timer');
     },
   );
@@ -243,5 +243,5 @@ void ContentOfNotification(String RestaurantId) async {
   } //switch
 
 createNotification(NotificationContent ,RestaurantId, Photo , name);
-  //createPlantFoodNotification(NotificationContent, RestaurantId);
+  
 }
