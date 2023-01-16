@@ -37,14 +37,14 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  /*final periodicTimer = Timer.periodic(
+  final periodicTimer = Timer.periodic(
     //
-    const Duration(seconds:60),
+    const Duration(seconds:60*5),
     (timer) {
-     GetRecommendation();
-      //print('Update user about remaining time');
+     //GetRecommendation();
+      print('GetRecommendation timer');
     },
-  );*/
+  );
 
   runApp(MyApp());
 }
@@ -122,7 +122,7 @@ void GetRecommendation() async {
 } //GetRecommendation
 
 void ContentOfNotification(String RestaurantId) async {
-  print(1);
+
   final _firestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
 
@@ -134,15 +134,15 @@ void ContentOfNotification(String RestaurantId) async {
       .collection('Restaurants')
       .where("ID", isEqualTo: RestaurantId)
       .get();
-  print(2);
+ 
   if (res.docs.isNotEmpty) {
     String docid = res.docs[0].id;
     print(docid);
-    print(3);
-
+   
     // Get category, name, photo
     category = res.docs[0]['category'];
     print(category);
+    print(category.toLowerCase());
     name = res.docs[0]['name'];
     print(name);
 
@@ -166,6 +166,7 @@ void ContentOfNotification(String RestaurantId) async {
   String NotificationContent = "";
 // NotificationContent
   switch (category.toLowerCase()) {
+    
     case ("american restaurant"):
       {
         NotificationContent =
@@ -241,6 +242,6 @@ void ContentOfNotification(String RestaurantId) async {
         print(NotificationContent);
   } //switch
 
-createNotification(NotificationContent ,RestaurantId, Photo);
+createNotification(NotificationContent ,RestaurantId, Photo , name);
   //createPlantFoodNotification(NotificationContent, RestaurantId);
 }

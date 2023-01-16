@@ -601,79 +601,85 @@ void ContentOfLocationNotification(String RestaurantId) async {
     case ("american restaurant"):
       {
         NotificationContent =
-            "Fast and yummy, Good food for your belly!, lets go and try $name.";
+        // "Fast and yummy, Good food for your belly!, lets go and try $name.";
         // NotificationContent = "Burgers! Because no great story started with salad. lets go and try $name.";
+         NotificationContent = "Look like you're near $name restaurant! let's go and give it a try."; 
         print(NotificationContent);
         break;
       }
 
     case ('french restaurant'):
       {
-        NotificationContent =
-            "It's time to enjoy the finer things in life!, how about trying $name.";
+       // NotificationContent ="It's time to enjoy the finer things in life!, how about trying $name.";
         //  NotificationContent = "A genuine fine-dining experience awaits!, how about trying $name.";
+        NotificationContent = "$name restaurant is a few steps away! what about trying it out!";
         print(NotificationContent);
         break;
       }
 
     case ("health food restaurant"):
       {
-        NotificationContent =
-            "Choose healthy. Be strong. Live long!, Run to try $name.";
+       // NotificationContent =
+         //   "Choose healthy. Be strong. Live long!, Run to try $name.";
         //  NotificationContent = "We’re fresher! We’re tastier! We’re recommending $name!";
+        NotificationContent = "Look like you're near $name restaurant! let's go and give it a try."; 
         print(NotificationContent);
         break;
       }
 
     case ("indian restaurant"):
       {
-        NotificationContent =
-            "We suggest something hut, somthing tasty!, go and taste $name.";
-        //NotificationContent = "Spice it up!, and try $name.";
+       // NotificationContent =
+         //   "We suggest something hut, somthing tasty!, go and taste $name.";
+        NotificationContent = "Spice it up! You're near $name, go and give it a try!";
         print(NotificationContent);
         break;
       }
 
     case ("italian restaurant"):
       {
-        NotificationContent =
-            "Delicious Italian food, just the way it should be!, $name is a must.";
+       // NotificationContent =
+        //   "Delicious Italian food, just the way it should be!, $name is a must.";
+        NotificationContent = "Margarita is calling, you're near $name restaurant, let's give it a try";
         print(NotificationContent);
         break;
       }
 
     case ("japanese restaurant"):
       {
-        NotificationContent =
-            "Roll with us, and go to try $name. where sushi lovers rejoice!";
+        //NotificationContent =
+          //  "Roll with us, and go to try $name. where sushi lovers rejoice!";
+             NotificationContent = "Look like you're near $name restaurant! let's go and give it a try."; 
         print(NotificationContent);
         break;
       }
 
     case ("lebanese restaurant"):
       {
-        NotificationContent =
-            "Celebrating the pure, simple pleasures of Authentic lebanese cuisine.!, try  $name.";
+       // NotificationContent =
+         //   "Celebrating the pure, simple pleasures of Authentic lebanese cuisine.!, try $name.";
+             NotificationContent = "Smelling olive oils? you're near $name restaurant, let's give it a try!."; 
         print(NotificationContent);
         break;
       }
 
     case ("seafood restaurant"):
       {
-        NotificationContent =
-            "Try $name, and Keep The Waves of Seafood Coming!";
+        //NotificationContent =
+          //  "Try $name, and Keep The Waves of Seafood Coming!";
         // Fresh From The Net, You Won’t Regret!
+          NotificationContent = "Look like you're near $name restaurant! let's go and give it a try."; 
         print(NotificationContent);
         break;
       }
       default:
-      print('DEFAULT case ');
+      print('DEFAULT case');
       NotificationContent =
-            "New recommendations match your test!, lets go to try $name.";
+          "Look like you're near $name restaurant! let's go and give it a try."; 
         print(NotificationContent);
 
   } //switch
 
-createNotification(NotificationContent ,RestaurantId, Photo);
+createNotification(NotificationContent ,RestaurantId, Photo , name);
   //createPlantFoodNotification(NotificationContent, RestaurantId);
 }
