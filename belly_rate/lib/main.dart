@@ -39,7 +39,7 @@ void main() async {
 
   final periodicTimer = Timer.periodic(
     //
-    const Duration(seconds:5),
+    const Duration(seconds:60*5),
     (timer) {
      GetRecommendation();
       print('GetRecommendation timer');
