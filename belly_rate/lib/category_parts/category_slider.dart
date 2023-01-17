@@ -119,9 +119,8 @@ class _CategorySliderState extends State<CategorySlider> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        height: 120,
-        width: 120,
-        child: Card(
+        width: 111,
+        child: Container(
           child: InkWell(
             onTap: () {
               print("${categoryList[index].name}");
@@ -157,6 +156,7 @@ class _CategorySliderState extends State<CategorySlider> {
                   "health food".toLowerCase()) {
                 print("${_restauranthealthRestaurant.length}");
                 selected_list = _restauranthealthRestaurant;
+                selected_category = "Health Food Restaurant";
               } else if (categoryList[index].name.toLowerCase().trim() ==
                   "lebanese".toLowerCase()) {
                 print("${_restaurantlebaneseRestaurant.length}");
@@ -210,7 +210,7 @@ class _CategorySliderState extends State<CategorySlider> {
 
   List<Category> categoryList = [
     Category(name: "Italian", icon: "asset/category_img/italian.png"),
-    Category(name: "seafood", icon: "asset/category_img/seafood.png"),
+    Category(name: "Seafood", icon: "asset/category_img/seafood.png"),
     Category(name: "Health food", icon: "asset/category_img/healthFood.png"),
     Category(name: "Indian", icon: "asset/category_img/indian.png"),
     Category(name: "American", icon: "asset/category_img/American.png"),

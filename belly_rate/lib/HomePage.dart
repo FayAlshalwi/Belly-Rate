@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:belly_rate/history.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -52,11 +53,12 @@ class _HomePage extends State<HomePage> {
         showDialog(
           context: this.context,
           builder: (context) => CupertinoAlertDialog(
-            title: Text('Allow Notifications',
-            style: TextStyle(
-                          color: const Color(0xFF5a3769),
-                        ),),
-            
+            title: Text(
+              'Allow Notifications',
+              style: TextStyle(
+                color: const Color(0xFF5a3769),
+              ),
+            ),
             content: Text('Belly Rate would like to send you notifications'),
             actions: [
               TextButton(
@@ -66,9 +68,9 @@ class _HomePage extends State<HomePage> {
                 child: Text(
                   'Don\'t Allow',
                   style: TextStyle(
-                              fontSize: 15,
-                              color: const Color(0xFF5a3769),
-                            ),
+                    fontSize: 15,
+                    color: const Color(0xFF5a3769),
+                  ),
                 ),
               ),
               TextButton(
@@ -78,9 +80,9 @@ class _HomePage extends State<HomePage> {
                   child: Text(
                     'Allow',
                     style: TextStyle(
-                              fontSize: 15,
-                              color: const Color(0xFF5a3769),
-                            ),
+                      fontSize: 15,
+                      color: const Color(0xFF5a3769),
+                    ),
                   ))
             ],
           ),
@@ -126,13 +128,19 @@ class _HomePage extends State<HomePage> {
   get() async {
     final res = await FirebaseFirestore.instance
         .collection('Users')
-        .where('uid', isEqualTo: "mCfCKtGUGgWbQAEhpLtAWwMI7MG3")
+        .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
+    print(FirebaseAuth.instance.currentUser!.uid);
+    print("info");
+    print(res.docs[0]['uid']);
+    print(res.docs[0]['phoneNumber']);
+    print(res.docs[0]['name']);
+    print(res.docs[0]['picture']);
+    print(res.docs[0]['rest']);
     user = UserInfoModel(
         uid: res.docs[0]['uid'],
         phoneNumber: res.docs[0]['phoneNumber'],
-        firstName: res.docs[0]['firstName'],
-        lastName: res.docs[0]['lastName'],
+        name: res.docs[0]['name'],
         photo: res.docs[0]['picture'],
         recommendedRestaurant: res.docs[0]['rest']);
 
@@ -346,7 +354,7 @@ final Recommendation = await _firestore
           child: Column(
         children: [
           SizedBox(
-            height: 50,
+            height: 55,
           ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
@@ -424,7 +432,7 @@ final Recommendation = await _firestore
       //Favorite page container
       Container(child: Text('Favorite')),
       //History page container
-      Container(child: Text('History')),
+      Container(child: history()),
       //Profile page container
       Container(child: myProfile()),
     ];
