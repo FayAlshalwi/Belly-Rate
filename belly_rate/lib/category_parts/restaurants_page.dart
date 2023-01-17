@@ -136,9 +136,9 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                             children: [
                               InkWell(
                                   onTap: () {
-                                    item.phoneNumber != "No phone number"
-                                        ? launchPhoneDialer(item.phoneNumber!)
-                                        : "";
+                                    item.phoneNumber == "No phone number"
+                                        ? print("no phone")
+                                        : launchPhoneDialer(item.phoneNumber!);
                                   },
                                   child: Icon(
                                     Icons.call,
@@ -416,6 +416,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
   }
 
   Future<void> launchPhoneDialer(String contactNumber) async {
+    print(contactNumber);
     final Uri _phoneUri = Uri(scheme: "tel", path: contactNumber);
     try {
       if (await canLaunchUrl(_phoneUri)) await launchUrl(_phoneUri);
