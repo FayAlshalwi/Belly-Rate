@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:belly_rate/category_parts/restaurant_model.dart';
 import 'package:belly_rate/category_parts/restaurants_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,7 +9,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:maps_launcher/maps_launcher.dart';
-
 import '../main.dart';
 import 'category_model.dart';
 
