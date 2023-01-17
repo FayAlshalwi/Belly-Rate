@@ -43,7 +43,7 @@ void main() async {
 
   final periodicTimer = Timer.periodic(
     //
-    const Duration(seconds: 60 * 5),
+    const Duration(seconds: 60*5),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
@@ -97,11 +97,12 @@ class _MyAppState extends State<MyApp> {
 }
 
 void GetRecommendation() async {
+  try{
   print('inside GetRecommendation');
   final _firestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
-  //final UID = FirebaseAuth.instance.currentUser!.uid;
-  final UID = '111';
+  final UID = FirebaseAuth.instance.currentUser!.uid;
+ // final UID = '111';
 
   final res = await _firestore
       .collection('Recommendation')
@@ -125,6 +126,10 @@ void GetRecommendation() async {
     ContentOfNotification(RestaurantId);
   } else {
     print('no recommendation!');
+  }
+  }
+  catch(e){
+     print('User not loged in');
   }
 } //GetRecommendation
 

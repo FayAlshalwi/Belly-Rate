@@ -295,8 +295,8 @@ Future<Position> _determinePosition() async {
 
       final _firestore = FirebaseFirestore.instance;
       final _firebaseAuth = FirebaseAuth.instance;
-      //final UID = FirebaseAuth.instance.currentUser!.uid;
-      final UID = '111';
+      final UID = FirebaseAuth.instance.currentUser!.uid;
+      
 
       final Recommendation = await _firestore
           .collection('Recommendation')
