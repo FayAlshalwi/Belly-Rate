@@ -135,13 +135,20 @@ class _myProfile extends State<myProfile> {
             ),
             ClipRRect(
               borderRadius: BorderRadius.circular(100.0),
-              child: Image.network(
-                "${ourUser?.picture}",
-                fit: BoxFit.cover,
-                height: 150.0,
-                width: 150.0,
-                // errorBuilder: ,
-              ),
+              child: ourUser!.picture == null
+                  ? Image.network(
+                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                      fit: BoxFit.cover,
+                      height: 150.0,
+                      width: 150.0,
+                    )
+                  : Image.network(
+                      "${ourUser!.picture}",
+                      fit: BoxFit.cover,
+                      height: 150.0,
+                      width: 150.0,
+                      // errorBuilder: ,
+                    ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
