@@ -91,12 +91,12 @@ class _HomePage extends State<HomePage> {
     });
 
     AwesomeNotifications().actionStream.listen((notification) {
-      if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
+      /*if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
         AwesomeNotifications().getGlobalBadgeCounter().then(
               (value) =>
                   AwesomeNotifications().setGlobalBadgeCounter(0),
             );
-      }
+      }*/
       String? resID = notification.summary;
       print(resID);
 
@@ -242,8 +242,8 @@ location.onLocationChanged.listen((LocationData currentLocation) async {
 
   final _firestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
-  //final UID = FirebaseAuth.instance.currentUser!.uid;
-  final UID = '111';
+  final UID = FirebaseAuth.instance.currentUser!.uid;
+ // final UID = '111';
 
 final Recommendation = await _firestore
       .collection('Recommendation')

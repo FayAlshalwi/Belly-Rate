@@ -40,15 +40,19 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+try{
   final periodicTimer = Timer.periodic(
     //
-    const Duration(seconds:60*5),
+    const Duration(seconds:60*10),
     (timer) {
      GetRecommendation();
       print('GetRecommendation timer');
     },
   );
+}
+catch(e){
+  print("No recommendation until sign in");
+}
  AwesomeNotifications().getGlobalBadgeCounter().then(
               (value) =>
                   AwesomeNotifications().setGlobalBadgeCounter(0),
@@ -98,11 +102,12 @@ class _MyAppState extends State<MyApp> {
 }
 
 void GetRecommendation() async {
+  try{
   print('inside GetRecommendation');
   final _firestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
-  //final UID = FirebaseAuth.instance.currentUser!.uid;
-  final UID = '111';
+  final UID = FirebaseAuth.instance.currentUser!.uid;
+  //final UID = '111';
 
   final res = await _firestore
       .collection('Recommendation')
@@ -126,6 +131,10 @@ void GetRecommendation() async {
     ContentOfNotification(RestaurantId);
   } else {
     print('no recommendation!');
+  }
+  }//try
+  catch(e){
+     print("No recommendation until sign in");
   }
 } //GetRecommendation
 
