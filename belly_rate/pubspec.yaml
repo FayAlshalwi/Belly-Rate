@@ -55,6 +55,7 @@ dependencies:
   maps_launcher: ^2.0.1
   flutter_rating_bar: ^4.0.1
   shared_preferences: ^2.0.15
+  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:
@@ -79,9 +80,16 @@ dev_dependencies:
   get_storage: ^2.0.2
   cached_network_image: ^3.0.0
   shimmer: ^2.0.0
+  flutter_launcher_icons: ^0.11.0
  
   
   firebase_auth: ^4.2.3
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "asset/BRLogo.png"
+  image_path_android: "asset/BRLogo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
