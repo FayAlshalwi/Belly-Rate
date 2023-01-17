@@ -37,8 +37,11 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
 
   @override
   Widget build(BuildContext context) {
-    double heightM = MediaQuery.of(context).size.height / 30;
-    Color txt_color = Colors.black;
+    final Color txt_color = Color(0xFF5a3769);
+    final Color button_color = Color.fromARGB(255, 216, 107, 147);
+    final double heightM = MediaQuery.of(context).size.height / 30;
+    // double heightM = MediaQuery.of(context).size.height / 30;
+    // Color txt_color = Colors.black;
     double rating;
     return Scaffold(
         appBar: AppBar(
@@ -246,37 +249,79 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                                           SizedBox(
                                             height: 15,
                                           ),
-                                          Container(
-                                            child: TextButton(
-                                                child: Text("Submit",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF5a3769),
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  CoolAlert.show(
-                                                    context: context,
-                                                    type: CoolAlertType.confirm,
-                                                    text:
-                                                        'Do you want to submit this rate',
-                                                    confirmBtnText: 'Yes',
-                                                    cancelBtnText: 'No',
-                                                    confirmBtnColor:
-                                                        Color(0xFF5a3769),
-                                                    onConfirmBtnTap: () => {
-                                                      //save the rate (backend)
-                                                    },
-                                                  );
+                                          Material(
+                                              elevation: 10.0,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      5.0), //12
+                                              color: Colors
+                                                  .transparent, //Colors.cyan.withOpacity(0.5),
+                                              child: MaterialButton(
+                                                minWidth: 15,
+                                                color: button_color,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0)),
+                                                splashColor: button_color,
+                                                onPressed: () async {
+                                                  // Navigator.pop(context);
+                                                  // CoolAlert.show(
+                                                  //   context: context,
+                                                  //   type: CoolAlertType.confirm,
+                                                  //   text:
+                                                  //       'Do you want to submit this rate',
+                                                  //   confirmBtnText: 'Yes',
+                                                  //   cancelBtnText: 'No',
+                                                  //   confirmBtnColor:
+                                                  //       Color(0xFF5a3769),
+                                                  //   onConfirmBtnTap: () {
+                                                  //     Navigator.pop(context);
+                                                  //     Navigator.pop(context);
+                                                  //     Navigator.pop(context);
+
+                                                  //     //save the rate (backend)
+                                                  //   },
+                                                  // );
                                                 },
-                                                style: TextButton.styleFrom(
-                                                  textStyle: const TextStyle(
-                                                    fontSize: 15,
-                                                  ),
-                                                )),
-                                          ),
+                                                child: Text('Submit',
+                                                    textAlign: TextAlign.center,
+                                                    style: getMyTextStyle(
+                                                        txt_color: Colors.white,
+                                                        fontSize:
+                                                            heightM * 0.6)),
+                                              )
+                                              // Container(
+                                              //   child: TextButton(
+                                              //       child: Text("Submit",
+                                              //           style: TextStyle(
+                                              //               color:
+                                              //                   Color(0xFF5a3769),
+                                              //               fontSize: 15,
+                                              //               fontWeight:
+                                              //                   FontWeight.bold)),
+                                              //       onPressed: () {
+                                              //         Navigator.pop(context);
+                                              //         CoolAlert.show(
+                                              //           context: context,
+                                              //           type: CoolAlertType.confirm,
+                                              //           text:
+                                              //               'Do you want to submit this rate',
+                                              //           confirmBtnText: 'Yes',
+                                              //           cancelBtnText: 'No',
+                                              //           confirmBtnColor:
+                                              //               Color(0xFF5a3769),
+                                              //           onConfirmBtnTap: () => {
+                                              //             //save the rate (backend)
+                                              //           },
+                                              //         );
+                                              //       },
+                                              //       style: TextButton.styleFrom(
+                                              //         textStyle: const TextStyle(
+                                              //           fontSize: 15,
+                                              //         ),
+                                              //       )),
+                                              ),
                                         ],
                                       ),
                                     ),
@@ -378,4 +423,9 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
       throw ("Cannot dial");
     }
   }
+}
+
+TextStyle getMyTextStyle({required Color txt_color, double fontSize = 22}) {
+  return GoogleFonts.cairo(
+      color: txt_color, fontSize: fontSize, fontWeight: FontWeight.bold);
 }

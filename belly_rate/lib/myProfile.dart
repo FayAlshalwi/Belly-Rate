@@ -105,7 +105,7 @@ class _myProfile extends State<myProfile> {
                             Navigator.pop(context); //close Dialog
                           },
                           child: Text(
-                            "Close",
+                            "Cancel",
                             style: TextStyle(
                               fontSize: 15,
                               color: const Color(0xFF5a3769),
