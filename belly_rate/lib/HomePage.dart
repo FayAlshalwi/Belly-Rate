@@ -282,7 +282,7 @@ class _HomePage extends State<HomePage> {
       }// if isNotEmpty 
 
 }//distanceInMeters*/
-
+/*
     location.onLocationChanged.listen((LocationData currentLocation) async {
       // Use current location
       print('onLocationChanged method');
@@ -341,7 +341,7 @@ class _HomePage extends State<HomePage> {
       } else {
         print('no recommendation for this user!');
       }
-    });
+    });*/
   } //userlocation
 
   @override

@@ -43,7 +43,7 @@ void main() async {
 
   final periodicTimer = Timer.periodic(
     //
-    const Duration(seconds: 60 * 5),
+    const Duration(seconds:10),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
@@ -97,43 +97,43 @@ class _MyAppState extends State<MyApp> {
 }
 
 void GetRecommendation() async {
-  try {
-    print('inside GetRecommendation');
-    final _firestore = FirebaseFirestore.instance;
-    final _firebaseAuth = FirebaseAuth.instance;
-    final UID = FirebaseAuth.instance.currentUser!.uid;
-    // final UID = '111';
+  try{
 
-    final res = await _firestore
-        .collection('Recommendation')
-        .where("userId", isEqualTo: UID)
-        .where("Notified", isEqualTo: false)
-        .get();
+  print('inside GetRecommendation');
+  final _firestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+  final UID = FirebaseAuth.instance.currentUser!.uid;
 
-    if (res.docs.isNotEmpty) {
-      print('recommendation is here');
+  final res = await _firestore
+      .collection('Recommendation')
+      .where("userId", isEqualTo: UID)
+      .where("Notified", isEqualTo: false)
+      .get();
+
+  if (res.docs.isNotEmpty) {
+    print('recommendation is here');
 // Get RestaurantId
-      String RestaurantId = res.docs[0]['RestaurantId'];
-      print('RestaurantId is = $RestaurantId');
-      String docid = res.docs[0].id;
-      print('docid is = $docid');
+    String RestaurantId = res.docs[0]['RestaurantId'];
+    print('RestaurantId is = $RestaurantId');
+    String docid = res.docs[0].id;
+    print('docid is = $docid');
 //set isNotified to true
-      FirebaseFirestore.instance
-          .collection('Recommendation')
-          .doc(docid)
-          .update({"Notified": true});
+    FirebaseFirestore.instance
+        .collection('Recommendation')
+        .doc(docid)
+        .update({"Notified": true});
 
-      ContentOfNotification(RestaurantId);
-    } else {
-      print('no recommendation!');
-    }
-  } catch (e) {
-    print('User not loged in');
+    ContentOfNotification(RestaurantId);
+  } else {
+    print('no recommendation!');
+  }
+  }
+  catch(e){
+     print('User not loged in');
   }
 } //GetRecommendation
 
 void ContentOfNotification(String RestaurantId) async {
-  print(1);
   final _firestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
 
@@ -145,15 +145,15 @@ void ContentOfNotification(String RestaurantId) async {
       .collection('Restaurants')
       .where("ID", isEqualTo: RestaurantId)
       .get();
-  print(2);
+
   if (res.docs.isNotEmpty) {
     String docid = res.docs[0].id;
     print(docid);
-    print(3);
 
     // Get category, name, photo
     category = res.docs[0]['category'];
     print(category);
+    print(category.toLowerCase());
     name = res.docs[0]['name'];
     print(name);
 
@@ -232,7 +232,7 @@ void ContentOfNotification(String RestaurantId) async {
     case ("lebanese restaurant"):
       {
         NotificationContent =
-            "Celebrating the pure, simple pleasures of Authentic lebanese cuisine.!, try  $name.";
+            "Celebrating the pure, simple pleasures of Authentic lebanese cuisine!, lets go and try $name.";
         print(NotificationContent);
         break;
       }
@@ -245,9 +245,12 @@ void ContentOfNotification(String RestaurantId) async {
         print(NotificationContent);
         break;
       }
+    default:
+      print('DEFAULT case');
+      NotificationContent =
+          "New recommendation match your test!, lets go to try $name.";
+      print(NotificationContent);
   } //switch
 
-//createPlantFoodNotification(NotificationContent ,RestaurantId, Photo);
-  // createPlantFoodNotification(NotificationContent, RestaurantId);
   createNotification(NotificationContent, RestaurantId, Photo, name);
 }
