@@ -80,7 +80,6 @@ dev_dependencies:
   get_storage: ^2.0.2
   cached_network_image: ^3.0.0
   shimmer: ^2.0.0
-  flutter_launcher_icons: ^0.11.0
  
   
   firebase_auth: ^4.2.3
@@ -88,7 +87,6 @@ dev_dependencies:
 flutter_icons:
   ios: true
   android: true
-  image_path_ios: "asset/BRLogo.png"
   image_path_android: "asset/BRLogo.png"
 
 # For information on the generic Dart part of this file, see the

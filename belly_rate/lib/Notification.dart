@@ -11,8 +11,9 @@ Future<void> createNotification(
       //resName,
       body: '$notificationcontent',
       summary: resID,
-      bigPicture: photo,
-      notificationLayout: NotificationLayout.BigPicture,
+      //bigPicture: 'asset://assets/notification_map.png',
+      //notificationLayout: NotificationLayout.BigPicture,
     ),
   );
+  print('Dalal2');
 }
