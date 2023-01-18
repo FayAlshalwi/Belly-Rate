@@ -604,3 +604,140 @@ class _HomePage extends State<HomePage> {
     );
   }
 }
+
+void ContentOfLocationNotification(String RestaurantId) async {
+  print('inside ContentOfLocationNotification');
+  final _firestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+
+  String category = "";
+  String name = "";
+  String Photo = "";
+
+  final res = await _firestore
+      .collection('Restaurants')
+      .where("ID", isEqualTo: RestaurantId)
+      .get();
+  print(2);
+  if (res.docs.isNotEmpty) {
+    String docid = res.docs[0].id;
+    print(docid);
+    print(3);
+
+    // Get category, name, photo
+    category = res.docs[0]['category'];
+    print(category);
+    name = res.docs[0]['name'];
+    print(name);
+
+    List<dynamic> Recommendationphotos = [];
+
+    try {
+      Recommendationphotos = res.docs[0]['photos'];
+      if (Recommendationphotos.length != 0) {
+        Photo = Recommendationphotos[0];
+        print('Photo not empty');
+      } else {
+        print('Photo empty');
+      }
+    } catch (e) {
+      Photo = "";
+    }
+    print(Photo);
+  }
+  print('last');
+
+  String NotificationContent = "";
+// NotificationContent
+  switch (category.toLowerCase()) {
+    case ("american restaurant"):
+      {
+        NotificationContent =
+            // "Fast and yummy, Good food for your belly!, lets go and try $name.";
+            // NotificationContent = "Burgers! Because no great story started with salad. lets go and try $name.";
+            NotificationContent =
+                "Look like you're near $name restaurant! let's go and give it a try.";
+        print(NotificationContent);
+        break;
+      }
+
+    case ('french restaurant'):
+      {
+        // NotificationContent ="It's time to enjoy the finer things in life!, how about trying $name.";
+        //  NotificationContent = "A genuine fine-dining experience awaits!, how about trying $name.";
+        NotificationContent =
+            "$name restaurant is a few steps away! what about trying it out!";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("health food restaurant"):
+      {
+        // NotificationContent =
+        //   "Choose healthy. Be strong. Live long!, Run to try $name.";
+        //  NotificationContent = "We’re fresher! We’re tastier! We’re recommending $name!";
+        NotificationContent =
+            "Look like you're near $name restaurant! let's go and give it a try.";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("indian restaurant"):
+      {
+        // NotificationContent =
+        //   "We suggest something hut, somthing tasty!, go and taste $name.";
+        NotificationContent =
+            "Spice it up! You're near $name, go and give it a try!";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("italian restaurant"):
+      {
+        // NotificationContent =
+        //   "Delicious Italian food, just the way it should be!, $name is a must.";
+        NotificationContent =
+            "Margarita is calling, you're near $name restaurant, let's give it a try";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("japanese restaurant"):
+      {
+        //NotificationContent =
+        //  "Roll with us, and go to try $name. where sushi lovers rejoice!";
+        NotificationContent =
+            "Look like you're near $name restaurant! let's go and give it a try.";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("lebanese restaurant"):
+      {
+        // NotificationContent =
+        //   "Celebrating the pure, simple pleasures of Authentic lebanese cuisine.!, try $name.";
+        NotificationContent =
+            "Smelling olive oils? you're near $name restaurant, let's give it a try!.";
+        print(NotificationContent);
+        break;
+      }
+
+    case ("seafood restaurant"):
+      {
+        //NotificationContent =
+        //  "Try $name, and Keep The Waves of Seafood Coming!";
+        // Fresh From The Net, You Won’t Regret!
+        NotificationContent =
+            "Look like you're near $name restaurant! let's go and give it a try.";
+        print(NotificationContent);
+        break;
+      }
+    default:
+      print('DEFAULT case');
+      NotificationContent =
+          "Look like you're near $name restaurant! let's go and give it a try.";
+      print(NotificationContent);
+  } //switch
+
+  createNotification(NotificationContent, RestaurantId, Photo, name);
+}
