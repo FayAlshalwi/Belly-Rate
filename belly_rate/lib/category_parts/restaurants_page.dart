@@ -233,6 +233,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                                               minRating: 1,
                                               direction: Axis.horizontal,
                                               allowHalfRating: true,
+                                              glowColor: Color(0xFF5a3769),
                                               itemCount: 5,
                                               itemPadding: EdgeInsets.symmetric(
                                                   horizontal: 4.0),
