@@ -40,24 +40,19 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-try{
+
   final periodicTimer = Timer.periodic(
     //
-    const Duration(seconds:60*10),
+    const Duration(seconds:10),
     (timer) {
-     GetRecommendation();
+      GetRecommendation();
       print('GetRecommendation timer');
     },
   );
-}
-catch(e){
-  print("No recommendation until sign in");
-}
- AwesomeNotifications().getGlobalBadgeCounter().then(
-              (value) =>
-                  AwesomeNotifications().setGlobalBadgeCounter(0),
-            );
-      
+  AwesomeNotifications().getGlobalBadgeCounter().then(
+        (value) => AwesomeNotifications().setGlobalBadgeCounter(0),
+      );
+
   runApp(MyApp());
 }
 
@@ -103,11 +98,11 @@ class _MyAppState extends State<MyApp> {
 
 void GetRecommendation() async {
   try{
+
   print('inside GetRecommendation');
   final _firestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
   final UID = FirebaseAuth.instance.currentUser!.uid;
-  //final UID = '111';
 
   final res = await _firestore
       .collection('Recommendation')
@@ -132,14 +127,13 @@ void GetRecommendation() async {
   } else {
     print('no recommendation!');
   }
-  }//try
+  }
   catch(e){
-     print("No recommendation until sign in");
+     print('User not loged in');
   }
 } //GetRecommendation
 
 void ContentOfNotification(String RestaurantId) async {
-
   final _firestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
 
@@ -151,11 +145,11 @@ void ContentOfNotification(String RestaurantId) async {
       .collection('Restaurants')
       .where("ID", isEqualTo: RestaurantId)
       .get();
- 
+
   if (res.docs.isNotEmpty) {
     String docid = res.docs[0].id;
     print(docid);
-   
+
     // Get category, name, photo
     category = res.docs[0]['category'];
     print(category);
@@ -183,7 +177,6 @@ void ContentOfNotification(String RestaurantId) async {
   String NotificationContent = "";
 // NotificationContent
   switch (category.toLowerCase()) {
-    
     case ("american restaurant"):
       {
         NotificationContent =
@@ -252,13 +245,12 @@ void ContentOfNotification(String RestaurantId) async {
         print(NotificationContent);
         break;
       }
-       default:
+    default:
       print('DEFAULT case');
       NotificationContent =
-            "New recommendation match your test!, lets go to try $name.";
-        print(NotificationContent);
+          "New recommendation match your test!, lets go to try $name.";
+      print(NotificationContent);
   } //switch
 
-createNotification(NotificationContent ,RestaurantId, Photo , name);
-  
+  createNotification(NotificationContent, RestaurantId, Photo, name);
 }

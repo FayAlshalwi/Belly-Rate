@@ -20,6 +20,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 import 'category_parts/category_slider.dart';
+import 'category_parts/category_slider_homepage.dart';
 import 'category_parts/restaurant_model.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -33,7 +34,6 @@ import 'utilities.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 
-
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
@@ -43,10 +43,21 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
   void initState() {
     super.initState();
-     print('dalal');
+    print('dalal');
 
-  /////LOCATION Tracking 
-  userlocation();
+    /////LOCATION Tracking
+    userlocation();
+//Nouf
+
+    Future.delayed(Duration.zero, () async {
+      Position position = await _determinePosition();
+      if (position != null) {
+        print("dddd ${position.latitude}");
+        UserData!.setDouble('locationLat', position.latitude);
+        UserData!.setDouble('locationLon', position.longitude);
+      }
+    });
+    // _determinePosition();
 
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
@@ -91,12 +102,13 @@ class _HomePage extends State<HomePage> {
     });
 
     AwesomeNotifications().actionStream.listen((notification) {
-      /*if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
+      if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
         AwesomeNotifications().getGlobalBadgeCounter().then(
               (value) =>
-                  AwesomeNotifications().setGlobalBadgeCounter(0),
+                  AwesomeNotifications().setGlobalBadgeCounter(value - 1),
             );
-      }*/
+      }
+
       String? resID = notification.summary;
       print(resID);
 
@@ -165,32 +177,83 @@ class _HomePage extends State<HomePage> {
       });
     }
   }
-  /////Location 
-userlocation() async {
-  print('inside userlocation method');
 
-  Location location = new Location();
+  //Nouf
 
-bool _serviceEnabled;
-PermissionStatus _permissionGranted;
-LocationData _locationData;
+  /// Determine the current position of the device.
+  ///
+  /// When the location services are not enabled or permissions
+  /// are denied the `Future` will return an error.
+  Future<Position> _determinePosition() async {
+    print('inside _determinePosition');
+    bool serviceEnabled;
+    LocationPermission permission;
 
-_serviceEnabled = await location.serviceEnabled();
-if (!_serviceEnabled) {
-  _serviceEnabled = await location.requestService();
-  if (!_serviceEnabled) {
-    return;
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    } else {
+      print('Location services are enabled');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      } else {
+        print('Location permissions are not denied!!');
+      }
+    } else {
+      print('Location permissions are not denied!!');
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
   }
-}
 
-_permissionGranted = await location.hasPermission();
-if (_permissionGranted == PermissionStatus.denied) {
-  _permissionGranted = await location.requestPermission();
-  location.enableBackgroundMode(enable: true);
-  if (_permissionGranted != PermissionStatus.granted) {
-    return LocationData;
-  }
-}
+  /////Location
+  userlocation() async {
+    print('inside userlocation method');
+
+    Location location = new Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      location.enableBackgroundMode(enable: true);
+      if (_permissionGranted != PermissionStatus.granted) {
+        return LocationData;
+      }
+    }
 
 /*Future<void> distanceInMeters(String RestaurantId ,double userlat , double userlong , String RecommendationDocID) async {
 
@@ -230,75 +293,67 @@ if (_permissionGranted == PermissionStatus.denied) {
       }// if isNotEmpty 
 
 }//distanceInMeters*/
+/*
+    location.onLocationChanged.listen((LocationData currentLocation) async {
+      // Use current location
+      print('onLocationChanged method');
+      print('currentLocation.latitude:');
+      print(currentLocation.latitude);
+      print('currentLocation.longitude');
+      print(currentLocation.longitude);
 
+      final _firestore = FirebaseFirestore.instance;
+      final _firebaseAuth = FirebaseAuth.instance;
+      final UID = FirebaseAuth.instance.currentUser!.uid;
 
-location.onLocationChanged.listen((LocationData currentLocation) async {
-  // Use current location
-  print('onLocationChanged method');
-  print('currentLocation.latitude:');
-  print(currentLocation.latitude);
-  print('currentLocation.longitude');
-  print(currentLocation.longitude);
+      final Recommendation = await _firestore
+          .collection('Recommendation')
+          .where("userId", isEqualTo: UID)
+          .where("Notified_location", isEqualTo: false)
+          .get();
 
-  final _firestore = FirebaseFirestore.instance;
-  final _firebaseAuth = FirebaseAuth.instance;
-  final UID = FirebaseAuth.instance.currentUser!.uid;
- // final UID = '111';
+      if (Recommendation.docs.isNotEmpty) {
+        for (int i = 0; i < Recommendation.docs.length; i++) {
+          String RestaurantId = Recommendation.docs[i]['RestaurantId'];
+          double? userlat = currentLocation.latitude;
+          double? userlong = currentLocation.longitude;
+          String RecommendationDocID = Recommendation.docs[i].id;
 
-final Recommendation = await _firestore
-      .collection('Recommendation')
-      .where("userId", isEqualTo: UID)
-      .where("Notified_location", isEqualTo: false)
-      .get();
+          final Restaurants = await _firestore
+              .collection('Restaurants')
+              .where("ID", isEqualTo: RestaurantId)
+              .get();
 
-  if (Recommendation.docs.isNotEmpty) {
+          if (Restaurants.docs.isNotEmpty) {
+            double Restaurantlong = double.parse(Restaurants.docs[0]['long']);
+            double Restaurantlat = double.parse(Restaurants.docs[0]['lat']);
 
-    for (int i = 0; i < Recommendation.docs.length; i++){
+            double distanceInMeters = Geolocator.distanceBetween(
+                Restaurantlat, Restaurantlong, userlat!, userlong!);
 
-      String RestaurantId = Recommendation.docs[i]['RestaurantId'];
-      double? userlat = currentLocation.latitude; 
-      double? userlong = currentLocation.longitude;
-      String RecommendationDocID = Recommendation.docs[i].id;
+            if (distanceInMeters <= 2000) {
+              print('$distanceInMeters');
+              print('less or equal than 2km');
 
-      final Restaurants = await _firestore
-      .collection('Restaurants')
-      .where("ID", isEqualTo: RestaurantId)
-      .get();
+              print('docid is = $RecommendationDocID');
+              FirebaseFirestore.instance
+                  .collection('Recommendation')
+                  .doc(RecommendationDocID)
+                  .update({"Notified_location": true});
 
-      if (Restaurants.docs.isNotEmpty) {
-
-     double Restaurantlong = double.parse(Restaurants.docs[0]['long']);
-     double Restaurantlat = double.parse(Restaurants.docs[0]['lat']);
-
-    double distanceInMeters = Geolocator.distanceBetween(Restaurantlat , Restaurantlong , userlat! , userlong!);
-
-    if(distanceInMeters <= 2000){
-      print('$distanceInMeters');
-      print('less or equal than 2km');
-
-       print('docid is = $RecommendationDocID');
-        FirebaseFirestore.instance
-        .collection('Recommendation')
-        .doc(RecommendationDocID)
-        .update({"Notified_location": true});
-
-        ContentOfLocationNotification(RestaurantId);
-    }
-    else{
-       print('$distanceInMeters');
-      print('More than 2km');
-    }
+              ContentOfLocationNotification(RestaurantId);
+            } else {
+              print('$distanceInMeters');
+              print('More than 2km');
+            }
+          }
+          //distanceInMeters(RestaurantId ,lat! , long! , RecommendationDocID );
+        }
+      } else {
+        print('no recommendation for this user!');
       }
-      //distanceInMeters(RestaurantId ,lat! , long! , RecommendationDocID );
-    }
-  } 
-  else {
-    print('no recommendation for this user!');
-  }
-
-});
-
-}//userlocation
+    });*/
+  } //userlocation
 
   @override
   Widget build(BuildContext context) {
@@ -427,6 +482,11 @@ final Recommendation = await _firestore
                       fontWeight: FontWeight.bold),
                 ),
               )),
+          //  SizedBox(
+
+          // height: 10,
+          // ),
+          // RestaurantSlider()
         ],
       )),
       //Favorite page container
@@ -609,46 +669,51 @@ void ContentOfLocationNotification(String RestaurantId) async {
     case ("american restaurant"):
       {
         NotificationContent =
-        // "Fast and yummy, Good food for your belly!, lets go and try $name.";
-        // NotificationContent = "Burgers! Because no great story started with salad. lets go and try $name.";
-         NotificationContent = "Look like you're near $name restaurant! let's go and give it a try."; 
+            // "Fast and yummy, Good food for your belly!, lets go and try $name.";
+            // NotificationContent = "Burgers! Because no great story started with salad. lets go and try $name.";
+            NotificationContent =
+                "Look like you're near $name restaurant! let's go and give it a try.";
         print(NotificationContent);
         break;
       }
 
     case ('french restaurant'):
       {
-       // NotificationContent ="It's time to enjoy the finer things in life!, how about trying $name.";
+        // NotificationContent ="It's time to enjoy the finer things in life!, how about trying $name.";
         //  NotificationContent = "A genuine fine-dining experience awaits!, how about trying $name.";
-        NotificationContent = "$name restaurant is a few steps away! what about trying it out!";
+        NotificationContent =
+            "$name restaurant is a few steps away! what about trying it out!";
         print(NotificationContent);
         break;
       }
 
     case ("health food restaurant"):
       {
-       // NotificationContent =
-         //   "Choose healthy. Be strong. Live long!, Run to try $name.";
+        // NotificationContent =
+        //   "Choose healthy. Be strong. Live long!, Run to try $name.";
         //  NotificationContent = "We’re fresher! We’re tastier! We’re recommending $name!";
-        NotificationContent = "Look like you're near $name restaurant! let's go and give it a try."; 
+        NotificationContent =
+            "Look like you're near $name restaurant! let's go and give it a try.";
         print(NotificationContent);
         break;
       }
 
     case ("indian restaurant"):
       {
-       // NotificationContent =
-         //   "We suggest something hut, somthing tasty!, go and taste $name.";
-        NotificationContent = "Spice it up! You're near $name, go and give it a try!";
+        // NotificationContent =
+        //   "We suggest something hut, somthing tasty!, go and taste $name.";
+        NotificationContent =
+            "Spice it up! You're near $name, go and give it a try!";
         print(NotificationContent);
         break;
       }
 
     case ("italian restaurant"):
       {
-       // NotificationContent =
+        // NotificationContent =
         //   "Delicious Italian food, just the way it should be!, $name is a must.";
-        NotificationContent = "Margarita is calling, you're near $name restaurant, let's give it a try";
+        NotificationContent =
+            "Margarita is calling, you're near $name restaurant, let's give it a try";
         print(NotificationContent);
         break;
       }
@@ -656,17 +721,19 @@ void ContentOfLocationNotification(String RestaurantId) async {
     case ("japanese restaurant"):
       {
         //NotificationContent =
-          //  "Roll with us, and go to try $name. where sushi lovers rejoice!";
-             NotificationContent = "Look like you're near $name restaurant! let's go and give it a try."; 
+        //  "Roll with us, and go to try $name. where sushi lovers rejoice!";
+        NotificationContent =
+            "Look like you're near $name restaurant! let's go and give it a try.";
         print(NotificationContent);
         break;
       }
 
     case ("lebanese restaurant"):
       {
-       // NotificationContent =
-         //   "Celebrating the pure, simple pleasures of Authentic lebanese cuisine.!, try $name.";
-             NotificationContent = "Smelling olive oils? you're near $name restaurant, let's give it a try!."; 
+        // NotificationContent =
+        //   "Celebrating the pure, simple pleasures of Authentic lebanese cuisine.!, try $name.";
+        NotificationContent =
+            "Smelling olive oils? you're near $name restaurant, let's give it a try!.";
         print(NotificationContent);
         break;
       }
@@ -674,19 +741,19 @@ void ContentOfLocationNotification(String RestaurantId) async {
     case ("seafood restaurant"):
       {
         //NotificationContent =
-          //  "Try $name, and Keep The Waves of Seafood Coming!";
+        //  "Try $name, and Keep The Waves of Seafood Coming!";
         // Fresh From The Net, You Won’t Regret!
-          NotificationContent = "Look like you're near $name restaurant! let's go and give it a try."; 
+        NotificationContent =
+            "Look like you're near $name restaurant! let's go and give it a try.";
         print(NotificationContent);
         break;
       }
-      default:
+    default:
       print('DEFAULT case');
       NotificationContent =
-          "Look like you're near $name restaurant! let's go and give it a try."; 
-        print(NotificationContent);
-
+          "Look like you're near $name restaurant! let's go and give it a try.";
+      print(NotificationContent);
   } //switch
 
-createNotification(NotificationContent ,RestaurantId, Photo , name);
+  createNotification(NotificationContent, RestaurantId, Photo, name);
 }
