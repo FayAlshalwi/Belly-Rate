@@ -20,6 +20,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 import 'category_parts/category_slider.dart';
+import 'category_parts/category_slider_homepage.dart';
 import 'category_parts/restaurant_model.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -28,6 +29,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
 import 'Notification.dart';
+import 'main.dart';
 import 'utilities.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +48,16 @@ class _HomePage extends State<HomePage> {
     /////LOCATION Tracking
     userlocation();
 //Nouf
-    _determinePosition();
+
+    Future.delayed(Duration.zero, () async {
+      Position position = await _determinePosition();
+      if (position != null) {
+        print("dddd ${position.latitude}");
+        UserData!.setDouble('locationLat', position.latitude);
+        UserData!.setDouble('locationLon', position.longitude);
+      }
+    });
+    // _determinePosition();
 
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
@@ -471,6 +482,11 @@ class _HomePage extends State<HomePage> {
                       fontWeight: FontWeight.bold),
                 ),
               )),
+          //  SizedBox(
+
+          // height: 10,
+          // ),
+          // RestaurantSlider()
         ],
       )),
       //Favorite page container
