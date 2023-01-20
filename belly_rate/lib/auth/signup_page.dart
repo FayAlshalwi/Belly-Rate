@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:belly_rate/HomePage.dart';
 import 'package:belly_rate/auth/signin_page.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -11,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -130,12 +133,12 @@ class _SignUpPageState extends State<SignUpPage> {
                     print(first_name.text);
                   },
                   validator: (value) {
-                    final regExp = RegExp(r'^[a-zA-Z]+$');
+                    final regExp = RegExp(r'^[ a-zA-Z]+$');
                     String text = first_name.text;
                     if (value == null || value.isEmpty) {
                       return 'Please enter your name';
                     } else if (!regExp.hasMatch(text.trim())) {
-                      return 'You cannot enter special characters !@#\%^&*()';
+                      return 'You cannot enter special characters and numbers';
                     } else if (value.length <= 2) {
                       return "Please enter at least 3 characters";
                     }
@@ -514,7 +517,21 @@ class _SignUpPageState extends State<SignUpPage> {
                                 print(userUid);
                                 print("firstName");
                                 print(first_name.text);
-
+                                print("here1");
+                                final uri =
+                                    Uri.parse('http://127.0.0.1:5000/ratings');
+                                print("here2");
+                                final response = await get(uri);
+                                print("here3");
+                                print(response.body);
+                                print("here");
+                                final decoded = json.decode(response.body)
+                                    as Map<String, dynamic>;
+                                print("here4");
+                                print('Recommendation');
+                                print(decoded['recommeneded'][0]);
+                                print(decoded['recommeneded'][1]);
+                                print(decoded['recommeneded'][2]);
                                 FirebaseFirestore.instance
                                     .collection('Users')
                                     .doc(userUid)
@@ -524,9 +541,97 @@ class _SignUpPageState extends State<SignUpPage> {
                                   'uid': userUid,
                                   'picture':
                                       'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-                                  'rest': rest,
+                                  'rest': [
+                                    decoded['recommeneded'][0],
+                                    decoded['recommeneded'][1],
+                                    decoded['recommeneded'][2]
+                                  ],
+                                });
+                                print("user added");
+                                FirebaseFirestore.instance
+                                    .collection('Recommendation')
+                                    .doc()
+                                    .set({
+                                  'userId':
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  'RestaurantId': decoded['recommeneded'][0],
+                                  'Notified': false,
+                                  'Notified_location': false,
+                                  "Date_Of_Recommendation":
+                                      FieldValue.serverTimestamp(),
                                 });
 
+                                print("Recommendation 1 added");
+
+                                FirebaseFirestore.instance
+                                    .collection('Recommendation')
+                                    .doc()
+                                    .set({
+                                  'userId':
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  'RestaurantId': decoded['recommeneded'][1],
+                                  'Notified': false,
+                                  'Notified_location': false,
+                                  "Date_Of_Recommendation":
+                                      FieldValue.serverTimestamp(),
+                                });
+
+                                print("Recommendation 2 added");
+
+                                FirebaseFirestore.instance
+                                    .collection('Recommendation')
+                                    .doc()
+                                    .set({
+                                  'userId':
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  'RestaurantId': decoded['recommeneded'][2],
+                                  'Notified': false,
+                                  'Notified_location': false,
+                                  "Date_Of_Recommendation":
+                                      FieldValue.serverTimestamp(),
+                                });
+
+                                print("Recommendation 3 added");
+
+                                FirebaseFirestore.instance
+                                    .collection('History')
+                                    .doc()
+                                    .set({
+                                  'userId':
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  'RestaurantId': decoded['recommeneded'][0],
+                                  'Notified': false,
+                                  'Notified_location': false,
+                                  "Date_Of_Recommendation":
+                                      FieldValue.serverTimestamp(),
+                                });
+                                print("History 1 added");
+                                FirebaseFirestore.instance
+                                    .collection('History')
+                                    .doc()
+                                    .set({
+                                  'userId':
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  'RestaurantId': decoded['recommeneded'][1],
+                                  'Notified': false,
+                                  'Notified_location': false,
+                                  "Date_Of_Recommendation":
+                                      FieldValue.serverTimestamp(),
+                                });
+                                print("History 2 added");
+                                FirebaseFirestore.instance
+                                    .collection('History')
+                                    .doc()
+                                    .set({
+                                  'userId':
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  'RestaurantId': decoded['recommeneded'][2],
+                                  'Notified': false,
+                                  'Notified_location': false,
+                                  "Date_Of_Recommendation":
+                                      FieldValue.serverTimestamp(),
+                                });
+                                print("History 3 added");
                                 CoolAlert.show(
                                   context: context,
                                   type: CoolAlertType.success,
