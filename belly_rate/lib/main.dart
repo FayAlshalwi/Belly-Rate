@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:belly_rate/auth/signin_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,19 +24,16 @@ SharedPreferences? UserData;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   UserData = await SharedPreferences.getInstance();
-  AwesomeNotifications().initialize(
-      // set the icon to null if you want to use the default app icon
-      null,
-      [
-        NotificationChannel(
-            channelKey: 'basic_channel',
-            channelName: 'Basic notifications',
-            channelDescription: 'Notification channel for basic tests',
-            importance: NotificationImportance.High,
-            channelShowBadge: true,
-            defaultColor: Color(0xFF9D50DD),
-            ledColor: Colors.white)
-      ]);
+  AwesomeNotifications().initialize(null, [
+    NotificationChannel(
+        channelKey: 'basic_channel',
+        channelName: 'Basic notifications',
+        channelDescription: 'Notification channel for basic tests',
+        importance: NotificationImportance.High,
+        channelShowBadge: true,
+        defaultColor: Color(0xFF9D50DD),
+        ledColor: Colors.white)
+  ]);
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -43,7 +42,7 @@ void main() async {
 
   final periodicTimer = Timer.periodic(
     //
-    const Duration(seconds:10),
+    const Duration(seconds: 60 * 12 * 14),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
@@ -52,6 +51,88 @@ void main() async {
   AwesomeNotifications().getGlobalBadgeCounter().then(
         (value) => AwesomeNotifications().setGlobalBadgeCounter(0),
       );
+  // if (FirebaseAuth.instance.currentUser != null) {
+  print("in");
+  final periodicTimer2 = Timer.periodic(
+    //
+    //60 * 24 * 3
+    const Duration(days: 3),
+    (timer) async {
+      // final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+      // print("here2");
+      // final response = await get(uri);
+      // print("here3");
+      // print(response.body);
+      // print("here");
+      // final decoded = json.decode(response.body) as Map<String, dynamic>;
+      // print("here4");
+      // print('Recommendation');
+      // print(decoded['recommeneded'][0]);
+      // print(decoded['recommeneded'][1]);
+      // print(decoded['recommeneded'][2]);
+
+      // print('history');
+      // FirebaseFirestore.instance.collection('History').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': decoded['recommeneded'][0],
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+      // FirebaseFirestore.instance.collection('History').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': decoded['recommeneded'][1],
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+
+      // FirebaseFirestore.instance.collection('History').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': decoded['recommeneded'][2],
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+      // print('done history');
+
+      // print("update Users");
+      // await FirebaseFirestore.instance
+      //     .collection('Users')
+      //     .doc(FirebaseAuth.instance.currentUser!.uid)
+      //     .update({
+      //   "rest": [
+      //     decoded['recommeneded'][0],
+      //     decoded['recommeneded'][1],
+      //     decoded['recommeneded'][2]
+      //   ],
+      // });
+      // print("Done Users");
+
+      // final res = await FirebaseFirestore.instance
+      //     .collection('Recommendation')
+      //     .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+      //     .get();
+      // print(res.docs[0].id);
+      // print(res.docs[1].id);
+      // print(res.docs[2].id);
+
+      // await FirebaseFirestore.instance
+      //     .collection('Recommendation')
+      //     .doc(res.docs[0].id)
+      //     .update({"RestaurantId": decoded['recommeneded'][0]});
+      // await FirebaseFirestore.instance
+      //     .collection('Recommendation')
+      //     .doc(res.docs[1].id)
+      //     .update({"RestaurantId": decoded['recommeneded'][1]});
+      // await FirebaseFirestore.instance
+      //     .collection('Recommendation')
+      //     .doc(res.docs[2].id)
+      //     .update({
+      //   "RestaurantId": decoded['recommeneded'][2],
+      // });
+    },
+  );
 
   runApp(MyApp());
 }
@@ -85,51 +166,42 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: MyApp._title,
-        home: user?.uid == null ? SignIn() : HomePage()
-
-        // Scaffold(
-        //   appBar: AppBar(title: const Text(_title)),
-        //   body: const SignIn(),
-        //   // body: const MyStatefulWidget(),
-        // ),
-        );
+        home: user?.uid == null ? SignIn() : HomePage());
   }
 }
 
 void GetRecommendation() async {
-  try{
+  try {
+    print('inside GetRecommendation');
+    final _firestore = FirebaseFirestore.instance;
+    final _firebaseAuth = FirebaseAuth.instance;
+    final UID = FirebaseAuth.instance.currentUser!.uid;
 
-  print('inside GetRecommendation');
-  final _firestore = FirebaseFirestore.instance;
-  final _firebaseAuth = FirebaseAuth.instance;
-  final UID = FirebaseAuth.instance.currentUser!.uid;
-
-  final res = await _firestore
-      .collection('Recommendation')
-      .where("userId", isEqualTo: UID)
-      .where("Notified", isEqualTo: false)
-      .get();
-
-  if (res.docs.isNotEmpty) {
-    print('recommendation is here');
-// Get RestaurantId
-    String RestaurantId = res.docs[0]['RestaurantId'];
-    print('RestaurantId is = $RestaurantId');
-    String docid = res.docs[0].id;
-    print('docid is = $docid');
-//set isNotified to true
-    FirebaseFirestore.instance
+    final res = await _firestore
         .collection('Recommendation')
-        .doc(docid)
-        .update({"Notified": true});
+        .where("userId", isEqualTo: UID)
+        .where("Notified", isEqualTo: false)
+        .get();
 
-    ContentOfNotification(RestaurantId);
-  } else {
-    print('no recommendation!');
-  }
-  }
-  catch(e){
-     print('User not loged in');
+    if (res.docs.isNotEmpty) {
+      print('recommendation is here');
+// Get RestaurantId
+      String RestaurantId = res.docs[0]['RestaurantId'];
+      print('RestaurantId is = $RestaurantId');
+      String docid = res.docs[0].id;
+      print('docid is = $docid');
+//set isNotified to true
+      FirebaseFirestore.instance
+          .collection('Recommendation')
+          .doc(docid)
+          .update({"Notified": true});
+
+      ContentOfNotification(RestaurantId);
+    } else {
+      print('no recommendation!');
+    }
+  } catch (e) {
+    print('User not loged in');
   }
 } //GetRecommendation
 
