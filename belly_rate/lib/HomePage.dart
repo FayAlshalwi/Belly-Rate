@@ -255,45 +255,8 @@ class _HomePage extends State<HomePage> {
       }
     }
 
-/*Future<void> distanceInMeters(String RestaurantId ,double userlat , double userlong , String RecommendationDocID) async {
-
-  print('inside distanceInMeters method');
-
-  final _firestore = FirebaseFirestore.instance;
-  final _firebaseAuth = FirebaseAuth.instance;
 
 
-  final Restaurants = await _firestore
-      .collection('Restaurants')
-      .where("ID", isEqualTo: RestaurantId)
-      .get();
-
-      if (Restaurants.docs.isNotEmpty) {
-     double  RLongitude = double.parse(Restaurants.docs[0]['long']);
-     double RLatitude = double.parse(Restaurants.docs[0]['lat']);
-
-    double distanceInMeters = Geolocator.distanceBetween(RLatitude , RLongitude , userlat , userlong);
-
-    if(distanceInMeters <= 2000){
-      print('$distanceInMeters');
-      print('less than 2km');
-
-       print('docid is = $RecommendationDocID');
-        FirebaseFirestore.instance
-        .collection('Recommendation')
-        .doc(RecommendationDocID)
-        .update({"Notified_location": true});
-
-        ContentOfLocationNotification(RestaurantId);
-    }
-    else{
-       print('$distanceInMeters');
-      print('More than 2km');
-    }
-      }// if isNotEmpty 
-
-}//distanceInMeters*/
-/*
     location.onLocationChanged.listen((LocationData currentLocation) async {
       // Use current location
       print('onLocationChanged method');
@@ -347,12 +310,11 @@ class _HomePage extends State<HomePage> {
               print('More than 2km');
             }
           }
-          //distanceInMeters(RestaurantId ,lat! , long! , RecommendationDocID );
         }
       } else {
         print('no recommendation for this user!');
       }
-    });*/
+    });
   } //userlocation
 
   @override
