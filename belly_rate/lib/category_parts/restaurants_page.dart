@@ -1,5 +1,6 @@
 import 'dart:ffi';
 import 'dart:io';
+import 'package:belly_rate/category_parts/restaurantDetails.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -64,282 +65,293 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
             return Padding(
               padding: const EdgeInsets.only(
                   left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(15.0),
-                          topRight: Radius.circular(15.0),
-                        ),
-                        child: CarouselSlider(
-                          options: CarouselOptions(height: heightM * 5.0),
-                          items: item.photos?.map((i) {
-                            return Builder(
-                              builder: (BuildContext context) {
-                                return Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 5.0),
-                                    decoration: BoxDecoration(
-                                        color: txt_color.withOpacity(0.5)),
-                                    child: CachedNetworkImage(
-                                        imageUrl: "${i}",
-                                        // child: Image.network("${i}",
-                                        height: heightM * 5,
-                                        width: heightM * 15,
-                                        fit: BoxFit.fill));
-                              },
-                            );
-                          }).toList(),
-                        )
-                        // Image.network("${item.photos?.first}",
-                        //     height: heightM * 5,
-                        //     width: heightM * 15,
-                        //     fit: BoxFit.fill)
-                        ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("${item.name}",
-                              style: ourTextStyle(
-                                  txt_color: Color(0xFF5a3769),
-                                  txt_size: heightM * 0.7)),
-                          Text("${getBuildPriceAvg(item)}",
-                              style: ourTextStyle(
-                                  txt_color: Colors.black,
-                                  txt_size: heightM * 0.5)),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                      child: Text("${item.description}",
-                          style: ourTextStyle(
-                              txt_color: Colors.grey, txt_size: heightM * 0.5)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, bottom: 8.0, top: 3.0, right: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              InkWell(
-                                  onTap: () {
-                                    item.phoneNumber == "No phone number"
-                                        ? print("no phone")
-                                        : launchPhoneDialer(item.phoneNumber!);
-                                  },
-                                  child: Icon(
-                                    Icons.call,
-                                    color: Color(0xFF5a3769),
-                                  )),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text("${item.phoneNumber}",
-                                  style: ourTextStyle(
-                                      txt_color: Colors.grey,
-                                      txt_size: heightM * 0.5)),
-                            ],
+              child: InkWell(
+                onTap: (){
+                  /// RestaurantDetails
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => RestaurantDetails(
+                          category_name:  widget.category_name,
+                          restaurant: item,
+                        )),
+                  );
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(15.0),
+                            topRight: Radius.circular(15.0),
                           ),
-                          Row(
-                            children: [
-                              InkWell(
-                                  onTap: () async {
-                                    // _launchUrl(item.location!);
-                                    // openMap(double.parse(item.lat!) , double.parse(item.long!));
-                                    MapsLauncher.launchCoordinates(
-                                        double.parse(item.lat!),
-                                        double.parse(item.long!));
-                                  },
-                                  child: const Icon(
-                                    Icons.location_on_outlined,
-                                    color: Color(0xFF5a3769),
-                                    size: 30,
-                                  )),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text("${item.far} KM",
-                                  style: ourTextStyle(
-                                      txt_color: Colors.grey,
-                                      txt_size: heightM * 0.5)),
-                            ],
+                          child:
+                          // CarouselSlider(
+                          //   options: CarouselOptions(height: heightM * 5.0),
+                          //   items: item.photos?.map((i) {
+                          //     return Builder(
+                          //       builder: (BuildContext context) {
+                          //         return Container(
+                          //             width: MediaQuery.of(context).size.width,
+                          //             margin:
+                          //                 EdgeInsets.symmetric(horizontal: 5.0),
+                          //             decoration: BoxDecoration(
+                          //                 color: txt_color.withOpacity(0.5)),
+                          //             child: CachedNetworkImage(
+                          //                 imageUrl: "${i}",
+                          //                 // child: Image.network("${i}",
+                          //                 height: heightM * 5,
+                          //                 width: heightM * 15,
+                          //                 fit: BoxFit.fill));
+                          //       },
+                          //     );
+                          //   }).toList(),
+                          // )
+                          Image.network("${item.photos?.first}",
+                              height: heightM * 7,
+                              width: heightM * 15,
+                              fit: BoxFit.fill)
                           ),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("${item.name}",
+                                style: ourTextStyle(
+                                    txt_color: Color(0xFF5a3769),
+                                    txt_size: heightM * 0.7)),
+                            Text("${getBuildPriceAvg(item)}",
+                                style: ourTextStyle(
+                                    txt_color: Colors.black,
+                                    txt_size: heightM * 0.5)),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, bottom: 6.0, top: 1.0, right: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                  textStyle: const TextStyle(fontSize: 15),
-                                ),
-                                onPressed: () {
-                                  showModalBottomSheet<dynamic>(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    builder: (context) => Container(
-                                      //change the height of the bottom sheet
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.22,
-                                      decoration: new BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: new BorderRadius.only(
-                                          topLeft: const Radius.circular(25.0),
-                                          topRight: const Radius.circular(25.0),
-                                        ),
-                                      ),
-                                      //content of the bottom sheet
-                                      child: Column(
-                                        // mainAxisAlignment:
-                                        //     MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          Container(
-                                            height: 50,
-                                            child: Text(
-                                              "Rate & Review",
-                                              style: TextStyle(
-                                                  fontSize: 25,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Color(0xFF5a3769)),
-                                            ),
-                                          ),
-                                          Container(
-                                            child: RatingBar.builder(
-                                              minRating: 1,
-                                              direction: Axis.horizontal,
-                                              allowHalfRating: true,
-                                              glowColor: Color(0xFF5a3769),
-                                              itemCount: 5,
-                                              itemPadding: EdgeInsets.symmetric(
-                                                  horizontal: 4.0),
-                                              itemBuilder: (context, _) => Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                              ),
-                                              onRatingUpdate: (double value) {
-                                                rating = value;
-                                                print(rating);
-                                              },
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          Material(
-                                              elevation: 10.0,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      5.0), //12
-                                              color: Colors
-                                                  .transparent, //Colors.cyan.withOpacity(0.5),
-                                              child: MaterialButton(
-                                                minWidth: 15,
-                                                color: button_color,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5.0)),
-                                                splashColor: button_color,
-                                                onPressed: () async {
-                                                  // Navigator.pop(context);
-                                                  // CoolAlert.show(
-                                                  //   context: context,
-                                                  //   type: CoolAlertType.confirm,
-                                                  //   text:
-                                                  //       'Do you want to submit this rate',
-                                                  //   confirmBtnText: 'Yes',
-                                                  //   cancelBtnText: 'No',
-                                                  //   confirmBtnColor:
-                                                  //       Color(0xFF5a3769),
-                                                  //   onConfirmBtnTap: () {
-                                                  //     Navigator.pop(context);
-                                                  //     Navigator.pop(context);
-                                                  //     Navigator.pop(context);
+                      // Padding(
+                      //   padding: const EdgeInsets.only(
+                      //       left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                      //   child: Text("${item.description}",
+                      //       style: ourTextStyle(
+                      //           txt_color: Colors.grey, txt_size: heightM * 0.5)),
+                      // ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16.0, bottom: 8.0, top: 3.0, right: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            // Row(
+                            //   children: [
+                            //     InkWell(
+                            //         onTap: () {
+                            //           // item.phoneNumber == "No phone number"
+                            //           //     ? print("no phone")
+                            //           //     : launchPhoneDialer(item.phoneNumber!);
+                            //         },
+                            //         child: Icon(
+                            //           Icons.call,
+                            //           color: Color(0xFF5a3769),
+                            //         )),
+                            //     SizedBox(
+                            //       width: 5,
+                            //     ),
+                            //     Text("${item.phoneNumber}",
+                            //         style: ourTextStyle(
+                            //             txt_color: Colors.grey,
+                            //             txt_size: heightM * 0.5)),
+                            //   ],
+                            // ),
+                            Row(
+                              children: [
+                                InkWell(
+                                    onTap: () async {
 
-                                                  //     //save the rate (backend)
-                                                  //   },
-                                                  // );
-                                                },
-                                                child: Text('Submit',
-                                                    textAlign: TextAlign.center,
-                                                    style: getMyTextStyle(
-                                                        txt_color: Colors.white,
-                                                        fontSize:
-                                                            heightM * 0.6)),
-                                              )
-                                              // Container(
-                                              //   child: TextButton(
-                                              //       child: Text("Submit",
-                                              //           style: TextStyle(
-                                              //               color:
-                                              //                   Color(0xFF5a3769),
-                                              //               fontSize: 15,
-                                              //               fontWeight:
-                                              //                   FontWeight.bold)),
-                                              //       onPressed: () {
-                                              //         Navigator.pop(context);
-                                              //         CoolAlert.show(
-                                              //           context: context,
-                                              //           type: CoolAlertType.confirm,
-                                              //           text:
-                                              //               'Do you want to submit this rate',
-                                              //           confirmBtnText: 'Yes',
-                                              //           cancelBtnText: 'No',
-                                              //           confirmBtnColor:
-                                              //               Color(0xFF5a3769),
-                                              //           onConfirmBtnTap: () => {
-                                              //             //save the rate (backend)
-                                              //           },
-                                              //         );
-                                              //       },
-                                              //       style: TextButton.styleFrom(
-                                              //         textStyle: const TextStyle(
-                                              //           fontSize: 15,
-                                              //         ),
-                                              //       )),
-                                              ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Icon(
-                                  Icons.rate_review_outlined,
-                                  color: Color(0xFF5a3769),
-                                  size: 25,
+                                      // MapsLauncher.launchCoordinates(
+                                      //     double.parse(item.lat!),
+                                      //     double.parse(item.long!));
+                                    },
+                                    child: const Icon(
+                                      Icons.location_on_outlined,
+                                      color: Color(0xFF5a3769),
+                                      size: 30,
+                                    )),
+                                SizedBox(
+                                  width: 5,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                                Text("${item.far} KM",
+                                    style: ourTextStyle(
+                                        txt_color: Colors.grey,
+                                        txt_size: heightM * 0.5)),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      // Padding(
+                      //   padding: const EdgeInsets.only(
+                      //       left: 10.0, bottom: 6.0, top: 1.0, right: 10.0),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     children: [
+                      //       Row(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           TextButton(
+                      //             style: TextButton.styleFrom(
+                      //               textStyle: const TextStyle(fontSize: 15),
+                      //             ),
+                      //             onPressed: () {
+                      //               showModalBottomSheet<dynamic>(
+                      //                 context: context,
+                      //                 isScrollControlled: true,
+                      //                 backgroundColor: Colors.transparent,
+                      //                 builder: (context) => Container(
+                      //                   //change the height of the bottom sheet
+                      //                   height:
+                      //                       MediaQuery.of(context).size.height *
+                      //                           0.22,
+                      //                   decoration: new BoxDecoration(
+                      //                     color: Colors.white,
+                      //                     borderRadius: new BorderRadius.only(
+                      //                       topLeft: const Radius.circular(25.0),
+                      //                       topRight: const Radius.circular(25.0),
+                      //                     ),
+                      //                   ),
+                      //                   //content of the bottom sheet
+                      //                   child: Column(
+                      //                     // mainAxisAlignment:
+                      //                     //     MainAxisAlignment.spaceEvenly,
+                      //                     children: [
+                      //                       SizedBox(
+                      //                         height: 15,
+                      //                       ),
+                      //                       Container(
+                      //                         height: 50,
+                      //                         child: Text(
+                      //                           "Rate & Review",
+                      //                           style: TextStyle(
+                      //                               fontSize: 25,
+                      //                               fontWeight: FontWeight.bold,
+                      //                               color: Color(0xFF5a3769)),
+                      //                         ),
+                      //                       ),
+                      //                       Container(
+                      //                         child: RatingBar.builder(
+                      //                           minRating: 1,
+                      //                           direction: Axis.horizontal,
+                      //                           allowHalfRating: true,
+                      //                           itemCount: 5,
+                      //                           itemPadding: EdgeInsets.symmetric(
+                      //                               horizontal: 4.0),
+                      //                           itemBuilder: (context, _) => Icon(
+                      //                             Icons.star,
+                      //                             color: Colors.amber,
+                      //                           ),
+                      //                           onRatingUpdate: (double value) {
+                      //                             rating = value;
+                      //                             print(rating);
+                      //                           },
+                      //                         ),
+                      //                       ),
+                      //                       SizedBox(
+                      //                         height: 15,
+                      //                       ),
+                      //                       Material(
+                      //                           elevation: 10.0,
+                      //                           borderRadius:
+                      //                               BorderRadius.circular(
+                      //                                   5.0), //12
+                      //                           color: Colors
+                      //                               .transparent, //Colors.cyan.withOpacity(0.5),
+                      //                           child: MaterialButton(
+                      //                             minWidth: 15,
+                      //                             color: button_color,
+                      //                             shape: RoundedRectangleBorder(
+                      //                                 borderRadius:
+                      //                                     BorderRadius.circular(
+                      //                                         5.0)),
+                      //                             splashColor: button_color,
+                      //                             onPressed: () async {
+                      //                               // Navigator.pop(context);
+                      //                               // CoolAlert.show(
+                      //                               //   context: context,
+                      //                               //   type: CoolAlertType.confirm,
+                      //                               //   text:
+                      //                               //       'Do you want to submit this rate',
+                      //                               //   confirmBtnText: 'Yes',
+                      //                               //   cancelBtnText: 'No',
+                      //                               //   confirmBtnColor:
+                      //                               //       Color(0xFF5a3769),
+                      //                               //   onConfirmBtnTap: () {
+                      //                               //     Navigator.pop(context);
+                      //                               //     Navigator.pop(context);
+                      //                               //     Navigator.pop(context);
+                      //
+                      //                               //     //save the rate (backend)
+                      //                               //   },
+                      //                               // );
+                      //                             },
+                      //                             child: Text('Submit',
+                      //                                 textAlign: TextAlign.center,
+                      //                                 style: getMyTextStyle(
+                      //                                     txt_color: Colors.white,
+                      //                                     fontSize:
+                      //                                         heightM * 0.6)),
+                      //                           )
+                      //                           // Container(
+                      //                           //   child: TextButton(
+                      //                           //       child: Text("Submit",
+                      //                           //           style: TextStyle(
+                      //                           //               color:
+                      //                           //                   Color(0xFF5a3769),
+                      //                           //               fontSize: 15,
+                      //                           //               fontWeight:
+                      //                           //                   FontWeight.bold)),
+                      //                           //       onPressed: () {
+                      //                           //         Navigator.pop(context);
+                      //                           //         CoolAlert.show(
+                      //                           //           context: context,
+                      //                           //           type: CoolAlertType.confirm,
+                      //                           //           text:
+                      //                           //               'Do you want to submit this rate',
+                      //                           //           confirmBtnText: 'Yes',
+                      //                           //           cancelBtnText: 'No',
+                      //                           //           confirmBtnColor:
+                      //                           //               Color(0xFF5a3769),
+                      //                           //           onConfirmBtnTap: () => {
+                      //                           //             //save the rate (backend)
+                      //                           //           },
+                      //                           //         );
+                      //                           //       },
+                      //                           //       style: TextButton.styleFrom(
+                      //                           //         textStyle: const TextStyle(
+                      //                           //           fontSize: 15,
+                      //                           //         ),
+                      //                           //       )),
+                      //                           ),
+                      //                     ],
+                      //                   ),
+                      //                 ),
+                      //               );
+                      //             },
+                      //             child: Icon(
+                      //               Icons.rate_review_outlined,
+                      //               color: Color(0xFF5a3769),
+                      //               size: 25,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                    ],
+                  ),
                 ),
               ),
             );

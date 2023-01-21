@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import '../models/rateModel.dart';
+
 Restaurant restaurantFromJson(String str) => Restaurant.fromJson(json.decode(str));
 
 String restaurantToJson(Restaurant data) => json.encode(data.toJson());
@@ -21,6 +23,7 @@ class Restaurant {
     this.category,
     this.photos,
     this.far,
+    this.rate,
   });
 
   String? priceAvg;
@@ -32,6 +35,7 @@ class Restaurant {
   double? far;
   String? lat ;
   String? long ;
+  Rate? rate;
   String? category;
   List<String>? photos;
 
@@ -45,6 +49,8 @@ class Restaurant {
     far: json["far"],
     lat: json["lat"] == null ? null : json["lat"],
     long: json["long"] == null ? null : json["long"],
+
+    rate: json["rate"],
     category: json["category"] == null ? null : json["category"],
     photos: json["photos"] == null ? null : List<String>.from(json["photos"].map((x) => x)),
   );
@@ -56,6 +62,7 @@ class Restaurant {
     "description": description == null ? null : description,
     "location": location == null ? null : location,
     "ID": id == null ? null : id,
+    "rate": rate,
     "lat": lat == null ? null : lat,
     "long": long == null ? null : long,
     "category": category == null ? null : category,

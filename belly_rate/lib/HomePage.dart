@@ -23,6 +23,7 @@ import 'category_parts/category_slider.dart';
 import 'category_parts/category_slider_homepage.dart';
 import 'category_parts/restaurant_model.dart';
 import 'package:provider/provider.dart';
+import 'favoritePage.dart';
 import 'firebase_options.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
@@ -406,91 +407,93 @@ class _HomePage extends State<HomePage> {
     List<Widget> listOfWidgets = [
       //home page container
       Container(
-          child: Column(
-        children: [
-          SizedBox(
-            height: 55,
-          ),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Recommended Restaurants",
-                  style: TextStyle(
-                      color: Color(0xFF5a3769),
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
-                ),
-              )),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Saudi Arabia, Riyadh",
-                  style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold),
-                ),
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          (restaurants.isEmpty == true)
-              ? CarouselLoading()
-              : Container(
-                  child: CarouselSlider(
-                  options: CarouselOptions(
-                    aspectRatio: 16 / 9,
-                    enlargeCenterPage: true,
-                    enableInfiniteScroll: false,
-                    initialPage: 0,
-                    autoPlay: true,
+          child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 55,
+            ),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Recommended Restaurants",
+                    style: TextStyle(
+                        color: Color(0xFF5a3769),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
                   ),
-                  items: imageSliders,
                 )),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Discover Restaurants",
-                  style: TextStyle(
-                      color: Color(0xFF5a3769),
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
-                ),
-              )),
-          CategorySlider(),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Near you",
-                  style: TextStyle(
-                      color: Color(0xFF5a3769),
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
-                ),
-              )),
-          //  SizedBox(
-
-          // height: 10,
-          // ),
-          // RestaurantSlider()
-        ],
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Saudi Arabia, Riyadh",
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )),
+            SizedBox(
+              height: 10,
+            ),
+            (restaurants.isEmpty == true)
+                ? CarouselLoading()
+                : Container(
+                    child: CarouselSlider(
+                    options: CarouselOptions(
+                      aspectRatio: 16 / 9,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: false,
+                      initialPage: 0,
+                      autoPlay: true,
+                    ),
+                    items: imageSliders,
+                  )),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Discover Restaurants",
+                    style: TextStyle(
+                        color: Color(0xFF5a3769),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )),
+            CategorySlider(),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Near you",
+                    style: TextStyle(
+                        color: Color(0xFF5a3769),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )),
+            SizedBox(
+              height: 10,
+            ),
+            RestaurantSlider()
+          ],
+        ),
       )),
       //Favorite page container
-      Container(child: Text('Favorite')),
+      Container(child: Favorite()),
+      // Container(child: Text('Favorite')),
       //History page container
       Container(child: history()),
       //Profile page container
