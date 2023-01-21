@@ -517,16 +517,20 @@ class _SignUpPageState extends State<SignUpPage> {
                                 print(userUid);
                                 print("firstName");
                                 print(first_name.text);
-                                print("here1");
-                                final uri =
-                                    Uri.parse('http://127.0.0.1:5000/ratings');
-                                print("here2");
-                                final response = await get(uri);
-                                print("here3");
-                                print(response.body);
-                                print("here");
+
+                                /////////////////////////////////////////////
+                                final uri = Uri.parse(
+                                    'http://127.0.0.1:5000/recommendation');
+                                final response = await post(uri,
+                                    body: json.encode({
+                                      'usrID':
+                                          FirebaseAuth.instance.currentUser!.uid
+                                    }));
                                 final decoded = json.decode(response.body)
                                     as Map<String, dynamic>;
+                                print("here4");
+
+                                print(decoded['recommeneded']);
                                 print("here4");
                                 print('Recommendation');
                                 print(decoded['recommeneded'][0]);
@@ -542,9 +546,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                   'picture':
                                       'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
                                   'rest': [
-                                    decoded['recommeneded'][0],
-                                    decoded['recommeneded'][1],
-                                    decoded['recommeneded'][2]
+                                    decoded['recommeneded'][0].toString(),
+                                    decoded['recommeneded'][1].toString(),
+                                    decoded['recommeneded'][2].toString()
                                   ],
                                 });
                                 print("user added");
