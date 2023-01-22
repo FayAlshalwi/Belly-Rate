@@ -23,6 +23,7 @@ import 'category_parts/category_slider.dart';
 import 'category_parts/category_slider_homepage.dart';
 import 'category_parts/restaurant_model.dart';
 import 'package:provider/provider.dart';
+import 'favoritePage.dart';
 import 'firebase_options.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
@@ -452,7 +453,7 @@ class _HomePage extends State<HomePage> {
         ],
       )),
       //Favorite page container
-      Container(child: Text('Favorite')),
+      Container(child: Favorite()),
       //History page container
       Container(child: history()),
       //Profile page container
