@@ -57,9 +57,9 @@ class _Favorite extends State<Favorite> {
       // setState(() {});
     });
 
-    Future.delayed(Duration.zero,() async {
+    Future.delayed(Duration.zero, () async {
       Position position = await _determinePosition();
-      if(position != null){
+      if (position != null) {
         print("dddd ${position.latitude}");
         UserData!.setDouble('locationLat', position.latitude);
         UserData!.setDouble('locationLon', position.longitude);
@@ -107,24 +107,26 @@ class _Favorite extends State<Favorite> {
                   ///
                   Expanded(
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => RestaurantDetails(
-                                category_name:  item.category!,
-                                restaurant: item,
-                              )),
+                                    category_name: item.category!,
+                                    restaurant: item,
+                                  )),
                         );
                       },
                       child: Row(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                             child: Image.network("${item.photos?.first}",
                                 height: heightM * 2.5,
                                 width: heightM * 2.5,
                                 fit: BoxFit.fill),
                           ),
+
                           ///
                           Padding(
                             padding: const EdgeInsets.only(
@@ -137,9 +139,9 @@ class _Favorite extends State<Favorite> {
                                     style: ourTextStyle(
                                         txt_color: Color(0xFF5a3769),
                                         txt_size: heightM * 0.6)),
-
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.5,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
                                   child: Text("${item.description}",
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
@@ -147,11 +149,11 @@ class _Favorite extends State<Favorite> {
                                           txt_color: Colors.grey,
                                           txt_size: heightM * 0.4)),
                                 ),
-                                if(item.rate != null)
+                                if (item.rate != null)
                                   Text("Rate: ${item.rate!.rate} / 5.0",
                                       style: ourTextStyle(
-                                          txt_color: Colors.pinkAccent, txt_size: heightM * 0.4)),
-
+                                          txt_color: Colors.pinkAccent,
+                                          txt_size: heightM * 0.4)),
                               ],
                             ),
                           ),
@@ -159,12 +161,13 @@ class _Favorite extends State<Favorite> {
                       ),
                     ),
                   ),
+
                   ///
-                  if(item.rate == null)
+                  if (item.rate == null)
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         print("qqq");
-                        String rating = "" ;
+                        String rating = "";
 
                         showModalBottomSheet<dynamic>(
                           context: context,
@@ -172,9 +175,7 @@ class _Favorite extends State<Favorite> {
                           backgroundColor: Colors.transparent,
                           builder: (context) => Container(
                             //change the height of the bottom sheet
-                            height:
-                            MediaQuery.of(context).size.height *
-                                0.22,
+                            height: MediaQuery.of(context).size.height * 0.22,
                             decoration: const BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.only(
@@ -206,8 +207,8 @@ class _Favorite extends State<Favorite> {
                                   allowHalfRating: true,
                                   glowColor: Color(0xFF5a3769),
                                   itemCount: 5,
-                                  itemPadding: EdgeInsets.symmetric(
-                                      horizontal: 4.0),
+                                  itemPadding:
+                                      EdgeInsets.symmetric(horizontal: 4.0),
                                   itemBuilder: (context, _) => Icon(
                                     Icons.star,
                                     color: Colors.amber,
@@ -220,66 +221,6 @@ class _Favorite extends State<Favorite> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                // Material(
-                                //     elevation: 10.0,
-                                //     borderRadius:
-                                //     BorderRadius.circular(
-                                //         5.0), //12
-                                //     color: Colors
-                                //         .transparent, //Colors.cyan.withOpacity(0.5),
-                                //     child: MaterialButton(
-                                //       minWidth: 15,
-                                //       color: button_color,
-                                //       shape: RoundedRectangleBorder(
-                                //           borderRadius:
-                                //           BorderRadius.circular(
-                                //               5.0)),
-                                //       splashColor: button_color,
-                                //       onPressed: () async {
-                                //         CoolAlert.show(
-                                //           context: context,
-                                //           type: CoolAlertType.loading,
-                                //           text: "Loading",
-                                //         );
-                                //
-                                //         bool isRate = await addRate(rate: rating.toString() , restID: item.restaurantId!).then((value) {
-                                //           setState(() {
-                                //             FavoriteList.clear();
-                                //           });
-                                //           getFavorite();
-                                //           return true ;
-                                //         });
-                                //
-                                //         if(isRate){
-                                //           print("isRate");
-                                //           CoolAlert.show(
-                                //             title: "Success",
-                                //             context: context,
-                                //             type: CoolAlertType.success,
-                                //             text: "Rate added successfully!",
-                                //             confirmBtnColor:
-                                //             Color.fromARGB(255, 216, 107, 147),
-                                //             onConfirmBtnTap: () {
-                                //               Navigator.of(context).pop();
-                                //               Navigator.of(context).pop();
-                                //               Navigator.of(context).pop();
-                                //             },
-                                //           );
-                                //
-                                //
-                                //         }else{
-                                //           print("No isRate");
-                                //           Navigator.of(context).pop();
-                                //         }
-                                //         // Navigator.of(context).pop();
-                                //       },
-                                //       child: Text('Submit',
-                                //           textAlign: TextAlign.center,
-                                //           style: ourTextStyle(
-                                //               txt_color: Colors.white,
-                                //               txt_size: heightM * 0.6)),
-                                //     )
-                                // ),
                               ],
                             ),
                           ),
@@ -288,18 +229,17 @@ class _Favorite extends State<Favorite> {
                       child: const Padding(
                         padding: EdgeInsets.only(
                             left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                        child: Icon(Icons.star_border , color: Colors.pinkAccent),
+                        child:
+                            Icon(Icons.star_border, color: Colors.pinkAccent),
                       ),
                     ),
 
-                  if(item.rate != null)
+                  if (item.rate != null)
                     const Padding(
                       padding: EdgeInsets.only(
                           left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                      child: Icon(Icons.star , color: Colors.pinkAccent),
+                      child: Icon(Icons.star, color: Colors.pinkAccent),
                     ),
-
-
                 ],
               ),
             ),
@@ -309,159 +249,15 @@ class _Favorite extends State<Favorite> {
     );
   }
 
-  // Future<dynamic> buildShowRestaurantDetails(BuildContext context , Restaurant item ,double heightM , txt_color) {
-  //   return showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         shape: RoundedRectangleBorder(  borderRadius: BorderRadius.only(
-  //           topLeft: Radius.circular(15.0),
-  //           topRight: Radius.circular(15.0),
-  //           // bottomLeft: Radius.circular(15.0),
-  //           // bottomRight: Radius.circular(15.0),
-  //         ),),
-  //         // title: Text("Alert Dialog"),
-  //         content: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: <Widget>[
-  //             Container(
-  //               height: MediaQuery.of(context).size.height * 0.15,
-  //               width: MediaQuery.of(context).size.width * 0.9,
-  //               child: ClipRRect(
-  //                   borderRadius: const BorderRadius.only(
-  //                     topLeft: Radius.circular(15.0),
-  //                     topRight: Radius.circular(15.0),
-  //                   ),
-  //                   child: CarouselSlider(
-  //                     options: CarouselOptions(height: heightM * 5.0),
-  //                     items: item.photos?.map((i) {
-  //                       return Builder(
-  //                         builder: (BuildContext context) {
-  //                           return Container(
-  //                               width: MediaQuery.of(context).size.width,
-  //                               margin:
-  //                               EdgeInsets.symmetric(horizontal: 5.0),
-  //                               decoration: BoxDecoration(
-  //                                   color: txt_color.withOpacity(0.5)),
-  //                               child: CachedNetworkImage(
-  //                                   imageUrl: "${i}",
-  //                                   // child: Image.network("${i}",
-  //                                   height: heightM * 5,
-  //                                   width: heightM * 15,
-  //                                   fit: BoxFit.fill));
-  //                         },
-  //                       );
-  //                     }).toList(),
-  //                   )
-  //                 // Image.network("${item.photos?.first}",
-  //                 //     height: heightM * 5,
-  //                 //     width: heightM * 15,
-  //                 //     fit: BoxFit.fill)
-  //               ),
-  //             ),
-  //             Padding(
-  //               padding: const EdgeInsets.only(
-  //                   left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-  //               child: Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 children: [
-  //                   Text("${item.name}",
-  //                       style: ourTextStyle(
-  //                           txt_color: Color(0xFF5a3769),
-  //                           txt_size: heightM * 0.7)),
-  //                 ],
-  //               ),
-  //             ),
-  //             Padding(
-  //               padding: const EdgeInsets.only(
-  //                   left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-  //               child: Text("${item.description}",
-  //                   style: ourTextStyle(
-  //                       txt_color: Colors.grey, txt_size: heightM * 0.5)),
-  //             ),
-  //             Padding(
-  //               padding: const EdgeInsets.only(
-  //                   left: 16.0, bottom: 8.0, top: 3.0, right: 16.0),
-  //               child: Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 children: [
-  //                   Row(
-  //                     children: [
-  //                       InkWell(
-  //                           onTap: () {
-  //                             // item.phoneNumber == "No phone number"
-  //                             //     ? print("no phone")
-  //                             //     : launchPhoneDialer(item.phoneNumber!);
-  //                           },
-  //                           child: Icon(
-  //                             Icons.call,
-  //                             color: Color(0xFF5a3769),
-  //                           )),
-  //                       SizedBox(
-  //                         width: 5,
-  //                       ),
-  //                       Text("${item.phoneNumber}",
-  //                           style: ourTextStyle(
-  //                               txt_color: Colors.grey,
-  //                               txt_size: heightM * 0.5)),
-  //                     ],
-  //                   ),
-  //                   Row(
-  //                     children: [
-  //                       InkWell(
-  //                           onTap: () async {
-  //                             // _launchUrl(item.location!);
-  //                             // openMap(double.parse(item.lat!) , double.parse(item.long!));
-  //                             // MapsLauncher.launchCoordinates(
-  //                             //     double.parse(item.lat!),
-  //                             //     double.parse(item.long!));
-  //                           },
-  //                           child: const Icon(
-  //                             Icons.location_on_outlined,
-  //                             color: Color(0xFF5a3769),
-  //                             size: 30,
-  //                           )),
-  //                       SizedBox(
-  //                         width: 5,
-  //                       ),
-  //                       Text("${item.far} KM",
-  //                           style: ourTextStyle(
-  //                               txt_color: Colors.grey,
-  //                               txt_size: heightM * 0.5)),
-  //                     ],
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //         actions: <Widget>[
-  //           MaterialButton(
-  //             child: Text("Close"),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  //
-  // }
-
-
   Future<bool> addRate({required String rate, required String restID}) async {
     final _firestore = FirebaseFirestore.instance;
-    return await _firestore
-        .collection("rating")
-        .add({
+    return await _firestore.collection("rating").add({
       'rateID': '',
       'UID': '${user?.uid}',
       'rate': rate,
       'restID': restID,
       // Add more fields as needed
-    })
-        .then((value) async {
+    }).then((value) async {
       await _firestore
           .collection("rating")
           .doc(value.id)
@@ -473,7 +269,6 @@ class _Favorite extends State<Favorite> {
     });
   }
 
-
   void getFavorite() async {
     // try{
 
@@ -483,11 +278,12 @@ class _Favorite extends State<Favorite> {
 
     final res = await _firestore
         .collection('rating')
-          .where("UID", isEqualTo: UID)
+        .where("UID", isEqualTo: UID)
         // .orderBy('rate', descending: true)
         .get();
     List<Restaurant> FavoriteListBase = [];
-    final restaurants = await FirebaseFirestore.instance.collection('Restaurants').get();
+    final restaurants =
+        await FirebaseFirestore.instance.collection('Restaurants').get();
 
     for (var rest in restaurants.docs) {
       final resta = Restaurant.fromJson(rest.data());
@@ -504,153 +300,81 @@ class _Favorite extends State<Favorite> {
     }
 
     if (res.docs.isNotEmpty) {
-
       FavoriteList.clear();
-      List<Rate> rates = [] ;
+      List<Rate> rates = [];
       for (var item in res.docs) {
-        // final body = json.encode(Category.data().toString());
-        // log("Res: ${body}");
-        // final restaurant = restaurantFromJson(Category.data().toString());
-        ///
-        // Restaurant temp ;
-        // final restaurant = Restaurant.fromJson(item.data());
-        // temp = restaurant ;
-        //
-        // final rateRes = await FirebaseFirestore.instance.collection('rating')
-        //     .where("UID", isEqualTo: UID)
-        //     .where("restID", isEqualTo: temp.id)
-        //     .orderBy('createdAt', descending: true)
-        //     .get();
         final rate = Rate.fromJson(item.data()) as Rate;
         rates.add(rate);
         // print(item.data());
 
-
       }
       print("-----");
       rates.sort((a, b) => a.rate!.compareTo(b.rate!));
-      rates = rates.reversed.toList() ;
+      rates = rates.reversed.toList();
       rates.forEach((element) {
         print(element.toJson());
       });
       addResttoList(rates, FavoriteListBase);
 
-
-
       setState(() {});
-    }
-    else {
+    } else {
       print('no getFavorite!');
     }
   }
 
   void addResttoList(List<Rate> rates, List<Restaurant> FavoriteListBase) {
-    if(rates.length >= 5){
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[0].restId.toString()));
-      FavoriteList.last.rate = rates[0] ;
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[1].restId.toString()));
-      FavoriteList.last.rate = rates[1] ;
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[2].restId.toString()));
-      FavoriteList.last.rate = rates[2] ;
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[3].restId.toString()));
-      FavoriteList.last.rate = rates[3] ;
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[4].restId.toString()));
-      FavoriteList.last.rate = rates[4] ;
-    } else if(rates.length == 4){
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[0].restId.toString()));
-      FavoriteList.last.rate = rates[0] ;
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[1].restId.toString()));
-      FavoriteList.last.rate = rates[1] ;
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[2].restId.toString()));
-      FavoriteList.last.rate = rates[2] ;
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[3].restId.toString()));
-      FavoriteList.last.rate = rates[3] ;
-    } else if(rates.length == 3){
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[0].restId.toString()));
-      FavoriteList.last.rate = rates[0] ;
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[1].restId.toString()));
-      FavoriteList.last.rate = rates[1] ;
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[2].restId.toString()));
-      FavoriteList.last.rate = rates[2] ;
-    }else if(rates.length == 2){
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[0].restId.toString()));
-      FavoriteList.last.rate = rates[0] ;
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[1].restId.toString()));
-      FavoriteList.last.rate = rates[1] ;
-    }else if(rates.length == 1){
-      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[0].restId.toString()));
-      FavoriteList.last.rate = rates[0] ;
+    if (rates.length >= 5) {
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[0].restId.toString()));
+      FavoriteList.last.rate = rates[0];
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[1].restId.toString()));
+      FavoriteList.last.rate = rates[1];
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[2].restId.toString()));
+      FavoriteList.last.rate = rates[2];
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[3].restId.toString()));
+      FavoriteList.last.rate = rates[3];
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[4].restId.toString()));
+      FavoriteList.last.rate = rates[4];
+    } else if (rates.length == 4) {
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[0].restId.toString()));
+      FavoriteList.last.rate = rates[0];
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[1].restId.toString()));
+      FavoriteList.last.rate = rates[1];
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[2].restId.toString()));
+      FavoriteList.last.rate = rates[2];
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[3].restId.toString()));
+      FavoriteList.last.rate = rates[3];
+    } else if (rates.length == 3) {
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[0].restId.toString()));
+      FavoriteList.last.rate = rates[0];
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[1].restId.toString()));
+      FavoriteList.last.rate = rates[1];
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[2].restId.toString()));
+      FavoriteList.last.rate = rates[2];
+    } else if (rates.length == 2) {
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[0].restId.toString()));
+      FavoriteList.last.rate = rates[0];
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[1].restId.toString()));
+      FavoriteList.last.rate = rates[1];
+    } else if (rates.length == 1) {
+      FavoriteList.add(FavoriteListBase.firstWhere(
+          (element) => element.id.toString() == rates[0].restId.toString()));
+      FavoriteList.last.rate = rates[0];
     }
   }
-
-  // void getFavorite() async {
-  //   // try{
-  //
-  //   final _firestore = FirebaseFirestore.instance;
-  //   final _firebaseAuth = FirebaseAuth.instance;
-  //   final UID = FirebaseAuth.instance.currentUser!.uid;
-  //
-  //   final res = await _firestore
-  //       .collection('Favorite')
-  //       .where("userId", isEqualTo: UID)
-  //       .where("Notified", isEqualTo: false)
-  //       .get();
-  //
-  //   if (res.docs.isNotEmpty) {
-  //
-  //     FavoriteList.clear();
-  //     for (var item in res.docs) {
-  //       // final body = json.encode(Category.data().toString());
-  //       // log("Res: ${body}");
-  //       // final restaurant = restaurantFromJson(Category.data().toString());
-  //       Restaurant temp ;
-  //       final restaurant = Restaurant.fromJson(item.data());
-  //       temp = restaurant ;
-  //
-  //       final rateRes = await FirebaseFirestore.instance.collection('rating')
-  //           .where("UID", isEqualTo: UID)
-  //           .where("restID", isEqualTo: temp.id)
-  //           .get();
-  //
-  //       for (var Category in rateRes.docs) {
-  //         final rate = Rate.fromJson(Category.data()) as Rate;
-  //         temp.rate = rate;
-  //       }
-  //
-  //
-  //       final res = await FirebaseFirestore.instance.collection('Restaurants')
-  //           .where("ID", isEqualTo: restaurant.id)
-  //           .get();
-  //
-  //       // log("Res: ${res}");
-  //       if(res != null && res.size > 0){
-  //         // final tempRestaurant = Restaurant.fromJson(res.docs.first.data()) as Restaurant;
-  //         for (var Category in res.docs) {
-  //           final restaurant = Restaurant.fromJson(Category.data()) as Restaurant;
-  //
-  //           var ffff = Geolocator.distanceBetween(
-  //               (UserData?.getDouble('locationLat'))!,
-  //               (UserData?.getDouble('locationLon'))!,
-  //               double.parse("${restaurant.lat}"),
-  //               double.parse("${restaurant.long}"));
-  //           // print("distance: ${(ffff / 1000).toStringAsFixed(2)} KM");
-  //           // print("ffff ${ffff}");
-  //           restaurant.far = double.parse((ffff / 1000).toStringAsFixed(2));
-  //
-  //           temp.restaurant = restaurant;
-  //         }
-  //         // log("Res: ${tempRestaurant}");
-  //         // temp.restaurant = tempRestaurant;
-  //       }
-  //       FavoriteList.add(restaurant);
-  //     }
-  //     setState(() {});
-  //   }
-  //   else {
-  //     print('no getFavorite!');
-  //   }
-  // }
-
 
   TextStyle ourTextStyle({required Color txt_color, required double txt_size}) {
     return GoogleFonts.cairo(
@@ -704,4 +428,3 @@ class _Favorite extends State<Favorite> {
     return await Geolocator.getCurrentPosition();
   }
 }
-
