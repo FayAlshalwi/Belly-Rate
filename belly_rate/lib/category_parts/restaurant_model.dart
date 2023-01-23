@@ -23,11 +23,15 @@ class Restaurant {
     this.category,
     this.photos,
     this.far,
+    this.rateAVG,
     this.rate,
+    this.rateAVGNum,
   });
 
   String? priceAvg;
   String? phoneNumber;
+  String? rateAVG;
+  String? rateAVGNum;
   String? name;
   String? description;
   String? location;
@@ -41,7 +45,9 @@ class Restaurant {
 
   factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
     priceAvg: json["priceAvg"] == null ? null : json["priceAvg"],
+    rateAVGNum: json["rateAVGNum"] == null ? null : json["rateAVGNum"],
     phoneNumber: json["phoneNumber"] == null ? null : json["phoneNumber"],
+    rateAVG: json["rateAVG"] == null ? null : json["rateAVG"],
     name: json["name"] == null ? null : json["name"],
     description: json["description"] == null ? null : json["description"],
     location: json["location"] == null ? null : json["location"],
@@ -59,9 +65,11 @@ class Restaurant {
     "priceAvg": priceAvg == null ? null : priceAvg,
     "phoneNumber": phoneNumber == null ? null : phoneNumber,
     "name": name == null ? null : name,
+    "rateAVG": rateAVG == null ? null : rateAVG,
     "description": description == null ? null : description,
     "location": location == null ? null : location,
     "ID": id == null ? null : id,
+    "rateAVGNum": rateAVGNum == null ? null : rateAVGNum,
     "rate": rate,
     "lat": lat == null ? null : lat,
     "long": long == null ? null : long,

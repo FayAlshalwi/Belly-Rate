@@ -408,8 +408,8 @@ class _HomePage extends State<HomePage> {
       //home page container
       Container(
           child: SingleChildScrollView(
-        child: Column(
-          children: [
+            child: Column(
+        children: [
             SizedBox(
               height: 55,
             ),
@@ -484,13 +484,14 @@ class _HomePage extends State<HomePage> {
                         fontWeight: FontWeight.bold),
                   ),
                 )),
-            SizedBox(
-              height: 10,
-            ),
+            //  SizedBox(
+
+            // height: 10,
+            // ),
             RestaurantSlider()
-          ],
-        ),
-      )),
+        ],
+      ),
+          )),
       //Favorite page container
       Container(child: Favorite()),
       // Container(child: Text('Favorite')),
