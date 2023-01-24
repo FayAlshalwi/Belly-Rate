@@ -21,6 +21,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 import 'category_parts/category_slider.dart';
 import 'category_parts/category_slider_homepage.dart';
+import 'category_parts/restaurantDetails.dart';
 import 'category_parts/restaurant_model.dart';
 import 'package:provider/provider.dart';
 import 'favoritePage.dart';
@@ -42,10 +43,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
+  get restaurantDetails => null;
+
   void initState() {
     super.initState();
-    print('dalal');
-
     /////LOCATION Tracking
     userlocation();
 //Nouf
@@ -102,7 +103,7 @@ class _HomePage extends State<HomePage> {
       }
     });
 
-    AwesomeNotifications().actionStream.listen((notification) {
+    AwesomeNotifications().actionStream.listen((notification) async {
       if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
         AwesomeNotifications().getGlobalBadgeCounter().then(
               (value) =>
@@ -113,13 +114,44 @@ class _HomePage extends State<HomePage> {
       String? resID = notification.summary;
       print(resID);
 
-      /*Navigator.pushAndRemoveUntil(
+     List<Restaurant> restaurantsDetailss = [];
+
+     final _firestore = FirebaseFirestore.instance;
+     final _firebaseAuth = FirebaseAuth.instance;
+  
+       final restt = await FirebaseFirestore.instance
+          .collection('Restaurants')
+          .where('ID', isEqualTo: resID)
+          .get();
+
+          String  category = restt.docs[0]['category'];
+
+      for (var item in restt.docs) {
+        final restaurant = Restaurant.fromJson(item.data());
+
+        Restaurant restaurantDetails = Restaurant(
+            phoneNumber: restaurant.phoneNumber,
+            category: restaurant.category,
+            description: restaurant.description,
+            location: restaurant.location,
+            name: restaurant.name,
+            photos: restaurant.photos,
+            priceAvg: restaurant.priceAvg,
+            id: restaurant.id);
+   
+        setState(() {
+          restaurantsDetailss.add(restaurantDetails);
+        });
+      }
+
+      Navigator.pushAndRemoveUntil(
         this.context,
         MaterialPageRoute(
-          builder: (_) => HomePage(),
+          builder: (Context) =>
+          RestaurantDetails(restaurant:  restaurantsDetailss[0] , category_name: restaurantsDetailss[0].category.toString())
         ),
         (route) => route.isFirst,
-      );*/
+      );
     });
 
     get();
@@ -180,9 +212,7 @@ class _HomePage extends State<HomePage> {
   }
 
   //Nouf
-
   /// Determine the current position of the device.
-  ///
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
   Future<Position> _determinePosition() async {
@@ -250,11 +280,11 @@ class _HomePage extends State<HomePage> {
 
     location.onLocationChanged.listen((LocationData currentLocation) async {
       // Use current location
-      print('onLocationChanged method');
-      print('currentLocation.latitude:');
-      print(currentLocation.latitude);
-      print('currentLocation.longitude');
-      print(currentLocation.longitude);
+     // print('onLocationChanged method');
+      //print('currentLocation.latitude:');
+      //print(currentLocation.latitude);
+      //print('currentLocation.longitude');
+      //print(currentLocation.longitude);
 
       final _firestore = FirebaseFirestore.instance;
       final _firebaseAuth = FirebaseAuth.instance;
