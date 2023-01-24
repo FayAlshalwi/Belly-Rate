@@ -212,13 +212,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false, title: MyApp._title, home: HomePage()
-
-        // Scaffold(
-        //   appBar: AppBar(title: const Text(_title)),
-        //   body: const SignIn(),
-        //   // body: const MyStatefulWidget(),
-        // ),
+        debugShowCheckedModeBanner: false,
+        title: MyApp._title,
+        home: user?.uid == null ? SignIn() : HomePage()
         );
   }
 }
