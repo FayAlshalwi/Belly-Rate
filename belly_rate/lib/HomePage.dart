@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:belly_rate/favoritePage.dart';
 import 'package:belly_rate/history.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +22,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 import 'category_parts/category_slider.dart';
 import 'category_parts/category_slider_homepage.dart';
+import 'category_parts/restaurantDetails.dart';
 import 'category_parts/restaurant_model.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -135,6 +137,7 @@ class _HomePage extends State<HomePage> {
 
   static late UserInfoModel user;
   static List<restaurantModel> restaurants = [];
+  List<Restaurant> restaurantsDetailss = [];
   static List<String> restaurantsImgs = [];
 
   get() async {
@@ -171,6 +174,26 @@ class _HomePage extends State<HomePage> {
           photos: restt.docs[0]['photos'],
           priceAvg: restt.docs[0]['priceAvg'],
           resId: restt.docs[0]['ID']);
+
+      for (var item in restt.docs) {
+        final restaurant = Restaurant.fromJson(item.data());
+
+        Restaurant restaurantDetails = Restaurant(
+            phoneNumber: restaurant.phoneNumber,
+            category: restaurant.category,
+            description: restaurant.description,
+            location: restaurant.location,
+            name: restaurant.name,
+            photos: restaurant.photos,
+            priceAvg: restaurant.priceAvg,
+            id: restaurant.id);
+        print("res name");
+        print(restaurantDetails.name);
+        setState(() {
+          restaurantsDetailss.add(restaurantDetails);
+        });
+      }
+
       setState(() {
         restaurants.add(restaurant);
         restaurantsImgs.add(restaurant.photos[0]);
@@ -178,12 +201,6 @@ class _HomePage extends State<HomePage> {
     }
   }
 
-  //Nouf
-
-  /// Determine the current position of the device.
-  ///
-  /// When the location services are not enabled or permissions
-  /// are denied the `Future` will return an error.
   Future<Position> _determinePosition() async {
     print('inside _determinePosition');
     bool serviceEnabled;
@@ -192,9 +209,6 @@ class _HomePage extends State<HomePage> {
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
       return Future.error('Location services are disabled.');
     } else {
       print('Location services are enabled');
@@ -204,11 +218,6 @@ class _HomePage extends State<HomePage> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
         return Future.error('Location permissions are denied');
       } else {
         print('Location permissions are not denied!!');
@@ -218,17 +227,13 @@ class _HomePage extends State<HomePage> {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
   }
 
-  /////Location
   userlocation() async {
     print('inside userlocation method');
 
@@ -254,153 +259,70 @@ class _HomePage extends State<HomePage> {
         return LocationData;
       }
     }
-
-/*Future<void> distanceInMeters(String RestaurantId ,double userlat , double userlong , String RecommendationDocID) async {
-
-  print('inside distanceInMeters method');
-
-  final _firestore = FirebaseFirestore.instance;
-  final _firebaseAuth = FirebaseAuth.instance;
-
-
-  final Restaurants = await _firestore
-      .collection('Restaurants')
-      .where("ID", isEqualTo: RestaurantId)
-      .get();
-
-      if (Restaurants.docs.isNotEmpty) {
-     double  RLongitude = double.parse(Restaurants.docs[0]['long']);
-     double RLatitude = double.parse(Restaurants.docs[0]['lat']);
-
-    double distanceInMeters = Geolocator.distanceBetween(RLatitude , RLongitude , userlat , userlong);
-
-    if(distanceInMeters <= 2000){
-      print('$distanceInMeters');
-      print('less than 2km');
-
-       print('docid is = $RecommendationDocID');
-        FirebaseFirestore.instance
-        .collection('Recommendation')
-        .doc(RecommendationDocID)
-        .update({"Notified_location": true});
-
-        ContentOfLocationNotification(RestaurantId);
-    }
-    else{
-       print('$distanceInMeters');
-      print('More than 2km');
-    }
-      }// if isNotEmpty 
-
-}//distanceInMeters*/
-/*
-    location.onLocationChanged.listen((LocationData currentLocation) async {
-      // Use current location
-      print('onLocationChanged method');
-      print('currentLocation.latitude:');
-      print(currentLocation.latitude);
-      print('currentLocation.longitude');
-      print(currentLocation.longitude);
-
-      final _firestore = FirebaseFirestore.instance;
-      final _firebaseAuth = FirebaseAuth.instance;
-      final UID = FirebaseAuth.instance.currentUser!.uid;
-
-      final Recommendation = await _firestore
-          .collection('Recommendation')
-          .where("userId", isEqualTo: UID)
-          .where("Notified_location", isEqualTo: false)
-          .get();
-
-      if (Recommendation.docs.isNotEmpty) {
-        for (int i = 0; i < Recommendation.docs.length; i++) {
-          String RestaurantId = Recommendation.docs[i]['RestaurantId'];
-          double? userlat = currentLocation.latitude;
-          double? userlong = currentLocation.longitude;
-          String RecommendationDocID = Recommendation.docs[i].id;
-
-          final Restaurants = await _firestore
-              .collection('Restaurants')
-              .where("ID", isEqualTo: RestaurantId)
-              .get();
-
-          if (Restaurants.docs.isNotEmpty) {
-            double Restaurantlong = double.parse(Restaurants.docs[0]['long']);
-            double Restaurantlat = double.parse(Restaurants.docs[0]['lat']);
-
-            double distanceInMeters = Geolocator.distanceBetween(
-                Restaurantlat, Restaurantlong, userlat!, userlong!);
-
-            if (distanceInMeters <= 2000) {
-              print('$distanceInMeters');
-              print('less or equal than 2km');
-
-              print('docid is = $RecommendationDocID');
-              FirebaseFirestore.instance
-                  .collection('Recommendation')
-                  .doc(RecommendationDocID)
-                  .update({"Notified_location": true});
-
-              ContentOfLocationNotification(RestaurantId);
-            } else {
-              print('$distanceInMeters');
-              print('More than 2km');
-            }
-          }
-          //distanceInMeters(RestaurantId ,lat! , long! , RecommendationDocID );
-        }
-      } else {
-        print('no recommendation for this user!');
-      }
-    });*/
-  } //userlocation
+  }
 
   @override
   Widget build(BuildContext context) {
     double displayOfWidth = MediaQuery.of(context).size.width;
     var x = 0;
+    var y = 0;
+    var z = 0;
+
     final List<Widget> imageSliders = restaurantsImgs
         .map((item) => Container(
               child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    child: Stack(
-                      children: <Widget>[
-                        Image.network(item, fit: BoxFit.cover, width: 1000.0),
-                        Positioned(
-                          bottom: 0.0,
-                          left: 0.0,
-                          right: 0.0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color.fromARGB(200, 0, 0, 0),
-                                  Color.fromARGB(0, 0, 0, 0)
-                                ],
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                              ),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 10.0),
-                            child: Text(
-                              restaurants[x++].name,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-              ),
+                  decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("GestureDetector");
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => RestaurantDetails(
+                                  category_name: restaurantsDetailss[y++]
+                                      .category
+                                      .toString(),
+                                  restaurant: restaurantsDetailss[z++],
+                                )),
+                      );
+                    },
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        child: Stack(
+                          children: <Widget>[
+                            Image.network(item,
+                                fit: BoxFit.cover, width: 1000.0),
+                            Positioned(
+                                bottom: 0.0,
+                                left: 0.0,
+                                right: 0.0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color.fromARGB(200, 0, 0, 0),
+                                        Color.fromARGB(0, 0, 0, 0)
+                                      ],
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 10.0),
+                                  child: Text(
+                                    restaurants[x++].name,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ))
+                          ],
+                        )),
+                  )),
             ))
         .toList();
     List<Widget> listOfWidgets = [
@@ -490,7 +412,7 @@ class _HomePage extends State<HomePage> {
         ],
       )),
       //Favorite page container
-      Container(child: Text('Favorite')),
+      Container(child: Favorite()),
       //History page container
       Container(child: history()),
       //Profile page container
