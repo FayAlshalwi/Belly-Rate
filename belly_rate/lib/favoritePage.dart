@@ -118,19 +118,25 @@ class _Favorite extends State<Favorite> {
                       },
                       child: Row(
                         children: [
-                          ClipRRect(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            child: Image.network("${item.photos?.first}",
-                                height: heightM * 2.5,
-                                width: heightM * 2.5,
-                                fit: BoxFit.fill),
-                          ),
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10, bottom: 0, top: 0, right: 0),
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                child: Image.network("${item.photos?.first}",
+                                    height: heightM * 2.5,
+                                    width: heightM * 2.5,
+                                    fit: BoxFit.fill),
+                              )),
 
                           ///
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                                left: 15.0,
+                                bottom: 15.0,
+                                top: 15.0,
+                                right: 19.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,20 +145,21 @@ class _Favorite extends State<Favorite> {
                                     style: ourTextStyle(
                                         txt_color: Color(0xFF5a3769),
                                         txt_size: heightM * 0.6)),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                  child: Text("${item.description}",
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: ourTextStyle(
-                                          txt_color: Colors.grey,
-                                          txt_size: heightM * 0.4)),
-                                ),
+                                // SizedBox(
+                                //   width:
+                                //       MediaQuery.of(context).size.width * 0.5,
+                                //   child: Text("${item.description}",
+                                //       maxLines: 2,
+                                //       overflow: TextOverflow.ellipsis,
+                                //       style: ourTextStyle(
+                                //           txt_color: Colors.grey,
+                                //           txt_size: heightM * 0.4)),
+                                // ),
                                 if (item.rate != null)
-                                  Text("Rate: ${item.rate!.rate} / 5.0",
+                                  Text("${item.rate!.rate} / 5.0",
                                       style: ourTextStyle(
-                                          txt_color: Colors.pinkAccent,
+                                          txt_color: Color.fromARGB(
+                                              255, 216, 107, 147),
                                           txt_size: heightM * 0.4)),
                               ],
                             ),
@@ -183,10 +190,7 @@ class _Favorite extends State<Favorite> {
                                 topRight: Radius.circular(25.0),
                               ),
                             ),
-                            //content of the bottom sheet
                             child: Column(
-                              // mainAxisAlignment:
-                              //     MainAxisAlignment.spaceEvenly,
                               children: [
                                 const SizedBox(
                                   height: 15,
@@ -221,66 +225,6 @@ class _Favorite extends State<Favorite> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                // Material(
-                                //     elevation: 10.0,
-                                //     borderRadius:
-                                //     BorderRadius.circular(
-                                //         5.0), //12
-                                //     color: Colors
-                                //         .transparent, //Colors.cyan.withOpacity(0.5),
-                                //     child: MaterialButton(
-                                //       minWidth: 15,
-                                //       color: button_color,
-                                //       shape: RoundedRectangleBorder(
-                                //           borderRadius:
-                                //           BorderRadius.circular(
-                                //               5.0)),
-                                //       splashColor: button_color,
-                                //       onPressed: () async {
-                                //         CoolAlert.show(
-                                //           context: context,
-                                //           type: CoolAlertType.loading,
-                                //           text: "Loading",
-                                //         );
-                                //
-                                //         bool isRate = await addRate(rate: rating.toString() , restID: item.restaurantId!).then((value) {
-                                //           setState(() {
-                                //             FavoriteList.clear();
-                                //           });
-                                //           getFavorite();
-                                //           return true ;
-                                //         });
-                                //
-                                //         if(isRate){
-                                //           print("isRate");
-                                //           CoolAlert.show(
-                                //             title: "Success",
-                                //             context: context,
-                                //             type: CoolAlertType.success,
-                                //             text: "Rate added successfully!",
-                                //             confirmBtnColor:
-                                //             Color.fromARGB(255, 216, 107, 147),
-                                //             onConfirmBtnTap: () {
-                                //               Navigator.of(context).pop();
-                                //               Navigator.of(context).pop();
-                                //               Navigator.of(context).pop();
-                                //             },
-                                //           );
-                                //
-                                //
-                                //         }else{
-                                //           print("No isRate");
-                                //           Navigator.of(context).pop();
-                                //         }
-                                //         // Navigator.of(context).pop();
-                                //       },
-                                //       child: Text('Submit',
-                                //           textAlign: TextAlign.center,
-                                //           style: ourTextStyle(
-                                //               txt_color: Colors.white,
-                                //               txt_size: heightM * 0.6)),
-                                //     )
-                                // ),
                               ],
                             ),
                           ),
@@ -289,8 +233,8 @@ class _Favorite extends State<Favorite> {
                       child: const Padding(
                         padding: EdgeInsets.only(
                             left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                        child:
-                            Icon(Icons.star_border, color: Colors.pinkAccent),
+                        child: Icon(Icons.star_border,
+                            color: Color.fromARGB(255, 216, 107, 147)),
                       ),
                     ),
 
@@ -298,7 +242,8 @@ class _Favorite extends State<Favorite> {
                     const Padding(
                       padding: EdgeInsets.only(
                           left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                      child: Icon(Icons.star, color: Colors.pinkAccent),
+                      child: Icon(Icons.star,
+                          color: Color.fromARGB(255, 216, 107, 147)),
                     ),
                 ],
               ),
