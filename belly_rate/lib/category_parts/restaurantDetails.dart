@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:belly_rate/category_parts/restaurant_model.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -415,6 +418,12 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
           .collection("rating")
           .doc(value.id)
           .update({"rateID": value.id});
+      final uri =
+          Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
+      final response = await post(uri,
+          body: json.encode({
+            'rating': [user?.uid, restID, rate, rate, rate]
+          }));
       return true;
     }).catchError((error) {
       print(error);

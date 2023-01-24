@@ -1,33 +1,21 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:belly_rate/auth/our_user_model.dart';
-import 'package:belly_rate/auth/signin_page.dart';
-import 'package:belly_rate/auth/signup_page.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:belly_rate/auth/signin_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-// To parse this JSON data, do
-//
-//     final restaurantsList = restaurantsListFromJson(jsonString);
-
 import 'dart:convert';
-
 import 'category_parts/restaurant_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'main.dart';
 import 'models/historyRestaurantModel.dart';
 import 'models/rateModel.dart';
-
 import 'package:intl/intl.dart';
 
 class history extends StatefulWidget {
@@ -49,12 +37,6 @@ class _history extends State<history> {
 
     Future.delayed(Duration.zero).then((value) async {
       getHistory();
-      // var vari = await FirebaseFirestore.instance
-      //     .collection("Users")
-      //     .doc(user!.uid)
-      //     .get();
-      // print("currentUser: ${vari.data()}");
-      // setState(() {});
     });
 
     Future.delayed(Duration.zero, () async {
@@ -65,8 +47,6 @@ class _history extends State<history> {
         UserData!.setDouble('locationLon', position.longitude);
       }
     });
-
-    // User? user =  FirebaseAuth.instance.currentUser;
   }
 
   @override
@@ -106,14 +86,8 @@ class _history extends State<history> {
           DateTime date = DateTime.fromMillisecondsSinceEpoch(
               ((seconds * 1000).toInt()) + (nanoseconds ~/ 1000000));
 
-          // DateTime convertedDateTime = DateTime.parse(item.dateOfRecommendation.toString());
-          // Timestamp timestamp = Timestamp.fromDate(convertedDateTime);
-          // DateTime dateTime = timestamp.toDate();
-          // // dateTimeUpdate = dateTime;
           String formattedDate = DateFormat('yyyy-MM-dd').format(date);
-          // DateTime.fromMicrosecondsSinceEpoch((item.dateOfRecommendation)).toString();
 
-          // print(item.location);
           return Padding(
             padding: const EdgeInsets.only(
                 left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
@@ -134,20 +108,28 @@ class _history extends State<history> {
                       },
                       child: Row(
                         children: [
-                          ClipRRect(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            child: Image.network(
-                                "${item.restaurant?.photos?.first}",
-                                height: heightM * 2.5,
-                                width: heightM * 2.5,
-                                fit: BoxFit.fill),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10, bottom: 0, top: 0, right: 0),
+                            child: ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              child: Image.network(
+                                  "${item.restaurant?.photos?.first}",
+                                  height: heightM * 2.5,
+                                  width: heightM * 2.5,
+                                  fit: BoxFit.fill),
+                            ),
                           ),
 
                           ///
+
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                                left: 15.0,
+                                bottom: 15.0,
+                                top: 15.0,
+                                right: 19.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,26 +138,16 @@ class _history extends State<history> {
                                     style: ourTextStyle(
                                         txt_color: Color(0xFF5a3769),
                                         txt_size: heightM * 0.6)),
-                                Text("Date: ${formattedDate}",
+                                Text("${formattedDate}",
                                     maxLines: 4,
                                     overflow: TextOverflow.ellipsis,
                                     style: ourTextStyle(
                                         txt_color: Colors.grey.shade700,
                                         txt_size: heightM * 0.4)),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                  child: Text("${item.restaurant?.description}",
-                                      maxLines: 4,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: ourTextStyle(
-                                          txt_color: Colors.grey,
-                                          txt_size: heightM * 0.4)),
-                                ),
                                 if (item.rate != null)
-                                  Text("Rate: ${item.rate!.rate} / 5.0",
+                                  Text("${item.rate!.rate} / 5.0",
                                       style: ourTextStyle(
-                                          txt_color: Colors.pinkAccent,
+                                          txt_color: button_color,
                                           txt_size: heightM * 0.4)),
                               ],
                             ),
@@ -187,8 +159,8 @@ class _history extends State<history> {
 
                   ///
                   if (item.rate == null)
-                    InkWell(
-                      onTap: () {
+                    MaterialButton(
+                      onPressed: () {
                         print("qqq");
                         String rating = "";
 
@@ -197,7 +169,6 @@ class _history extends State<history> {
                           isScrollControlled: true,
                           backgroundColor: Colors.transparent,
                           builder: (context) => Container(
-                            //change the height of the bottom sheet
                             height: MediaQuery.of(context).size.height * 0.22,
                             decoration: const BoxDecoration(
                               color: Colors.white,
@@ -206,10 +177,7 @@ class _history extends State<history> {
                                 topRight: Radius.circular(25.0),
                               ),
                             ),
-                            //content of the bottom sheet
                             child: Column(
-                              // mainAxisAlignment:
-                              //     MainAxisAlignment.spaceEvenly,
                               children: [
                                 const SizedBox(
                                   height: 15,
@@ -307,19 +275,25 @@ class _history extends State<history> {
                           ),
                         );
                       },
-                      child: const Padding(
-                        padding: EdgeInsets.only(
-                            left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                        child:
-                            Icon(Icons.star_border, color: Colors.pinkAccent),
+                      color: button_color,
+                      textColor: Colors.white,
+                      child: Icon(
+                        Icons.star,
+                        size: 23,
                       ),
+                      padding: EdgeInsets.all(2),
+                      shape: CircleBorder(),
                     ),
 
                   if (item.rate != null)
                     const Padding(
                       padding: EdgeInsets.only(
-                          left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                      child: Icon(Icons.star, color: Colors.pinkAccent),
+                          left: 19.0, bottom: 3.0, top: 3.0, right: 30.0),
+                      child: Icon(
+                        Icons.star,
+                        size: 25,
+                        color: Color.fromARGB(255, 216, 107, 147),
+                      ),
                     ),
                 ],
               ),
@@ -340,11 +314,8 @@ class _history extends State<history> {
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15.0),
               topRight: Radius.circular(15.0),
-              // bottomLeft: Radius.circular(15.0),
-              // bottomRight: Radius.circular(15.0),
             ),
           ),
-          // title: Text("Alert Dialog"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -375,12 +346,7 @@ class _history extends State<history> {
                           },
                         );
                       }).toList(),
-                    )
-                    // Image.network("${item.photos?.first}",
-                    //     height: heightM * 5,
-                    //     width: heightM * 15,
-                    //     fit: BoxFit.fill)
-                    ),
+                    )),
               ),
               Padding(
                 padding: const EdgeInsets.only(
@@ -432,13 +398,7 @@ class _history extends State<history> {
                     Row(
                       children: [
                         InkWell(
-                            onTap: () async {
-                              // _launchUrl(item.location!);
-                              // openMap(double.parse(item.lat!) , double.parse(item.long!));
-                              // MapsLauncher.launchCoordinates(
-                              //     double.parse(item.lat!),
-                              //     double.parse(item.long!));
-                            },
+                            onTap: () async {},
                             child: const Icon(
                               Icons.location_on_outlined,
                               color: Color(0xFF5a3769),
@@ -484,6 +444,13 @@ class _history extends State<history> {
           .collection("rating")
           .doc(value.id)
           .update({"rateID": value.id});
+
+      final uri =
+          Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
+      final response = await post(uri,
+          body: json.encode({
+            'rating': [user?.uid, restID, rate, rate, rate]
+          }));
       return true;
     }).catchError((error) {
       print(error);
@@ -492,8 +459,6 @@ class _history extends State<history> {
   }
 
   void getHistory() async {
-    // try{
-
     print('inside getHistory');
     final _firestore = FirebaseFirestore.instance;
     final _firebaseAuth = FirebaseAuth.instance;
@@ -508,9 +473,6 @@ class _history extends State<history> {
     if (res.docs.isNotEmpty) {
       historyList.clear();
       for (var item in res.docs) {
-        // final body = json.encode(Category.data().toString());
-        // log("Res: ${body}");
-        // final restaurant = restaurantFromJson(Category.data().toString());
         HistoryRestaurant temp;
         final restaurant = HistoryRestaurant.fromJson(item.data());
         temp = restaurant;
@@ -531,9 +493,7 @@ class _history extends State<history> {
             .where("ID", isEqualTo: restaurant.restaurantId)
             .get();
 
-        // log("Res: ${res}");
         if (res != null && res.size > 0) {
-          // final tempRestaurant = Restaurant.fromJson(res.docs.first.data()) as Restaurant;
           for (var Category in res.docs) {
             final restaurant =
                 Restaurant.fromJson(Category.data()) as Restaurant;
@@ -543,14 +503,11 @@ class _history extends State<history> {
                 (UserData?.getDouble('locationLon'))!,
                 double.parse("${restaurant.lat}"),
                 double.parse("${restaurant.long}"));
-            // print("distance: ${(ffff / 1000).toStringAsFixed(2)} KM");
-            // print("ffff ${ffff}");
+
             restaurant.far = double.parse((ffff / 1000).toStringAsFixed(2));
 
             temp.restaurant = restaurant;
           }
-          // log("Res: ${tempRestaurant}");
-          // temp.restaurant = tempRestaurant;
         }
         historyList.add(restaurant);
       }
@@ -576,9 +533,6 @@ class _history extends State<history> {
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
       return Future.error('Location services are disabled.');
     } else {
       print('Location services are enabled');
@@ -588,11 +542,6 @@ class _history extends State<history> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
         return Future.error('Location permissions are denied');
       } else {
         print('Location permissions are not denied!!');
@@ -607,8 +556,6 @@ class _history extends State<history> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
   }
 }
