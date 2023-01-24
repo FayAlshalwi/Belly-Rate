@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:belly_rate/auth/signin_page.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
@@ -39,15 +40,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  final periodicTimer = Timer.periodic(
-    //
-    const Duration(seconds: 60 * 12 * 14),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
+  signup();
+  // final periodicTimer = Timer.periodic(
+  //   //
+  //   const Duration(seconds: 60 * 12 * 14),
+  //   (timer) {
+  //     GetRecommendation();
+  //     print('GetRecommendation timer');
+  //   },
+  // );
   AwesomeNotifications().getGlobalBadgeCounter().then(
         (value) => AwesomeNotifications().setGlobalBadgeCounter(0),
       );
@@ -204,6 +205,127 @@ void GetRecommendation() async {
     print('User not loged in');
   }
 } //GetRecommendation
+
+Future<void> signup() async {
+  print("here1");
+  final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+  print("here2");
+  final response = await get(uri);
+  print("here3");
+  print(response.body);
+  print("here");
+  final decoded = json.decode(response.body) as Map<String, dynamic>;
+  print("here4");
+  print('Recommendation');
+  print(decoded['recommeneded'][0]);
+  print(decoded['recommeneded'][1]);
+  print(decoded['recommeneded'][2]);
+  // FirebaseFirestore.instance
+  //     .collection('Users')
+  //     .doc(userUid)
+  //     .set({
+  //   'name': first_name.text,
+  //   'phoneNumber': phoneNumber,
+  //   'uid': userUid,
+  //   'picture':
+  //       'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+  //   'rest': [
+  //     decoded['recommeneded'][0],
+  //     decoded['recommeneded'][1],
+  //     decoded['recommeneded'][2]
+  //   ],
+  // });
+  print("user added");
+  // FirebaseFirestore.instance
+  //     .collection('Recommendation')
+  //     .doc()
+  //     .set({
+  //   'userId':
+  //       FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': decoded['recommeneded'][0],
+  //   'Notified': false,
+  //   'Notified_location': false,
+  //   "Date_Of_Recommendation":
+  //       FieldValue.serverTimestamp(),
+  // });
+
+  // print("Recommendation 1 added");
+
+  // FirebaseFirestore.instance
+  //     .collection('Recommendation')
+  //     .doc()
+  //     .set({
+  //   'userId':
+  //       FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': decoded['recommeneded'][1],
+  //   'Notified': false,
+  //   'Notified_location': false,
+  //   "Date_Of_Recommendation":
+  //       FieldValue.serverTimestamp(),
+  // });
+
+  // print("Recommendation 2 added");
+
+  // FirebaseFirestore.instance
+  //     .collection('Recommendation')
+  //     .doc()
+  //     .set({
+  //   'userId':
+  //       FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': decoded['recommeneded'][2],
+  //   'Notified': false,
+  //   'Notified_location': false,
+  //   "Date_Of_Recommendation":
+  //       FieldValue.serverTimestamp(),
+  // });
+
+  // print("Recommendation 3 added");
+
+  // FirebaseFirestore.instance
+  //     .collection('History')
+  //     .doc()
+  //     .set({
+  //   'userId':
+  //       FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': decoded['recommeneded'][0],
+  //   'Notified': false,
+  //   'Notified_location': false,
+  //   "Date_Of_Recommendation":
+  //       FieldValue.serverTimestamp(),
+  // });
+  // print("History 1 added");
+  // FirebaseFirestore.instance
+  //     .collection('History')
+  //     .doc()
+  //     .set({
+  //   'userId':
+  //       FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': decoded['recommeneded'][1],
+  //   'Notified': false,
+  //   'Notified_location': false,
+  //   "Date_Of_Recommendation":
+  //       FieldValue.serverTimestamp(),
+  // });
+  // print("History 2 added");
+  // FirebaseFirestore.instance
+  //     .collection('History')
+  //     .doc()
+  //     .set({
+  //   'userId':
+  //       FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': decoded['recommeneded'][2],
+  //   'Notified': false,
+  //   'Notified_location': false,
+  //   "Date_Of_Recommendation":
+  //       FieldValue.serverTimestamp(),
+  // });
+  // print("History 3 added");
+  // CoolAlert.show(
+  //   context: context,
+  //   type: CoolAlertType.success,
+  //   text: 'Sign Up completed successfully!',
+  // );
+}
 
 void ContentOfNotification(String RestaurantId) async {
   final _firestore = FirebaseFirestore.instance;
