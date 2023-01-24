@@ -212,9 +212,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: MyApp._title,
-        home: user?.uid == null ? SignIn() : HomePage()
+        debugShowCheckedModeBanner: false, title: MyApp._title, home: HomePage()
 
         // Scaffold(
         //   appBar: AppBar(title: const Text(_title)),
@@ -226,39 +224,37 @@ class _MyAppState extends State<MyApp> {
 }
 
 void GetRecommendation() async {
-  try{
+  try {
+    print('inside GetRecommendation');
+    final _firestore = FirebaseFirestore.instance;
+    final _firebaseAuth = FirebaseAuth.instance;
+    final UID = FirebaseAuth.instance.currentUser!.uid;
 
-  print('inside GetRecommendation');
-  final _firestore = FirebaseFirestore.instance;
-  final _firebaseAuth = FirebaseAuth.instance;
-  final UID = FirebaseAuth.instance.currentUser!.uid;
-
-  final res = await _firestore
-      .collection('Recommendation')
-      .where("userId", isEqualTo: UID)
-      .where("Notified", isEqualTo: false)
-      .get();
-
-  if (res.docs.isNotEmpty) {
-    print('recommendation is here');
-// Get RestaurantId
-    String RestaurantId = res.docs[0]['RestaurantId'];
-    print('RestaurantId is = $RestaurantId');
-    String docid = res.docs[0].id;
-    print('docid is = $docid');
-//set isNotified to true
-    FirebaseFirestore.instance
+    final res = await _firestore
         .collection('Recommendation')
-        .doc(docid)
-        .update({"Notified": true});
+        .where("userId", isEqualTo: UID)
+        .where("Notified", isEqualTo: false)
+        .get();
 
-    ContentOfNotification(RestaurantId);
-  } else {
-    print('no recommendation!');
-  }
-  }
-  catch(e){
-     print('User not loged in');
+    if (res.docs.isNotEmpty) {
+      print('recommendation is here');
+// Get RestaurantId
+      String RestaurantId = res.docs[0]['RestaurantId'];
+      print('RestaurantId is = $RestaurantId');
+      String docid = res.docs[0].id;
+      print('docid is = $docid');
+//set isNotified to true
+      FirebaseFirestore.instance
+          .collection('Recommendation')
+          .doc(docid)
+          .update({"Notified": true});
+
+      ContentOfNotification(RestaurantId);
+    } else {
+      print('no recommendation!');
+    }
+  } catch (e) {
+    print('User not loged in');
   }
 } //GetRecommendation
 
