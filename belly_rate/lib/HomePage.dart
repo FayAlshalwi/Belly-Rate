@@ -198,24 +198,16 @@ class _HomePage extends State<HomePage> {
       // App to enable the location services.
       return Future.error('Location services are disabled.');
     } else {
-      print('Location services are enabled');
     }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
         return Future.error('Location permissions are denied');
       } else {
-        print('Location permissions are not denied!!');
       }
     } else {
-      print('Location permissions are not denied!!');
     }
 
     if (permission == LocationPermission.deniedForever) {
@@ -224,8 +216,6 @@ class _HomePage extends State<HomePage> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
   }
 
@@ -369,89 +359,92 @@ class _HomePage extends State<HomePage> {
     List<Widget> listOfWidgets = [
       //home page container
       Container(
-          child: Column(
-        children: [
-          SizedBox(
-            height: 55,
-          ),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Recommended Restaurants",
-                  style: TextStyle(
-                      color: Color(0xFF5a3769),
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
-                ),
-              )),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Saudi Arabia, Riyadh",
-                  style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold),
-                ),
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          (restaurants.isEmpty == true)
-              ? CarouselLoading()
-              : Container(
-                  child: CarouselSlider(
-                  options: CarouselOptions(
-                    aspectRatio: 16 / 9,
-                    enlargeCenterPage: true,
-                    enableInfiniteScroll: false,
-                    initialPage: 0,
-                    autoPlay: true,
+            child: SingleChildScrollView(
+          
+            child: Column(
+                  children: [
+            SizedBox(
+              height: 55,
+            ),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Recommended Restaurants",
+                    style: TextStyle(
+                        color: Color(0xFF5a3769),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
                   ),
-                  items: imageSliders,
                 )),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Discover Restaurants",
-                  style: TextStyle(
-                      color: Color(0xFF5a3769),
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Saudi Arabia, Riyadh",
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )),
+            SizedBox(
+              height: 10,
+            ),
+            (restaurants.isEmpty == true)
+                ? CarouselLoading()
+                : Container(
+                    child: CarouselSlider(
+                    options: CarouselOptions(
+                      aspectRatio: 16 / 9,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: false,
+                      initialPage: 0,
+                      autoPlay: true,
+                    ),
+                    items: imageSliders,
+                  )),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Discover Restaurants",
+                    style: TextStyle(
+                        color: Color(0xFF5a3769),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )),
+            CategorySlider(),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Near you",
+                    style: TextStyle(
+                        color: Color(0xFF5a3769),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )),
+             SizedBox(
+          
+             height: 10,
+             ),
+             RestaurantSlider()
+                  ],
                 ),
-              )),
-          CategorySlider(),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Near you",
-                  style: TextStyle(
-                      color: Color(0xFF5a3769),
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
-                ),
-              )),
-          //  SizedBox(
-
-          // height: 10,
-          // ),
-          // RestaurantSlider()
-        ],
-      )),
+          )),
       //Favorite page container
       Container(child: Favorite()),
       //History page container

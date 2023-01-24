@@ -292,17 +292,12 @@ void ContentOfNotification(String RestaurantId) async {
       Recommendationphotos = res.docs[0]['photos'];
       if (Recommendationphotos.length != 0) {
         Photo = Recommendationphotos[0];
-        print('not empty');
       } else {
-        print(' empty');
       }
     } catch (e) {
       Photo = "";
     }
-    print(Photo);
   }
-  print('last');
-
   String NotificationContent = "";
 // NotificationContent
   switch (category.toLowerCase()) {
