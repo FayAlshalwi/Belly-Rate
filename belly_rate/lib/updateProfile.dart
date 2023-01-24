@@ -45,6 +45,9 @@ class _UpdateProfile extends State<UpdateProfile> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        leading: const BackButton(
+          color: const Color(0xFF5a3769),
+        ),
         backgroundColor: Colors.white,
         elevation: 0.0,
         centerTitle: true,
@@ -140,15 +143,6 @@ class _UpdateProfile extends State<UpdateProfile> {
                     ],
                   )),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only( left: 8.0 , right:  8.0 , top:  8.0),
-            //   child: Text("${widget.ourUser?.name}" , style: getMyTextStyle(txt_color: txt_color ,fontSize: heightM * 0.75 ),),
-            // ),
-            ///
-//             Padding(
-//               padding: const EdgeInsets.only( left: 8.0 , right:  8.0),
-//               child: Text("${widget.ourUser?.phone_number}" , style: getMyTextStyle(txt_color: Colors.grey , fontSize: heightM * 0.6),),
-//             ),
 
             Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
