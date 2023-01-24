@@ -273,7 +273,7 @@ class _UpdateProfile extends State<UpdateProfile> {
                             text:
                                 'Are you sure you want to update your profile?',
                             confirmBtnText: 'Yes',
-                            cancelBtnText: 'Cacel',
+                            cancelBtnText: 'Cancel',
                             confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                             title: "Update Profile",
                             onCancelBtnTap: () {
