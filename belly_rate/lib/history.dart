@@ -467,7 +467,6 @@ class _history extends State<history> {
     final res = await _firestore
         .collection('History')
         .where("userId", isEqualTo: UID)
-        .where("Notified", isEqualTo: false)
         .get();
 
     if (res.docs.isNotEmpty) {
