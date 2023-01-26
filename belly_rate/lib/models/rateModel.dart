@@ -22,16 +22,16 @@ class Rate {
   String? restId;
 
   factory Rate.fromJson(Map<String, dynamic> json) => Rate(
-        uid: json["UID"],
-        rate: json["rate"],
-        rateId: json["rateID"],
-        restId: json["restID"],
-      );
+    uid: json["UID"],
+    rate: json["rate"],
+    rateId: json["rateID"],
+    restId: json["restID"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "UID": uid,
-        "rate": rate,
-        "rateID": rateId,
-        "restID": restId,
-      };
+    "UID": uid,
+    "rate": rate,
+    "rateID": rateId,
+    "restID": restId,
+  };
 }

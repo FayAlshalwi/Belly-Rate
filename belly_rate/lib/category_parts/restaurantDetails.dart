@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:belly_rate/category_parts/restaurant_model.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +5,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -312,12 +309,6 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                                   BorderRadius.circular(5.0)),
                                           splashColor: button_color,
                                           onPressed: () async {
-                                            CoolAlert.show(
-                                              context: context,
-                                              type: CoolAlertType.loading,
-                                              text: "Loading",
-                                            );
-
                                             bool isRate = await addRate(
                                                     rate: rating.toString(),
                                                     restID:
@@ -333,25 +324,106 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
 
                                             if (isRate) {
                                               print("isRate");
-                                              CoolAlert.show(
-                                                title: "Success",
-                                                context: context,
-                                                type: CoolAlertType.success,
-                                                text:
-                                                    "Rate added successfully!",
-                                                confirmBtnColor: Color.fromARGB(
-                                                    255, 216, 107, 147),
-                                                onConfirmBtnTap: () {
-                                                  Navigator.of(context).pop();
-                                                  Navigator.of(context).pop();
-                                                  Navigator.of(context).pop();
-                                                },
-                                              );
                                             } else {
                                               print("No isRate");
-                                              Navigator.of(context).pop();
                                             }
-                                            // Navigator.of(context).pop();
+                                            showModalBottomSheet(
+                                                context: context,
+                                                isScrollControlled: true,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                builder: (context) => Container(
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.22,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  25.0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  25.0),
+                                                        ),
+                                                      ),
+                                                      child: Column(
+                                                        children: [
+                                                          const SizedBox(
+                                                            height: 15,
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 50,
+                                                            child: Icon(
+                                                              Icons
+                                                                  .favorite_border_outlined,
+                                                              color: Color(
+                                                                  0xFF5a3769),
+                                                              size: 30,
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 50,
+                                                            child: Text(
+                                                              "Thanks for your rating!",
+                                                              style: TextStyle(
+                                                                color: Color(
+                                                                    0xFF5a3769),
+                                                                fontSize: 25,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                            child: Text(
+                                                              "Your opinion matters to us",
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.grey,
+                                                                fontSize: 15,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Material(
+                                                              elevation: 10.0,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.0), //12
+                                                              color: Colors
+                                                                  .transparent,
+                                                              child:
+                                                                  MaterialButton(
+                                                                      minWidth:
+                                                                          15,
+                                                                      color:
+                                                                          button_color,
+                                                                      shape: RoundedRectangleBorder(
+                                                                          borderRadius: BorderRadius.circular(
+                                                                              5.0)),
+                                                                      splashColor:
+                                                                          button_color,
+                                                                      onPressed:
+                                                                          () async {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                      child: Text(
+                                                                          'Sure!',
+                                                                          textAlign: TextAlign
+                                                                              .center,
+                                                                          style: ourTextStyle(
+                                                                              txt_color: Colors.white,
+                                                                              txt_size: heightM * 0.6)))),
+                                                        ],
+                                                      ),
+                                                    ));
                                           },
                                           child: Text('Submit',
                                               textAlign: TextAlign.center,
@@ -418,12 +490,6 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
           .collection("rating")
           .doc(value.id)
           .update({"rateID": value.id});
-      final uri =
-          Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
-      final response = await post(uri,
-          body: json.encode({
-            'rating': [user?.uid, restID, rate, rate, rate]
-          }));
       return true;
     }).catchError((error) {
       print(error);

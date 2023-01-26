@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+import '../models/rateModel.dart';
 import 'category_model.dart';
 
 class CategorySlider extends StatefulWidget {
@@ -48,6 +49,19 @@ class _CategorySliderState extends State<CategorySlider> {
       // final restaurant = restaurantFromJson(Category.data().toString());
       final restaurant = Restaurant.fromJson(Category.data()) as Restaurant;
 
+
+      // final res = await FirebaseFirestore.instance
+      //     .collection('rating')
+      //     .where("restID", isEqualTo: restaurant.id)
+      // // .orderBy('rate', descending: true)
+      //     .get();
+      // List<double> values = [] ;
+      // for (var resRate in res.docs) {
+      //   final rate = Rate.fromJson(resRate.data()) as Rate;
+      //   values.add(double.parse(rate.rate!));
+      // }
+      // print("values ${values}");
+      //
       _restaurant.add(restaurant);
 
       if (restaurant.category?.toLowerCase().trim() ==
@@ -105,12 +119,18 @@ class _CategorySliderState extends State<CategorySlider> {
     Color txt_color = Color(0xFF5a3769);
     return Container(
       height: 130,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: categoryList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return buildContainerList(txt_color, heightM, index);
-        },
+      child: Scrollbar(
+        thickness: 5.0,
+        radius: const Radius.circular(20),
+        // width: 20,
+        // color: Colors.black,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: categoryList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return buildContainerList(txt_color, heightM, index);
+          },
+        ),
       ),
     );
   }

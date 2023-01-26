@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:belly_rate/category_parts/restaurantDetails.dart';
 import 'package:belly_rate/category_parts/restaurant_model.dart';
 import 'package:belly_rate/category_parts/restaurants_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -21,7 +22,7 @@ class RestaurantSlider extends StatefulWidget {
 
 class _RestaurantSliderState extends State<RestaurantSlider> {
   // List<Restaurant> _restaurant = [];
-  // // List<Restaurant> _restaurantBurger = [] ;
+  // // List<Restaurant> _restaurantBurger = [] ;S
   // List<Restaurant> _restaurantAmericanRestaurant = [];
   // List<Restaurant> _restaurantSeafoodRestaurant = [];
   // List<Restaurant> _restaurantIndianRestaurant = [];
@@ -66,6 +67,7 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
     }
 
     _restaurant.sort((a, b) => a.far!.compareTo(b.far!));
+    setState(() {});
   }
 
   @override
@@ -75,78 +77,100 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
     return Container(
       height: heightM * 10,
       child: ListView.builder(
-        itemCount: _restaurant.length,
-        scrollDirection: Axis.horizontal,
+        itemCount: 10,
+        // itemCount: _restaurant.length,
+        scrollDirection: Axis.vertical,
+        // scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
-          Restaurant item = _restaurant[index];
-          print(item.location);
-          return Padding(
-            padding: const EdgeInsets.only(
-                left: 10.0, bottom: 8.0, top: 8.0, right: 10.0),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: Container(
-                width: heightM * 9,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CachedNetworkImage(
-                        imageUrl: "${item.photos?.first}",
-                        // Image.network("${item.photos?.first}",
-                        height: heightM * 5,
-                        width: heightM * 10,
-                        fit: BoxFit.fill),
-                    // ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+          if (_restaurant.isNotEmpty) {
+            Restaurant item = _restaurant[index];
+            print(item.location);
+            return Padding(
+              padding: const EdgeInsets.only(
+                  left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+              child: InkWell(
+                onTap: () {
+                  /// RestaurantDetails
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => RestaurantDetails(
+                              category_name: item.category!,
+                              restaurant: item,
+                            )),
+                  );
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(15.0),
+                            topRight: Radius.circular(15.0),
+                          ),
+                          child: Image.network("${item.photos?.first}",
+                              height: heightM * 7,
+                              width: heightM * 15,
+                              fit: BoxFit.fill)),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("${item.name}",
+                                style: ourTextStyle(
+                                    txt_color: Color(0xFF5a3769),
+                                    txt_size: heightM * 0.7)),
+                            Text("${getBuildPriceAvg(item)}",
+                                style: ourTextStyle(
+                                    txt_color: Colors.black,
+                                    txt_size: heightM * 0.5)),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16.0, bottom: 8.0, top: 3.0, right: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
                               children: [
-                                FittedBox(
-                                  child: Text("${item.name} ",
-                                      style: ourTextStyle(
-                                          txt_color: Color(0xFF5a3769),
-                                          txt_size: heightM * 0.7)),
+                                SizedBox(
+                                  width: 5,
                                 ),
-                                Text("${getBuildPriceAvg(item)}",
+                                Text("Far From you: ${item.far ?? ""} KM",
                                     style: ourTextStyle(
-                                        txt_color: Colors.black,
-                                        txt_size: heightM * 0.5)),
-                                Text("Far from you: ${item.far} KM",
-                                    style: ourTextStyle(
-                                        txt_color: Colors.black,
+                                        txt_color: Colors.grey,
                                         txt_size: heightM * 0.5)),
                               ],
                             ),
-                          ),
-                          InkWell(
-                              onTap: () async {
-                                // _launchUrl(item.location!);
-                                // openMap(double.parse(item.lat!) , double.parse(item.long!));
-                                MapsLauncher.launchCoordinates(
-                                    double.parse(item.lat!),
-                                    double.parse(item.long!));
-                              },
-                              child: const Icon(
-                                Icons.location_on_outlined,
-                                color: Color(0xFF5a3769),
-                                size: 30,
-                              )),
-                        ],
+                            InkWell(
+                                onTap: () async {
+                                  // MapsLauncher.launchCoordinates(
+                                  //     double.parse(item.lat!),
+                                  //     double.parse(item.long!));
+                                },
+                                child: const Icon(
+                                  Icons.location_on_outlined,
+                                  color: Color(0xFF5a3769),
+                                  size: 30,
+                                )),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
+            );
+          } else {
+            return SizedBox();
+          }
         },
       ),
     );
