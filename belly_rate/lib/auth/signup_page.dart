@@ -300,6 +300,11 @@ class _SignUpPageState extends State<SignUpPage> {
                     splashColor: button_color,
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
+                        CoolAlert.show(
+                          context: context,
+                          type: CoolAlertType.loading,
+                          text: "Loading",
+                        );
                         print("here the submitted phone");
                         print(phone.text);
 
