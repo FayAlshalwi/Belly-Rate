@@ -43,13 +43,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
+  get restaurantDetails => null;
   void initState() {
     super.initState();
-    print('dalal');
-
-    /////LOCATION Tracking
     userlocation();
-//Nouf
 
     Future.delayed(Duration.zero, () async {
       Position position = await _determinePosition();
@@ -59,7 +56,6 @@ class _HomePage extends State<HomePage> {
         UserData!.setDouble('locationLon', position.longitude);
       }
     });
-    // _determinePosition();
 
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
@@ -103,7 +99,7 @@ class _HomePage extends State<HomePage> {
       }
     });
 
-    AwesomeNotifications().actionStream.listen((notification) {
+    AwesomeNotifications().actionStream.listen((notification) async {
       if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
         AwesomeNotifications().getGlobalBadgeCounter().then(
               (value) =>
@@ -114,15 +110,45 @@ class _HomePage extends State<HomePage> {
       String? resID = notification.summary;
       print(resID);
 
-      /*Navigator.pushAndRemoveUntil(
+      List<Restaurant> restaurantsDetailss = [];
+
+      final _firestore = FirebaseFirestore.instance;
+      final _firebaseAuth = FirebaseAuth.instance;
+
+      final restt = await FirebaseFirestore.instance
+          .collection('Restaurants')
+          .where('ID', isEqualTo: resID)
+          .get();
+
+      String category = restt.docs[0]['category'];
+
+      for (var item in restt.docs) {
+        final restaurant = Restaurant.fromJson(item.data());
+
+        Restaurant restaurantDetails = Restaurant(
+            phoneNumber: restaurant.phoneNumber,
+            category: restaurant.category,
+            description: restaurant.description,
+            location: restaurant.location,
+            name: restaurant.name,
+            photos: restaurant.photos,
+            priceAvg: restaurant.priceAvg,
+            id: restaurant.id);
+
+        setState(() {
+          restaurantsDetailss.add(restaurantDetails);
+        });
+      }
+
+      Navigator.pushAndRemoveUntil(
         this.context,
         MaterialPageRoute(
-          builder: (_) => HomePage(),
-        ),
+            builder: (Context) => RestaurantDetails(
+                restaurant: restaurantsDetailss[0],
+                category_name: restaurantsDetailss[0].category.toString())),
         (route) => route.isFirst,
-      );*/
+      );
     });
-
     get();
   }
 
@@ -210,8 +236,6 @@ class _HomePage extends State<HomePage> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return Future.error('Location services are disabled.');
-    } else {
-      print('Location services are enabled');
     }
 
     permission = await Geolocator.checkPermission();
@@ -219,11 +243,7 @@ class _HomePage extends State<HomePage> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         return Future.error('Location permissions are denied');
-      } else {
-        print('Location permissions are not denied!!');
       }
-    } else {
-      print('Location permissions are not denied!!');
     }
 
     if (permission == LocationPermission.deniedForever) {
@@ -259,6 +279,64 @@ class _HomePage extends State<HomePage> {
         return LocationData;
       }
     }
+    location.onLocationChanged.listen((LocationData currentLocation) async {
+      // Use current location
+      // print('onLocationChanged method');
+      //print('currentLocation.latitude:');
+      //print(currentLocation.latitude);
+      //print('currentLocation.longitude');
+      //print(currentLocation.longitude);
+
+      final _firestore = FirebaseFirestore.instance;
+      final _firebaseAuth = FirebaseAuth.instance;
+      final UID = FirebaseAuth.instance.currentUser!.uid;
+
+      final Recommendation = await _firestore
+          .collection('Recommendation')
+          .where("userId", isEqualTo: UID)
+          .where("Notified_location", isEqualTo: false)
+          .get();
+
+      if (Recommendation.docs.isNotEmpty) {
+        for (int i = 0; i < Recommendation.docs.length; i++) {
+          String RestaurantId = Recommendation.docs[i]['RestaurantId'];
+          double? userlat = currentLocation.latitude;
+          double? userlong = currentLocation.longitude;
+          String RecommendationDocID = Recommendation.docs[i].id;
+
+          final Restaurants = await _firestore
+              .collection('Restaurants')
+              .where("ID", isEqualTo: RestaurantId)
+              .get();
+
+          if (Restaurants.docs.isNotEmpty) {
+            double Restaurantlong = double.parse(Restaurants.docs[0]['long']);
+            double Restaurantlat = double.parse(Restaurants.docs[0]['lat']);
+
+            double distanceInMeters = Geolocator.distanceBetween(
+                Restaurantlat, Restaurantlong, userlat!, userlong!);
+
+            if (distanceInMeters <= 2000) {
+              print('$distanceInMeters');
+              print('less or equal than 2km');
+
+              print('docid is = $RecommendationDocID');
+              FirebaseFirestore.instance
+                  .collection('Recommendation')
+                  .doc(RecommendationDocID)
+                  .update({"Notified_location": true});
+
+              ContentOfLocationNotification(RestaurantId);
+            } else {
+              print('$distanceInMeters');
+              print('More than 2km');
+            }
+          }
+        }
+      } else {
+        print('no recommendation for this user!');
+      }
+    });
   }
 
   @override
