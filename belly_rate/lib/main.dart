@@ -59,79 +59,90 @@ void main() async {
     //60 * 24 * 3
     const Duration(days: 3),
     (timer) async {
-      // final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+      // print("here1");
+      // final uri =
+      //     Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
       // print("here2");
-      // final response = await get(uri);
+      // final response = await get(
+      //   uri,
+      //   headers: <String, String>{
+      //     'usrID': FirebaseAuth.instance.currentUser!.uid.toString(),
+      //   },
+      // );
       // print("here3");
       // print(response.body);
       // print("here");
-      // final decoded = json.decode(response.body) as Map<String, dynamic>;
+      // var responseData = json.decode(response.body);
+      // print(responseData[0].toString());
+      // print(responseData[1].toString());
+      // print(responseData[2].toString());
       // print("here4");
-      // print('Recommendation');
-      // print(decoded['recommeneded'][0]);
-      // print(decoded['recommeneded'][1]);
-      // print(decoded['recommeneded'][2]);
 
-      // print('history');
-      // FirebaseFirestore.instance.collection('History').doc().set({
-      //   'userId': FirebaseAuth.instance.currentUser!.uid,
-      //   'RestaurantId': decoded['recommeneded'][0],
-      //   'Notified': false,
-      //   'Notified_location': false,
-      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
-      // });
-      // FirebaseFirestore.instance.collection('History').doc().set({
-      //   'userId': FirebaseAuth.instance.currentUser!.uid,
-      //   'RestaurantId': decoded['recommeneded'][1],
-      //   'Notified': false,
-      //   'Notified_location': false,
-      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
-      // });
-
-      // FirebaseFirestore.instance.collection('History').doc().set({
-      //   'userId': FirebaseAuth.instance.currentUser!.uid,
-      //   'RestaurantId': decoded['recommeneded'][2],
-      //   'Notified': false,
-      //   'Notified_location': false,
-      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
-      // });
-      // print('done history');
-
-      // print("update Users");
       // await FirebaseFirestore.instance
       //     .collection('Users')
       //     .doc(FirebaseAuth.instance.currentUser!.uid)
       //     .update({
       //   "rest": [
-      //     decoded['recommeneded'][0],
-      //     decoded['recommeneded'][1],
-      //     decoded['recommeneded'][2]
+      //     responseData[0].toString(),
+      //     responseData[1].toString(),
+      //     responseData[2].toString(),
       //   ],
       // });
-      // print("Done Users");
-
-      // final res = await FirebaseFirestore.instance
-      //     .collection('Recommendation')
-      //     .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-      //     .get();
-      // print(res.docs[0].id);
-      // print(res.docs[1].id);
-      // print(res.docs[2].id);
-
-      // await FirebaseFirestore.instance
-      //     .collection('Recommendation')
-      //     .doc(res.docs[0].id)
-      //     .update({"RestaurantId": decoded['recommeneded'][0]});
-      // await FirebaseFirestore.instance
-      //     .collection('Recommendation')
-      //     .doc(res.docs[1].id)
-      //     .update({"RestaurantId": decoded['recommeneded'][1]});
-      // await FirebaseFirestore.instance
-      //     .collection('Recommendation')
-      //     .doc(res.docs[2].id)
-      //     .update({
-      //   "RestaurantId": decoded['recommeneded'][2],
+      // print("user updated");
+      // FirebaseFirestore.instance.collection('Recommendation').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': responseData[0].toString(),
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
       // });
+
+      // print("Recommendation 1 added");
+
+      // FirebaseFirestore.instance.collection('Recommendation').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': responseData[1].toString(),
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+
+      // print("Recommendation 2 added");
+
+      // FirebaseFirestore.instance.collection('Recommendation').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': responseData[2].toString(),
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+
+      // print("Recommendation 3 added");
+
+      // FirebaseFirestore.instance.collection('History').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': responseData[0].toString(),
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+      // print("History 1 added");
+      // FirebaseFirestore.instance.collection('History').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': responseData[1].toString(),
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+      // print("History 2 added");
+      // FirebaseFirestore.instance.collection('History').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': responseData[2].toString(),
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+      // print("History 3 added");
     },
   );
 
@@ -207,124 +218,90 @@ void GetRecommendation() async {
 } //GetRecommendation
 
 Future<void> signup() async {
-  print("here1");
-  final uri = Uri.parse('http://127.0.0.1:5000/ratings');
-  print("here2");
-  final response = await get(uri);
-  print("here3");
-  print(response.body);
-  print("here");
-  final decoded = json.decode(response.body) as Map<String, dynamic>;
-  print("here4");
-  print('Recommendation');
-  print(decoded['recommeneded'][0]);
-  print(decoded['recommeneded'][1]);
-  print(decoded['recommeneded'][2]);
-  // FirebaseFirestore.instance
+  // print("here1");
+  // final uri = Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
+  // // final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+  // print("here2");
+  // final response = await get(
+  //   uri,
+  //   headers: <String, String>{
+  //     'usrID': FirebaseAuth.instance.currentUser!.uid.toString(),
+  //   },
+  // );
+  // print("here3");
+  // print(response.body);
+  // print("here");
+  // var responseData = json.decode(response.body);
+  // print(responseData[0].toString());
+  // print(responseData[1].toString());
+  // print(responseData[2].toString());
+  // print("here4");
+
+  // await FirebaseFirestore.instance
   //     .collection('Users')
-  //     .doc(userUid)
-  //     .set({
-  //   'name': first_name.text,
-  //   'phoneNumber': phoneNumber,
-  //   'uid': userUid,
-  //   'picture':
-  //       'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-  //   'rest': [
-  //     decoded['recommeneded'][0],
-  //     decoded['recommeneded'][1],
-  //     decoded['recommeneded'][2]
+  //     .doc(FirebaseAuth.instance.currentUser!.uid)
+  //     .update({
+  //   "rest": [
+  //     responseData[0].toString(),
+  //     responseData[1].toString(),
+  //     responseData[2].toString(),
   //   ],
   // });
-  print("user added");
-  // FirebaseFirestore.instance
-  //     .collection('Recommendation')
-  //     .doc()
-  //     .set({
-  //   'userId':
-  //       FirebaseAuth.instance.currentUser!.uid,
-  //   'RestaurantId': decoded['recommeneded'][0],
+  // print("user updated");
+  // FirebaseFirestore.instance.collection('Recommendation').doc().set({
+  //   'userId': FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': responseData[0].toString(),
   //   'Notified': false,
   //   'Notified_location': false,
-  //   "Date_Of_Recommendation":
-  //       FieldValue.serverTimestamp(),
+  //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
   // });
 
   // print("Recommendation 1 added");
 
-  // FirebaseFirestore.instance
-  //     .collection('Recommendation')
-  //     .doc()
-  //     .set({
-  //   'userId':
-  //       FirebaseAuth.instance.currentUser!.uid,
-  //   'RestaurantId': decoded['recommeneded'][1],
+  // FirebaseFirestore.instance.collection('Recommendation').doc().set({
+  //   'userId': FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': responseData[1].toString(),
   //   'Notified': false,
   //   'Notified_location': false,
-  //   "Date_Of_Recommendation":
-  //       FieldValue.serverTimestamp(),
+  //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
   // });
 
   // print("Recommendation 2 added");
 
-  // FirebaseFirestore.instance
-  //     .collection('Recommendation')
-  //     .doc()
-  //     .set({
-  //   'userId':
-  //       FirebaseAuth.instance.currentUser!.uid,
-  //   'RestaurantId': decoded['recommeneded'][2],
+  // FirebaseFirestore.instance.collection('Recommendation').doc().set({
+  //   'userId': FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': responseData[2].toString(),
   //   'Notified': false,
   //   'Notified_location': false,
-  //   "Date_Of_Recommendation":
-  //       FieldValue.serverTimestamp(),
+  //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
   // });
 
   // print("Recommendation 3 added");
 
-  // FirebaseFirestore.instance
-  //     .collection('History')
-  //     .doc()
-  //     .set({
-  //   'userId':
-  //       FirebaseAuth.instance.currentUser!.uid,
-  //   'RestaurantId': decoded['recommeneded'][0],
+  // FirebaseFirestore.instance.collection('History').doc().set({
+  //   'userId': FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': responseData[0].toString(),
   //   'Notified': false,
   //   'Notified_location': false,
-  //   "Date_Of_Recommendation":
-  //       FieldValue.serverTimestamp(),
+  //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
   // });
   // print("History 1 added");
-  // FirebaseFirestore.instance
-  //     .collection('History')
-  //     .doc()
-  //     .set({
-  //   'userId':
-  //       FirebaseAuth.instance.currentUser!.uid,
-  //   'RestaurantId': decoded['recommeneded'][1],
+  // FirebaseFirestore.instance.collection('History').doc().set({
+  //   'userId': FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': responseData[1].toString(),
   //   'Notified': false,
   //   'Notified_location': false,
-  //   "Date_Of_Recommendation":
-  //       FieldValue.serverTimestamp(),
+  //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
   // });
   // print("History 2 added");
-  // FirebaseFirestore.instance
-  //     .collection('History')
-  //     .doc()
-  //     .set({
-  //   'userId':
-  //       FirebaseAuth.instance.currentUser!.uid,
-  //   'RestaurantId': decoded['recommeneded'][2],
+  // FirebaseFirestore.instance.collection('History').doc().set({
+  //   'userId': FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': responseData[2].toString(),
   //   'Notified': false,
   //   'Notified_location': false,
-  //   "Date_Of_Recommendation":
-  //       FieldValue.serverTimestamp(),
+  //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
   // });
   // print("History 3 added");
-  // CoolAlert.show(
-  //   context: context,
-  //   type: CoolAlertType.success,
-  //   text: 'Sign Up completed successfully!',
-  // );
 }
 
 void ContentOfNotification(String RestaurantId) async {
