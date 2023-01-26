@@ -1,40 +1,28 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:belly_rate/favoritePage.dart';
 import 'package:belly_rate/history.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:belly_rate/models/restaurantModesl.dart';
 import 'package:belly_rate/models/user.dart';
 import 'package:belly_rate/myProfile.dart';
 import 'package:belly_rate/views/carousel_loading.dart';
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 import 'category_parts/category_slider.dart';
-import 'category_parts/category_slider_homepage.dart';
 import 'category_parts/restaurantDetails.dart';
 import 'category_parts/restaurant_model.dart';
-import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'package:path/path.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
 import 'Notification.dart';
 import 'main.dart';
-import 'utilities.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -280,13 +268,6 @@ class _HomePage extends State<HomePage> {
       }
     }
     location.onLocationChanged.listen((LocationData currentLocation) async {
-      // Use current location
-      // print('onLocationChanged method');
-      //print('currentLocation.latitude:');
-      //print(currentLocation.latitude);
-      //print('currentLocation.longitude');
-      //print(currentLocation.longitude);
-
       final _firestore = FirebaseFirestore.instance;
       final _firebaseAuth = FirebaseAuth.instance;
       final UID = FirebaseAuth.instance.currentUser!.uid;
@@ -356,15 +337,18 @@ class _HomePage extends State<HomePage> {
                   child: GestureDetector(
                     onTap: () {
                       print("GestureDetector");
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => RestaurantDetails(
-                                  category_name: restaurantsDetailss[y++]
-                                      .category
-                                      .toString(),
-                                  restaurant: restaurantsDetailss[z++],
-                                )),
-                      );
+                      print(item);
+                      for (int i = 0; 0 < restaurantsImgs.length; i++)
+                        if (item == restaurantsImgs[i])
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => RestaurantDetails(
+                                      category_name: restaurantsDetailss[i]
+                                          .category
+                                          .toString(),
+                                      restaurant: restaurantsDetailss[i],
+                                    )),
+                          );
                     },
                     child: ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
