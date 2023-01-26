@@ -652,17 +652,55 @@ class _SignUpPageState extends State<SignUpPage> {
                                     MaterialPageRoute(
                                         builder: (context) => SignIn()),
                                     (Route<dynamic> route) => false);
-                              } catch (error) {
-                                CoolAlert.show(
-                                  context: context,
-                                  title: "",
-                                  type: CoolAlertType.error,
-                                  text: "Code Error !",
-                                  confirmBtnColor: button_color,
-                                );
+                              } on FirebaseAuthException catch (error) {
+                                Navigator.of(context).pop();
+                                String Error = "";
+                                print("e ${error}");
+
+                                if (error
+                                    .toString()
+                                    .contains("does not exist")) {
+                                  CoolAlert.show(
+                                    context: context,
+                                    title: "No user correspond",
+                                    type: CoolAlertType.error,
+                                    text:
+                                        "User Not Exist! , Please Go to Sign Up Page",
+                                    confirmBtnColor: button_color,
+                                  );
+                                } else if (error.toString().contains(
+                                    "The sms verification code used to create the phone auth credential is invalid")) {
+                                  CoolAlert.show(
+                                    context: context,
+                                    title: "Wrong OTP",
+                                    type: CoolAlertType.error,
+                                    text: "Invalid verification code",
+                                    confirmBtnColor: button_color,
+                                  );
+                                  Error = "Code Error !";
+                                } else if (error.code ==
+                                    'invalid-verification-code') {
+                                  CoolAlert.show(
+                                    context: context,
+                                    title: "Wrong OTP",
+                                    type: CoolAlertType.error,
+                                    text: "Invalid verification code",
+                                    confirmBtnColor: button_color,
+                                  );
+                                  Error = "Wrong OTP entered";
+                                }
+
                                 print("ddd_222 ${error}");
 
-                                // viewContext.showToast(msg: "$error", bgColor: Colors.red);
+                                // if (e.code == 'invalid-verification-code') {
+                                //   CoolAlert.show(
+                                //     context: context,
+                                //     title: "",
+                                //     type: CoolAlertType.error,
+                                //     text: "Error",
+                                //     confirmBtnColor: button_color,
+                                //   );
+                                // }
                               }
                             },
                             child: Text('Sign Up',
