@@ -518,20 +518,25 @@ class _SignUpPageState extends State<SignUpPage> {
                                 print("firstName");
                                 print(first_name.text);
                                 print("here1");
-                                final uri =
-                                    Uri.parse('http://127.0.0.1:5000/ratings');
+                                final uri = Uri.parse(
+                                    'https://bellyrate-urhmg.ondigitalocean.app/ratings');
                                 print("here2");
-                                final response = await get(uri);
+                                final response = await get(
+                                  uri,
+                                  headers: <String, String>{
+                                    'usrID': FirebaseAuth
+                                        .instance.currentUser!.uid
+                                        .toString(),
+                                  },
+                                );
                                 print("here3");
                                 print(response.body);
                                 print("here");
-                                final decoded = json.decode(response.body)
-                                    as Map<String, dynamic>;
+                                var responseData = json.decode(response.body);
+                                print(responseData[0].toString());
+                                print(responseData[1].toString());
+                                print(responseData[2].toString());
                                 print("here4");
-                                print('Recommendation');
-                                print(decoded['recommeneded'][0]);
-                                print(decoded['recommeneded'][1]);
-                                print(decoded['recommeneded'][2]);
                                 FirebaseFirestore.instance
                                     .collection('Users')
                                     .doc(userUid)
@@ -542,9 +547,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                   'picture':
                                       'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
                                   'rest': [
-                                    decoded['recommeneded'][0],
-                                    decoded['recommeneded'][1],
-                                    decoded['recommeneded'][2]
+                                    responseData[0].toString(),
+                                    responseData[1].toString(),
+                                    responseData[2].toString(),
                                   ],
                                 });
                                 print("user added");
@@ -554,7 +559,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     .set({
                                   'userId':
                                       FirebaseAuth.instance.currentUser!.uid,
-                                  'RestaurantId': decoded['recommeneded'][0],
+                                  'RestaurantId': responseData[0].toString(),
                                   'Notified': false,
                                   'Notified_location': false,
                                   "Date_Of_Recommendation":
@@ -569,7 +574,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     .set({
                                   'userId':
                                       FirebaseAuth.instance.currentUser!.uid,
-                                  'RestaurantId': decoded['recommeneded'][1],
+                                  'RestaurantId': responseData[1].toString(),
                                   'Notified': false,
                                   'Notified_location': false,
                                   "Date_Of_Recommendation":
@@ -584,7 +589,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     .set({
                                   'userId':
                                       FirebaseAuth.instance.currentUser!.uid,
-                                  'RestaurantId': decoded['recommeneded'][2],
+                                  'RestaurantId': responseData[2].toString(),
                                   'Notified': false,
                                   'Notified_location': false,
                                   "Date_Of_Recommendation":
@@ -599,7 +604,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     .set({
                                   'userId':
                                       FirebaseAuth.instance.currentUser!.uid,
-                                  'RestaurantId': decoded['recommeneded'][0],
+                                  'RestaurantId': responseData[0].toString(),
                                   'Notified': false,
                                   'Notified_location': false,
                                   "Date_Of_Recommendation":
@@ -612,7 +617,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     .set({
                                   'userId':
                                       FirebaseAuth.instance.currentUser!.uid,
-                                  'RestaurantId': decoded['recommeneded'][1],
+                                  'RestaurantId': responseData[1].toString(),
                                   'Notified': false,
                                   'Notified_location': false,
                                   "Date_Of_Recommendation":
@@ -625,7 +630,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     .set({
                                   'userId':
                                       FirebaseAuth.instance.currentUser!.uid,
-                                  'RestaurantId': decoded['recommeneded'][2],
+                                  'RestaurantId': responseData[2].toString(),
                                   'Notified': false,
                                   'Notified_location': false,
                                   "Date_Of_Recommendation":
