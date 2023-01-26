@@ -90,7 +90,7 @@ print(userID)
 print(pivot_data)
 
 @app.route('/ratings', methods=['GET', 'POST'])
-def rate():  # put application's code here
+def rate():  
     global response
     if(request.method == 'POST'):
         request_data = request.data
@@ -102,31 +102,9 @@ def rate():  # put application's code here
             f.close()
         return "Done"
     if(request.method == 'GET'):
-        user_index = userID - 1  # index starts at 0
-        sorted_user_ratings = pivot_data.iloc[user_index].sort_values(ascending=False)  # sort user ratings
-        sorted_user_predictions = pred_data.iloc[user_index].sort_values(ascending=False)  # sorted_user_predictions
-        temp = pd.concat([sorted_user_ratings, sorted_user_predictions], axis=1)
-        temp.index.name = 'Recommended Places'
-        temp.columns = ['user_ratings', 'user_predictions']
-        temp = temp.loc[temp.user_ratings == 0]
-        temp = temp.sort_values('user_predictions', ascending=False)
-        print('\n Below are the recommended places for user(user_id = {}):\n'.format(userID))
-        RecommendedPlaces = temp.head(num_recommendations)
-        Recommended = [RecommendedPlaces.index[0], RecommendedPlaces.index[1], RecommendedPlaces.index[2]]
-
-        print(Recommended)
-        # print(temp.head(num_recommendations))
-        return jsonify({'recommeneded': Recommended})
-        # return temp.head(num_recommendations)
-
-@app.route('/recommendation', methods=['GET', 'POST'])
-def recommend():  # put application's code here
-    global response
-    if(request.method == 'POST'):
-        # value from flutter
-        request_data = request.data
-        request_data = json.loads(request_data.decode('utf-8'))
-        uid = request_data['usrID']
+        # # value from flutter
+        print(request.headers.get('usrID'))
+        uid = request.headers.get('usrID')
         # table with index 
         UserIDs = pd.DataFrame(data=data_final['userID'].drop_duplicates())
         UserIDs['user_index'] = np.arange(0, pivot_data.shape[0],1)
@@ -151,7 +129,8 @@ def recommend():  # put application's code here
             print('\n Below are the recommended places for user(user_id = {}):\n'.format(userID))
             RecommendedPlaces = temp.head(num_recommendations)
             Recommended = [RecommendedPlaces.index[0], RecommendedPlaces.index[1], RecommendedPlaces.index[2]]
-            return jsonify({'recommeneded': Recommended})
+            json_str = json.dumps({'recommeneded': Recommended})
+            return json_str
 
         # if user dont have ratings
         else:
@@ -162,9 +141,10 @@ def recommend():  # put application's code here
             print(pop_recom['placeID'][2])
             print("null")
             Recommended = [pop_recom['placeID'][0],pop_recom['placeID'][1],pop_recom['placeID'][2]]
-            return jsonify({'recommeneded': Recommended})
-
-       
+            print("the recomended resturants is")
+            print(Recommended)
+            return json.dumps(Recommended, cls=NpEncoder)
+  
 
 userID = 120
 num_recommedations = 5
@@ -184,6 +164,18 @@ def write(new):
 
 # newData = ["U115", "RAD", 5, 5, 5]
 # write(newData)
+
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return super(NpEncoder, self).default(obj)
+
 
 if __name__ == '__main__':
     app.run()
