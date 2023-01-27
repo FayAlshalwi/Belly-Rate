@@ -265,12 +265,12 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                     const SizedBox(
                                       height: 15,
                                     ),
-                                    const SizedBox(
-                                      height: 50,
+                                    SizedBox(
+                                      height: 40,
                                       child: Text(
-                                        "Rate & Review",
+                                        "Rate & Review for ${widget.restaurant.name}",
                                         style: TextStyle(
-                                            fontSize: 25,
+                                            fontSize: 18,
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFF5a3769)),
                                       ),
