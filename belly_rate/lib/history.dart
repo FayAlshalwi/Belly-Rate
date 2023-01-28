@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'dart:convert';
 import 'category_parts/restaurant_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -17,6 +18,7 @@ import 'main.dart';
 import 'models/historyRestaurantModel.dart';
 import 'models/rateModel.dart';
 import 'package:intl/intl.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class history extends StatefulWidget {
   history({Key? key}) : super(key: key);
@@ -69,238 +71,307 @@ class _history extends State<history> {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: historyList.length,
-        itemBuilder: (BuildContext context, int index) {
-          HistoryRestaurant item = historyList[index];
-          print("fdsfsd " + item.dateOfRecommendation!);
+      body: historyList.isEmpty
+          ? Center(
+              child: LoadingAnimationWidget.discreteCircle(
+                  size: 35,
+                  color: Color(0xFF5a3769),
+                  secondRingColor: Colors.grey.shade700,
+                  thirdRingColor: Color.fromARGB(255, 216, 107, 147)),
 
-          // Timestamp timestamp = item.dateOfRecommendation as Timestamp;
-          num seconds = int.parse(item.dateOfRecommendation!.substring(
-              item.dateOfRecommendation!.indexOf("=") + 1,
-              item.dateOfRecommendation!.indexOf(",")));
-          num nanoseconds = int.parse(item.dateOfRecommendation!.substring(
-              item.dateOfRecommendation!.lastIndexOf("=") + 1,
-              item.dateOfRecommendation!.indexOf(")")));
+              //   LoadingAnimationWidget.hexagonDots(
+              //   color: Color.fromARGB(255, 216, 107, 147),
+              //   size: 35,
+              // )
 
-          DateTime date = DateTime.fromMillisecondsSinceEpoch(
-              ((seconds * 1000).toInt()) + (nanoseconds ~/ 1000000));
+              // LoadingAnimationWidget.twistingDots(
+              //   leftDotColor: const Color(0xFF5a3769),
+              //   rightDotColor: const Color.fromARGB(255, 216, 107, 147),
+              //   size: 20,
+              // ),
+            )
+          : ListView.builder(
+              itemCount: historyList.length,
+              itemBuilder: (BuildContext context, int index) {
+                HistoryRestaurant item = historyList[index];
+                print("fdsfsd " + item.dateOfRecommendation!);
 
-          String formattedDate = DateFormat('yyyy-MM-dd').format(date);
+                // Timestamp timestamp = item.dateOfRecommendation as Timestamp;
+                num seconds = int.parse(item.dateOfRecommendation!.substring(
+                    item.dateOfRecommendation!.indexOf("=") + 1,
+                    item.dateOfRecommendation!.indexOf(",")));
+                num nanoseconds = int.parse(item.dateOfRecommendation!
+                    .substring(item.dateOfRecommendation!.lastIndexOf("=") + 1,
+                        item.dateOfRecommendation!.indexOf(")")));
 
-          return Padding(
-            padding: const EdgeInsets.only(
-                left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ///
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        buildShowRestaurantDetails(
-                            context, item.restaurant!, heightM, txt_color);
-                      },
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10, bottom: 0, top: 0, right: 0),
-                            child: ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                              child: Image.network(
-                                  "${item.restaurant?.photos?.first}",
-                                  height: heightM * 2.5,
-                                  width: heightM * 2.5,
-                                  fit: BoxFit.fill),
-                            ),
-                          ),
+                DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                    ((seconds * 1000).toInt()) + (nanoseconds ~/ 1000000));
 
-                          ///
+                String formattedDate = DateFormat('yyyy-MM-dd').format(date);
 
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 15.0,
-                                bottom: 15.0,
-                                top: 15.0,
-                                right: 19.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                return Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ///
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              buildShowRestaurantDetails(context,
+                                  item.restaurant!, heightM, txt_color);
+                            },
+                            child: Row(
                               children: [
-                                Text("${item.restaurant?.name}",
-                                    style: ourTextStyle(
-                                        txt_color: Color(0xFF5a3769),
-                                        txt_size: heightM * 0.6)),
-                                Text("${formattedDate}",
-                                    maxLines: 4,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: ourTextStyle(
-                                        txt_color: Colors.grey.shade700,
-                                        txt_size: heightM * 0.4)),
-                                if (item.rate != null)
-                                  Text("${item.rate!.rate} / 5.0",
-                                      style: ourTextStyle(
-                                          txt_color: button_color,
-                                          txt_size: heightM * 0.4)),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, bottom: 0, top: 0, right: 0),
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                    child: Image.network(
+                                        "${item.restaurant?.photos?.first}",
+                                        height: heightM * 2.5,
+                                        width: heightM * 2.5,
+                                        fit: BoxFit.fill),
+                                  ),
+                                ),
+
+                                ///
+
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0,
+                                      bottom: 15.0,
+                                      top: 15.0,
+                                      right: 19.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("${item.restaurant?.name}",
+                                          style: ourTextStyle(
+                                              txt_color: Color(0xFF5a3769),
+                                              txt_size: heightM * 0.6)),
+                                      Text("${formattedDate}",
+                                          maxLines: 4,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: ourTextStyle(
+                                              txt_color: Colors.grey.shade700,
+                                              txt_size: heightM * 0.4)),
+                                      if (item.rate != null)
+                                        Text("${item.rate!.rate} / 5.0",
+                                            style: ourTextStyle(
+                                                txt_color: button_color,
+                                                txt_size: heightM * 0.4)),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+
+                        ///
+                        if (item.rate == null)
+                          MaterialButton(
+                            onPressed: () {
+                              print("qqq");
+                              String rating = "";
+
+                              showModalBottomSheet<dynamic>(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (context) => Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.22,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(25.0),
+                                      topRight: Radius.circular(25.0),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      const SizedBox(
+                                        height: 50,
+                                        child: Text(
+                                          "Rate & Review",
+                                          style: TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFF5a3769)),
+                                        ),
+                                      ),
+                                      ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(200.0),
+                                          child: Container(
+                                            child: RatingBar.builder(
+                                              minRating: 1,
+
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              glowColor: Color(0xFF5a3769),
+                                              // unratedColor: Colors.black,
+                                              itemCount: 5,
+                                              itemPadding: EdgeInsets.symmetric(
+                                                  horizontal: 4.0),
+                                              itemBuilder: (context, _) {
+                                                return ClipRRect(
+                                                    child: Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                ));
+                                              },
+
+                                              onRatingUpdate: (double value) {
+                                                rating = value.toString();
+                                                print(rating);
+                                              },
+                                            ),
+                                          )),
+                                      SizedBox(
+                                        height: 15,
+                                      ),
+                                      Material(
+                                          elevation: 10.0,
+                                          borderRadius:
+                                              BorderRadius.circular(5.0), //12
+                                          color: Colors
+                                              .transparent, //Colors.cyan.withOpacity(0.5),
+                                          child: MaterialButton(
+                                            minWidth: 15,
+                                            color: button_color,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0)),
+                                            splashColor: button_color,
+                                            onPressed: () async {
+                                              CoolAlert.show(
+                                                context: context,
+                                                type: CoolAlertType.loading,
+                                                text: "Loading",
+                                              );
+
+                                              bool isRate = await addRate(
+                                                      rate: rating.toString(),
+                                                      restID:
+                                                          item.restaurantId!)
+                                                  .then((value) {
+                                                setState(() {
+                                                  historyList.clear();
+                                                });
+                                                getHistory();
+                                                return true;
+                                              });
+
+                                              if (isRate) {
+                                                print("isRate");
+                                                CoolAlert.show(
+                                                  title: "Success",
+                                                  context: context,
+                                                  type: CoolAlertType.success,
+                                                  text:
+                                                      "Rate added successfully!",
+                                                  confirmBtnColor:
+                                                      Color.fromARGB(
+                                                          255, 216, 107, 147),
+                                                  onConfirmBtnTap: () {
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                );
+                                              } else {
+                                                print("No isRate");
+                                                Navigator.of(context).pop();
+                                              }
+                                              // Navigator.of(context).pop();
+                                            },
+                                            child: Text('Submit',
+                                                textAlign: TextAlign.center,
+                                                style: ourTextStyle(
+                                                    txt_color: Colors.white,
+                                                    txt_size: heightM * 0.6)),
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            color: button_color,
+                            textColor: Colors.white,
+                            child: Icon(
+                              Icons.star,
+                              size: 25,
+                            ),
+                            padding: EdgeInsets.all(2),
+                            shape: CircleBorder(),
+                          ),
+
+                        if (item.rate != null)
+                          MaterialButton(
+                            onPressed: () {
+                              print("qqq");
+                              final snackBar = SnackBar(
+                                elevation: 0,
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: Color.fromARGB(0, 236, 28, 28),
+                                padding: const EdgeInsets.only(
+                                    left: 1.0,
+                                    bottom: 0.0,
+                                    top: 15.0,
+                                    right: 1.0),
+                                margin: EdgeInsets.fromLTRB(0, 110, 0, 0),
+                                content: AwesomeSnackbarContent(
+                                  title: 'Rated',
+                                  message:
+                                      'You rated this restaurant previously!',
+                                  contentType: ContentType.help,
+                                ),
+                              );
+
+                              ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(snackBar);
+                            },
+                            color: Color.fromARGB(166, 97, 97, 97),
+                            textColor: Colors.white,
+                            child: Icon(
+                              Icons.star,
+                              size: 25,
+                            ),
+                            padding: EdgeInsets.all(2),
+                            shape: CircleBorder(),
+                          ),
+                        // const Padding(
+                        //   padding: EdgeInsets.only(
+                        //       left: 19.0, bottom: 3.0, top: 3.0, right: 30.0),
+                        //   child: Icon(
+                        //     Icons.star,
+                        //     size: 25,
+                        //     color: Color.fromARGB(255, 216, 107, 147),
+                        //   ),
+                        // ),
+                      ],
                     ),
                   ),
-
-                  ///
-                  if (item.rate == null)
-                    MaterialButton(
-                      onPressed: () {
-                        print("qqq");
-                        String rating = "";
-
-                        showModalBottomSheet<dynamic>(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) => Container(
-                            height: MediaQuery.of(context).size.height * 0.22,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(25.0),
-                                topRight: Radius.circular(25.0),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                const SizedBox(
-                                  height: 50,
-                                  child: Text(
-                                    "Rate & Review",
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF5a3769)),
-                                  ),
-                                ),
-                                RatingBar.builder(
-                                  minRating: 1,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  glowColor: Color(0xFF5a3769),
-                                  itemCount: 5,
-                                  itemPadding:
-                                      EdgeInsets.symmetric(horizontal: 4.0),
-                                  itemBuilder: (context, _) => Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                  ),
-                                  onRatingUpdate: (double value) {
-                                    rating = value.toString();
-                                    print(rating);
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Material(
-                                    elevation: 10.0,
-                                    borderRadius:
-                                        BorderRadius.circular(5.0), //12
-                                    color: Colors
-                                        .transparent, //Colors.cyan.withOpacity(0.5),
-                                    child: MaterialButton(
-                                      minWidth: 15,
-                                      color: button_color,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5.0)),
-                                      splashColor: button_color,
-                                      onPressed: () async {
-                                        CoolAlert.show(
-                                          context: context,
-                                          type: CoolAlertType.loading,
-                                          text: "Loading",
-                                        );
-
-                                        bool isRate = await addRate(
-                                                rate: rating.toString(),
-                                                restID: item.restaurantId!)
-                                            .then((value) {
-                                          setState(() {
-                                            historyList.clear();
-                                          });
-                                          getHistory();
-                                          return true;
-                                        });
-
-                                        if (isRate) {
-                                          print("isRate");
-                                          CoolAlert.show(
-                                            title: "Success",
-                                            context: context,
-                                            type: CoolAlertType.success,
-                                            text: "Rate added successfully!",
-                                            confirmBtnColor: Color.fromARGB(
-                                                255, 216, 107, 147),
-                                            onConfirmBtnTap: () {
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pop();
-                                            },
-                                          );
-                                        } else {
-                                          print("No isRate");
-                                          Navigator.of(context).pop();
-                                        }
-                                        // Navigator.of(context).pop();
-                                      },
-                                      child: Text('Submit',
-                                          textAlign: TextAlign.center,
-                                          style: ourTextStyle(
-                                              txt_color: Colors.white,
-                                              txt_size: heightM * 0.6)),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      color: button_color,
-                      textColor: Colors.white,
-                      child: Icon(
-                        Icons.star,
-                        size: 23,
-                      ),
-                      padding: EdgeInsets.all(2),
-                      shape: CircleBorder(),
-                    ),
-
-                  if (item.rate != null)
-                    const Padding(
-                      padding: EdgeInsets.only(
-                          left: 19.0, bottom: 3.0, top: 3.0, right: 30.0),
-                      child: Icon(
-                        Icons.star,
-                        size: 25,
-                        color: Color.fromARGB(255, 216, 107, 147),
-                      ),
-                    ),
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 

@@ -1,34 +1,22 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'package:belly_rate/auth/our_user_model.dart';
-import 'package:belly_rate/auth/signin_page.dart';
-import 'package:belly_rate/auth/signup_page.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:belly_rate/auth/signin_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-// To parse this JSON data, do
-//
-//     final restaurantsList = restaurantsListFromJson(jsonString);
-
-import 'dart:convert';
-
 import 'category_parts/restaurantDetails.dart';
 import 'category_parts/restaurant_model.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'main.dart';
 import 'models/rateModel.dart';
-
 import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:loading_btn/loading_btn.dart';
 
 class Favorite extends StatefulWidget {
   Favorite({Key? key}) : super(key: key);
@@ -49,12 +37,6 @@ class _Favorite extends State<Favorite> {
 
     Future.delayed(Duration.zero).then((value) async {
       getFavorite();
-      // var vari = await FirebaseFirestore.instance
-      //     .collection("Users")
-      //     .doc(user!.uid)
-      //     .get();
-      // print("currentUser: ${vari.data()}");
-      // setState(() {});
     });
 
     Future.delayed(Duration.zero, () async {
@@ -65,8 +47,6 @@ class _Favorite extends State<Favorite> {
         UserData!.setDouble('locationLon', position.longitude);
       }
     });
-
-    // User? user =  FirebaseAuth.instance.currentUser;
   }
 
   @override
@@ -89,168 +69,109 @@ class _Favorite extends State<Favorite> {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: FavoriteList.length,
-        itemBuilder: (BuildContext context, int index) {
-          Restaurant item = FavoriteList[index];
-          return Padding(
-            padding: const EdgeInsets.only(
-                left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ///
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => RestaurantDetails(
-                                    category_name: item.category!,
-                                    restaurant: item,
-                                  )),
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10, bottom: 0, top: 0, right: 0),
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                child: Image.network("${item.photos?.first}",
-                                    height: heightM * 2.5,
-                                    width: heightM * 2.5,
-                                    fit: BoxFit.fill),
-                              )),
+      body: FavoriteList.isEmpty
+          ? Center(
+              child: LoadingAnimationWidget.discreteCircle(
+                  size: 35,
+                  color: Color(0xFF5a3769),
+                  secondRingColor: Colors.grey.shade700,
+                  thirdRingColor: Color.fromARGB(255, 216, 107, 147)),
 
-                          ///
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 15.0,
-                                bottom: 15.0,
-                                top: 15.0,
-                                right: 19.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+              //   LoadingAnimationWidget.hexagonDots(
+              //   color: Color.fromARGB(255, 216, 107, 147),
+              //   size: 35,
+              // )
+
+              // LoadingAnimationWidget.twistingDots(
+              //   leftDotColor: const Color(0xFF5a3769),
+              //   rightDotColor: const Color.fromARGB(255, 216, 107, 147),
+              //   size: 20,
+              // ),
+            )
+          : ListView.builder(
+              itemCount: FavoriteList.length,
+              itemBuilder: (BuildContext context, int index) {
+                Restaurant item = FavoriteList[index];
+                return Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ///
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => RestaurantDetails(
+                                          category_name: item.category!,
+                                          restaurant: item,
+                                        )),
+                              );
+                            },
+                            child: Row(
                               children: [
-                                Text("${item.name}",
-                                    style: ourTextStyle(
-                                        txt_color: Color(0xFF5a3769),
-                                        txt_size: heightM * 0.6)),
-                                // SizedBox(
-                                //   width:
-                                //       MediaQuery.of(context).size.width * 0.5,
-                                //   child: Text("${item.description}",
-                                //       maxLines: 2,
-                                //       overflow: TextOverflow.ellipsis,
-                                //       style: ourTextStyle(
-                                //           txt_color: Colors.grey,
-                                //           txt_size: heightM * 0.4)),
-                                // ),
-                                if (item.rate != null)
-                                  Text("${item.rate!.rate} / 5.0",
-                                      style: ourTextStyle(
-                                          txt_color: Color.fromARGB(
-                                              255, 216, 107, 147),
-                                          txt_size: heightM * 0.4)),
+                                Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, bottom: 0, top: 0, right: 0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0)),
+                                      child: Image.network(
+                                          "${item.photos?.first}",
+                                          height: heightM * 2.5,
+                                          width: heightM * 2.5,
+                                          fit: BoxFit.fill),
+                                    )),
+
+                                ///
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0,
+                                      bottom: 15.0,
+                                      top: 15.0,
+                                      right: 19.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("${item.name}",
+                                          style: ourTextStyle(
+                                              txt_color: Color(0xFF5a3769),
+                                              txt_size: heightM * 0.6)),
+                                      if (item.rate != null)
+                                        Text("${item.rate!.rate} / 5.0",
+                                            style: ourTextStyle(
+                                                txt_color: Color.fromARGB(
+                                                    255, 216, 107, 147),
+                                                txt_size: heightM * 0.4)),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        if (item.rate != null)
+                          const Padding(
+                            padding: EdgeInsets.only(
+                                left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                            child: Icon(Icons.star,
+                                color: Color.fromARGB(255, 216, 107, 147)),
+                          ),
+                      ],
                     ),
                   ),
-
-                  ///
-                  if (item.rate == null)
-                    InkWell(
-                      onTap: () {
-                        print("qqq");
-                        String rating = "";
-
-                        showModalBottomSheet<dynamic>(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) => Container(
-                            //change the height of the bottom sheet
-                            height: MediaQuery.of(context).size.height * 0.22,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(25.0),
-                                topRight: Radius.circular(25.0),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                const SizedBox(
-                                  height: 50,
-                                  child: Text(
-                                    "Rate & Review",
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF5a3769)),
-                                  ),
-                                ),
-                                RatingBar.builder(
-                                  minRating: 1,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  glowColor: Color(0xFF5a3769),
-                                  itemCount: 5,
-                                  itemPadding:
-                                      EdgeInsets.symmetric(horizontal: 4.0),
-                                  itemBuilder: (context, _) => Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                  ),
-                                  onRatingUpdate: (double value) {
-                                    rating = value.toString();
-                                    print(rating);
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(
-                            left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                        child: Icon(Icons.star_border,
-                            color: Color.fromARGB(255, 216, 107, 147)),
-                      ),
-                    ),
-
-                  if (item.rate != null)
-                    const Padding(
-                      padding: EdgeInsets.only(
-                          left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                      child: Icon(Icons.star,
-                          color: Color.fromARGB(255, 216, 107, 147)),
-                    ),
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 
@@ -297,8 +218,7 @@ class _Favorite extends State<Favorite> {
           (UserData?.getDouble('locationLon'))!,
           double.parse("${resta.lat}"),
           double.parse("${resta.long}"));
-      // print("distance: ${(ffff / 1000).toStringAsFixed(2)} KM");
-      // print("ffff ${ffff}");
+
       resta.far = double.parse((ffff / 1000).toStringAsFixed(2));
 
       FavoriteListBase.add(resta);

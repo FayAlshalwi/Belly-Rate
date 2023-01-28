@@ -27,6 +27,7 @@ class UpdateProfile extends StatefulWidget {
 class _UpdateProfile extends State<UpdateProfile> {
   TextEditingController phone = TextEditingController();
   TextEditingController first_name = TextEditingController();
+  bool flag = false;
   File? image;
   @override
   void initState() {
@@ -46,20 +47,23 @@ class _UpdateProfile extends State<UpdateProfile> {
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
-            CoolAlert.show(
-                context: context,
-                type: CoolAlertType.confirm,
-                text: 'Are you sure you want to discard your changes?',
-                confirmBtnText: 'Yes',
-                cancelBtnText: 'Cancel',
-                title: "Discard changes",
-                onCancelBtnTap: () {
-                  Navigator.of(context).pop(true);
-                },
-                onConfirmBtnTap: () async {
-                  Navigator.of(context).pop(true);
-                  Navigator.of(context).pop(true);
-                });
+            if (flag)
+              CoolAlert.show(
+                  context: context,
+                  type: CoolAlertType.confirm,
+                  text: 'Are you sure you want to discard your changes?',
+                  confirmBtnText: 'Yes',
+                  cancelBtnText: 'Cancel',
+                  title: "Discard changes",
+                  onCancelBtnTap: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  onConfirmBtnTap: () async {
+                    Navigator.of(context).pop(true);
+                    Navigator.of(context).pop(true);
+                  });
+            else
+              Navigator.of(context).pop(true);
           },
           color: Color(0xFF5a3769),
         ),
@@ -168,6 +172,9 @@ class _UpdateProfile extends State<UpdateProfile> {
                   TextFormField(
                     keyboardType: TextInputType.text,
                     onChanged: (value) {
+                      setState(() {
+                        flag = true;
+                      });
                       // formKey.currentState?.validate();
                       print(first_name.text);
                     },

@@ -97,32 +97,10 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                               topLeft: Radius.circular(15.0),
                               topRight: Radius.circular(15.0),
                             ),
-                            child:
-                                // CarouselSlider(
-                                //   options: CarouselOptions(height: heightM * 5.0),
-                                //   items: item.photos?.map((i) {
-                                //     return Builder(
-                                //       builder: (BuildContext context) {
-                                //         return Container(
-                                //             width: MediaQuery.of(context).size.width,
-                                //             margin:
-                                //                 EdgeInsets.symmetric(horizontal: 5.0),
-                                //             decoration: BoxDecoration(
-                                //                 color: txt_color.withOpacity(0.5)),
-                                //             child: CachedNetworkImage(
-                                //                 imageUrl: "${i}",
-                                //                 // child: Image.network("${i}",
-                                //                 height: heightM * 5,
-                                //                 width: heightM * 15,
-                                //                 fit: BoxFit.fill));
-                                //       },
-                                //     );
-                                //   }).toList(),
-                                // )
-                                Image.network("${item.photos?.first}",
-                                    height: heightM * 7,
-                                    width: heightM * 15,
-                                    fit: BoxFit.fill)),
+                            child: Image.network("${item.photos?.first}",
+                                height: heightM * 7,
+                                width: heightM * 15,
+                                fit: BoxFit.fill)),
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
@@ -140,13 +118,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                             ],
                           ),
                         ),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(
-                        //       left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                        //   child: Text("${item.description}",
-                        //       style: ourTextStyle(
-                        //           txt_color: Colors.grey, txt_size: heightM * 0.5)),
-                        // ),
+
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 16.0, bottom: 8.0, top: 3.0, right: 16.0),
@@ -170,7 +142,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                                   ),
                                   Text(
                                       item.rateAVGNum != "0"
-                                          ? "${item.rateAVG ?? " - "} / 5. rated by: ${item.rateAVGNum} users"
+                                          ? "${item.rateAVG ?? " - "} / 5 (${item.rateAVGNum})"
                                           : "No Rating Yet",
                                       style: ourTextStyle(
                                           txt_color: Colors.grey,
