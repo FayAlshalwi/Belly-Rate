@@ -1,40 +1,28 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'package:belly_rate/favoritePage.dart';
 import 'package:belly_rate/history.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:belly_rate/models/restaurantModesl.dart';
-import 'package:belly_rate/models/user.dart';
+import 'package:belly_rate/models/userModel.dart';
 import 'package:belly_rate/myProfile.dart';
 import 'package:belly_rate/views/carousel_loading.dart';
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 import 'category_parts/category_slider.dart';
-import 'category_parts/category_slider_homepage.dart';
 import 'category_parts/restaurantDetails.dart';
 import 'category_parts/restaurant_model.dart';
-import 'package:provider/provider.dart';
-import 'favoritePage.dart';
 import 'firebase_options.dart';
-import 'package:path/path.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
 import 'Notification.dart';
 import 'main.dart';
-import 'utilities.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -44,12 +32,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePage extends State<HomePage> {
   get restaurantDetails => null;
-
   void initState() {
     super.initState();
-    /////LOCATION Tracking
     userlocation();
-//Nouf
 
     Future.delayed(Duration.zero, () async {
       Position position = await _determinePosition();
@@ -59,7 +44,6 @@ class _HomePage extends State<HomePage> {
         UserData!.setDouble('locationLon', position.longitude);
       }
     });
-    // _determinePosition();
 
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
@@ -114,17 +98,17 @@ class _HomePage extends State<HomePage> {
       String? resID = notification.summary;
       print(resID);
 
-     List<Restaurant> restaurantsDetailss = [];
+      List<Restaurant> restaurantsDetailss = [];
 
-     final _firestore = FirebaseFirestore.instance;
-     final _firebaseAuth = FirebaseAuth.instance;
-  
-       final restt = await FirebaseFirestore.instance
+      final _firestore = FirebaseFirestore.instance;
+      final _firebaseAuth = FirebaseAuth.instance;
+
+      final restt = await FirebaseFirestore.instance
           .collection('Restaurants')
           .where('ID', isEqualTo: resID)
           .get();
 
-          String  category = restt.docs[0]['category'];
+      String category = restt.docs[0]['category'];
 
       for (var item in restt.docs) {
         final restaurant = Restaurant.fromJson(item.data());
@@ -138,7 +122,7 @@ class _HomePage extends State<HomePage> {
             photos: restaurant.photos,
             priceAvg: restaurant.priceAvg,
             id: restaurant.id);
-   
+
         setState(() {
           restaurantsDetailss.add(restaurantDetails);
         });
@@ -147,13 +131,12 @@ class _HomePage extends State<HomePage> {
       Navigator.pushAndRemoveUntil(
         this.context,
         MaterialPageRoute(
-          builder: (Context) =>
-          RestaurantDetails(restaurant:  restaurantsDetailss[0] , category_name: restaurantsDetailss[0].category.toString())
-        ),
+            builder: (Context) => RestaurantDetails(
+                restaurant: restaurantsDetailss[0],
+                category_name: restaurantsDetailss[0].category.toString())),
         (route) => route.isFirst,
       );
     });
-
     get();
   }
 
@@ -168,6 +151,7 @@ class _HomePage extends State<HomePage> {
 
   static late UserInfoModel user;
   static List<restaurantModel> restaurants = [];
+  List<Restaurant> restaurantsDetailss = [];
   static List<String> restaurantsImgs = [];
 
   get() async {
@@ -204,6 +188,26 @@ class _HomePage extends State<HomePage> {
           photos: restt.docs[0]['photos'],
           priceAvg: restt.docs[0]['priceAvg'],
           resId: restt.docs[0]['ID']);
+
+      for (var item in restt.docs) {
+        final restaurant = Restaurant.fromJson(item.data());
+
+        Restaurant restaurantDetails = Restaurant(
+            phoneNumber: restaurant.phoneNumber,
+            category: restaurant.category,
+            description: restaurant.description,
+            location: restaurant.location,
+            name: restaurant.name,
+            photos: restaurant.photos,
+            priceAvg: restaurant.priceAvg,
+            id: restaurant.id);
+        print("res name");
+        print(restaurantDetails.name);
+        setState(() {
+          restaurantsDetailss.add(restaurantDetails);
+        });
+      }
+
       setState(() {
         restaurants.add(restaurant);
         restaurantsImgs.add(restaurant.photos[0]);
@@ -211,10 +215,6 @@ class _HomePage extends State<HomePage> {
     }
   }
 
-  //Nouf
-  /// Determine the current position of the device.
-  /// When the location services are not enabled or permissions
-  /// are denied the `Future` will return an error.
   Future<Position> _determinePosition() async {
     print('inside _determinePosition');
     bool serviceEnabled;
@@ -223,11 +223,7 @@ class _HomePage extends State<HomePage> {
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
       return Future.error('Location services are disabled.');
-    } else {
     }
 
     permission = await Geolocator.checkPermission();
@@ -235,13 +231,10 @@ class _HomePage extends State<HomePage> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         return Future.error('Location permissions are denied');
-      } else {
       }
-    } else {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
@@ -249,7 +242,6 @@ class _HomePage extends State<HomePage> {
     return await Geolocator.getCurrentPosition();
   }
 
-  /////Location
   userlocation() async {
     print('inside userlocation method');
 
@@ -275,17 +267,7 @@ class _HomePage extends State<HomePage> {
         return LocationData;
       }
     }
-
-
-
     location.onLocationChanged.listen((LocationData currentLocation) async {
-      // Use current location
-     // print('onLocationChanged method');
-      //print('currentLocation.latitude:');
-      //print(currentLocation.latitude);
-      //print('currentLocation.longitude');
-      //print(currentLocation.longitude);
-
       final _firestore = FirebaseFirestore.instance;
       final _firebaseAuth = FirebaseAuth.instance;
       final UID = FirebaseAuth.instance.currentUser!.uid;
@@ -336,145 +318,161 @@ class _HomePage extends State<HomePage> {
         print('no recommendation for this user!');
       }
     });
-  } //userlocation
+  }
 
   @override
   Widget build(BuildContext context) {
     double displayOfWidth = MediaQuery.of(context).size.width;
     var x = 0;
+    var y = 0;
+    var z = 0;
+
     final List<Widget> imageSliders = restaurantsImgs
         .map((item) => Container(
               child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    child: Stack(
-                      children: <Widget>[
-                        Image.network(item, fit: BoxFit.cover, width: 1000.0),
-                        Positioned(
-                          bottom: 0.0,
-                          left: 0.0,
-                          right: 0.0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color.fromARGB(200, 0, 0, 0),
-                                  Color.fromARGB(0, 0, 0, 0)
-                                ],
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                              ),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 10.0),
-                            child: Text(
-                              restaurants[x++].name,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-              ),
+                  decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("GestureDetector");
+                      print(item);
+                      for (int i = 0; 0 < restaurantsImgs.length; i++)
+                        if (item == restaurantsImgs[i])
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => RestaurantDetails(
+                                      category_name: restaurantsDetailss[i]
+                                          .category
+                                          .toString(),
+                                      restaurant: restaurantsDetailss[i],
+                                    )),
+                          );
+                    },
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        child: Stack(
+                          children: <Widget>[
+                            Image.network(item,
+                                fit: BoxFit.cover, width: 1000.0),
+                            Positioned(
+                                bottom: 0.0,
+                                left: 0.0,
+                                right: 0.0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color.fromARGB(200, 0, 0, 0),
+                                        Color.fromARGB(0, 0, 0, 0)
+                                      ],
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 10.0),
+                                  child: Text(
+                                    restaurants[x++].name,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ))
+                          ],
+                        )),
+                  )),
             ))
         .toList();
     List<Widget> listOfWidgets = [
       //home page container
       Container(
-            child: SingleChildScrollView(
-          
-            child: Column(
-                  children: [
-            SizedBox(
-              height: 55,
-            ),
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Recommended Restaurants",
-                    style: TextStyle(
-                        color: Color(0xFF5a3769),
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
-                )),
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Saudi Arabia, Riyadh",
-                    style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold),
-                  ),
-                )),
-            SizedBox(
-              height: 10,
-            ),
-            (restaurants.isEmpty == true)
-                ? CarouselLoading()
-                : Container(
-                    child: CarouselSlider(
-                    options: CarouselOptions(
-                      aspectRatio: 16 / 9,
-                      enlargeCenterPage: true,
-                      enableInfiniteScroll: false,
-                      initialPage: 0,
-                      autoPlay: true,
-                    ),
-                    items: imageSliders,
-                  )),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Discover Restaurants",
-                    style: TextStyle(
-                        color: Color(0xFF5a3769),
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
-                )),
-            CategorySlider(),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Near you",
-                    style: TextStyle(
-                        color: Color(0xFF5a3769),
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
-                )),
-             SizedBox(
-          
-             height: 10,
-             ),
-             RestaurantSlider()
-                  ],
+          child: Column(
+        children: [
+          SizedBox(
+            height: 55,
+          ),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Recommended Restaurants",
+                  style: TextStyle(
+                      color: Color(0xFF5a3769),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
                 ),
-          )),
+              )),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Saudi Arabia, Riyadh",
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold),
+                ),
+              )),
+          SizedBox(
+            height: 10,
+          ),
+          (restaurants.isEmpty == true)
+              ? CarouselLoading()
+              : Container(
+                  child: CarouselSlider(
+                  options: CarouselOptions(
+                    aspectRatio: 16 / 9,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: false,
+                    initialPage: 0,
+                    autoPlay: true,
+                  ),
+                  items: imageSliders,
+                )),
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Discover Restaurants",
+                  style: TextStyle(
+                      color: Color(0xFF5a3769),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                ),
+              )),
+          CategorySlider(),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Near you",
+                  style: TextStyle(
+                      color: Color(0xFF5a3769),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                ),
+              )),
+          //  SizedBox(
+
+          // height: 10,
+          // ),
+          // RestaurantSlider()
+        ],
+      )),
       //Favorite page container
       Container(child: Favorite()),
       //History page container

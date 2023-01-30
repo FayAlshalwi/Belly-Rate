@@ -231,11 +231,11 @@ class _SignInState extends State<SignIn> {
                       if (formKey.currentState!.validate()) {
                         if (phone.text.isNotEmpty) {
                           // if (formKey.currentState!.validate()) {
-                          // CoolAlert.show(
-                          //   context: context,
-                          //   type: CoolAlertType.loading,
-                          //   text: "Loading",
-                          // );
+                          CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.loading,
+                            text: "Loading",
+                          );
                           print("here the submitted phone");
                           print(phone.text);
 

@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:belly_rate/auth/signin_page.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,165 +25,126 @@ SharedPreferences? UserData;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   UserData = await SharedPreferences.getInstance();
-  AwesomeNotifications().initialize(
-      // set the icon to null if you want to use the default app icon
-      null,
-      [
-        NotificationChannel(
-            channelKey: 'basic_channel',
-            channelName: 'Basic notifications',
-            channelDescription: 'Notification channel for basic tests',
-            importance: NotificationImportance.High,
-            channelShowBadge: true,
-            defaultColor: Color(0xFF9D50DD),
-            ledColor: Colors.white)
-      ]);
+  AwesomeNotifications().initialize(null, [
+    NotificationChannel(
+        channelKey: 'basic_channel',
+        channelName: 'Basic notifications',
+        channelDescription: 'Notification channel for basic tests',
+        importance: NotificationImportance.High,
+        channelShowBadge: true,
+        defaultColor: Color(0xFF9D50DD),
+        ledColor: Colors.white)
+  ]);
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  final periodicTime = Timer.periodic(
-    //
-    const Duration(minutes:1),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-
-  final periodicTimer = Timer.periodic(
-    //
-    const Duration(days:1),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-
-  final periodicTimer2 = Timer.periodic(
-    //
-    const Duration(days:2),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-
-   final periodicTimer3 = Timer.periodic(
-    //
-    const Duration(days:3),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-    final periodicTimer4 = Timer.periodic(
-    //
-    const Duration(days:4),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-
-    final periodicTimer5 = Timer.periodic(
-    //
-    const Duration(days:5),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-   final periodicTimer6 = Timer.periodic(
-    //
-    const Duration(days:6),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-
-   final periodicTimer7 = Timer.periodic(
-    //
-    const Duration(days:7),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-
-  final periodicTimer8 = Timer.periodic(
-    //
-    const Duration(days:8),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-    final periodicTimer9 = Timer.periodic(
-    //
-    const Duration(days:9),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-
-  final periodicTimer10 = Timer.periodic(
-    //
-    const Duration(days:10),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-
-  final periodicTimer11 = Timer.periodic(
-    //
-    const Duration(days:11),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-   final periodicTimer12 = Timer.periodic(
-    //
-    const Duration(days:12),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-    final periodicTimer13 = Timer.periodic(
-    //
-    const Duration(days:13),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-    final periodicTimer14 = Timer.periodic(
-    //
-    const Duration(days:14),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-    final periodicTimer15 = Timer.periodic(
-    //
-    const Duration(days:15),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-  
+  signup();
+  // final periodicTimer = Timer.periodic(
+  //   //
+  //   const Duration(seconds: 60 * 12 * 14),
+  //   (timer) {
+  //     GetRecommendation();
+  //     print('GetRecommendation timer');
+  //   },
+  // );
   AwesomeNotifications().getGlobalBadgeCounter().then(
         (value) => AwesomeNotifications().setGlobalBadgeCounter(0),
       );
+  // if (FirebaseAuth.instance.currentUser != null) {
+  print("in");
+  final periodicTimer2 = Timer.periodic(
+    //
+    //60 * 24 * 3
+    const Duration(days: 3),
+    (timer) async {
+      // print("here1");
+      // final uri =
+      //     Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
+      // print("here2");
+      // final response = await get(
+      //   uri,
+      //   headers: <String, String>{
+      //     'usrID': FirebaseAuth.instance.currentUser!.uid.toString(),
+      //   },
+      // );
+      // print("here3");
+      // print(response.body);
+      // print("here");
+      // var responseData = json.decode(response.body);
+      // print(responseData[0].toString());
+      // print(responseData[1].toString());
+      // print(responseData[2].toString());
+      // print("here4");
+
+      // await FirebaseFirestore.instance
+      //     .collection('Users')
+      //     .doc(FirebaseAuth.instance.currentUser!.uid)
+      //     .update({
+      //   "rest": [
+      //     responseData[0].toString(),
+      //     responseData[1].toString(),
+      //     responseData[2].toString(),
+      //   ],
+      // });
+      // print("user updated");
+      // FirebaseFirestore.instance.collection('Recommendation').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': responseData[0].toString(),
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+
+      // print("Recommendation 1 added");
+
+      // FirebaseFirestore.instance.collection('Recommendation').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': responseData[1].toString(),
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+
+      // print("Recommendation 2 added");
+
+      // FirebaseFirestore.instance.collection('Recommendation').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': responseData[2].toString(),
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+
+      // print("Recommendation 3 added");
+
+      // FirebaseFirestore.instance.collection('History').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': responseData[0].toString(),
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+      // print("History 1 added");
+      // FirebaseFirestore.instance.collection('History').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': responseData[1].toString(),
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+      // print("History 2 added");
+      // FirebaseFirestore.instance.collection('History').doc().set({
+      //   'userId': FirebaseAuth.instance.currentUser!.uid,
+      //   'RestaurantId': responseData[2].toString(),
+      //   'Notified': false,
+      //   'Notified_location': false,
+      //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+      // });
+      // print("History 3 added");
+    },
+  );
 
   runApp(MyApp());
 }
@@ -214,8 +178,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: MyApp._title,
-        home: user?.uid == null ? SignIn() : HomePage()
-        );
+        home: user?.uid == null ? SignIn() : HomePage());
   }
 }
 
@@ -254,6 +217,93 @@ void GetRecommendation() async {
   }
 } //GetRecommendation
 
+Future<void> signup() async {
+  // print("here1");
+  // final uri = Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
+  // // final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+  // print("here2");
+  // final response = await get(
+  //   uri,
+  //   headers: <String, String>{
+  //     'usrID': FirebaseAuth.instance.currentUser!.uid.toString(),
+  //   },
+  // );
+  // print("here3");
+  // print(response.body);
+  // print("here");
+  // var responseData = json.decode(response.body);
+  // print(responseData[0].toString());
+  // print(responseData[1].toString());
+  // print(responseData[2].toString());
+  // print("here4");
+
+  // await FirebaseFirestore.instance
+  //     .collection('Users')
+  //     .doc(FirebaseAuth.instance.currentUser!.uid)
+  //     .update({
+  //   "rest": [
+  //     responseData[0].toString(),
+  //     responseData[1].toString(),
+  //     responseData[2].toString(),
+  //   ],
+  // });
+  // print("user updated");
+  // FirebaseFirestore.instance.collection('Recommendation').doc().set({
+  //   'userId': FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': responseData[0].toString(),
+  //   'Notified': false,
+  //   'Notified_location': false,
+  //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+  // });
+
+  // print("Recommendation 1 added");
+
+  // FirebaseFirestore.instance.collection('Recommendation').doc().set({
+  //   'userId': FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': responseData[1].toString(),
+  //   'Notified': false,
+  //   'Notified_location': false,
+  //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+  // });
+
+  // print("Recommendation 2 added");
+
+  // FirebaseFirestore.instance.collection('Recommendation').doc().set({
+  //   'userId': FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': responseData[2].toString(),
+  //   'Notified': false,
+  //   'Notified_location': false,
+  //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+  // });
+
+  // print("Recommendation 3 added");
+
+  // FirebaseFirestore.instance.collection('History').doc().set({
+  //   'userId': FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': responseData[0].toString(),
+  //   'Notified': false,
+  //   'Notified_location': false,
+  //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+  // });
+  // print("History 1 added");
+  // FirebaseFirestore.instance.collection('History').doc().set({
+  //   'userId': FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': responseData[1].toString(),
+  //   'Notified': false,
+  //   'Notified_location': false,
+  //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+  // });
+  // print("History 2 added");
+  // FirebaseFirestore.instance.collection('History').doc().set({
+  //   'userId': FirebaseAuth.instance.currentUser!.uid,
+  //   'RestaurantId': responseData[2].toString(),
+  //   'Notified': false,
+  //   'Notified_location': false,
+  //   "Date_Of_Recommendation": FieldValue.serverTimestamp(),
+  // });
+  // print("History 3 added");
+}
+
 void ContentOfNotification(String RestaurantId) async {
   final _firestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
@@ -284,12 +334,17 @@ void ContentOfNotification(String RestaurantId) async {
       Recommendationphotos = res.docs[0]['photos'];
       if (Recommendationphotos.length != 0) {
         Photo = Recommendationphotos[0];
+        print('not empty');
       } else {
+        print(' empty');
       }
     } catch (e) {
       Photo = "";
     }
+    print(Photo);
   }
+  print('last');
+
   String NotificationContent = "";
 // NotificationContent
   switch (category.toLowerCase()) {

@@ -56,7 +56,10 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   shared_preferences: ^2.0.15
   location: ^4.4.0
-
+  loading_animation_widget: ^1.2.0+4
+  awesome_snackbar_content: ^0.1.0
+  loading_btn: ^1.0.3
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

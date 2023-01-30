@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:belly_rate/HomePage.dart';
 import 'package:belly_rate/auth/signin_page.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -11,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -130,12 +133,12 @@ class _SignUpPageState extends State<SignUpPage> {
                     print(first_name.text);
                   },
                   validator: (value) {
-                    final regExp = RegExp(r'^[a-zA-Z]+$');
+                    final regExp = RegExp(r'^[ a-zA-Z]+$');
                     String text = first_name.text;
                     if (value == null || value.isEmpty) {
                       return 'Please enter your name';
                     } else if (!regExp.hasMatch(text.trim())) {
-                      return 'You cannot enter special characters !@#\%^&*()';
+                      return 'You cannot enter special characters and numbers';
                     } else if (value.length <= 2) {
                       return "Please enter at least 3 characters";
                     }
@@ -297,6 +300,11 @@ class _SignUpPageState extends State<SignUpPage> {
                     splashColor: button_color,
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
+                        CoolAlert.show(
+                          context: context,
+                          type: CoolAlertType.loading,
+                          text: "Loading",
+                        );
                         print("here the submitted phone");
                         print(phone.text);
 
@@ -514,7 +522,26 @@ class _SignUpPageState extends State<SignUpPage> {
                                 print(userUid);
                                 print("firstName");
                                 print(first_name.text);
-
+                                print("here1");
+                                final uri = Uri.parse(
+                                    'https://bellyrate-urhmg.ondigitalocean.app/ratings');
+                                print("here2");
+                                final response = await get(
+                                  uri,
+                                  headers: <String, String>{
+                                    'usrID': FirebaseAuth
+                                        .instance.currentUser!.uid
+                                        .toString(),
+                                  },
+                                );
+                                print("here3");
+                                print(response.body);
+                                print("here");
+                                var responseData = json.decode(response.body);
+                                print(responseData[0].toString());
+                                print(responseData[1].toString());
+                                print(responseData[2].toString());
+                                print("here4");
                                 FirebaseFirestore.instance
                                     .collection('Users')
                                     .doc(userUid)
@@ -524,9 +551,97 @@ class _SignUpPageState extends State<SignUpPage> {
                                   'uid': userUid,
                                   'picture':
                                       'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-                                  'rest': rest,
+                                  'rest': [
+                                    responseData[0].toString(),
+                                    responseData[1].toString(),
+                                    responseData[2].toString(),
+                                  ],
+                                });
+                                print("user added");
+                                FirebaseFirestore.instance
+                                    .collection('Recommendation')
+                                    .doc()
+                                    .set({
+                                  'userId':
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  'RestaurantId': responseData[0].toString(),
+                                  'Notified': false,
+                                  'Notified_location': false,
+                                  "Date_Of_Recommendation":
+                                      FieldValue.serverTimestamp(),
                                 });
 
+                                print("Recommendation 1 added");
+
+                                FirebaseFirestore.instance
+                                    .collection('Recommendation')
+                                    .doc()
+                                    .set({
+                                  'userId':
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  'RestaurantId': responseData[1].toString(),
+                                  'Notified': false,
+                                  'Notified_location': false,
+                                  "Date_Of_Recommendation":
+                                      FieldValue.serverTimestamp(),
+                                });
+
+                                print("Recommendation 2 added");
+
+                                FirebaseFirestore.instance
+                                    .collection('Recommendation')
+                                    .doc()
+                                    .set({
+                                  'userId':
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  'RestaurantId': responseData[2].toString(),
+                                  'Notified': false,
+                                  'Notified_location': false,
+                                  "Date_Of_Recommendation":
+                                      FieldValue.serverTimestamp(),
+                                });
+
+                                print("Recommendation 3 added");
+
+                                FirebaseFirestore.instance
+                                    .collection('History')
+                                    .doc()
+                                    .set({
+                                  'userId':
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  'RestaurantId': responseData[0].toString(),
+                                  'Notified': false,
+                                  'Notified_location': false,
+                                  "Date_Of_Recommendation":
+                                      FieldValue.serverTimestamp(),
+                                });
+                                print("History 1 added");
+                                FirebaseFirestore.instance
+                                    .collection('History')
+                                    .doc()
+                                    .set({
+                                  'userId':
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  'RestaurantId': responseData[1].toString(),
+                                  'Notified': false,
+                                  'Notified_location': false,
+                                  "Date_Of_Recommendation":
+                                      FieldValue.serverTimestamp(),
+                                });
+                                print("History 2 added");
+                                FirebaseFirestore.instance
+                                    .collection('History')
+                                    .doc()
+                                    .set({
+                                  'userId':
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  'RestaurantId': responseData[2].toString(),
+                                  'Notified': false,
+                                  'Notified_location': false,
+                                  "Date_Of_Recommendation":
+                                      FieldValue.serverTimestamp(),
+                                });
+                                print("History 3 added");
                                 CoolAlert.show(
                                   context: context,
                                   type: CoolAlertType.success,
@@ -537,17 +652,55 @@ class _SignUpPageState extends State<SignUpPage> {
                                     MaterialPageRoute(
                                         builder: (context) => SignIn()),
                                     (Route<dynamic> route) => false);
-                              } catch (error) {
-                                CoolAlert.show(
-                                  context: context,
-                                  title: "",
-                                  type: CoolAlertType.error,
-                                  text: "Code Error !",
-                                  confirmBtnColor: button_color,
-                                );
+                              } on FirebaseAuthException catch (error) {
+                                Navigator.of(context).pop();
+                                String Error = "";
+                                print("e ${error}");
+
+                                if (error
+                                    .toString()
+                                    .contains("does not exist")) {
+                                  CoolAlert.show(
+                                    context: context,
+                                    title: "No user correspond",
+                                    type: CoolAlertType.error,
+                                    text:
+                                        "User Not Exist! , Please Go to Sign Up Page",
+                                    confirmBtnColor: button_color,
+                                  );
+                                } else if (error.toString().contains(
+                                    "The sms verification code used to create the phone auth credential is invalid")) {
+                                  CoolAlert.show(
+                                    context: context,
+                                    title: "Wrong OTP",
+                                    type: CoolAlertType.error,
+                                    text: "Invalid verification code",
+                                    confirmBtnColor: button_color,
+                                  );
+                                  Error = "Code Error !";
+                                } else if (error.code ==
+                                    'invalid-verification-code') {
+                                  CoolAlert.show(
+                                    context: context,
+                                    title: "Wrong OTP",
+                                    type: CoolAlertType.error,
+                                    text: "Invalid verification code",
+                                    confirmBtnColor: button_color,
+                                  );
+                                  Error = "Wrong OTP entered";
+                                }
+
                                 print("ddd_222 ${error}");
 
-                                // viewContext.showToast(msg: "$error", bgColor: Colors.red);
+                                // if (e.code == 'invalid-verification-code') {
+                                //   CoolAlert.show(
+                                //     context: context,
+                                //     title: "",
+                                //     type: CoolAlertType.error,
+                                //     text: "Error",
+                                //     confirmBtnColor: button_color,
+                                //   );
+                                // }
                               }
                             },
                             child: Text('Sign Up',

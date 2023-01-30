@@ -90,7 +90,7 @@ print(userID)
 print(pivot_data)
 
 @app.route('/ratings', methods=['GET', 'POST'])
-def recommend():  # put application's code here
+def rate():  
     global response
     if(request.method == 'POST'):
         request_data = request.data
@@ -100,24 +100,51 @@ def recommend():  # put application's code here
         with open("rating_final.csv", "a") as f:
             csv.writer(f).writerow(rate)
             f.close()
-        return " "
+        return "Done"
     if(request.method == 'GET'):
-        user_index = userID - 1  # index starts at 0
-        sorted_user_ratings = pivot_data.iloc[user_index].sort_values(ascending=False)  # sort user ratings
-        sorted_user_predictions = pred_data.iloc[user_index].sort_values(ascending=False)  # sorted_user_predictions
-        temp = pd.concat([sorted_user_ratings, sorted_user_predictions], axis=1)
-        temp.index.name = 'Recommended Places'
-        temp.columns = ['user_ratings', 'user_predictions']
-        temp = temp.loc[temp.user_ratings == 0]
-        temp = temp.sort_values('user_predictions', ascending=False)
-        print('\n Below are the recommended places for user(user_id = {}):\n'.format(userID))
-        RecommendedPlaces = temp.head(num_recommendations)
-        Recommended = [RecommendedPlaces.index[0], RecommendedPlaces.index[1], RecommendedPlaces.index[2]]
+        # # value from flutter
+        print(request.headers.get('usrID'))
+        uid = request.headers.get('usrID')
+        # table with index 
+        UserIDs = pd.DataFrame(data=data_final['userID'].drop_duplicates())
+        UserIDs['user_index'] = np.arange(0, pivot_data.shape[0],1)
+        UserIDs.set_index(['user_index'], inplace = True)
+        UserIDs
+        print(UserIDs[UserIDs['userID']==uid].index.values)
 
-        print(Recommended)
-        # print(temp.head(num_recommendations))
-        return jsonify({'recommeneded': Recommended})
-        # return temp.head(num_recommendations)
+        uid = 0
+        # if user has ratings
+        if (UserIDs[UserIDs['userID']== uid].index.values != None):
+            print(" not null")
+            print(UserIDs[UserIDs['userID']=='U1067'].index.values[0]) 
+            uid = UserIDs[UserIDs['userID']==uid].index.values[0]
+            user_index = UserIDs[UserIDs['userID']==uid].index.values - 1
+            sorted_user_ratings = pivot_data.iloc[user_index].sort_values(ascending=False)  # sort user ratings
+            sorted_user_predictions = pred_data.iloc[user_index].sort_values(ascending=False)  # sorted_user_predictions
+            temp = pd.concat([sorted_user_ratings, sorted_user_predictions], axis=1)
+            temp.index.name = 'Recommended Places'
+            temp.columns = ['user_ratings', 'user_predictions']
+            temp = temp.loc[temp.user_ratings == 0]
+            temp = temp.sort_values('user_predictions', ascending=False)
+            print('\n Below are the recommended places for user(user_id = {}):\n'.format(userID))
+            RecommendedPlaces = temp.head(num_recommendations)
+            Recommended = [RecommendedPlaces.index[0], RecommendedPlaces.index[1], RecommendedPlaces.index[2]]
+            json_str = json.dumps({'recommeneded': Recommended})
+            return json_str
+
+        # if user dont have ratings
+        else:
+            # top rated resturants
+            pop_recom[['placeID','score','Rank']].head()
+            print(pop_recom['placeID'][0])
+            print(pop_recom['placeID'][1])
+            print(pop_recom['placeID'][2])
+            print("null")
+            Recommended = [pop_recom['placeID'][0],pop_recom['placeID'][1],pop_recom['placeID'][2]]
+            print("the recomended resturants is")
+            print(Recommended)
+            return json.dumps(Recommended, cls=NpEncoder)
+  
 
 userID = 120
 num_recommedations = 5
@@ -137,6 +164,18 @@ def write(new):
 
 # newData = ["U115", "RAD", 5, 5, 5]
 # write(newData)
+
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return super(NpEncoder, self).default(obj)
+
 
 if __name__ == '__main__':
     app.run()

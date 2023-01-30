@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:belly_rate/category_parts/restaurant_model.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
+import 'package:loading_btn/loading_btn.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,7 +30,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
   User? user;
   int _current = 0;
   bool isDone = false;
-
+  double? rate = 0;
   @override
   void initState() {
     // TODO: implement initState
@@ -35,6 +39,16 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
     Future.delayed(Duration.zero).then((value) async {
       getRate();
     });
+
+    print("rattte");
+    // print(widget.restaurant.rate!.rate);
+    if (widget.restaurant.rate?.rate != null) {
+      print("rattte");
+      print(widget.restaurant.rate!.rate);
+      var rateD = double.tryParse(widget.restaurant.rate!.rate.toString());
+      print(rateD);
+      rate = rateD;
+    }
 
     user = FirebaseAuth.instance.currentUser!;
   }
@@ -101,12 +115,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                           vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: _current == index
-                              ? txt_color
-                              // ? const Color.fromRGBO(255,255, 255, 0.9)
-                              : button_color
-                          // : const Color.fromRGBO(255,255, 255, 0.4)
-                          ),
+                          color: _current == index ? txt_color : button_color),
                     );
                   },
                 ).toList(), // this was the part the I had to add
@@ -115,22 +124,46 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
           ),
           Padding(
             padding: const EdgeInsets.only(
-                left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                left: 16.0, bottom: 0.0, top: 3.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${widget.restaurant.name}",
                     style: ourTextStyle(
                         txt_color: Color(0xFF5a3769), txt_size: heightM * 0.8)),
-                Text("${getBuildPriceAvg(widget.restaurant)}",
-                    style: ourTextStyle(
-                        txt_color: Colors.black, txt_size: heightM * 0.6)),
+                if (widget.restaurant.rate != null)
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 0.0, horizontal: 0.0),
+                    child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16.0, bottom: 0.0, top: 3.0, right: 16.0),
+                        child: rate == 0.5
+                            ? StarWidget5()
+                            : rate == 1.5
+                                ? StarWidget15()
+                                : rate == 2.5
+                                    ? StarWidget25()
+                                    : rate == 3.5
+                                        ? StarWidget35()
+                                        : rate == 4.5
+                                            ? StarWidget45()
+                                            : StarWidget(
+                                                activated: rate!,
+                                              )),
+                  ),
               ],
             ),
           ),
           Padding(
+              padding: const EdgeInsets.only(
+                  left: 16.0, bottom: 0.0, top: 0.0, right: 16.0),
+              child: Text("${getBuildPriceAvg(widget.restaurant)}",
+                  style: ourTextStyle(
+                      txt_color: Colors.black, txt_size: heightM * 0.6))),
+          Padding(
             padding: const EdgeInsets.only(
-                left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                left: 16.0, bottom: 3.0, top: 0.0, right: 16.0),
             child: Text("${widget.restaurant.description}",
                 maxLines: 5,
                 overflow: TextOverflow.ellipsis,
@@ -159,7 +192,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                     ),
                     Text("${widget.restaurant.phoneNumber}",
                         style: ourTextStyle(
-                            txt_color: Colors.grey, txt_size: heightM * 0.5)),
+                            txt_color: Colors.grey, txt_size: heightM * 0.55)),
                   ],
                 ),
               ),
@@ -173,9 +206,9 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                       children: [
                         InkWell(
                             onTap: () async {
-                              // MapsLauncher.launchCoordinates(
-                              //     double.parse(item.lat!),
-                              //     double.parse(item.long!));
+                              MapsLauncher.launchCoordinates(
+                                  double.parse(widget.restaurant.lat!),
+                                  double.parse(widget.restaurant.long!));
                             },
                             child: const Icon(
                               Icons.location_on_outlined,
@@ -193,30 +226,12 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                           },
                           child: Text("Open with Google Maps",
                               style: ourTextStyle(
-                                  txt_color: Color(0xFF5a3769),
-                                  txt_size: heightM * 0.5)),
+                                  txt_color: Colors.grey,
+                                  txt_size: heightM * 0.55)),
                         ),
                       ],
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(
-                  //       left: 0.0, bottom: 3.0, top: 10.0, right: 0.0),
-                  //   child: Center(
-                  //     child: InkWell(
-                  //       onTap: () async {
-                  //         MapsLauncher.launchCoordinates(
-                  //             double.parse(widget.restaurant.lat!),
-                  //             double.parse(widget.restaurant.long!));
-                  //
-                  //       },
-                  //       child: Text('Open with Google Maps',
-                  //           textAlign: TextAlign.center,
-                  //           style: ourTextStyle(
-                  //               txt_color: Colors.black, txt_size: heightM * 0.5)),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
               if (widget.restaurant.rate == null && isDone)
@@ -249,7 +264,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                               builder: (context) => Container(
                                 //change the height of the bottom sheet
                                 height:
-                                    MediaQuery.of(context).size.height * 0.22,
+                                    MediaQuery.of(context).size.height * 0.27,
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.only(
@@ -259,24 +274,38 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                 ),
                                 //content of the bottom sheet
                                 child: Column(
-                                  // mainAxisAlignment:
-                                  //     MainAxisAlignment.spaceEvenly,
                                   children: [
                                     const SizedBox(
-                                      height: 15,
+                                      height: 35,
                                     ),
-                                    SizedBox(
-                                      height: 40,
+                                    const SizedBox(
+                                      height: 30,
                                       child: Text(
-                                        "Rate & Review for ${widget.restaurant.name}",
+                                        "Give a Rate",
                                         style: TextStyle(
-                                            fontSize: 18,
+                                            fontSize: 25,
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFF5a3769)),
                                       ),
                                     ),
+                                    SizedBox(
+                                        height: 60,
+                                        child: Center(
+                                            child: Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(3, 0, 15, 0),
+                                          child: Text(
+                                            "How much do you rate ${widget.restaurant.name} restaurant? ",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                // fontWeight: FontWeight.bold,
+                                                color: Color.fromARGB(
+                                                    255, 110, 110, 110)),
+                                          ),
+                                        ))),
                                     RatingBar.builder(
-                                      minRating: 1,
+                                      minRating: 0.5,
                                       direction: Axis.horizontal,
                                       allowHalfRating: true,
                                       glowColor: Color(0xFF5a3769),
@@ -284,153 +313,176 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                       itemPadding:
                                           EdgeInsets.symmetric(horizontal: 4.0),
                                       itemBuilder: (context, _) => Icon(
-                                        Icons.star,
+                                        Icons.star_rate_rounded,
                                         color: Colors.amber,
                                       ),
                                       onRatingUpdate: (double value) {
-                                        rating = value.toString();
+                                        setState(() {
+                                          rate = value;
+                                          rating = value.toString();
+                                        });
+
                                         print(rating);
                                       },
                                     ),
                                     SizedBox(
-                                      height: 15,
+                                      height: 12,
                                     ),
-                                    Material(
-                                        elevation: 10.0,
-                                        borderRadius:
-                                            BorderRadius.circular(5.0), //12
-                                        color: Colors
-                                            .transparent, //Colors.cyan.withOpacity(0.5),
-                                        child: MaterialButton(
-                                          minWidth: 15,
-                                          color: button_color,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0)),
-                                          splashColor: button_color,
-                                          onPressed: () async {
-                                            bool isRate = await addRate(
-                                                    rate: rating.toString(),
-                                                    restID:
-                                                        widget.restaurant.id!)
-                                                .then((value) {
-                                              isDone = false;
-                                              setState(() {
-                                                // historyList.clear();
-                                              });
-                                              getRate();
-                                              return true;
-                                            });
+                                    LoadingBtn(
+                                      height: 45,
+                                      borderRadius: 8,
+                                      animate: true,
+                                      color: Color.fromARGB(255, 216, 107, 147),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.3,
+                                      loader: Container(
+                                        padding: const EdgeInsets.all(10),
+                                        width: 40,
+                                        height: 40,
+                                        child: const CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Colors.white),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        "Rate",
+                                        style: TextStyle(
+                                          // color: Color(0xFF5a3769),
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      onTap: (startLoading, stopLoading,
+                                          btnState) async {
+                                        if (btnState == ButtonState.idle) {
+                                          startLoading();
 
-                                            if (isRate) {
-                                              print("isRate");
-                                            } else {
-                                              print("No isRate");
-                                            }
-                                            showModalBottomSheet(
-                                                context: context,
-                                                isScrollControlled: true,
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                builder: (context) => Container(
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.22,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  25.0),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  25.0),
-                                                        ),
+                                          bool isRate = await addRate(
+                                                  rate: rating.toString(),
+                                                  restID: widget.restaurant.id!)
+                                              .then((value) {
+                                            isDone = false;
+                                            setState(() {
+                                              // historyList.clear();
+                                            });
+                                            getRate();
+                                            return true;
+                                          });
+
+                                          if (isRate) {
+                                            print("isRate");
+                                          } else {
+                                            print("No isRate");
+                                          }
+                                          stopLoading();
+                                          showModalBottomSheet(
+                                              context: context,
+                                              isScrollControlled: true,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              builder: (context) => Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.27,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(
+                                                                25.0),
+                                                        topRight:
+                                                            Radius.circular(
+                                                                25.0),
                                                       ),
-                                                      child: Column(
-                                                        children: [
-                                                          const SizedBox(
-                                                            height: 15,
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        const SizedBox(
+                                                          height: 28,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 50,
+                                                          child: Icon(
+                                                            Icons
+                                                                .favorite_border_outlined,
+                                                            color: Color(
+                                                                0xFF5a3769),
+                                                            size: 45,
                                                           ),
-                                                          const SizedBox(
-                                                            height: 50,
-                                                            child: Icon(
-                                                              Icons
-                                                                  .favorite_border_outlined,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 40,
+                                                          child: Text(
+                                                            "Thanks for your rating!",
+                                                            style: TextStyle(
                                                               color: Color(
                                                                   0xFF5a3769),
-                                                              size: 30,
+                                                              fontSize: 25,
                                                             ),
                                                           ),
-                                                          const SizedBox(
-                                                            height: 50,
-                                                            child: Text(
-                                                              "Thanks for your rating!",
-                                                              style: TextStyle(
-                                                                color: Color(
-                                                                    0xFF5a3769),
-                                                                fontSize: 25,
-                                                              ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 22,
+                                                          child: Text(
+                                                            "Your opinion matters to us",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                              fontSize: 20,
                                                             ),
                                                           ),
-                                                          const SizedBox(
-                                                            height: 20,
-                                                            child: Text(
-                                                              "Your opinion matters to us",
-                                                              style: TextStyle(
-                                                                color:
-                                                                    Colors.grey,
-                                                                fontSize: 15,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Material(
-                                                              elevation: 10.0,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5.0), //12
-                                                              color: Colors
-                                                                  .transparent,
-                                                              child:
-                                                                  MaterialButton(
-                                                                      minWidth:
-                                                                          15,
-                                                                      color:
-                                                                          button_color,
-                                                                      shape: RoundedRectangleBorder(
-                                                                          borderRadius: BorderRadius.circular(
-                                                                              5.0)),
-                                                                      splashColor:
-                                                                          button_color,
-                                                                      onPressed:
-                                                                          () async {
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      },
-                                                                      child: Text(
-                                                                          'Sure!',
-                                                                          textAlign: TextAlign
-                                                                              .center,
-                                                                          style: ourTextStyle(
-                                                                              txt_color: Colors.white,
-                                                                              txt_size: heightM * 0.6)))),
-                                                        ],
-                                                      ),
-                                                    ));
-                                          },
-                                          child: Text('Submit',
-                                              textAlign: TextAlign.center,
-                                              style: ourTextStyle(
-                                                  txt_color: Colors.white,
-                                                  txt_size: heightM * 0.6)),
-                                        )),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 15,
+                                                        ),
+                                                        Material(
+                                                            elevation: 10.0,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5.0), //12
+                                                            color: Colors
+                                                                .transparent,
+                                                            child:
+                                                                MaterialButton(
+                                                                    minWidth:
+                                                                        15,
+                                                                    color:
+                                                                        button_color,
+                                                                    shape: RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                5.0)),
+                                                                    splashColor:
+                                                                        button_color,
+                                                                    onPressed:
+                                                                        () async {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: Text(
+                                                                        'Sure!',
+                                                                        textAlign:
+                                                                            TextAlign
+                                                                                .center,
+                                                                        style: ourTextStyle(
+                                                                            txt_color:
+                                                                                Colors.white,
+                                                                            txt_size: heightM * 0.6)))),
+                                                      ],
+                                                    ),
+                                                  ));
+                                        }
+                                      },
+                                    ),
                                   ],
                                 ),
                               ),
@@ -490,6 +542,13 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
           .collection("rating")
           .doc(value.id)
           .update({"rateID": value.id});
+
+      final uri =
+          Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
+      final response = await post(uri,
+          body: json.encode({
+            'rating': [user?.uid, restID, rate, rate, rate]
+          }));
       return true;
     }).catchError((error) {
       print(error);
@@ -517,5 +576,178 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
       fontWeight: FontWeight.bold,
       fontSize: txt_size,
     );
+  }
+}
+
+class StarWidget extends StatelessWidget {
+  final int total;
+  final double activated;
+
+  const StarWidget({Key? key, this.total = 5, required this.activated})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: List.generate(total, (index) {
+        var filled = index < activated;
+        return Icon(
+          filled ? Icons.star : Icons.star_border,
+          color: Color.fromARGB(255, 216, 107, 147),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class StarWidget5 extends StatelessWidget {
+  const StarWidget5({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      Icon(
+        Icons.star_half_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_outline_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_outline_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_outline_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_outline_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+    ]);
+  }
+}
+
+class StarWidget15 extends StatelessWidget {
+  const StarWidget15({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      Icon(
+        Icons.star_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_half_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_outline_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_outline_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_outline_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+    ]);
+  }
+}
+
+class StarWidget25 extends StatelessWidget {
+  const StarWidget25({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      Icon(
+        Icons.star_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_half_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_outline_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_outline_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+    ]);
+  }
+}
+
+class StarWidget35 extends StatelessWidget {
+  const StarWidget35({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      Icon(
+        Icons.star_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_half_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_outline_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+    ]);
+  }
+}
+
+class StarWidget45 extends StatelessWidget {
+  const StarWidget45({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      Icon(
+        Icons.star_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+      Icon(
+        Icons.star_half_rounded,
+        color: Color.fromARGB(255, 216, 107, 147),
+      ),
+    ]);
   }
 }

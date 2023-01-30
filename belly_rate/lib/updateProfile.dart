@@ -25,9 +25,9 @@ class UpdateProfile extends StatefulWidget {
 }
 
 class _UpdateProfile extends State<UpdateProfile> {
-  // User? user;
   TextEditingController phone = TextEditingController();
   TextEditingController first_name = TextEditingController();
+  bool flag = false;
   File? image;
   @override
   void initState() {
@@ -45,6 +45,28 @@ class _UpdateProfile extends State<UpdateProfile> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        leading: BackButton(
+          onPressed: () {
+            if (flag)
+              CoolAlert.show(
+                  context: context,
+                  type: CoolAlertType.confirm,
+                  text: 'Are you sure you want to discard your changes?',
+                  confirmBtnText: 'Yes',
+                  cancelBtnText: 'Cancel',
+                  title: "Discard changes",
+                  onCancelBtnTap: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  onConfirmBtnTap: () async {
+                    Navigator.of(context).pop(true);
+                    Navigator.of(context).pop(true);
+                  });
+            else
+              Navigator.of(context).pop(true);
+          },
+          color: Color(0xFF5a3769),
+        ),
         backgroundColor: Colors.white,
         elevation: 0.0,
         centerTitle: true,
@@ -66,25 +88,11 @@ class _UpdateProfile extends State<UpdateProfile> {
             SizedBox(
               height: 40,
             ),
-            // ClipRRect(
-            //   borderRadius: BorderRadius.circular(100.0),
-            //   child: Image.network(
-            //     "${widget.ourUser?.picture}",
-            //     height: 150.0,
-            //     width: 150.0,
-            //     // errorBuilder: ,
-            //   ),
-            // ),
-
-            ///
             Container(
               padding: EdgeInsets.all(10.0),
               width: MediaQuery.of(context).size.width / 2.29,
               height: MediaQuery.of(context).size.width / 2.29,
               decoration: BoxDecoration(
-                // border: Border.all(
-                //     color: Colors.white,
-                //     width: 1.0),
                 shape: BoxShape.circle,
                 color: Colors.white,
               ),
@@ -140,16 +148,6 @@ class _UpdateProfile extends State<UpdateProfile> {
                     ],
                   )),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only( left: 8.0 , right:  8.0 , top:  8.0),
-            //   child: Text("${widget.ourUser?.name}" , style: getMyTextStyle(txt_color: txt_color ,fontSize: heightM * 0.75 ),),
-            // ),
-            ///
-//             Padding(
-//               padding: const EdgeInsets.only( left: 8.0 , right:  8.0),
-//               child: Text("${widget.ourUser?.phone_number}" , style: getMyTextStyle(txt_color: Colors.grey , fontSize: heightM * 0.6),),
-//             ),
-
             Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
               child: Container(
@@ -174,6 +172,9 @@ class _UpdateProfile extends State<UpdateProfile> {
                   TextFormField(
                     keyboardType: TextInputType.text,
                     onChanged: (value) {
+                      setState(() {
+                        flag = true;
+                      });
                       // formKey.currentState?.validate();
                       print(first_name.text);
                     },
@@ -210,7 +211,6 @@ class _UpdateProfile extends State<UpdateProfile> {
                 ]),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
               child: Container(
@@ -253,7 +253,6 @@ class _UpdateProfile extends State<UpdateProfile> {
                 ]),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12),
               child: Center(
@@ -279,8 +278,7 @@ class _UpdateProfile extends State<UpdateProfile> {
                             text:
                                 'Are you sure you want to update your profile?',
                             confirmBtnText: 'Yes',
-                            cancelBtnText: 'Cacel',
-                            confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
+                            cancelBtnText: 'Cancel',
                             title: "Update Profile",
                             onCancelBtnTap: () {
                               Navigator.of(context).pop(true);
