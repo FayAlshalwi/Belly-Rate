@@ -170,7 +170,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                                   ),
                                   Text(
                                       item.rateAVGNum != "0"
-                                          ? "${item.rateAVG ?? " - "} / 5. rated by: ${item.rateAVGNum} users"
+                                          ? item.rateAVG != null && item.rateAVGNum != null ?  "${item.rateAVG ?? " - "} / 5. rated by: ${item.rateAVGNum?? " - "} users" : " "
                                           : "No Rating Yet",
                                       style: ourTextStyle(
                                           txt_color: Colors.grey,
@@ -190,10 +190,10 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                                         color: Color(0xFF5a3769),
                                         size: 30,
                                       )),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 5,
                                   ),
-                                  Text("${item.far ?? ""} KM",
+                                  Text(item.far != null ? "${item.far ?? ""} KM" : "",
                                       style: ourTextStyle(
                                           txt_color: Colors.grey,
                                           txt_size: heightM * 0.5)),
@@ -417,7 +417,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
       rateValues.forEach((element) {
         if (element.restId.toString() ==
             widget.restaurant_list[i].id.toString()) {
-          values.add(double.parse(element.rate!));
+          values.add(double.tryParse(element.rate!)?? 0.0);
         }
       });
       // double average = values.sum() / values.length;

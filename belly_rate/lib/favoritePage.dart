@@ -39,7 +39,7 @@ class Favorite extends StatefulWidget {
 class _Favorite extends State<Favorite> {
   User? user;
   List<Restaurant> FavoriteList = [];
-
+  bool isWrong = false ;
   @override
   void initState() {
     // TODO: implement initState
@@ -89,7 +89,15 @@ class _Favorite extends State<Favorite> {
           ),
         ),
       ),
-      body: ListView.builder(
+      body: getBody(heightM)
+      ,
+    );
+  }
+
+  Widget getBody(double heightM) {
+    // return FavoriteList.length != 0 && !isWrong ?
+    if(FavoriteList.length != 0){
+      return  ListView.builder(
         itemCount: FavoriteList.length,
         itemBuilder: (BuildContext context, int index) {
           Restaurant item = FavoriteList[index];
@@ -111,16 +119,16 @@ class _Favorite extends State<Favorite> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => RestaurantDetails(
-                                    category_name: item.category!,
-                                    restaurant: item,
-                                  )),
+                                category_name: item.category!,
+                                restaurant: item,
+                              )),
                         );
                       },
                       child: Row(
                         children: [
                           ClipRRect(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
+                            BorderRadius.all(Radius.circular(10.0)),
                             child: Image.network("${item.photos?.first}",
                                 height: heightM * 2.5,
                                 width: heightM * 2.5,
@@ -141,7 +149,7 @@ class _Favorite extends State<Favorite> {
                                         txt_size: heightM * 0.6)),
                                 SizedBox(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.5,
+                                  MediaQuery.of(context).size.width * 0.5,
                                   child: Text("${item.description}",
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
@@ -208,7 +216,7 @@ class _Favorite extends State<Favorite> {
                                   glowColor: Color(0xFF5a3769),
                                   itemCount: 5,
                                   itemPadding:
-                                      EdgeInsets.symmetric(horizontal: 4.0),
+                                  EdgeInsets.symmetric(horizontal: 4.0),
                                   itemBuilder: (context, _) => Icon(
                                     Icons.star,
                                     color: Colors.amber,
@@ -230,7 +238,7 @@ class _Favorite extends State<Favorite> {
                         padding: EdgeInsets.only(
                             left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
                         child:
-                            Icon(Icons.star_border, color: Colors.pinkAccent),
+                        Icon(Icons.star_border, color: Colors.pinkAccent),
                       ),
                     ),
 
@@ -245,8 +253,17 @@ class _Favorite extends State<Favorite> {
             ),
           );
         },
-      ),
-    );
+      );
+    } else if(FavoriteList.length == 0 && isWrong){
+      return   Center(child: Text("No favorite restaurant" , style: TextStyle(
+        fontSize: 22,
+        color: const Color(0xFF5a3769),
+        fontWeight: FontWeight.bold,
+      )));
+    } else{
+      return Center(child: CircularProgressIndicator(color: Color(0xFF5a3769),));
+    }
+
   }
 
   Future<bool> addRate({required String rate, required String restID}) async {
@@ -306,72 +323,69 @@ class _Favorite extends State<Favorite> {
         final rate = Rate.fromJson(item.data()) as Rate;
         rates.add(rate);
         // print(item.data());
-
       }
+
+
+
+
+
       print("-----");
       rates.sort((a, b) => a.rate!.compareTo(b.rate!));
       rates = rates.reversed.toList();
       rates.forEach((element) {
         print(element.toJson());
       });
-      addResttoList(rates, FavoriteListBase);
 
+      rates.removeWhere((element) => double.parse(element.rate!) <= 3);
+      addResttoList(rates, FavoriteListBase);
+      isWrong = false ;
       setState(() {});
-    } else {
-      print('no getFavorite!');
     }
+    else {
+      print('no getFavorite!');
+      isWrong = true ;
+      setState(() {});
+    }
+
   }
 
   void addResttoList(List<Rate> rates, List<Restaurant> FavoriteListBase) {
+
+
     if (rates.length >= 5) {
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[0].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[0].restId.toString()));
       FavoriteList.last.rate = rates[0];
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[1].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[1].restId.toString()));
       FavoriteList.last.rate = rates[1];
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[2].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[2].restId.toString()));
       FavoriteList.last.rate = rates[2];
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[3].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[3].restId.toString()));
       FavoriteList.last.rate = rates[3];
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[4].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[4].restId.toString()));
       FavoriteList.last.rate = rates[4];
     } else if (rates.length == 4) {
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[0].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[0].restId.toString()));
       FavoriteList.last.rate = rates[0];
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[1].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[1].restId.toString()));
       FavoriteList.last.rate = rates[1];
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[2].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[2].restId.toString()));
       FavoriteList.last.rate = rates[2];
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[3].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[3].restId.toString()));
       FavoriteList.last.rate = rates[3];
     } else if (rates.length == 3) {
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[0].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[0].restId.toString()));
       FavoriteList.last.rate = rates[0];
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[1].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[1].restId.toString()));
       FavoriteList.last.rate = rates[1];
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[2].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[2].restId.toString()));
       FavoriteList.last.rate = rates[2];
     } else if (rates.length == 2) {
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[0].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[0].restId.toString()));
       FavoriteList.last.rate = rates[0];
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[1].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[1].restId.toString()));
       FavoriteList.last.rate = rates[1];
     } else if (rates.length == 1) {
-      FavoriteList.add(FavoriteListBase.firstWhere(
-          (element) => element.id.toString() == rates[0].restId.toString()));
+      FavoriteList.add(FavoriteListBase.firstWhere((element) => element.id.toString() == rates[0].restId.toString()));
       FavoriteList.last.rate = rates[0];
     }
   }
