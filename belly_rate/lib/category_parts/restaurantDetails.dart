@@ -260,7 +260,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                           splashColor: button_color,
                           onPressed: () async {
                             print("qqq");
-                            String rating = "";
+                            String rating = "0";
 
                             showModalBottomSheet<dynamic>(
                               context: context,
@@ -297,18 +297,24 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                         height: 60,
                                         child: Center(
                                             child: Container(
-                                          margin:
-                                              EdgeInsets.fromLTRB(3, 0, 15, 0),
-                                          child: Text(
-                                            "How much do you rate ${widget.restaurant.name} restaurant? ",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                // fontWeight: FontWeight.bold,
-                                                color: Color.fromARGB(
-                                                    255, 110, 110, 110)),
-                                          ),
-                                        ))),
+                                                margin: EdgeInsets.fromLTRB(
+                                                    3, 0, 15, 0),
+                                                child: Align(
+                                                  child: Text(
+                                                    "How much do you rate ${widget.restaurant.name} restaurant?",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+
+                                                        // fontWeight: FontWeight.bold,
+                                                        color: Color.fromARGB(
+                                                            255,
+                                                            110,
+                                                            110,
+                                                            110)),
+                                                  ),
+                                                  alignment: Alignment.center,
+                                                )))),
                                     RatingBar.builder(
                                       minRating: 0.5,
                                       direction: Axis.horizontal,
@@ -375,8 +381,12 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                           });
 
                                           if (isRate) {
+                                            stopLoading();
+
                                             print("isRate");
                                           } else {
+                                            stopLoading();
+
                                             print("No isRate");
                                           }
                                           stopLoading();

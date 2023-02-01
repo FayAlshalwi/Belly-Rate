@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:loading_btn/loading_btn.dart';
 import 'dart:convert';
 import 'category_parts/restaurant_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -30,6 +31,7 @@ class history extends StatefulWidget {
 class _history extends State<history> {
   User? user;
   List<HistoryRestaurant> historyList = [];
+  double? rate = 0;
 
   @override
   void initState() {
@@ -191,7 +193,7 @@ class _history extends State<history> {
                           MaterialButton(
                             onPressed: () {
                               print("qqq");
-                              String rating = "";
+                              String rating = "0";
 
                               showModalBottomSheet<dynamic>(
                                 context: context,
@@ -199,7 +201,7 @@ class _history extends State<history> {
                                 backgroundColor: Colors.transparent,
                                 builder: (context) => Container(
                                   height:
-                                      MediaQuery.of(context).size.height * 0.22,
+                                      MediaQuery.of(context).size.height * 0.27,
                                   decoration: const BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.only(
@@ -213,22 +215,44 @@ class _history extends State<history> {
                                         height: 15,
                                       ),
                                       const SizedBox(
-                                        height: 50,
+                                        height: 30,
                                         child: Text(
-                                          "Rate & Review",
+                                          "Give a Rate",
                                           style: TextStyle(
                                               fontSize: 25,
                                               fontWeight: FontWeight.bold,
                                               color: Color(0xFF5a3769)),
                                         ),
                                       ),
+                                      SizedBox(
+                                          height: 60,
+                                          child: Center(
+                                              child: Container(
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      3, 0, 15, 0),
+                                                  child: Align(
+                                                    child: Text(
+                                                      "How much do you rate ${item.restaurant!.name} restaurant?",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+
+                                                          // fontWeight: FontWeight.bold,
+                                                          color: Color.fromARGB(
+                                                              255,
+                                                              110,
+                                                              110,
+                                                              110)),
+                                                    ),
+                                                    alignment: Alignment.center,
+                                                  )))),
                                       ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(200.0),
                                           child: Container(
                                             child: RatingBar.builder(
-                                              minRating: 1,
-
+                                              minRating: 0.5,
                                               direction: Axis.horizontal,
                                               allowHalfRating: true,
                                               glowColor: Color(0xFF5a3769),
@@ -239,39 +263,52 @@ class _history extends State<history> {
                                               itemBuilder: (context, _) {
                                                 return ClipRRect(
                                                     child: Icon(
-                                                  Icons.star,
+                                                  Icons.star_rate_rounded,
                                                   color: Colors.amber,
                                                 ));
                                               },
 
                                               onRatingUpdate: (double value) {
+                                                rate = value;
                                                 rating = value.toString();
-                                                print(rating);
                                               },
                                             ),
                                           )),
                                       SizedBox(
-                                        height: 15,
+                                        height: 12,
                                       ),
-                                      Material(
-                                          elevation: 10.0,
-                                          borderRadius:
-                                              BorderRadius.circular(5.0), //12
-                                          color: Colors
-                                              .transparent, //Colors.cyan.withOpacity(0.5),
-                                          child: MaterialButton(
-                                            minWidth: 15,
-                                            color: button_color,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(5.0)),
-                                            splashColor: button_color,
-                                            onPressed: () async {
-                                              CoolAlert.show(
-                                                context: context,
-                                                type: CoolAlertType.loading,
-                                                text: "Loading",
-                                              );
+                                      LoadingBtn(
+                                          height: 45,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.3,
+                                          borderRadius: 8,
+                                          animate: true,
+                                          color: Color.fromARGB(
+                                              255, 216, 107, 147),
+                                          loader: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            width: 40,
+                                            height: 40,
+                                            child:
+                                                const CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      Colors.white),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            "Rate",
+                                            style: TextStyle(
+                                              // color: Color(0xFF5a3769),
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                          onTap: (startLoading, stopLoading,
+                                              btnState) async {
+                                            if (btnState == ButtonState.idle) {
+                                              startLoading();
 
                                               bool isRate = await addRate(
                                                       rate: rating.toString(),
@@ -286,34 +323,108 @@ class _history extends State<history> {
                                               });
 
                                               if (isRate) {
+                                                stopLoading();
+                                                showModalBottomSheet(
+                                                    context: context,
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    builder:
+                                                        (context) => Container(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.27,
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                color: Colors
+                                                                    .white,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          25.0),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          25.0),
+                                                                ),
+                                                              ),
+                                                              child: Column(
+                                                                children: [
+                                                                  const SizedBox(
+                                                                    height: 28,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 50,
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .favorite_border_outlined,
+                                                                      color: Color(
+                                                                          0xFF5a3769),
+                                                                      size: 45,
+                                                                    ),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 40,
+                                                                    child: Text(
+                                                                      "Thanks for your rating!",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Color(
+                                                                            0xFF5a3769),
+                                                                        fontSize:
+                                                                            25,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 22,
+                                                                    child: Text(
+                                                                      "Your opinion matters to us",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        fontSize:
+                                                                            20,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 15,
+                                                                  ),
+                                                                  Material(
+                                                                      elevation:
+                                                                          10.0,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              5.0), //12
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                      child: MaterialButton(
+                                                                          minWidth: 15,
+                                                                          color: button_color,
+                                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                                                                          splashColor: button_color,
+                                                                          onPressed: () async {
+                                                                            Navigator.of(context).pop();
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                          child: Text('Sure!', textAlign: TextAlign.center, style: ourTextStyle(txt_color: Colors.white, txt_size: heightM * 0.6)))),
+                                                                ],
+                                                              ),
+                                                            ));
                                                 print("isRate");
-                                                CoolAlert.show(
-                                                  title: "Success",
-                                                  context: context,
-                                                  type: CoolAlertType.success,
-                                                  text:
-                                                      "Rate added successfully!",
-                                                  confirmBtnColor:
-                                                      Color.fromARGB(
-                                                          255, 216, 107, 147),
-                                                  onConfirmBtnTap: () {
-                                                    Navigator.of(context).pop();
-                                                    Navigator.of(context).pop();
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                );
                                               } else {
+                                                stopLoading();
+
                                                 print("No isRate");
-                                                Navigator.of(context).pop();
                                               }
-                                              // Navigator.of(context).pop();
-                                            },
-                                            child: Text('Submit',
-                                                textAlign: TextAlign.center,
-                                                style: ourTextStyle(
-                                                    txt_color: Colors.white,
-                                                    txt_size: heightM * 0.6)),
-                                          )),
+                                              stopLoading();
+                                            }
+                                          }),
                                     ],
                                   ),
                                 ),
