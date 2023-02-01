@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:belly_rate/auth/our_user_model.dart';
+import 'package:belly_rate/category_parts/restaurantDetails.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -124,8 +125,14 @@ class _history extends State<history> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              buildShowRestaurantDetails(context,
-                                  item.restaurant!, heightM, txt_color);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => RestaurantDetails(
+                                          category_name:
+                                              item.restaurant!.category!,
+                                          restaurant: item.restaurant!,
+                                        )),
+                              );
                             },
                             child: Row(
                               children: [
@@ -372,133 +379,6 @@ class _history extends State<history> {
                 );
               },
             ),
-    );
-  }
-
-  Future<dynamic> buildShowRestaurantDetails(
-      BuildContext context, Restaurant item, double heightM, txt_color) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15.0),
-              topRight: Radius.circular(15.0),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).size.height * 0.15,
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(15.0),
-                      topRight: Radius.circular(15.0),
-                    ),
-                    child: CarouselSlider(
-                      options: CarouselOptions(height: heightM * 5.0),
-                      items: item.photos?.map((i) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return Container(
-                                width: MediaQuery.of(context).size.width,
-                                margin: EdgeInsets.symmetric(horizontal: 5.0),
-                                decoration: BoxDecoration(
-                                    color: txt_color.withOpacity(0.5)),
-                                child: CachedNetworkImage(
-                                    imageUrl: "${i}",
-                                    // child: Image.network("${i}",
-                                    height: heightM * 5,
-                                    width: heightM * 15,
-                                    fit: BoxFit.fill));
-                          },
-                        );
-                      }).toList(),
-                    )),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("${item.name}",
-                        style: ourTextStyle(
-                            txt_color: Color(0xFF5a3769),
-                            txt_size: heightM * 0.7)),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                child: Text("${item.description}",
-                    style: ourTextStyle(
-                        txt_color: Colors.grey, txt_size: heightM * 0.5)),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 16.0, bottom: 8.0, top: 3.0, right: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        InkWell(
-                            onTap: () {
-                              // item.phoneNumber == "No phone number"
-                              //     ? print("no phone")
-                              //     : launchPhoneDialer(item.phoneNumber!);
-                            },
-                            child: Icon(
-                              Icons.call,
-                              color: Color(0xFF5a3769),
-                            )),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text("${item.phoneNumber}",
-                            style: ourTextStyle(
-                                txt_color: Colors.grey,
-                                txt_size: heightM * 0.5)),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        InkWell(
-                            onTap: () async {},
-                            child: const Icon(
-                              Icons.location_on_outlined,
-                              color: Color(0xFF5a3769),
-                              size: 30,
-                            )),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text("${item.far} KM",
-                            style: ourTextStyle(
-                                txt_color: Colors.grey,
-                                txt_size: heightM * 0.5)),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            MaterialButton(
-              child: Text("Close"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
