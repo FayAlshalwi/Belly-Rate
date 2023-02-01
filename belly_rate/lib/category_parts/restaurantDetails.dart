@@ -159,9 +159,11 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
               padding: const EdgeInsets.only(
                   left: 16.0, bottom: 0.0, top: 0.0, right: 16.0),
               child: Text(
-                  "${getBuildPriceAvg(widget.restaurant)}" == '\$\$'
-                      ? " \$\$\$-\$\$"
-                      : "b",
+                  "${getBuildPriceAvg(widget.restaurant)}"
+                  // == '\$\$'
+                  //     ? " \$\$\$-\$\$"
+                  //     : "b"
+                  ,
                   style: ourTextStyle(
                       txt_color: Colors.black, txt_size: heightM * 0.6))),
           Padding(
