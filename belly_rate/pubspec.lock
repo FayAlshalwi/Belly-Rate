@@ -43,6 +43,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.6+12"
+  awesome_snackbar_content:
+    dependency: "direct main"
+    description:
+      name: awesome_snackbar_content
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -541,6 +548,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  loading_animation_widget:
+    dependency: "direct main"
+    description:
+      name: loading_animation_widget
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.0+4"
+  loading_btn:
+    dependency: "direct main"
+    description:
+      name: loading_btn
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   location:
     dependency: "direct main"
     description:

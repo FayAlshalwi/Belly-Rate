@@ -118,7 +118,6 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                             ],
                           ),
                         ),
-
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 16.0, bottom: 8.0, top: 3.0, right: 16.0),
@@ -140,9 +139,19 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                                   SizedBox(
                                     width: 5,
                                   ),
+                                  // Text(
+                                  //     item.rateAVGNum != "0"
+                                  //         ? "${item.rateAVG ?? " - "} / 5 (${item.rateAVGNum})"
+                                  //         : "No Rating Yet",
+                                  //     style: ourTextStyle(
+                                  //         txt_color: Colors.grey,
+                                  //         txt_size: heightM * 0.5)),
                                   Text(
                                       item.rateAVGNum != "0"
-                                          ? "${item.rateAVG ?? " - "} / 5 (${item.rateAVGNum})"
+                                          ? item.rateAVG != null &&
+                                                  item.rateAVGNum != null
+                                              ? "${item.rateAVG ?? " - "} / 5 (${item.rateAVGNum ?? " - "})"
+                                              : " "
                                           : "No Rating Yet",
                                       style: ourTextStyle(
                                           txt_color: Colors.grey,
@@ -165,7 +174,10 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  Text("${item.far ?? ""} KM",
+                                  Text(
+                                      item.far != null
+                                          ? "${item.far ?? ""} KM"
+                                          : "",
                                       style: ourTextStyle(
                                           txt_color: Colors.grey,
                                           txt_size: heightM * 0.5)),
@@ -174,164 +186,6 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                             ],
                           ),
                         ),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(
-                        //       left: 10.0, bottom: 6.0, top: 1.0, right: 10.0),
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.center,
-                        //     children: [
-                        //       Row(
-                        //         mainAxisAlignment: MainAxisAlignment.center,
-                        //         children: [
-                        //           TextButton(
-                        //             style: TextButton.styleFrom(
-                        //               textStyle: const TextStyle(fontSize: 15),
-                        //             ),
-                        //             onPressed: () {
-                        //               showModalBottomSheet<dynamic>(
-                        //                 context: context,
-                        //                 isScrollControlled: true,
-                        //                 backgroundColor: Colors.transparent,
-                        //                 builder: (context) => Container(
-                        //                   //change the height of the bottom sheet
-                        //                   height:
-                        //                       MediaQuery.of(context).size.height *
-                        //                           0.22,
-                        //                   decoration: new BoxDecoration(
-                        //                     color: Colors.white,
-                        //                     borderRadius: new BorderRadius.only(
-                        //                       topLeft: const Radius.circular(25.0),
-                        //                       topRight: const Radius.circular(25.0),
-                        //                     ),
-                        //                   ),
-                        //                   //content of the bottom sheet
-                        //                   child: Column(
-                        //                     // mainAxisAlignment:
-                        //                     //     MainAxisAlignment.spaceEvenly,
-                        //                     children: [
-                        //                       SizedBox(
-                        //                         height: 15,
-                        //                       ),
-                        //                       Container(
-                        //                         height: 50,
-                        //                         child: Text(
-                        //                           "Rate & Review",
-                        //                           style: TextStyle(
-                        //                               fontSize: 25,
-                        //                               fontWeight: FontWeight.bold,
-                        //                               color: Color(0xFF5a3769)),
-                        //                         ),
-                        //                       ),
-                        //                       Container(
-                        //                         child: RatingBar.builder(
-                        //                           minRating: 1,
-                        //                           direction: Axis.horizontal,
-                        //                           allowHalfRating: true,
-                        //                           itemCount: 5,
-                        //                           itemPadding: EdgeInsets.symmetric(
-                        //                               horizontal: 4.0),
-                        //                           itemBuilder: (context, _) => Icon(
-                        //                             Icons.star,
-                        //                             color: Colors.amber,
-                        //                           ),
-                        //                           onRatingUpdate: (double value) {
-                        //                             rating = value;
-                        //                             print(rating);
-                        //                           },
-                        //                         ),
-                        //                       ),
-                        //                       SizedBox(
-                        //                         height: 15,
-                        //                       ),
-                        //                       Material(
-                        //                           elevation: 10.0,
-                        //                           borderRadius:
-                        //                               BorderRadius.circular(
-                        //                                   5.0), //12
-                        //                           color: Colors
-                        //                               .transparent, //Colors.cyan.withOpacity(0.5),
-                        //                           child: MaterialButton(
-                        //                             minWidth: 15,
-                        //                             color: button_color,
-                        //                             shape: RoundedRectangleBorder(
-                        //                                 borderRadius:
-                        //                                     BorderRadius.circular(
-                        //                                         5.0)),
-                        //                             splashColor: button_color,
-                        //                             onPressed: () async {
-                        //                               // Navigator.pop(context);
-                        //                               // CoolAlert.show(
-                        //                               //   context: context,
-                        //                               //   type: CoolAlertType.confirm,
-                        //                               //   text:
-                        //                               //       'Do you want to submit this rate',
-                        //                               //   confirmBtnText: 'Yes',
-                        //                               //   cancelBtnText: 'No',
-                        //                               //   confirmBtnColor:
-                        //                               //       Color(0xFF5a3769),
-                        //                               //   onConfirmBtnTap: () {
-                        //                               //     Navigator.pop(context);
-                        //                               //     Navigator.pop(context);
-                        //                               //     Navigator.pop(context);
-                        //
-                        //                               //     //save the rate (backend)
-                        //                               //   },
-                        //                               // );
-                        //                             },
-                        //                             child: Text('Submit',
-                        //                                 textAlign: TextAlign.center,
-                        //                                 style: getMyTextStyle(
-                        //                                     txt_color: Colors.white,
-                        //                                     fontSize:
-                        //                                         heightM * 0.6)),
-                        //                           )
-                        //                           // Container(
-                        //                           //   child: TextButton(
-                        //                           //       child: Text("Submit",
-                        //                           //           style: TextStyle(
-                        //                           //               color:
-                        //                           //                   Color(0xFF5a3769),
-                        //                           //               fontSize: 15,
-                        //                           //               fontWeight:
-                        //                           //                   FontWeight.bold)),
-                        //                           //       onPressed: () {
-                        //                           //         Navigator.pop(context);
-                        //                           //         CoolAlert.show(
-                        //                           //           context: context,
-                        //                           //           type: CoolAlertType.confirm,
-                        //                           //           text:
-                        //                           //               'Do you want to submit this rate',
-                        //                           //           confirmBtnText: 'Yes',
-                        //                           //           cancelBtnText: 'No',
-                        //                           //           confirmBtnColor:
-                        //                           //               Color(0xFF5a3769),
-                        //                           //           onConfirmBtnTap: () => {
-                        //                           //             //save the rate (backend)
-                        //                           //           },
-                        //                           //         );
-                        //                           //       },
-                        //                           //       style: TextButton.styleFrom(
-                        //                           //         textStyle: const TextStyle(
-                        //                           //           fontSize: 15,
-                        //                           //         ),
-                        //                           //       )),
-                        //                           ),
-                        //                     ],
-                        //                   ),
-                        //                 ),
-                        //               );
-                        //             },
-                        //             child: Icon(
-                        //               Icons.rate_review_outlined,
-                        //               color: Color(0xFF5a3769),
-                        //               size: 25,
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -389,7 +243,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
       rateValues.forEach((element) {
         if (element.restId.toString() ==
             widget.restaurant_list[i].id.toString()) {
-          values.add(double.parse(element.rate!));
+          values.add(double.tryParse(element.rate!) ?? 0.0);
         }
       });
       // double average = values.sum() / values.length;
