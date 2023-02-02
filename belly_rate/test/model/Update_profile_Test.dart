@@ -13,7 +13,6 @@ void main() {
     test("null name", () {
 
      //setup
-     UpdateProfile updateProfile = UpdateProfile(); 
      String name = "";
      //do
     String actual =  UpdateName(name);
@@ -25,13 +24,11 @@ void main() {
      test("Name less than 3 characters", () {
 
      //setup
-     UpdateProfile updateProfile = UpdateProfile(); 
      String name = "da";
      //do
     String actual =  UpdateName(name);
     //test
     expect(actual, "Please enter at least 3 characters");
-
     });
 
     test("name with number", () {
@@ -42,32 +39,53 @@ void main() {
      //do
     String actual =  UpdateName(name);
     //test
-    expect(actual, "You cannot enter special characters !@#\%^&*()");
-
+    expect(actual, "You cannot enter number and special characters !@#\%^&*()");
     });
 
     test("name with special characters", () {
 
      //setup
-     UpdateProfile updateProfile = UpdateProfile(); 
      String name = "6@7Dalal";
      //do
     String actual =  UpdateName(name);
     //test
     expect(actual, "You cannot enter special characters !@#\%^&*()");
-
     });
 
     test("Valid name", () {
 
      //setup
-     UpdateProfile updateProfile = UpdateProfile(); 
      String name = "Dalal";
      //do
     String actual =  UpdateName(name);
     //test
-    expect(actual, "Success");
+    expect(actual, "Profile updated successfully!");
     });
+
+    test("Valid photo", () {
+
+     //setup
+     String img = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" ;
+     //do
+    String actual =  updatephoto(img);
+    //test
+    expect(actual, "Profile updated successfully!");
+    });
+
+    test("Valid photo and name", () {
+
+     //setup
+     String img = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" ;
+     String name = "Dalal";
+     //do
+    String actual =  updatephoto(img );
+    String actualname =  UpdateName(name);
+    //test
+    expect(actual, "Profile updated successfully!");
+    expect(actualname, "Profile updated successfully!");
+    });
+
+
   });
   
 }

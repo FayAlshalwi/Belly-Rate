@@ -434,10 +434,15 @@ void ContentOfNotification(String RestaurantId) async {
          return 'Please enter your name';}
   //case 2 
              else if (!regExp.hasMatch(name.trim())) {
-                        return 'You cannot enter special characters !@#\%^&*()';}
+                        return 'You cannot enter number and special characters !@#\%^&*()';}
    //case 3                     
                     else if (name.length <= 2) {
                         return "Please enter at least 3 characters";
                       }
 
-return "Success";}
+return "Profile updated successfully!";}
+
+String updatephoto(String photo ){
+
+  return "Profile updated successfully!";
+}
