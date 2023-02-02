@@ -45,11 +45,11 @@ void main() {
     test("name with special characters", () {
 
      //setup
-     String name = "6@7Dalal";
+     String name = "@Dalal";
      //do
     String actual =  UpdateName(name);
     //test
-    expect(actual, "You cannot enter special characters !@#\%^&*()");
+    expect(actual, "You cannot enter number and special characters !@#\%^&*()");
     });
 
     test("Valid name", () {
