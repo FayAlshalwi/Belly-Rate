@@ -59,6 +59,7 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   awesome_snackbar_content: ^0.1.0
   loading_btn: ^1.0.3
+  firebase_performance: ^0.9.0+10
   
 dev_dependencies:
   flutter_test:
