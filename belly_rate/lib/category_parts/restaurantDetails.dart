@@ -70,6 +70,30 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
           fontWeight: FontWeight.bold,
           fontSize: 22,
         ),
+              actions: [
+          IconButton(
+            padding: EdgeInsets.only(
+              right: 15,
+            ),
+            onPressed: () async {
+             CoolAlert.show(
+                  context: context,
+                  type: CoolAlertType.info,
+                  text: '\$\$ : Low \n \$\$\$-\$\$ : Average \n \$\$\$ : High',
+                  confirmBtnText: 'Ok',
+                  confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
+                  title: "Price Description",
+                  onConfirmBtnTap: () async {
+                   Navigator.of(context).pop(true); 
+                  });
+            },
+            icon: Icon(
+              Icons.question_mark_outlined,
+              color: const Color(0xFF5a3769),
+              size: 25,
+            ),
+          )
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,7 +187,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                       ? " \$\$\$-\$\$"
                       : "b",
                   style: ourTextStyle(
-                      txt_color: Colors.black, txt_size: heightM * 0.6))),
+                      txt_color: Color.fromARGB(255, 216, 107, 147), txt_size: heightM * 0.6))),
           Padding(
             padding: const EdgeInsets.only(
                 left: 16.0, bottom: 3.0, top: 0.0, right: 16.0),
