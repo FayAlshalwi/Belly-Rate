@@ -14,6 +14,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:animate_do/animate_do.dart';
 
+import '../manger/HomePageManger.dart';
+
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
 
@@ -490,10 +492,24 @@ class _SignInState extends State<SignIn> {
                                 // }
                               }
                               if (FirebaseAuth.instance.currentUser != null) {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) => HomePage()),
-                                    (Route<dynamic> route) => false);
+
+                                /// manger account :
+                                ///  phone number = +966 111 222 333
+                                ///  otp code : 000000
+                                ///  uid: lOz5BezciQUswmn3sO0nG9U7RjO2
+                                if(FirebaseAuth.instance.currentUser!.uid == "lOz5BezciQUswmn3sO0nG9U7RjO2"){
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) => HomePageManger()),
+                                          (Route<dynamic> route) => false);
+                                } else{
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) => HomePage()),
+                                          (Route<dynamic> route) => false);
+                                }
+
+
                               }
                             },
                             child: Text('Sign In',

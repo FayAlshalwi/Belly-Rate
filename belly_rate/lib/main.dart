@@ -17,6 +17,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
 
+import 'manger/HomePageManger.dart';
+
 SharedPreferences? UserData;
 
 void main() async {
@@ -83,7 +85,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false, title: MyApp._title, home: HomePage()
+        // debugShowCheckedModeBanner: false, title: MyApp._title, home: HomePageManger()
+        debugShowCheckedModeBanner: false, title: MyApp._title, home: getNewPage()
+        // debugShowCheckedModeBanner: false, title: MyApp._title, home: user != null ? HomePageManger() : SignIn()
+        // debugShowCheckedModeBanner: false, title: MyApp._title, home: HomePage()
 
         // Scaffold(
         //   appBar: AppBar(title: const Text(_title)),
@@ -91,6 +96,23 @@ class _MyAppState extends State<MyApp> {
         //   // body: const MyStatefulWidget(),
         // ),
         );
+  }
+
+  /// manger account :
+  ///  phone number = +966 111 222 333
+  ///  otp code : 000000
+  ///  uid: lOz5BezciQUswmn3sO0nG9U7RjO2
+  StatefulWidget getNewPage() {
+    if(user != null){
+      if(user!.uid == "lOz5BezciQUswmn3sO0nG9U7RjO2"){
+        return HomePageManger();
+        // return HomePage();
+      } else{
+        return HomePage();
+      }
+    } else{
+      return const SignIn();
+    }
   }
 }
 

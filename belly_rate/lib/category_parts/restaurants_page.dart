@@ -476,15 +476,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
     return response.headers.value(HttpHeaders.locationHeader)!;
   }
 
-  Future<void> launchPhoneDialer(String contactNumber) async {
-    print(contactNumber);
-    final Uri _phoneUri = Uri(scheme: "tel", path: contactNumber);
-    try {
-      if (await canLaunchUrl(_phoneUri)) await launchUrl(_phoneUri);
-    } catch (error) {
-      throw ("Cannot dial");
-    }
-  }
+
 }
 
 TextStyle getMyTextStyle({required Color txt_color, double fontSize = 22}) {

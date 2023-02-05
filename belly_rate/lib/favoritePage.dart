@@ -337,8 +337,14 @@ class _Favorite extends State<Favorite> {
       });
 
       rates.removeWhere((element) => double.parse(element.rate!) <= 3);
+      print("${rates.length} __");
       addResttoList(rates, FavoriteListBase);
-      isWrong = false ;
+      if(rates.isNotEmpty){
+        isWrong = false ;
+      } else{
+        isWrong = true ;
+      }
+
       setState(() {});
     }
     else {

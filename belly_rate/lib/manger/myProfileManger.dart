@@ -11,16 +11,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'ContactUs.dart';
-import 'manger/contactUsManger.dart';
+import 'contactUsManger.dart';
 
-class myProfile extends StatefulWidget {
-  myProfile({Key? key}) : super(key: key);
 
-  _myProfile createState() => _myProfile();
+
+class MyProfileManger extends StatefulWidget {
+  MyProfileManger({Key? key}) : super(key: key);
+
+  _MyProfileManger createState() => _MyProfileManger();
 }
 
-class _myProfile extends State<myProfile> {
+class _MyProfileManger extends State<MyProfileManger> {
   User? user;
   OurUser? ourUser;
   @override
@@ -224,42 +225,6 @@ class _myProfile extends State<myProfile> {
               ),
             ),
 
-            if(ourUser != null)
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12),
-                child: Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: heightM * 1.5,
-                    child: Material(
-                      elevation: 10.0,
-                      borderRadius: BorderRadius.circular(5.0), //12
-                      color: Colors.transparent, //Colors.cyan.withOpacity(0.5),
-                      child: MaterialButton(
-                        minWidth: MediaQuery.of(context).size.width,
-                        color: button_color,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                        splashColor: button_color,
-                        onPressed: () async {
-
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      // ContactUsManger()));
-                                      ContactUs()));
-                        },
-                        child: Text('Contact us',
-                            textAlign: TextAlign.center,
-                            style: getMyTextStyle(
-                                txt_color: Colors.white,
-                                fontSize: heightM * 0.6)),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
             Spacer(),
             Spacer(),
             Spacer(),

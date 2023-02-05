@@ -8,8 +8,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../models/rateModel.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+
 
 class RestaurantDetails extends StatefulWidget {
   String category_name;
@@ -146,9 +148,9 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                   children: [
                     InkWell(
                         onTap: () {
-                          // item.phoneNumber == "No phone number"
-                          //     ? print("no phone")
-                          //     : launchPhoneDialer(item.phoneNumber!);
+                          widget.restaurant.phoneNumber == "No phone number"
+                              ? print("no phone")
+                              : launchPhoneDialer(widget.restaurant.phoneNumber!);
                         },
                         child: Icon(
                           Icons.call,
@@ -460,6 +462,15 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
         ],
       ),
     );
+  }
+  Future<void> launchPhoneDialer(String contactNumber) async {
+    print(contactNumber);
+    final Uri _phoneUri = Uri(scheme: "tel", path: contactNumber);
+    try {
+      if (await canLaunchUrl(_phoneUri)) await launchUrl(_phoneUri);
+    } catch (error) {
+      throw ("Cannot dial");
+    }
   }
 
   getRate() async {
