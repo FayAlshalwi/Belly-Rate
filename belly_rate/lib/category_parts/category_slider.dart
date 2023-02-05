@@ -41,27 +41,10 @@ class _CategorySliderState extends State<CategorySlider> {
   void getData() async {
     final Categorys =
         await FirebaseFirestore.instance.collection('Restaurants').get();
-    // log("Res: ${Categorys.docs.toList()}");
 
     for (var Category in Categorys.docs) {
-      // final body = json.encode(Category.data().toString());
-      // log("Res: ${body}");
-      // final restaurant = restaurantFromJson(Category.data().toString());
       final restaurant = Restaurant.fromJson(Category.data()) as Restaurant;
 
-
-      // final res = await FirebaseFirestore.instance
-      //     .collection('rating')
-      //     .where("restID", isEqualTo: restaurant.id)
-      // // .orderBy('rate', descending: true)
-      //     .get();
-      // List<double> values = [] ;
-      // for (var resRate in res.docs) {
-      //   final rate = Rate.fromJson(resRate.data()) as Rate;
-      //   values.add(double.parse(rate.rate!));
-      // }
-      // print("values ${values}");
-      //
       _restaurant.add(restaurant);
 
       if (restaurant.category?.toLowerCase().trim() ==
@@ -101,16 +84,7 @@ class _CategorySliderState extends State<CategorySlider> {
     }
     log("Res: ${_restaurant.length}");
 
-    // log("Res_Burger: ${_restaurantBurger.length}");
     log("Res_American: ${_restaurantAmericanRestaurant.length}");
-    // log("Res_Seafood: ${_restaurantSeafoodRestaurant.length}");
-    // log("Res_Indian: ${_restaurantIndianRestaurant.length}");
-    // log("Res_Italian: ${_restaurantItalianRestaurant.length}");
-    // log("Res_Japanese: ${_restaurantJapaneseRestaurant.length}");
-    // log("Res_health: ${_restauranthealthRestaurant.length}");
-    // log("Res_lebanese: ${_restaurantlebaneseRestaurant.length}");
-    // log("Res_Other: ${_restaurantOtherRestaurant.length}");
-    // log("Res_Fast: ${_restaurantFastRestaurant.length}");
   }
 
   @override
@@ -122,8 +96,6 @@ class _CategorySliderState extends State<CategorySlider> {
       child: Scrollbar(
         thickness: 5.0,
         radius: const Radius.circular(20),
-        // width: 20,
-        // color: Colors.black,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: categoryList.length,
@@ -229,13 +201,13 @@ class _CategorySliderState extends State<CategorySlider> {
   }
 
   List<Category> categoryList = [
-    Category(name: "Italian", icon: "asset/category_img/italian.png"),
-    Category(name: "Seafood", icon: "asset/category_img/seafood.png"),
+    Category(name: "American", icon: "asset/category_img/American.png"),
+    Category(name: "French", icon: "asset/category_img/other.png"),
     Category(name: "Health food", icon: "asset/category_img/healthFood.png"),
     Category(name: "Indian", icon: "asset/category_img/indian.png"),
-    Category(name: "American", icon: "asset/category_img/American.png"),
-    Category(name: "Lebanese", icon: "asset/category_img/Lebanese.png"),
+    Category(name: "Italian", icon: "asset/category_img/italian.png"),
     Category(name: "Japanese", icon: "asset/category_img/Japanese.png"),
-    Category(name: "Other", icon: "asset/category_img/other.png"),
+    Category(name: "Lebanese", icon: "asset/category_img/Lebanese.png"),
+    Category(name: "Seafood", icon: "asset/category_img/seafood.png"),
   ];
 }

@@ -21,18 +21,6 @@ class RestaurantSlider extends StatefulWidget {
 }
 
 class _RestaurantSliderState extends State<RestaurantSlider> {
-  // List<Restaurant> _restaurant = [];
-  // // List<Restaurant> _restaurantBurger = [] ;S
-  // List<Restaurant> _restaurantAmericanRestaurant = [];
-  // List<Restaurant> _restaurantSeafoodRestaurant = [];
-  // List<Restaurant> _restaurantIndianRestaurant = [];
-  // List<Restaurant> _restaurantItalianRestaurant = [];
-  // List<Restaurant> _restaurantJapaneseRestaurant = [];
-  // List<Restaurant> _restaurantOtherRestaurant = [];
-  // List<Restaurant> _restauranthealthRestaurant = [];
-  // List<Restaurant> _restaurantlebaneseRestaurant = [];
-  // // List<Restaurant> _restaurantFastRestaurant = [] ;
-
   List<Restaurant> _restaurant = [];
   var Kilometer;
 
@@ -227,13 +215,13 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
   }
 
   List<Category> categoryList = [
-    Category(name: "Italian", icon: "asset/category_img/italian.png"),
-    Category(name: "seafood", icon: "asset/category_img/seafood.png"),
+    Category(name: "American", icon: "asset/category_img/American.png"),
+    Category(name: "French", icon: "asset/category_img/other.png"),
     Category(name: "Health food", icon: "asset/category_img/healthFood.png"),
     Category(name: "Indian", icon: "asset/category_img/indian.png"),
-    Category(name: "American", icon: "asset/category_img/American.png"),
-    Category(name: "Lebanese", icon: "asset/category_img/Lebanese.png"),
+    Category(name: "Italian", icon: "asset/category_img/italian.png"),
     Category(name: "Japanese", icon: "asset/category_img/Japanese.png"),
-    Category(name: "Other", icon: "asset/category_img/other.png"),
+    Category(name: "Lebanese", icon: "asset/category_img/Lebanese.png"),
+    Category(name: "Seafood", icon: "asset/category_img/seafood.png"),
   ];
 }

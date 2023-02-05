@@ -15,6 +15,7 @@ import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:loading_btn/loading_btn.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -106,7 +107,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-
             Container(
               alignment: AlignmentDirectional.center,
               width: 380,
@@ -163,8 +163,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ]),
             ),
-            // Center(child: first_name_text(txt_color, heightM)),
-            // Center(child: last_name_text(txt_color, heightM)),
             Container(
               margin: const EdgeInsets.fromLTRB(15, 0, 0, 0),
               child: Padding(
@@ -219,10 +217,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           value == null ||
                           value.trim() == '') {
                         return 'Please enter your phone number';
-                      }
-                      // else if (value[0] != 5)
-                      //   return 'Saudi numbers starts with 5 ';
-                      else if (value.length > 11 || value.length < 11) {
+                      } else if (value.length > 11 || value.length < 11) {
                         return 'Please enter 9 numbers';
                       } else if (true) {
                         for (int i = 0; i < numbers.length; i++) {
@@ -248,17 +243,13 @@ class _SignUpPageState extends State<SignUpPage> {
                     cursorColor: Colors.black,
                     inputDecoration: InputDecoration(
                       errorStyle: TextStyle(height: 0),
-
                       contentPadding: EdgeInsets.only(bottom: 15, left: 0),
-
-                      // contentPadding: EdgeInsets.only(bottom: 15, left: 0),
                       border: InputBorder.none,
                       hintText: '5XXXXXXXX',
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       errorBorder: InputBorder.none,
                       disabledBorder: InputBorder.none,
-                      // contentPadding: EdgeInsets.only(bottom: 0, left: 0),
                       hintStyle: TextStyle(
                           color: Color.fromRGBO(158, 158, 158, 1),
                           fontSize: 16),
@@ -283,65 +274,77 @@ class _SignUpPageState extends State<SignUpPage> {
             SizedBox(
               height: heightM * 0.5,
             ),
-
             Center(
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: heightM * 1.5,
-                child: Material(
+                child: LoadingBtn(
                   elevation: 10.0,
-                  borderRadius: BorderRadius.circular(10.0), //12
-                  color: Colors.transparent, //Colors.cyan.withOpacity(0.5),
-                  child: MaterialButton(
-                    minWidth: MediaQuery.of(context).size.width,
-                    color: button_color,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
-                    splashColor: button_color,
-                    onPressed: () async {
-                      if (formKey.currentState!.validate()) {
-                        CoolAlert.show(
-                          context: context,
-                          type: CoolAlertType.loading,
-                          text: "Loading",
-                        );
-                        print("here the submitted phone");
-                        print(phone.text);
-
-                        await FirebaseAuth.instance.verifyPhoneNumber(
-                          phoneNumber: phoneNumber,
-                          verificationCompleted:
-                              (PhoneAuthCredential credential) {
-                            print("verificationCompleted: ${credential}");
-                          },
-                          verificationFailed: (FirebaseAuthException e) {
-                            if (e.code == 'invalid-phone-number') {
-                              CoolAlert.show(
-                                context: context,
-                                title: "Invalid phone number",
-                                type: CoolAlertType.error,
-                                text: "The provided phone number is not valid",
-                                confirmBtnColor: button_color,
-                              );
-                              print('The provided phone number is not valid.');
-                            }
-                            print("verificationFailed: ${e}");
-                          },
-                          codeSent: (String verificationId, int? resendToken) {
-                            openSheet(context, heightM, button_color, txt_color,
-                                verificationId);
-                          },
-                          codeAutoRetrievalTimeout: (String verificationId) {
-                            print("codeSent: ${verificationId}");
-                          },
-                        );
-                      }
-                    },
-                    child: Text('Sign Up',
-                        textAlign: TextAlign.center,
-                        style: ourTextStyle(
-                            txt_color: Colors.white, txt_size: heightM * 0.6)),
+                  color: button_color,
+                  height: 50,
+                  borderRadius: 10,
+                  animate: true,
+                  //color: Colors.green,
+                  width: MediaQuery.of(context).size.width,
+                  loader: Container(
+                    padding: const EdgeInsets.all(10),
+                    width: 40,
+                    height: 40,
+                    child: const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
                   ),
+                  child: Text('Sign Uo',
+                      textAlign: TextAlign.center,
+                      style: ourTextStyle(
+                          txt_color: Colors.white, txt_size: heightM * 0.6)),
+
+                  onTap: (startLoading, stopLoading, btnState) async {
+                    if (btnState == ButtonState.idle) {
+                      startLoading();
+                      formKey.currentState?.save();
+                      if (formKey.currentState!.validate()) {
+                        if (phone.text.isNotEmpty) {
+                          print("here the submitted phone");
+                          print(phone.text);
+
+                          await FirebaseAuth.instance.verifyPhoneNumber(
+                            phoneNumber: phoneNumber,
+                            verificationCompleted:
+                                (PhoneAuthCredential credential) {
+                              stopLoading();
+
+                              print("verificationCompleted: ${credential}");
+                            },
+                            verificationFailed: (FirebaseAuthException e) {
+                              if (e.code == 'invalid-phone-number') {
+                                CoolAlert.show(
+                                  context: context,
+                                  title: "Invalid phone number",
+                                  type: CoolAlertType.error,
+                                  text:
+                                      "The provided phone number is not valid",
+                                  confirmBtnColor: button_color,
+                                );
+                                print(
+                                    'The provided phone number is not valid.');
+                                stopLoading();
+                              }
+                              print("verificationFailed: ${e}");
+                            },
+                            codeSent:
+                                (String verificationId, int? resendToken) {
+                              openSheet(context, heightM, button_color,
+                                  txt_color, verificationId);
+                            },
+                            codeAutoRetrievalTimeout: (String verificationId) {
+                              print("codeSent: ${verificationId}");
+                            },
+                          );
+                        }
+                      }
+                    }
+                  },
                 ),
               ),
             ),
@@ -489,218 +492,221 @@ class _SignUpPageState extends State<SignUpPage> {
                           borderRadius: BorderRadius.circular(10.0), //12
                           color: Colors
                               .transparent, //Colors.cyan.withOpacity(0.5),
-                          child: MaterialButton(
-                            minWidth: MediaQuery.of(context).size.width,
+                          child: LoadingBtn(
+                            width: MediaQuery.of(context).size.width,
                             color: button_color,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)),
-                            // splashColor: button_color,
-                            onPressed: () async {
-                              try {
-                                PhoneAuthCredential credential =
-                                    PhoneAuthProvider.credential(
-                                        verificationId: verificationId,
-                                        smsCode: _code!);
+                            borderRadius: 10,
+                            height: heightM * 1.9,
+                            onTap: (startLoading, stopLoading, btnState) async {
+                              if (btnState == ButtonState.idle) {
+                                startLoading();
+                                try {
+                                  PhoneAuthCredential credential =
+                                      PhoneAuthProvider.credential(
+                                          verificationId: verificationId,
+                                          smsCode: _code!);
 
-                                print("user  credential!!! ");
-                                print("user  !!! ");
+                                  print("user  credential!!! ");
+                                  print("user  !!! ");
 
-                                print(credential);
+                                  print(credential);
 
-                                print("hiiiiiii");
-                                final userCredential = await FirebaseAuth
-                                    .instance
-                                    .signInWithCredential(credential);
+                                  print("hiiiiiii");
+                                  final userCredential = await FirebaseAuth
+                                      .instance
+                                      .signInWithCredential(credential);
 
-                                String firebaseToken =
-                                    await userCredential.user!.getIdToken();
-                                print("firebaseToken");
-                                print(firebaseToken);
+                                  String firebaseToken =
+                                      await userCredential.user!.getIdToken();
+                                  print("firebaseToken");
+                                  print(firebaseToken);
 
-                                String userUid = userCredential.user!.uid;
-                                print("user id userUid!!! @@@@");
-                                print(userUid);
-                                print("firstName");
-                                print(first_name.text);
-                                print("here1");
-                                final uri = Uri.parse(
-                                    'https://bellyrate-urhmg.ondigitalocean.app/ratings');
-                                print("here2");
-                                final response = await get(
-                                  uri,
-                                  headers: <String, String>{
-                                    'usrID': FirebaseAuth
-                                        .instance.currentUser!.uid
-                                        .toString(),
-                                  },
-                                );
-                                print("here3");
-                                print(response.body);
-                                print("here");
-                                var responseData = json.decode(response.body);
-                                print(responseData[0].toString());
-                                print(responseData[1].toString());
-                                print(responseData[2].toString());
-                                print("here4");
-                                FirebaseFirestore.instance
-                                    .collection('Users')
-                                    .doc(userUid)
-                                    .set({
-                                  'name': first_name.text,
-                                  'phoneNumber': phoneNumber,
-                                  'uid': userUid,
-                                  'picture':
-                                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-                                  'rest': [
-                                    responseData[0].toString(),
-                                    responseData[1].toString(),
-                                    responseData[2].toString(),
-                                  ],
-                                });
-                                print("user added");
-                                FirebaseFirestore.instance
-                                    .collection('Recommendation')
-                                    .doc()
-                                    .set({
-                                  'userId':
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                  'RestaurantId': responseData[0].toString(),
-                                  'Notified': false,
-                                  'Notified_location': false,
-                                  "Date_Of_Recommendation":
-                                      FieldValue.serverTimestamp(),
-                                });
+                                  String userUid = userCredential.user!.uid;
+                                  print("user id userUid!!! @@@@");
+                                  print(userUid);
+                                  print("firstName");
+                                  print(first_name.text);
+                                  print("here1");
+                                  final uri = Uri.parse(
+                                      'https://bellyrate-urhmg.ondigitalocean.app/ratings');
+                                  print("here2");
+                                  final response = await get(
+                                    uri,
+                                    headers: <String, String>{
+                                      'usrID': FirebaseAuth
+                                          .instance.currentUser!.uid
+                                          .toString(),
+                                    },
+                                  );
+                                  print("here3");
+                                  print(response.body);
+                                  print("here");
+                                  var responseData = json.decode(response.body);
+                                  print(responseData[0].toString());
+                                  print(responseData[1].toString());
+                                  print(responseData[2].toString());
+                                  print("here4");
+                                  FirebaseFirestore.instance
+                                      .collection('Users')
+                                      .doc(userUid)
+                                      .set({
+                                    'name': first_name.text,
+                                    'phoneNumber': phoneNumber,
+                                    'uid': userUid,
+                                    'picture':
+                                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+                                    'rest': [
+                                      responseData[0].toString(),
+                                      responseData[1].toString(),
+                                      responseData[2].toString(),
+                                    ],
+                                  });
+                                  print("user added");
+                                  FirebaseFirestore.instance
+                                      .collection('Recommendation')
+                                      .doc()
+                                      .set({
+                                    'userId':
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                    'RestaurantId': responseData[0].toString(),
+                                    'Notified': false,
+                                    'Notified_location': false,
+                                    "Date_Of_Recommendation":
+                                        FieldValue.serverTimestamp(),
+                                  });
 
-                                print("Recommendation 1 added");
+                                  print("Recommendation 1 added");
 
-                                FirebaseFirestore.instance
-                                    .collection('Recommendation')
-                                    .doc()
-                                    .set({
-                                  'userId':
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                  'RestaurantId': responseData[1].toString(),
-                                  'Notified': false,
-                                  'Notified_location': false,
-                                  "Date_Of_Recommendation":
-                                      FieldValue.serverTimestamp(),
-                                });
+                                  FirebaseFirestore.instance
+                                      .collection('Recommendation')
+                                      .doc()
+                                      .set({
+                                    'userId':
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                    'RestaurantId': responseData[1].toString(),
+                                    'Notified': false,
+                                    'Notified_location': false,
+                                    "Date_Of_Recommendation":
+                                        FieldValue.serverTimestamp(),
+                                  });
 
-                                print("Recommendation 2 added");
+                                  print("Recommendation 2 added");
 
-                                FirebaseFirestore.instance
-                                    .collection('Recommendation')
-                                    .doc()
-                                    .set({
-                                  'userId':
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                  'RestaurantId': responseData[2].toString(),
-                                  'Notified': false,
-                                  'Notified_location': false,
-                                  "Date_Of_Recommendation":
-                                      FieldValue.serverTimestamp(),
-                                });
+                                  FirebaseFirestore.instance
+                                      .collection('Recommendation')
+                                      .doc()
+                                      .set({
+                                    'userId':
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                    'RestaurantId': responseData[2].toString(),
+                                    'Notified': false,
+                                    'Notified_location': false,
+                                    "Date_Of_Recommendation":
+                                        FieldValue.serverTimestamp(),
+                                  });
 
-                                print("Recommendation 3 added");
+                                  print("Recommendation 3 added");
 
-                                FirebaseFirestore.instance
-                                    .collection('History')
-                                    .doc()
-                                    .set({
-                                  'userId':
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                  'RestaurantId': responseData[0].toString(),
-                                  'Notified': false,
-                                  'Notified_location': false,
-                                  "Date_Of_Recommendation":
-                                      FieldValue.serverTimestamp(),
-                                });
-                                print("History 1 added");
-                                FirebaseFirestore.instance
-                                    .collection('History')
-                                    .doc()
-                                    .set({
-                                  'userId':
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                  'RestaurantId': responseData[1].toString(),
-                                  'Notified': false,
-                                  'Notified_location': false,
-                                  "Date_Of_Recommendation":
-                                      FieldValue.serverTimestamp(),
-                                });
-                                print("History 2 added");
-                                FirebaseFirestore.instance
-                                    .collection('History')
-                                    .doc()
-                                    .set({
-                                  'userId':
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                  'RestaurantId': responseData[2].toString(),
-                                  'Notified': false,
-                                  'Notified_location': false,
-                                  "Date_Of_Recommendation":
-                                      FieldValue.serverTimestamp(),
-                                });
-                                print("History 3 added");
-                                CoolAlert.show(
-                                  context: context,
-                                  type: CoolAlertType.success,
-                                  text: 'Sign Up completed successfully!',
-                                );
-
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) => SignIn()),
-                                    (Route<dynamic> route) => false);
-                              } on FirebaseAuthException catch (error) {
-                                Navigator.of(context).pop();
-                                String Error = "";
-                                print("e ${error}");
-
-                                if (error
-                                    .toString()
-                                    .contains("does not exist")) {
+                                  FirebaseFirestore.instance
+                                      .collection('History')
+                                      .doc()
+                                      .set({
+                                    'userId':
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                    'RestaurantId': responseData[0].toString(),
+                                    'Notified': false,
+                                    'Notified_location': false,
+                                    "Date_Of_Recommendation":
+                                        FieldValue.serverTimestamp(),
+                                  });
+                                  print("History 1 added");
+                                  FirebaseFirestore.instance
+                                      .collection('History')
+                                      .doc()
+                                      .set({
+                                    'userId':
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                    'RestaurantId': responseData[1].toString(),
+                                    'Notified': false,
+                                    'Notified_location': false,
+                                    "Date_Of_Recommendation":
+                                        FieldValue.serverTimestamp(),
+                                  });
+                                  print("History 2 added");
+                                  FirebaseFirestore.instance
+                                      .collection('History')
+                                      .doc()
+                                      .set({
+                                    'userId':
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                    'RestaurantId': responseData[2].toString(),
+                                    'Notified': false,
+                                    'Notified_location': false,
+                                    "Date_Of_Recommendation":
+                                        FieldValue.serverTimestamp(),
+                                  });
+                                  print("History 3 added");
                                   CoolAlert.show(
                                     context: context,
-                                    title: "No user correspond",
-                                    type: CoolAlertType.error,
-                                    text:
-                                        "User Not Exist! , Please Go to Sign Up Page",
-                                    confirmBtnColor: button_color,
+                                    type: CoolAlertType.success,
+                                    text: 'Sign Up completed successfully!',
                                   );
-                                } else if (error.toString().contains(
-                                    "The sms verification code used to create the phone auth credential is invalid")) {
-                                  CoolAlert.show(
-                                    context: context,
-                                    title: "Wrong OTP",
-                                    type: CoolAlertType.error,
-                                    text: "Invalid verification code",
-                                    confirmBtnColor: button_color,
-                                  );
-                                  Error = "Code Error !";
-                                } else if (error.code ==
-                                    'invalid-verification-code') {
-                                  CoolAlert.show(
-                                    context: context,
-                                    title: "Wrong OTP",
-                                    type: CoolAlertType.error,
-                                    text: "Invalid verification code",
-                                    confirmBtnColor: button_color,
-                                  );
-                                  Error = "Wrong OTP entered";
+                                  stopLoading();
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) => SignIn()),
+                                      (Route<dynamic> route) => false);
+                                } on FirebaseAuthException catch (error) {
+                                  stopLoading();
+                                  Navigator.of(context).pop();
+                                  String Error = "";
+                                  print("e ${error}");
+
+                                  if (error
+                                      .toString()
+                                      .contains("does not exist")) {
+                                    CoolAlert.show(
+                                      context: context,
+                                      title: "No user correspond",
+                                      type: CoolAlertType.error,
+                                      text:
+                                          "User Not Exist! , Please Go to Sign Up Page",
+                                      confirmBtnColor: button_color,
+                                    );
+                                  } else if (error.toString().contains(
+                                      "The sms verification code used to create the phone auth credential is invalid")) {
+                                    CoolAlert.show(
+                                      context: context,
+                                      title: "Wrong OTP",
+                                      type: CoolAlertType.error,
+                                      text: "Invalid verification code",
+                                      confirmBtnColor: button_color,
+                                    );
+                                    Error = "Code Error !";
+                                  } else if (error.code ==
+                                      'invalid-verification-code') {
+                                    CoolAlert.show(
+                                      context: context,
+                                      title: "Wrong OTP",
+                                      type: CoolAlertType.error,
+                                      text: "Invalid verification code",
+                                      confirmBtnColor: button_color,
+                                    );
+                                    Error = "Wrong OTP entered";
+                                  }
+                                  stopLoading();
+                                  print("ddd_222 ${error}");
+
+                                  // if (e.code == 'invalid-verification-code') {
+                                  //   CoolAlert.show(
+                                  //     context: context,
+                                  //     title: "",
+                                  //     type: CoolAlertType.error,
+                                  //     text: "Error",
+                                  //     confirmBtnColor: button_color,
+                                  //   );
+                                  // }
                                 }
-
-                                print("ddd_222 ${error}");
-
-                                // if (e.code == 'invalid-verification-code') {
-                                //   CoolAlert.show(
-                                //     context: context,
-                                //     title: "",
-                                //     type: CoolAlertType.error,
-                                //     text: "Error",
-                                //     confirmBtnColor: button_color,
-                                //   );
-                                // }
                               }
                             },
                             child: Text('Sign Up',
