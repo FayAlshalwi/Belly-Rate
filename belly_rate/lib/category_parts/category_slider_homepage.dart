@@ -21,18 +21,6 @@ class RestaurantSlider extends StatefulWidget {
 }
 
 class _RestaurantSliderState extends State<RestaurantSlider> {
-  // List<Restaurant> _restaurant = [];
-  // // List<Restaurant> _restaurantBurger = [] ;S
-  // List<Restaurant> _restaurantAmericanRestaurant = [];
-  // List<Restaurant> _restaurantSeafoodRestaurant = [];
-  // List<Restaurant> _restaurantIndianRestaurant = [];
-  // List<Restaurant> _restaurantItalianRestaurant = [];
-  // List<Restaurant> _restaurantJapaneseRestaurant = [];
-  // List<Restaurant> _restaurantOtherRestaurant = [];
-  // List<Restaurant> _restauranthealthRestaurant = [];
-  // List<Restaurant> _restaurantlebaneseRestaurant = [];
-  // // List<Restaurant> _restaurantFastRestaurant = [] ;
-
   List<Restaurant> _restaurant = [];
   var Kilometer;
 
@@ -46,22 +34,15 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
   void getData() async {
     final restaurants =
         await FirebaseFirestore.instance.collection('Restaurants').get();
-    // List<Restaurant> restaurant_list_temp = [] ;
     for (var Category in restaurants.docs) {
       Restaurant restaurant = Restaurant.fromJson(Category.data());
 
-      // Kilometer = distance(
-      //     LatLng((UserData?.getDouble('locationLat'))!,(UserData?.getDouble('locationLon'))!),
-      //     LatLng(double.parse("${restaurant.lat}"), double.parse("${restaurant.long}")
-      //     ));
-      // restaurant.far = double.parse((Kilometer/1000).toStringAsFixed(2)) ;
       var ffff = Geolocator.distanceBetween(
           (UserData?.getDouble('locationLat'))!,
           (UserData?.getDouble('locationLon'))!,
           double.parse("${restaurant.lat}"),
           double.parse("${restaurant.long}"));
-      // print("distance: ${(ffff / 1000).toStringAsFixed(2)} KM");
-      // print("ffff ${ffff}");
+
       restaurant.far = double.parse((ffff / 1000).toStringAsFixed(2));
       _restaurant.add(restaurant);
     }
@@ -77,111 +58,95 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
     return Container(
       // color: Color.fromARGB(255, 255, 255, 255),
       width: 410,
-      height: 260,
-      child: ListView.builder(
-          itemCount: 5,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (BuildContext context, int index) {
-            if (_restaurant.isNotEmpty) {
-              Restaurant item = _restaurant[index];
-              print(item.location);
-              return Padding(
-                padding: const EdgeInsets.only(
-                    left: 0.0, bottom: 3.0, top: 0.0, right: 0.0),
-                child: ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network("${item.photos?.first}",
-                        height: 100, width: 70, fit: BoxFit.cover),
-                  ),
-                  title: Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      padding: const EdgeInsets.only(
-                          left: 0.0, bottom: 0.0, top: 0.0, right: 0.0),
-                      child: Text("${item.name}",
-                          style: ourTextStyle(
-                              txt_color: Color.fromARGB(255, 0, 0, 0),
-                              txt_size: heightM * 0.6))),
-                  trailing: Container(
-                    height: 30,
-
-                    // getBuildPriceAvg(item) == "\$\$"
-                    //     ? 30
-                    //     : getBuildPriceAvg(item) == "\$\$\$"
-                    //         ? 30
-                    //         : 30,
-                    width: item.far!.floor() < 10
-                        ? 90
-                        : item.far!.floor() > 10
-                            ? 100
-                            : 110,
-
-                    // getBuildPriceAvg(item) == "\$\$"
-                    //     ? 40
-                    //     : getBuildPriceAvg(item) == "\$\$\$"
-                    //         ? 50
-                    //         : 35,
-                    decoration: BoxDecoration(
-                        color: Color.fromARGB(244, 216, 107, 147),
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
-
-                          // getBuildPriceAvg(item) == "\$\$"
-                          //     ? const EdgeInsets.fromLTRB(10, 0, 0, 0)
-                          //     : getBuildPriceAvg(item) == "\$\$\$"
-                          //         ? const EdgeInsets.fromLTRB(10, 0, 0, 0)
-                          //         : const EdgeInsets.fromLTRB(12, 0, 0, 0),
-                          child: Icon(
-                            Icons.location_pin,
-                            color: Colors.white,
+      height: 280,
+      child: Scrollbar(
+          thickness: 3.0,
+          radius: const Radius.circular(20),
+          child: ListView.builder(
+              padding: EdgeInsets.fromLTRB(2, 5, 2, 0),
+              reverse: false,
+              itemCount: 3,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, int index) {
+                if (_restaurant.isNotEmpty) {
+                  Restaurant item = _restaurant[index];
+                  print(item.location);
+                  return InkWell(
+                      onTap: () {
+                        /// RestaurantDetails
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => RestaurantDetails(
+                                    category_name: item.category!,
+                                    restaurant: item,
+                                  )),
+                        );
+                      },
+                      child: Container(
+                        height: 80,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 0.0, bottom: 0.0, top: 0.0, right: 0.0),
+                          child: ListTile(
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network("${item.photos?.first}",
+                                  height: 120, width: 60, fit: BoxFit.cover),
+                            ),
+                            title: Container(
+                                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                padding: EdgeInsets.only(
+                                    left: 0.0,
+                                    bottom: 0.0,
+                                    top: 0.0,
+                                    right: 0.0),
+                                child: Text("${item.name}",
+                                    style: ourTextStyle(
+                                        txt_color: Color.fromARGB(255, 0, 0, 0),
+                                        txt_size: heightM * 0.6))),
+                            trailing: Container(
+                              height: 27,
+                              width: item.far!.floor() < 10
+                                  ? 85
+                                  : item.far!.floor() > 10
+                                      ? 95
+                                      : 105,
+                              decoration: BoxDecoration(
+                                  color: Color.fromARGB(244, 216, 107, 147),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(5, 0, 1, 0),
+                                    child: Icon(
+                                      Icons.location_on,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  Text("${item.far ?? ""} KM",
+                                      textAlign: TextAlign.center,
+                                      style: ourTextStyle(
+                                          txt_color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          txt_size: heightM * 0.43))
+                                ],
+                              ),
+                            ),
+                            subtitle: Container(
+                                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: Text("${item.category}",
+                                    style: ourTextStyle(
+                                        txt_color:
+                                            Color.fromARGB(255, 116, 116, 116),
+                                        txt_size: heightM * 0.45))),
                           ),
                         ),
-                        Text("${item.far ?? ""} KM",
-                            textAlign: TextAlign.center,
-                            style: ourTextStyle(
-                                txt_color: Color.fromARGB(255, 255, 255, 255),
-                                txt_size: heightM * 0.5))
-                        // Text("${getBuildPriceAvg(item)}",
-                        //     textAlign: TextAlign.center,
-                        //     style: ourTextStyle(
-                        //         txt_color: Color.fromARGB(255, 255, 255, 255),
-                        //         txt_size: heightM * 0.5))
-                      ],
-                    ),
-                  ),
-
-                  //  Icon(Icons.more_vert),
-
-                  // Container(
-                  //     child: Row(
-                  //   children: [Icon(Icons.more_vert)],
-                  // )),
-                  subtitle: Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Text("${item.category}",
-                          style: ourTextStyle(
-                              txt_color: Color.fromARGB(255, 116, 116, 116),
-                              txt_size: heightM * 0.45))),
-                ),
-                // child: InkWell(
-                //   onTap: () {
-                //     /// RestaurantDetails
-                //     Navigator.of(context).push(
-                //       MaterialPageRoute(
-                //           builder: (context) => RestaurantDetails(
-                //                 category_name: item.category!,
-                //                 restaurant: item,
-                //               )),
-                //     );
-                //   },
-                // )
-              );
-            } else
-              return Container();
-          }),
+                      ));
+                } else
+                  return Container();
+              })),
     );
   }
 

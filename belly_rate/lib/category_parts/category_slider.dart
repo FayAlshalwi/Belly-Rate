@@ -92,7 +92,7 @@ class _CategorySliderState extends State<CategorySlider> {
     double heightM = MediaQuery.of(context).size.height / 30;
     Color txt_color = Color(0xFF5a3769);
     return Container(
-      height: 130,
+      height: 120,
       child: Scrollbar(
         thickness: 5.0,
         radius: const Radius.circular(20),
