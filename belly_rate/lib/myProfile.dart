@@ -78,7 +78,7 @@ class _myProfile extends State<myProfile> {
               CoolAlert.show(
                   context: context,
                   type: CoolAlertType.confirm,
-                  text: 'Are you sure you want to logout?',
+                  text: 'Are you sure you want to logout??',
                   confirmBtnText: 'Yes',
                   cancelBtnText: 'Cancel',
                   title: "Logout",
