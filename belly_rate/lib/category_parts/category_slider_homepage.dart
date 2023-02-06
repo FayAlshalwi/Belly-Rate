@@ -110,12 +110,13 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                   ? 85
                                   : item.far!.floor() > 10
                                       ? 95
-                                      : 105,
+                                      : 107,
                               decoration: BoxDecoration(
                                   color: Color.fromARGB(244, 216, 107, 147),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20))),
-                              child: Row(
+                              child: Center(
+                                  child: Row(
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.fromLTRB(5, 0, 1, 0),
@@ -125,14 +126,14 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                       size: 20,
                                     ),
                                   ),
-                                  Text("${item.far ?? ""} KM",
+                                  Text("${item.far!.toStringAsFixed(2)} KM",
                                       textAlign: TextAlign.center,
                                       style: ourTextStyle(
                                           txt_color: Color.fromARGB(
                                               255, 255, 255, 255),
                                           txt_size: heightM * 0.43))
                                 ],
-                              ),
+                              )),
                             ),
                             subtitle: Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 0, 0),

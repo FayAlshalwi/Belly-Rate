@@ -512,7 +512,7 @@ class _ContactUsState extends State<ContactUs> {
     return await _firestore.collection("users_requests").add({
       'request_id': '',
       'UID': '${user?.uid}',
-      'user_name': '${ourUser!.name ?? ""}',
+      'user_name': '${ourUser!.name}',
       'request_title': "",
       'request_text': textDescription.text,
       "status": "In Progress",

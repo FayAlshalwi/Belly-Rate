@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:belly_rate/category_parts/category_slider_homepage.dart';
+import 'package:belly_rate/category_parts/nearYou.dart';
 import 'package:belly_rate/favoritePage.dart';
 import 'package:belly_rate/history.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -280,7 +282,8 @@ class _HomePage extends State<HomePage> {
 
       if (Recommendation.docs.isNotEmpty) {
         for (int i = 0; i < Recommendation.docs.length; i++) {
-          String RestaurantId = Recommendation.docs[i]['RestaurantId'];
+          String RestaurantId =
+              Recommendation.docs[i]['RestaurantId'].toString();
           double? userlat = currentLocation.latitude;
           double? userlong = currentLocation.longitude;
           String RecommendationDocID = Recommendation.docs[i].id;
@@ -438,6 +441,9 @@ class _HomePage extends State<HomePage> {
           SizedBox(
             height: 20,
           ),
+          SizedBox(
+            height: 4,
+          ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
               child: Align(
@@ -452,7 +458,7 @@ class _HomePage extends State<HomePage> {
               )),
           CategorySlider(),
           SizedBox(
-            height: 10,
+            height: 4,
           ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
@@ -466,11 +472,10 @@ class _HomePage extends State<HomePage> {
                       fontWeight: FontWeight.bold),
                 ),
               )),
-          //  SizedBox(
-
-          // height: 10,
-          // ),
-          // RestaurantSlider()
+          RestaurantSlider(),
+          SizedBox(
+            height: 4,
+          ),
         ],
       )),
       //Favorite page container
@@ -497,10 +502,10 @@ class _HomePage extends State<HomePage> {
     return Scaffold(
       body: Center(child: listOfWidgets[currentIndex]),
       bottomNavigationBar: Container(
-          margin: EdgeInsets.all(displayOfWidth * .05),
-          height: displayOfWidth * .155,
+          margin: EdgeInsets.all(displayOfWidth * .03),
+          height: displayOfWidth * .144,
           decoration: BoxDecoration(
-              color: Colors.white70,
+              color: Color.fromARGB(255, 255, 255, 255),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(.07),

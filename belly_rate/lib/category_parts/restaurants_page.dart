@@ -103,7 +103,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                                 fit: BoxFit.fill)),
                         Padding(
                           padding: const EdgeInsets.only(
-                              left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                              left: 16.0, bottom: 0.0, top: 0.0, right: 16.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -133,11 +133,11 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                                         //     : launchPhoneDialer(item.phoneNumber!);
                                       },
                                       child: Icon(
-                                        Icons.star,
+                                        Icons.star_rounded,
                                         color: Color(0xFF5a3769),
                                       )),
                                   SizedBox(
-                                    width: 5,
+                                    width: 2,
                                   ),
                                   // Text(
                                   //     item.rateAVGNum != "0"
@@ -167,13 +167,13 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                                         //     double.parse(item.long!));
                                       },
                                       child: const Icon(
-                                        Icons.location_on_outlined,
+                                        Icons.location_on,
                                         color: Color(0xFF5a3769),
-                                        size: 30,
+                                        size: 25,
                                       )),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
+                                  // const SizedBox(
+                                  //   width: 5,
+                                  // ),
                                   Text(
                                       item.far != null
                                           ? "${item.far ?? ""} KM"
