@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:belly_rate/models/restaurantModesl.dart';
-import 'package:belly_rate/models/user.dart';
 import 'package:belly_rate/myProfile.dart';
 import 'package:belly_rate/views/carousel_loading.dart';
 import 'package:carousel_slider/carousel_controller.dart';

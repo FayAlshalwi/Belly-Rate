@@ -1,3 +1,4 @@
+import 'package:belly_rate/ContactUs.dart';
 import 'package:belly_rate/auth/our_user_model.dart';
 import 'package:belly_rate/auth/signin_page.dart';
 import 'package:belly_rate/auth/signup_page.dart';
@@ -204,6 +205,66 @@ class _myProfile extends State<myProfile> {
                       ),
                     ),
                   ),
+                  Spacer(
+                    flex: 1000,
+                  ),
+
+                  if (ourUser != null)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 0.0, right: 200.0, top: 12),
+                      child: Center(
+                        child: Container(
+                          width: 190,
+                          height: heightM * 1.5,
+                          child: Material(
+                            borderRadius: BorderRadius.circular(55.0), //12
+                            color: Colors
+                                .transparent, //Colors.cyan.withOpacity(0.5),
+                            child: FloatingActionButton.extended(
+                              backgroundColor: Colors.green,
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ContactUs()));
+                              },
+                              icon: Icon(
+                                Icons.contact_support_rounded,
+                                size: 24.0,
+                              ),
+                              label: Text('Contact us',
+                                  textAlign: TextAlign.center,
+                                  style: getMyTextStyle(
+                                      txt_color: Colors.white,
+                                      fontSize: heightM * 0.6)),
+                            ),
+
+                            // MaterialButton(
+                            //   minWidth: MediaQuery.of(context).size.width,
+                            //   color: button_color,
+                            //   shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(5.0)),
+                            //   splashColor: button_color,
+                            //   onPressed: () async {
+                            //     Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //             builder: (context) =>
+                            //                 // ContactUsManger()));
+                            //                 ContactUs()));
+                            //   },
+                            //   child: Text('Contact us',
+                            //       textAlign: TextAlign.center,
+                            //       style: getMyTextStyle(
+                            //           txt_color: Colors.white,
+                            //           fontSize: heightM * 0.6)),
+                            // ),
+                          ),
+                        ),
+                      ),
+                    ),
+
                   Spacer(),
                   Spacer(),
                   Spacer(),

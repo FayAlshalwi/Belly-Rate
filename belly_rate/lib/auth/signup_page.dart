@@ -29,7 +29,6 @@ class _SignUpPageState extends State<SignUpPage> {
   late PhoneNumber phonenum;
   TextEditingController phone = TextEditingController();
   TextEditingController first_name = TextEditingController();
-  List<String> rest = ["135055", "135062", "132668"];
   bool _onEditing = true;
   String? _code;
   late QuerySnapshot<Map<String, dynamic>> res;
@@ -276,16 +275,14 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             Center(
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: heightM * 1.5,
                 child: LoadingBtn(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: heightM * 1.5,
                   elevation: 10.0,
                   color: button_color,
-                  height: 50,
                   borderRadius: 10,
                   animate: true,
                   //color: Colors.green,
-                  width: MediaQuery.of(context).size.width,
                   loader: Container(
                     padding: const EdgeInsets.all(10),
                     width: 40,
@@ -301,9 +298,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
                   onTap: (startLoading, stopLoading, btnState) async {
                     if (btnState == ButtonState.idle) {
-                      startLoading();
                       formKey.currentState?.save();
                       if (formKey.currentState!.validate()) {
+                        startLoading();
+
                         if (phone.text.isNotEmpty) {
                           print("here the submitted phone");
                           print(phone.text);
@@ -483,8 +481,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: heightM * 1.9,
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Material(
@@ -493,10 +489,10 @@ class _SignUpPageState extends State<SignUpPage> {
                           color: Colors
                               .transparent, //Colors.cyan.withOpacity(0.5),
                           child: LoadingBtn(
-                            width: MediaQuery.of(context).size.width,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            height: heightM * 1.9,
                             color: button_color,
                             borderRadius: 10,
-                            height: heightM * 1.9,
                             onTap: (startLoading, stopLoading, btnState) async {
                               if (btnState == ButtonState.idle) {
                                 startLoading();

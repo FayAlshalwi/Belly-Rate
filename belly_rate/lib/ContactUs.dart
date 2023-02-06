@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loading_btn/loading_btn.dart';
 import 'auth/our_user_model.dart';
 import 'models/ticketSupport.dart';
 import 'package:intl/intl.dart';
@@ -49,6 +50,8 @@ class _ContactUsState extends State<ContactUs> {
 
   @override
   Widget build(BuildContext context) {
+    double heightM = MediaQuery.of(context).size.height / 30;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -325,180 +328,183 @@ class _ContactUsState extends State<ContactUs> {
   }
 
   Container addNewRequest(BuildContext context) {
+    double heightM = MediaQuery.of(context).size.height / 30;
+    final formKey = GlobalKey<FormState>();
+
     return Container(
-      height: MediaQuery.of(context).size.height * 0.75,
-      // width: 390,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Image.asset(
-              "asset/category_img/Wavy_Bus-31_Single-02.jpg",
-              width: 250,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 0.0, right: 273.0, top: 8.0, bottom: 0.0),
-              child: Text(
-                "New Request",
-                textAlign: TextAlign.start,
-                style: ourTextStyle2(txt_size: 22, txt_color: txt_color),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 5.0, right: 5.0, top: 2.0, bottom: 1.0),
-              child: Text(
-                "Kindly provide a detailed description of your problem, and our team will get back to you in as soon as possible.",
-                style: ourTextStyle2(
-                    txt_size: 15, txt_color: Color.fromARGB(235, 0, 0, 0)),
-              ),
-            ),
-            Container(
-              alignment: AlignmentDirectional.topStart,
-              margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
-              child: Padding(
-                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-                child: Text(
-                  "What is your issue?",
-                  textAlign: TextAlign.start,
-                  style: ourTextStyle2(txt_color: txt_color, txt_size: 16),
+        height: MediaQuery.of(context).size.height * 0.75,
+        // width: 390,
+        child: Form(
+          key: formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Image.asset(
+                  "asset/category_img/Wavy_Bus-31_Single-02.jpg",
+                  width: 250,
                 ),
-              ),
-            ),
-            Container(
-              alignment: AlignmentDirectional.topStart,
-              margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.black.withOpacity(0.13)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xffeeeeee),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 0.0, right: 273.0, top: 8.0, bottom: 0.0),
+                  child: Text(
+                    "New Request",
+                    textAlign: TextAlign.start,
+                    style: ourTextStyle2(txt_size: 22, txt_color: txt_color),
                   ),
-                ],
-              ),
-              child: Stack(
-                  //
-                  alignment: AlignmentDirectional.center,
-                  //
-                  children: [
-                    TextFormField(
-                      keyboardType: TextInputType.multiline,
-                      controller: textDescription,
-                      cursorColor: Colors.black,
-                      maxLines: 4,
-                      maxLength: 120,
-                      decoration: InputDecoration(
-                        errorStyle: TextStyle(height: 0),
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        contentPadding: EdgeInsets.only(bottom: 04, left: 0),
-                        hintText: "Write your Problem here",
-                        hintStyle: TextStyle(
-                            color: Color.fromRGBO(158, 158, 158, 1),
-                            fontSize: 14),
-                        // border: OutlineInputBorder(),
-                        // focusedBorder: OutlineInputBorder(
-                        //     borderSide: BorderSide(color: mainColor())),
-                        // labelText: 'Write  Problem here',
-                        labelStyle: ourTextStyle(
-                          color: Colors.grey,
-                          fontSize: 14.0,
-                          // textAlign: TextAlign.center,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 5.0, right: 5.0, top: 2.0, bottom: 1.0),
+                  child: Text(
+                    "Kindly provide a detailed description of your problem, and our team will get back to you in as soon as possible.",
+                    style: ourTextStyle2(
+                        txt_size: 15, txt_color: Color.fromARGB(235, 0, 0, 0)),
+                  ),
+                ),
+                Container(
+                  alignment: AlignmentDirectional.topStart,
+                  margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                    child: Text(
+                      "What is your issue?",
+                      textAlign: TextAlign.start,
+                      style: ourTextStyle2(txt_color: txt_color, txt_size: 16),
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: AlignmentDirectional.topStart,
+                  margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.black.withOpacity(0.13)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xffeeeeee),
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Stack(
+                      //
+                      alignment: AlignmentDirectional.center,
+                      //
+                      children: [
+                        TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          controller: textDescription,
+                          cursorColor: Colors.black,
+                          maxLines: 4,
+                          maxLength: 120,
+                          validator: (value) {
+                            if (value!.isEmpty ||
+                                value == null ||
+                                value.trim() == '') {
+                              return 'Please enter your issue';
+                            }
+                          },
+                          decoration: InputDecoration(
+                            errorStyle: TextStyle(height: 0),
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding:
+                                EdgeInsets.only(bottom: 04, left: 0),
+                            hintText: "Write your Problem here",
+                            hintStyle: TextStyle(
+                                color: Color.fromRGBO(158, 158, 158, 1),
+                                fontSize: 14),
+                            labelStyle: ourTextStyle(
+                              color: Colors.grey,
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Center(
+                  child: Container(
+                    child: LoadingBtn(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: heightM * 1.5,
+                      elevation: 10.0,
+                      color: button_color,
+                      borderRadius: 10,
+                      animate: true,
+                      //color: Colors.green,
+                      loader: Container(
+                        padding: const EdgeInsets.all(10),
+                        width: 40,
+                        height: 40,
+                        child: const CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       ),
+                      child: Text('Send Request',
+                          textAlign: TextAlign.center,
+                          style: ourTextStyle2(
+                              txt_color: Colors.white,
+                              txt_size: heightM * 0.6)),
+
+                      onTap: (startLoading, stopLoading, btnState) async {
+                        if (btnState == ButtonState.idle) {
+                          formKey.currentState?.save();
+                          if (formKey.currentState!.validate()) {
+                            CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.confirm,
+                                text:
+                                    'Are you sure you want to submit this request?',
+                                confirmBtnText: 'Yes',
+                                cancelBtnText: 'Cancel',
+                                confirmBtnColor:
+                                    Color.fromARGB(255, 216, 107, 147),
+                                title: "Submit Request",
+                                onCancelBtnTap: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                                onConfirmBtnTap: () async {
+                                  await addRequest();
+
+                                  textDescription.clear();
+                                  textTitle.clear();
+
+                                  CoolAlert.show(
+                                    title: "Success",
+                                    context: context,
+                                    type: CoolAlertType.success,
+                                    text: "Request submitted successfully!",
+                                    confirmBtnColor:
+                                        Color.fromARGB(255, 216, 107, 147),
+                                    onConfirmBtnTap: () {
+                                      Navigator.of(context).pop(true);
+                                      Navigator.of(context).pop(true);
+                                      Navigator.of(context).pop(true);
+                                    },
+                                  );
+                                });
+                            startLoading();
+                          }
+                        }
+                      },
                     ),
-                  ]),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: MaterialButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                color: Color.fromARGB(255, 216, 107, 147),
-                onPressed: () {
-                  // if (textTitle.text.isEmpty) {
-                  //   CoolAlert.show(
-                  //     context: context,
-                  //     title: "Title Empty",
-                  //     type: CoolAlertType.error,
-                  //     text: "Please Fill Request Title",
-                  //     confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                  //   );
-                  //
-                  // } else
-                  if (textDescription.text.isEmpty) {
-                    CoolAlert.show(
-                      context: context,
-                      title: "Description Empty",
-                      type: CoolAlertType.error,
-                      text: "Please Fill Request Description",
-                      confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                    );
-                  } else {
-                    CoolAlert.show(
-                        context: context,
-                        type: CoolAlertType.confirm,
-                        text: 'Are you sure you want to submit this request?',
-                        confirmBtnText: 'Yes',
-                        cancelBtnText: 'Cancel',
-                        confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                        title: "Submit Request",
-                        onCancelBtnTap: () {
-                          Navigator.of(context).pop(true);
-                        },
-                        onConfirmBtnTap: () async {
-                          CoolAlert.show(
-                            context: context,
-                            type: CoolAlertType.loading,
-                            text: "Loading",
-                          );
-
-                          await addRequest();
-
-                          textDescription.clear();
-                          textTitle.clear();
-
-                          CoolAlert.show(
-                            title: "Success",
-                            context: context,
-                            type: CoolAlertType.success,
-                            text: "Request submitted successfully!",
-                            confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                            onConfirmBtnTap: () {
-                              Navigator.of(context).pop(true);
-                              Navigator.of(context).pop(true);
-                              Navigator.of(context).pop(true);
-                            },
-                          );
-                        });
-                  }
-                },
-                child: Text(
-                  "Submit Request",
-                  style: ourTextStyle(
-                    color: Colors.white, //Colors.orange,
-                    fontSize: 15,
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 
   Future<bool> addRequest() async {

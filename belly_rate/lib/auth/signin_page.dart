@@ -212,16 +212,14 @@ class _SignInState extends State<SignIn> {
             ),
             Center(
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: heightM * 1.5,
                 child: LoadingBtn(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: heightM * 1.5,
                   elevation: 10.0,
                   color: button_color,
-                  height: 50,
                   borderRadius: 10,
                   animate: true,
                   //color: Colors.green,
-                  width: MediaQuery.of(context).size.width,
                   loader: Container(
                     padding: const EdgeInsets.all(10),
                     width: 40,
@@ -237,9 +235,9 @@ class _SignInState extends State<SignIn> {
 
                   onTap: (startLoading, stopLoading, btnState) async {
                     if (btnState == ButtonState.idle) {
-                      startLoading();
                       formKey.currentState?.save();
                       if (formKey.currentState!.validate()) {
+                        startLoading();
                         if (phone.text.isNotEmpty) {
                           print("here the submitted phone");
                           print(phone.text);
@@ -485,8 +483,6 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: heightM * 1.9,
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Material(
@@ -495,10 +491,10 @@ class _SignInState extends State<SignIn> {
                           color: Colors
                               .transparent, //Colors.cyan.withOpacity(0.5),
                           child: LoadingBtn(
-                            width: MediaQuery.of(context).size.width,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            height: heightM * 1.9,
                             color: button_color,
                             borderRadius: 10,
-                            height: heightM * 1.9,
                             loader: Container(
                               padding: const EdgeInsets.all(10),
                               width: 40,
