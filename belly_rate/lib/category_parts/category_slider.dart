@@ -155,10 +155,10 @@ class _CategorySliderState extends State<CategorySlider> {
                 selected_list = _restaurantlebaneseRestaurant;
                 selected_category = "Lebanese Restaurant";
               } else if (categoryList[index].name.toLowerCase().trim() ==
-                  "Other".toLowerCase()) {
+                  "French".toLowerCase()) {
                 print("${_restaurantOtherRestaurant.length}");
                 selected_list = _restaurantOtherRestaurant;
-                selected_category = "Other Restaurant";
+                selected_category = "French Restaurant";
               }
 
               /// RestaurantsPage
