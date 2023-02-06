@@ -76,18 +76,14 @@ dev_dependencies:
   url_launcher: ^6.1.7
   carousel_slider: ^4.2.1
   cloud_firestore: ^4.1.0
-  google_fonts: ^3.0.1
   path: ^1.8.0
-  image_picker: ^0.8.4
   transparent_image: ^2.0.0
-  cupertino_icons: ^1.0.2
   get: ^4.1.4
   get_storage: ^2.0.2
   cached_network_image: ^3.0.0
   shimmer: ^2.0.0
  
   
-  firebase_auth: ^4.2.3
 
 flutter_icons:
   ios: true
