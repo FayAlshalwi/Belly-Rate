@@ -71,30 +71,30 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
           fontWeight: FontWeight.bold,
           fontSize: 22,
         ),
-        //       actions: [
-        //   IconButton(
-        //     padding: EdgeInsets.only(
-        //       right: 15,
-        //     ),
-        //     onPressed: () async {
-        //      CoolAlert.show(
-        //           context: context,
-        //           type: CoolAlertType.info,
-        //           text: '\$: Low \n \$\$: Average \n \$\$\$: High',
-        //           confirmBtnText: 'Ok',
-        //           confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-        //           title: "Price Key",
-        //           onConfirmBtnTap: () async {
-        //            Navigator.of(context).pop(true); 
-        //           });
-        //     },
-        //     icon: Icon(
-        //       Icons.help_outline_rounded,
-        //       color: const Color(0xFF5a3769),
-        //       size: 27,
-        //     ),
-        //   )
-        // ],
+              actions: [
+          IconButton(
+            padding: EdgeInsets.only(
+              right: 15,
+            ),
+            onPressed: () async {
+             CoolAlert.show(
+                  context: context,
+                  type: CoolAlertType.info,
+                  text: '\$: Low \n \$\$: Average \n \$\$\$: High',
+                  confirmBtnText: 'Ok',
+                  confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
+                  title: "Price Description",
+                  onConfirmBtnTap: () async {
+                   Navigator.of(context).pop(true); 
+                  });
+            },
+            icon: Icon(
+              Icons.question_mark_outlined,
+              color: const Color(0xFF5a3769),
+              size: 25,
+            ),
+          )
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +104,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
             children: [
               CarouselSlider(
                 options: CarouselOptions(
-                    height: heightM * 10.0,
+                    height: heightM * 8.0,
                     onPageChanged: (index, reason) {
                       setState(() {
                         _current = index;
@@ -263,42 +263,27 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                 ],
               ),
                      
-              //              Row(
-              //   mainAxisAlignment: MainAxisAlignment.start,
-              //   children: [
-              //     Padding(
-              //       padding: const EdgeInsets.only(
-              //           left: 16.0, bottom: 3.0, top: 10.0, right: 5.0),
-              //       child: Row(
-              //         children: [
-              //           InkWell(
-              //               onTap: () async {
-                              
-              //               },
-              //               child: const Icon(
-              //                 Icons.favorite_rounded,
-              //                 color: Color(0xFF5a3769),
-              //                 size: 30,
-              //               )),
-              //           SizedBox(
-              //             width: 5,
-              //           ),
-              //           InkWell(
-              //             onTap: () {
-                            
-              //             },
-              //             child: Text("Rate Your visit?",
-              //                 style: ourTextStyle(
-              //                     txt_color: Colors.grey,
-              //                     txt_size: heightM * 0.55)),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ],
-              // ),
+                       /*  MaterialButton(
+                        minWidth: MediaQuery.of(context).size.width,
+                        color: Color.fromARGB(255, 216, 107, 147),
+                        
+                        // color: button_color,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        splashColor: button_color,
+                        
+                        // splashColor: button_color,
+                        onPressed: () async {
+                                         
+                        },
+                        child: Text('Google Maps',
+                            textAlign: TextAlign.center,
+                            style: getMyTextStyle(
+                                txt_color: Colors.white,
+                                fontSize: heightM * 0.6)),
+                                          ),
                       
-
+*/
                
               
               if (widget.restaurant.rate == null && isDone)
