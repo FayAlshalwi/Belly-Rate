@@ -492,24 +492,23 @@ class _SignInState extends State<SignIn> {
                                 // }
                               }
                               if (FirebaseAuth.instance.currentUser != null) {
-
                                 /// manger account :
                                 ///  phone number = +966 111 222 333
                                 ///  otp code : 000000
                                 ///  uid: lOz5BezciQUswmn3sO0nG9U7RjO2
-                                if(FirebaseAuth.instance.currentUser!.uid == "lOz5BezciQUswmn3sO0nG9U7RjO2"){
+                                if (FirebaseAuth.instance.currentUser!.uid ==
+                                    "lOz5BezciQUswmn3sO0nG9U7RjO2") {
                                   Navigator.of(context).pushAndRemoveUntil(
                                       MaterialPageRoute(
-                                          builder: (context) => HomePageManger()),
-                                          (Route<dynamic> route) => false);
-                                } else{
+                                          builder: (context) =>
+                                              HomePageManger()),
+                                      (Route<dynamic> route) => false);
+                                } else {
                                   Navigator.of(context).pushAndRemoveUntil(
                                       MaterialPageRoute(
                                           builder: (context) => HomePage()),
-                                          (Route<dynamic> route) => false);
+                                      (Route<dynamic> route) => false);
                                 }
-
-
                               }
                             },
                             child: Text('Sign In',
