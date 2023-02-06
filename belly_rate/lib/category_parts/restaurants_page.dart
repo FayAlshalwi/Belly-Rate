@@ -171,7 +171,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                                         color: Color(0xFF5a3769),
                                         size: 30,
                                       )),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 5,
                                   ),
                                   Text(
@@ -300,16 +300,6 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
     var response = await request.close();
     print(response.headers);
     return response.headers.value(HttpHeaders.locationHeader)!;
-  }
-
-  Future<void> launchPhoneDialer(String contactNumber) async {
-    print(contactNumber);
-    final Uri _phoneUri = Uri(scheme: "tel", path: contactNumber);
-    try {
-      if (await canLaunchUrl(_phoneUri)) await launchUrl(_phoneUri);
-    } catch (error) {
-      throw ("Cannot dial");
-    }
   }
 }
 

@@ -20,6 +20,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as Path;
 
+import 'manger/HomePageManger.dart';
+
 SharedPreferences? UserData;
 
 void main() async {
@@ -179,6 +181,23 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: MyApp._title,
         home: user?.uid == null ? SignIn() : HomePage());
+  }
+
+  /// manger account :
+  ///  phone number = +966 111 222 333
+  ///  otp code : 000000
+  ///  uid: lOz5BezciQUswmn3sO0nG9U7RjO2
+  StatefulWidget getNewPage() {
+    if (user != null) {
+      if (user!.uid == "lOz5BezciQUswmn3sO0nG9U7RjO2") {
+        return HomePageManger();
+        // return HomePage();
+      } else {
+        return HomePage();
+      }
+    } else {
+      return const SignIn();
+    }
   }
 }
 

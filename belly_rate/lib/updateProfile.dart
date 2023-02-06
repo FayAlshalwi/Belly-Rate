@@ -334,6 +334,8 @@ class _UpdateProfile extends State<UpdateProfile> {
     );
   }
 
+
+
   Future pickImage(ImageSource source) async {
     final image = await ImagePicker().pickImage(source: source);
     if (image == null) return;
