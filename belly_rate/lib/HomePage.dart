@@ -3,6 +3,7 @@ import 'package:belly_rate/category_parts/category_slider_homepage.dart';
 import 'package:belly_rate/category_parts/nearYou.dart';
 import 'package:belly_rate/favoritePage.dart';
 import 'package:belly_rate/history.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,43 +50,60 @@ class _HomePage extends State<HomePage> {
 
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
-        showDialog(
-          context: this.context,
-          builder: (context) => CupertinoAlertDialog(
-            title: Text(
-              'Allow Notifications',
-              style: TextStyle(
-                color: const Color(0xFF5a3769),
-              ),
-            ),
-            content: Text('Belly Rate would like to send you notifications'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Don\'t Allow',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: const Color(0xFF5a3769),
-                  ),
-                ),
-              ),
-              TextButton(
-                  onPressed: () => AwesomeNotifications()
+         CoolAlert.show(
+                  context: context,
+                  type: CoolAlertType.confirm,
+                  text: 'Belly Rate would like to send you notifications',
+                  confirmBtnText: 'Allow',
+                  cancelBtnText: 'Don\'t Allow',
+                  title: "Allow Notifications",
+                  onCancelBtnTap: () {
+                    Navigator.pop(context);
+                  },
+                  onConfirmBtnTap: () async {
+                    AwesomeNotifications()
                       .requestPermissionToSendNotifications()
-                      .then((_) => Navigator.pop(context)),
-                  child: Text(
-                    'Allow',
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: const Color(0xFF5a3769),
-                    ),
-                  ))
-            ],
-          ),
-        );
+                      .then((_) => Navigator.pop(context));
+                  Navigator.pop(context);
+                  });
+                  
+        // showDialog(
+        //   context: this.context,
+        //   builder: (context) => CupertinoAlertDialog(
+        //     title: Text(
+        //       'Allow Notifications',
+        //       style: TextStyle(
+        //         color: const Color(0xFF5a3769),
+        //       ),
+        //     ),
+        //     content: Text('Belly Rate would like to send you notifications'),
+        //     actions: [
+        //       TextButton(
+        //         onPressed: () {
+        //           Navigator.pop(context);
+        //         },
+        //         child: Text(
+        //           'Don\'t Allow',
+        //           style: TextStyle(
+        //             fontSize: 15,
+        //             color: const Color(0xFF5a3769),
+        //           ),
+        //         ),
+        //       ),
+        //       TextButton(
+        //           onPressed: () => AwesomeNotifications()
+        //               .requestPermissionToSendNotifications()
+        //               .then((_) => Navigator.pop(context)),
+        //           child: Text(
+        //             'Allow',
+        //             style: TextStyle(
+        //               fontSize: 15,
+        //               color: const Color(0xFF5a3769),
+        //             ),
+        //           ))
+        //     ],
+        //   ),
+        // );
       }
     });
 

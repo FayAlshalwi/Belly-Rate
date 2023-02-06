@@ -413,4 +413,21 @@ class _UpdateProfile extends State<UpdateProfile> {
     return GoogleFonts.cairo(
         color: txt_color, fontSize: fontSize, fontWeight: FontWeight.bold);
   }
+
+  String UpdateName (String name ){
+
+  final regExp = RegExp(r'^[a-zA-Z]+$');
+  //case 1
+     if (name == null || name.isEmpty) {
+         return 'Please enter your name';}
+  //case 2 
+             else if (!regExp.hasMatch(name.trim())) {
+                        return 'You cannot enter special characters !@#\%^&*()';}
+   //case 3                     
+                    else if (name.length <= 2) {
+                        return "Please enter at least 3 characters";
+                      }
+
+return "Success";}
+
 }
