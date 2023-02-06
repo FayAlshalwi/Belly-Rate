@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:belly_rate/category_parts/restaurant_model.dart';
+import 'package:belly_rate/category_parts/restaurants_page.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -79,7 +80,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
              CoolAlert.show(
                   context: context,
                   type: CoolAlertType.info,
-                  text: '\$\$ : Low \n \$\$\$-\$\$ : Average \n \$\$\$ : High',
+                  text: '\$: Low \n \$\$: Average \n \$\$\$: High',
                   confirmBtnText: 'Ok',
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                   title: "Price Description",
@@ -261,6 +262,30 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                   ),
                 ],
               ),
+                     
+                       /*  MaterialButton(
+                        minWidth: MediaQuery.of(context).size.width,
+                        color: Color.fromARGB(255, 216, 107, 147),
+                        
+                        // color: button_color,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        splashColor: button_color,
+                        
+                        // splashColor: button_color,
+                        onPressed: () async {
+                                         
+                        },
+                        child: Text('Google Maps',
+                            textAlign: TextAlign.center,
+                            style: getMyTextStyle(
+                                txt_color: Colors.white,
+                                fontSize: heightM * 0.6)),
+                                          ),
+                      
+*/
+               
+              
               if (widget.restaurant.rate == null && isDone)
                 Padding(
                   padding: const EdgeInsets.only(
@@ -515,7 +540,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                               ),
                             );
                           },
-                          child: Text('Rate & Review',
+                          child: Text('Rate ${widget.restaurant.name}',
                               textAlign: TextAlign.center,
                               style: ourTextStyle(
                                   txt_color: Colors.white,
