@@ -72,107 +72,116 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
 
   @override
   Widget build(BuildContext context) {
-    double heightM = MediaQuery.of(context).size.height / 30;
+    double heightM = 30;
     Color txt_color = Color(0xFF5a3769);
     return Container(
-      height: heightM * 10,
+      // color: Color.fromARGB(255, 255, 255, 255),
+      width: 410,
+      height: 260,
       child: ListView.builder(
-        itemCount: 10,
-        // itemCount: _restaurant.length,
-        scrollDirection: Axis.vertical,
-        // scrollDirection: Axis.horizontal,
-        itemBuilder: (BuildContext context, int index) {
-          if (_restaurant.isNotEmpty) {
-            Restaurant item = _restaurant[index];
-            print(item.location);
-            return Padding(
-              padding: const EdgeInsets.only(
-                  left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
-              child: InkWell(
-                onTap: () {
-                  /// RestaurantDetails
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => RestaurantDetails(
-                              category_name: item.category!,
-                              restaurant: item,
-                            )),
-                  );
-                },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
+          itemCount: 5,
+          scrollDirection: Axis.vertical,
+          itemBuilder: (BuildContext context, int index) {
+            if (_restaurant.isNotEmpty) {
+              Restaurant item = _restaurant[index];
+              print(item.location);
+              return Padding(
+                padding: const EdgeInsets.only(
+                    left: 0.0, bottom: 3.0, top: 0.0, right: 0.0),
+                child: ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network("${item.photos?.first}",
+                        height: 100, width: 70, fit: BoxFit.cover),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(15.0),
-                            topRight: Radius.circular(15.0),
+                  title: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      padding: const EdgeInsets.only(
+                          left: 0.0, bottom: 0.0, top: 0.0, right: 0.0),
+                      child: Text("${item.name}",
+                          style: ourTextStyle(
+                              txt_color: Color.fromARGB(255, 0, 0, 0),
+                              txt_size: heightM * 0.6))),
+                  trailing: Container(
+                    height: 30,
+
+                    // getBuildPriceAvg(item) == "\$\$"
+                    //     ? 30
+                    //     : getBuildPriceAvg(item) == "\$\$\$"
+                    //         ? 30
+                    //         : 30,
+                    width: item.far!.floor() < 10
+                        ? 90
+                        : item.far!.floor() > 10
+                            ? 100
+                            : 110,
+
+                    // getBuildPriceAvg(item) == "\$\$"
+                    //     ? 40
+                    //     : getBuildPriceAvg(item) == "\$\$\$"
+                    //         ? 50
+                    //         : 35,
+                    decoration: BoxDecoration(
+                        color: Color.fromARGB(244, 216, 107, 147),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+
+                          // getBuildPriceAvg(item) == "\$\$"
+                          //     ? const EdgeInsets.fromLTRB(10, 0, 0, 0)
+                          //     : getBuildPriceAvg(item) == "\$\$\$"
+                          //         ? const EdgeInsets.fromLTRB(10, 0, 0, 0)
+                          //         : const EdgeInsets.fromLTRB(12, 0, 0, 0),
+                          child: Icon(
+                            Icons.location_pin,
+                            color: Colors.white,
                           ),
-                          child: Image.network("${item.photos?.first}",
-                              height: heightM * 7,
-                              width: heightM * 15,
-                              fit: BoxFit.fill)),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("${item.name}",
-                                style: ourTextStyle(
-                                    txt_color: Color(0xFF5a3769),
-                                    txt_size: heightM * 0.7)),
-                            Text("${getBuildPriceAvg(item)}",
-                                style: ourTextStyle(
-                                    txt_color: Colors.black,
-                                    txt_size: heightM * 0.5)),
-                          ],
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16.0, bottom: 8.0, top: 3.0, right: 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text("Far From you: ${item.far ?? ""} KM",
-                                    style: ourTextStyle(
-                                        txt_color: Colors.grey,
-                                        txt_size: heightM * 0.5)),
-                              ],
-                            ),
-                            InkWell(
-                                onTap: () async {
-                                  // MapsLauncher.launchCoordinates(
-                                  //     double.parse(item.lat!),
-                                  //     double.parse(item.long!));
-                                },
-                                child: const Icon(
-                                  Icons.location_on_outlined,
-                                  color: Color(0xFF5a3769),
-                                  size: 30,
-                                )),
-                          ],
-                        ),
-                      ),
-                    ],
+                        Text("${item.far ?? ""} KM",
+                            textAlign: TextAlign.center,
+                            style: ourTextStyle(
+                                txt_color: Color.fromARGB(255, 255, 255, 255),
+                                txt_size: heightM * 0.5))
+                        // Text("${getBuildPriceAvg(item)}",
+                        //     textAlign: TextAlign.center,
+                        //     style: ourTextStyle(
+                        //         txt_color: Color.fromARGB(255, 255, 255, 255),
+                        //         txt_size: heightM * 0.5))
+                      ],
+                    ),
                   ),
+
+                  //  Icon(Icons.more_vert),
+
+                  // Container(
+                  //     child: Row(
+                  //   children: [Icon(Icons.more_vert)],
+                  // )),
+                  subtitle: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Text("${item.category}",
+                          style: ourTextStyle(
+                              txt_color: Color.fromARGB(255, 116, 116, 116),
+                              txt_size: heightM * 0.45))),
                 ),
-              ),
-            );
-          } else {
-            return SizedBox();
-          }
-        },
-      ),
+                // child: InkWell(
+                //   onTap: () {
+                //     /// RestaurantDetails
+                //     Navigator.of(context).push(
+                //       MaterialPageRoute(
+                //           builder: (context) => RestaurantDetails(
+                //                 category_name: item.category!,
+                //                 restaurant: item,
+                //               )),
+                //     );
+                //   },
+                // )
+              );
+            } else
+              return Container();
+          }),
     );
   }
 
