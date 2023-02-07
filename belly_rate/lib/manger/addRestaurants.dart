@@ -796,7 +796,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
           if (value!.isEmpty) {
             return "Resturant name cant be empty";
           }
-          if (value!.length < 2) {
+          if (value!.length < 3) {
             return "Min input length is 3 characters.";
           } else if (value!.length > 12) {
             return "Max input length is 12 characters.";
@@ -932,7 +932,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
           if (!regex.hasMatch(value!)) {
             return "Only letters and numbers are allowed!";
           }
-          if (value!.length < 2) {
+          if (value!.length < 3) {
             return "Min input length is 3 characters.";
           }
           if (value!.length > 120) {
