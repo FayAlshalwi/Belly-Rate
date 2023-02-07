@@ -55,21 +55,22 @@ class _Favorite extends State<Favorite> {
     Color txt_color = Color(0xFF5a3769);
     final Color button_color = Color.fromARGB(255, 216, 107, 147);
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          centerTitle: true,
-          title: const Text(
-            "Restaurant Favorite",
-            style: TextStyle(
-              fontSize: 22,
-              color: const Color(0xFF5a3769),
-              fontWeight: FontWeight.bold,
-            ),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        centerTitle: true,
+        title: const Text(
+          "Favorite Restaurant",
+          style: TextStyle(
+            fontSize: 22,
+            color: const Color(0xFF5a3769),
+            fontWeight: FontWeight.bold,
           ),
         ),
-        body: getBody(heightM));
+      ),
+      body: getBody(heightM),
+    );
   }
 
   Widget getBody(double heightM) {
@@ -176,36 +177,7 @@ class _Favorite extends State<Favorite> {
     }
   }
 
-  Future<bool> addRate({required String rate, required String restID}) async {
-    final _firestore = FirebaseFirestore.instance;
-    return await _firestore.collection("rating").add({
-      'rateID': '',
-      'UID': '${user?.uid}',
-      'rate': rate,
-      'restID': restID,
-      // Add more fields as needed
-    }).then((value) async {
-      await _firestore
-          .collection("rating")
-          .doc(value.id)
-          .update({"rateID": value.id});
-
-      final uri =
-          Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
-      final response = await post(uri,
-          body: json.encode({
-            'rating': [user?.uid, restID, rate, rate, rate]
-          }));
-      return true;
-    }).catchError((error) {
-      print(error);
-      return false;
-    });
-  }
-
   void getFavorite() async {
-    // try{
-
     final _firestore = FirebaseFirestore.instance;
     final _firebaseAuth = FirebaseAuth.instance;
     final UID = FirebaseAuth.instance.currentUser!.uid;
@@ -213,7 +185,6 @@ class _Favorite extends State<Favorite> {
     final res = await _firestore
         .collection('rating')
         .where("UID", isEqualTo: UID)
-        // .orderBy('rate', descending: true)
         .get();
     List<Restaurant> FavoriteListBase = [];
     final restaurants =
@@ -226,8 +197,6 @@ class _Favorite extends State<Favorite> {
           (UserData?.getDouble('locationLon'))!,
           double.parse("${resta.lat}"),
           double.parse("${resta.long}"));
-      // print("distance: ${(ffff / 1000).toStringAsFixed(2)} KM");
-      // print("ffff ${ffff}");
       resta.far = double.parse((ffff / 1000).toStringAsFixed(2));
 
       FavoriteListBase.add(resta);
@@ -239,7 +208,6 @@ class _Favorite extends State<Favorite> {
       for (var item in res.docs) {
         final rate = Rate.fromJson(item.data()) as Rate;
         rates.add(rate);
-        // print(item.data());
       }
 
       print("-----");
@@ -250,8 +218,13 @@ class _Favorite extends State<Favorite> {
       });
 
       rates.removeWhere((element) => double.parse(element.rate!) <= 3);
+      print("${rates.length} __");
       addResttoList(rates, FavoriteListBase);
-      isWrong = false;
+      if (rates.isNotEmpty) {
+        isWrong = false;
+      } else {
+        isWrong = true;
+      }
       setState(() {});
     } else {
       print('no getFavorite!');
