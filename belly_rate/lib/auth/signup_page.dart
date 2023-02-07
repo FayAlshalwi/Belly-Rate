@@ -291,7 +291,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   ),
-                  child: Text('Sign Uo',
+                  child: Text('Sign Up',
                       textAlign: TextAlign.center,
                       style: ourTextStyle(
                           txt_color: Colors.white, txt_size: heightM * 0.6)),

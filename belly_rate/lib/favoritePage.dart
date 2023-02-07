@@ -160,12 +160,35 @@ class _Favorite extends State<Favorite> {
       );
     } else if (FavoriteList.length == 0 && isWrong) {
       return Center(
-          child: Text("No favorite restaurant",
+          child: Column(
+        children: [
+          SizedBox(
+            height: 160,
+          ),
+          Image.asset(
+            'asset/category_img/noFav1.png',
+            height: 230,
+          ),
+          Text("No Favorites",
               style: TextStyle(
                 fontSize: 22,
-                color: const Color(0xFF5a3769),
-                fontWeight: FontWeight.bold,
-              )));
+                color: Color.fromARGB(255, 0, 0, 0),
+                fontWeight: FontWeight.w600,
+              )),
+          Padding(
+            padding: EdgeInsets.only(
+                left: 19.0, bottom: 15.0, top: 0.0, right: 19.0),
+            child: Text(
+                "You can add restaurants to your favorites by rating it with more than four stars",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color.fromARGB(255, 63, 63, 63),
+                  fontWeight: FontWeight.w500,
+                )),
+          )
+        ],
+      ));
     } else {
       return Center(
         child: LoadingAnimationWidget.discreteCircle(

@@ -30,7 +30,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
   User? user;
   int _current = 0;
   bool isDone = false;
-  double? rate = 0;
+  double? ratee = 0;
   @override
   void initState() {
     // TODO: implement initState
@@ -47,7 +47,6 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
       print(widget.restaurant.rate!.rate);
       var rateD = double.tryParse(widget.restaurant.rate!.rate.toString());
       print(rateD);
-      rate = rateD;
     }
 
     user = FirebaseAuth.instance.currentUser!;
@@ -88,9 +87,9 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                   });
             },
             icon: Icon(
-              Icons.question_mark_outlined,
+              Icons.info_outline_rounded,
               color: const Color(0xFF5a3769),
-              size: 25,
+              size: 28,
             ),
           )
         ],
@@ -162,18 +161,18 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                     child: Padding(
                         padding: const EdgeInsets.only(
                             left: 16.0, bottom: 0.0, top: 3.0, right: 16.0),
-                        child: rate == 0.5
+                        child: ratee == 0.5
                             ? StarWidget5()
-                            : rate == 1.5
+                            : ratee == 1.5
                                 ? StarWidget15()
-                                : rate == 2.5
+                                : ratee == 2.5
                                     ? StarWidget25()
-                                    : rate == 3.5
+                                    : ratee == 3.5
                                         ? StarWidget35()
-                                        : rate == 4.5
+                                        : ratee == 4.5
                                             ? StarWidget45()
                                             : StarWidget(
-                                                activated: rate!,
+                                                activated: ratee!,
                                               )),
                   ),
               ],
@@ -354,7 +353,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                       ),
                                       onRatingUpdate: (double value) {
                                         setState(() {
-                                          rate = value;
+                                          ratee = value;
                                           rating = value.toString();
                                         });
 
@@ -559,10 +558,16 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
     for (var Category in rateRes.docs) {
       final rate = Rate.fromJson(Category.data()) as Rate;
       widget.restaurant.rate = rate;
+      ratee = double.tryParse(widget.restaurant.rate!.rate.toString());
+      setState(() {
+        ratee = double.tryParse(widget.restaurant.rate!.rate.toString());
+      });
     }
     isDone = true;
     setState(() {});
   }
+
+  getRateValue() {}
 
   Future<bool> addRate({required String rate, required String restID}) async {
     final _firestore = FirebaseFirestore.instance;
