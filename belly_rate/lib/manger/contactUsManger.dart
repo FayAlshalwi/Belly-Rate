@@ -1,3 +1,4 @@
+import 'package:belly_rate/manger/requestDetails.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -70,8 +71,9 @@ class _contactUsMangerState extends State<ContactUsManger> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0),
                             ),
-                            color:
-                                requestsIndex == 0 ? mainColor() : Colors.white,
+                            color: requestsIndex == 0
+                                ? button_color
+                                : Colors.white,
                             onPressed: () {
                               setState(() {
                                 requestsIndex = 0;
@@ -99,8 +101,9 @@ class _contactUsMangerState extends State<ContactUsManger> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0),
                             ),
-                            color:
-                                requestsIndex == 1 ? mainColor() : Colors.white,
+                            color: requestsIndex == 1
+                                ? button_color
+                                : Colors.white,
                             onPressed: () {
                               setState(() {
                                 requestsIndex = 1;
@@ -127,11 +130,7 @@ class _contactUsMangerState extends State<ContactUsManger> {
                           itemCount: _listCompleted.length,
                           itemBuilder: (BuildContext context, int index) {
                             TicketSupport ticket = _listCompleted[index]!;
-                            if (ticket.status == "In Progress") {
-                              return buildInProgressCard(ticket);
-                            } else {
-                              return buildCompleteCard(ticket);
-                            }
+                            return buildContainerCardViewCompleted(ticket);
                           }),
                     if (requestsIndex == 0)
                       ListView.builder(
@@ -141,12 +140,7 @@ class _contactUsMangerState extends State<ContactUsManger> {
                           itemBuilder: (BuildContext context, int index) {
                             TicketSupport ticket = _listInProgress[index]!;
                             print("wwww ${ticket.status}");
-                            if (ticket.status!.trim().toLowerCase() ==
-                                "In Progress".trim().toLowerCase()) {
-                              return buildInProgressCard(ticket);
-                            } else {
-                              return buildCompleteCard(ticket);
-                            }
+                            return buildContainerCardView(ticket);
                           }),
                   ],
                 );
@@ -156,32 +150,6 @@ class _contactUsMangerState extends State<ContactUsManger> {
                 return Center(child: CircularProgressIndicator());
               }
             }),
-      ),
-    );
-  }
-
-  Card buildCompleteCard(TicketSupport ticket) {
-    return Card(
-      child: ClipRect(
-        child: Banner(
-          message: "${ticket.status}",
-          location: BannerLocation.topEnd,
-          color: const Color.fromARGB(255, 216, 107, 147),
-          child: buildContainerCard(ticket),
-        ),
-      ),
-    );
-  }
-
-  Card buildInProgressCard(TicketSupport ticket) {
-    return Card(
-      child: ClipRect(
-        child: Banner(
-          message: "${ticket.status}",
-          location: BannerLocation.topEnd,
-          color: mainColor(),
-          child: buildContainerCard(ticket),
-        ),
       ),
     );
   }
@@ -285,7 +253,7 @@ class _contactUsMangerState extends State<ContactUsManger> {
                             : Radius.circular(0.0),
                       ),
                       child: Container(
-                        color: Colors.grey.withOpacity(0.4),
+                        color: Colors.cyan.withOpacity(0.2),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: Row(
@@ -346,13 +314,379 @@ class _contactUsMangerState extends State<ContactUsManger> {
                         child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Write Your Reply",
+                        "write Your Reply here",
                         style: ourTextStyle(color: Colors.white, fontSize: 13),
                       ),
                     )),
                   ),
                 ),
               )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildContainerCardViewCompleted(TicketSupport ticket) {
+    final double heightM = MediaQuery.of(context).size.height / 30;
+
+    return Padding(
+      padding:
+          const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ///
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  /// RequestDetails
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => RequestDetails(
+                              ticket: ticket,
+                            )),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black, width: 2)),
+                        child: Center(
+                          child: Text(
+                            "${ticket.username!.substring(0, 1).toUpperCase()}",
+                            style:
+                                ourTextStyle(fontSize: 20, color: Colors.black
+                                    // fontWeight: FontWeight.bold
+                                    ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    ///
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: Text(
+                                  "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle! : "No title"}",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: ourTextStyle(
+                                      color: Color(0xFF5a3769), fontSize: 16)),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: Text("Request User : ${ticket.username}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: ourTextStyle(
+                                      color: button_color,
+                                      fontSize: heightM * 0.4)),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: Text(
+                                  "Request Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: ourTextStyle(
+                                      color: button_color,
+                                      fontSize: heightM * 0.4)),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: Text(
+                                  "Answer Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: ourTextStyle(
+                                      color: mainColor(),
+                                      fontSize: heightM * 0.4)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // ///
+            // if (item.rate == null)
+            //   InkWell(
+            //     onTap: () {
+            //       print("qqq");
+            //       String rating = "";
+            //
+            //       showModalBottomSheet<dynamic>(
+            //         context: context,
+            //         isScrollControlled: true,
+            //         backgroundColor: Colors.transparent,
+            //         builder: (context) => Container(
+            //           //change the height of the bottom sheet
+            //           height: MediaQuery.of(context).size.height * 0.22,
+            //           decoration: const BoxDecoration(
+            //             color: Colors.white,
+            //             borderRadius: BorderRadius.only(
+            //               topLeft: Radius.circular(25.0),
+            //               topRight: Radius.circular(25.0),
+            //             ),
+            //           ),
+            //           //content of the bottom sheet
+            //           child: Column(
+            //             // mainAxisAlignment:
+            //             //     MainAxisAlignment.spaceEvenly,
+            //             children: [
+            //               const SizedBox(
+            //                 height: 15,
+            //               ),
+            //               const SizedBox(
+            //                 height: 50,
+            //                 child: Text(
+            //                   "Rate & Review",
+            //                   style: TextStyle(
+            //                       fontSize: 25,
+            //                       fontWeight: FontWeight.bold,
+            //                       color: Color(0xFF5a3769)),
+            //                 ),
+            //               ),
+            //               RatingBar.builder(
+            //                 minRating: 1,
+            //                 direction: Axis.horizontal,
+            //                 allowHalfRating: true,
+            //                 glowColor: Color(0xFF5a3769),
+            //                 itemCount: 5,
+            //                 itemPadding:
+            //                 EdgeInsets.symmetric(horizontal: 4.0),
+            //                 itemBuilder: (context, _) => Icon(
+            //                   Icons.star,
+            //                   color: Colors.amber,
+            //                 ),
+            //                 onRatingUpdate: (double value) {
+            //                   rating = value.toString();
+            //                   print(rating);
+            //                 },
+            //               ),
+            //               SizedBox(
+            //                 height: 15,
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //     child: const Padding(
+            //       padding: EdgeInsets.only(
+            //           left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+            //       child:
+            //       Icon(Icons.star_border, color: Colors.pinkAccent),
+            //     ),
+            //   ),
+            //
+            // if (item.rate != null)
+            //   const Padding(
+            //     padding: EdgeInsets.only(
+            //         left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+            //     child: Icon(Icons.star, color: Colors.pinkAccent),
+            //   ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildContainerCardView(TicketSupport ticket) {
+    final double heightM = MediaQuery.of(context).size.height / 30;
+
+    return Padding(
+      padding:
+          const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ///
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  /// RequestDetails
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => RequestDetails(
+                              ticket: ticket,
+                            )),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black, width: 2)),
+                        child: Center(
+                          child: Text(
+                            "${ticket.username!.substring(0, 1).toUpperCase()}",
+                            style:
+                                ourTextStyle(fontSize: 20, color: Colors.black
+                                    // fontWeight: FontWeight.bold
+                                    ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    ///
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: Text(
+                                  "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle! : "No title"}",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: ourTextStyle(
+                                      color: Color(0xFF5a3769), fontSize: 16)),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: Text("Request User : ${ticket.username}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: ourTextStyle(
+                                      color: button_color,
+                                      fontSize: heightM * 0.4)),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: Text(
+                                  "Request Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: ourTextStyle(
+                                      color: button_color,
+                                      fontSize: heightM * 0.4)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // ///
+            // if (item.rate == null)
+            //   InkWell(
+            //     onTap: () {
+            //       print("qqq");
+            //       String rating = "";
+            //
+            //       showModalBottomSheet<dynamic>(
+            //         context: context,
+            //         isScrollControlled: true,
+            //         backgroundColor: Colors.transparent,
+            //         builder: (context) => Container(
+            //           //change the height of the bottom sheet
+            //           height: MediaQuery.of(context).size.height * 0.22,
+            //           decoration: const BoxDecoration(
+            //             color: Colors.white,
+            //             borderRadius: BorderRadius.only(
+            //               topLeft: Radius.circular(25.0),
+            //               topRight: Radius.circular(25.0),
+            //             ),
+            //           ),
+            //           //content of the bottom sheet
+            //           child: Column(
+            //             // mainAxisAlignment:
+            //             //     MainAxisAlignment.spaceEvenly,
+            //             children: [
+            //               const SizedBox(
+            //                 height: 15,
+            //               ),
+            //               const SizedBox(
+            //                 height: 50,
+            //                 child: Text(
+            //                   "Rate & Review",
+            //                   style: TextStyle(
+            //                       fontSize: 25,
+            //                       fontWeight: FontWeight.bold,
+            //                       color: Color(0xFF5a3769)),
+            //                 ),
+            //               ),
+            //               RatingBar.builder(
+            //                 minRating: 1,
+            //                 direction: Axis.horizontal,
+            //                 allowHalfRating: true,
+            //                 glowColor: Color(0xFF5a3769),
+            //                 itemCount: 5,
+            //                 itemPadding:
+            //                 EdgeInsets.symmetric(horizontal: 4.0),
+            //                 itemBuilder: (context, _) => Icon(
+            //                   Icons.star,
+            //                   color: Colors.amber,
+            //                 ),
+            //                 onRatingUpdate: (double value) {
+            //                   rating = value.toString();
+            //                   print(rating);
+            //                 },
+            //               ),
+            //               SizedBox(
+            //                 height: 15,
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //     child: const Padding(
+            //       padding: EdgeInsets.only(
+            //           left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+            //       child:
+            //       Icon(Icons.star_border, color: Colors.pinkAccent),
+            //     ),
+            //   ),
+            //
+            // if (item.rate != null)
+            //   const Padding(
+            //     padding: EdgeInsets.only(
+            //         left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+            //     child: Icon(Icons.star, color: Colors.pinkAccent),
+            //   ),
           ],
         ),
       ),
@@ -377,8 +711,6 @@ class _contactUsMangerState extends State<ContactUsManger> {
                     maxLines: 3,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor())),
                       labelText: 'Write your Reply here',
                       labelStyle: ourTextStyle(
                         color: Colors.grey,
@@ -396,7 +728,7 @@ class _contactUsMangerState extends State<ContactUsManger> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       ),
-                      color: mainColor(),
+                      color: button_color,
                       onPressed: () {
                         if (text.text.isNotEmpty) {
                           CoolAlert.show(
@@ -507,6 +839,8 @@ class _contactUsMangerState extends State<ContactUsManger> {
       fontSize: fontSize,
     );
   }
+
+  Color button_color = Color.fromARGB(255, 216, 107, 147);
 
   Color mainColor() => const Color(0xFF5a3769);
 }

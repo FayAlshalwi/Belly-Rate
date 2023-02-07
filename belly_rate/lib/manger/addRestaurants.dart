@@ -24,6 +24,7 @@ class AddRestaurants extends StatefulWidget {
 }
 
 class _AddRestaurantsState extends State<AddRestaurants> {
+  bool invalid2 = false;
   TextEditingController restaurantDescription = TextEditingController();
   TextEditingController restaurantLat = TextEditingController();
   TextEditingController restaurantLong = TextEditingController();
@@ -350,72 +351,78 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             ),
             color: Color.fromARGB(255, 216, 107, 147),
             onPressed: () async {
-              if (restaurantName.text.isEmpty) {
+              if (restaurantName.text.isEmpty || invalid2 == true) {
                 CoolAlert.show(
                   context: context,
-                  title: "Name Empty",
+                  title: "Resturant Name is invalid",
                   type: CoolAlertType.error,
-                  text: "Please Fill The Name",
+                  text: "Please enter a valid Resturant name",
                   confirmBtnTextStyle:
                       ourTextStyle(txt_color: Colors.white, txt_size: 13),
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
-              } else if (restaurantDescription.text.isEmpty) {
+              } else if (restaurantDescription.text.isEmpty ||
+                  invalid2 == true) {
                 CoolAlert.show(
                   context: context,
-                  title: "Description Empty",
+                  title: "Resturant Description is invalid",
                   type: CoolAlertType.error,
-                  text: "Please Fill The Description",
+                  text: "Please enter a valid Resturant Description",
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
-              } else if (_selectedCategory.isEmpty) {
+              } else if (_selectedCategory.isEmpty || invalid2 == true) {
                 CoolAlert.show(
                   context: context,
-                  title: "Category Empty",
+                  title: "Resturant category is invalid Empty",
                   type: CoolAlertType.error,
-                  text: "Please Fill The Category",
+                  text: "Please enter a valid resturant Category",
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
-              } else if (restaurantPhoneNumber.text.isEmpty) {
+              } else if (restaurantPhoneNumber.text.isEmpty ||
+                  invalid2 == true) {
                 CoolAlert.show(
                   context: context,
-                  title: "Phone Number Empty",
+                  title: "Phone Number is invalid",
                   type: CoolAlertType.error,
-                  text: "Please Fill The Phone Number",
+                  text: "Please enter a valid Phone Number",
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
-              } else if (_selectedPriceAvg.isEmpty) {
+              } else if (_selectedPriceAvg.isEmpty || invalid2 == true) {
                 CoolAlert.show(
                   context: context,
-                  title: "Price Average Empty",
+                  title: "Price Average is invalid",
                   type: CoolAlertType.error,
-                  text: "Please Fill The Price Average",
+                  text: "Please enter a valid Price Average",
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
               } else if (_selectedOption == 1 &&
-                  (restaurantLat.text.isEmpty || restaurantLong.text.isEmpty)) {
+                  (restaurantLat.text.isEmpty ||
+                      restaurantLong.text.isEmpty ||
+                      invalid2 == true)) {
                 CoolAlert.show(
                   context: context,
-                  title: "Restaurant Location Empty",
+                  title: "Restaurant Location is not valid",
                   type: CoolAlertType.error,
-                  text: "Please Fill The restaurant Location",
+                  text: "Please enter a valid restaurant Location",
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
               } else if (_selectedOption == 2 &&
-                  (restaurantLatAuto.isEmpty || restaurantLongAuto.isEmpty)) {
+                  (restaurantLatAuto.isEmpty ||
+                      restaurantLongAuto.isEmpty ||
+                      invalid2 == true)) {
                 CoolAlert.show(
                   context: context,
-                  title: "Restaurant Location Empty",
+                  title: "Restaurant Location is invalid",
                   type: CoolAlertType.error,
-                  text: "Please Fill The restaurant Location",
+                  text: "Please enter a valid restaurant Location",
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
-              } else if (_imageFiles.isEmpty) {
+              } else if (_imageFiles.length < 4) {
                 CoolAlert.show(
                   context: context,
-                  title: "Restaurant Image Empty",
+                  title: "Restaurant Image is less than 4",
                   type: CoolAlertType.error,
-                  text: "Please Fill The Restaurant Image",
+                  text: "Please choose exactly 4 pictures ",
                   confirmBtnColor: const Color.fromARGB(255, 216, 107, 147),
                 );
               } else {
@@ -610,19 +617,23 @@ class _AddRestaurantsState extends State<AddRestaurants> {
               color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
         ),
         validator: (value) {
-          if (value!.isEmpty) {
-            return "Field cant be empty";
-          }
           String pattern = r'^[0-9.]+$';
           RegExp regExp = new RegExp(pattern);
+          if (value!.isEmpty) {
+            invalid2 = true;
+            return "Field cant be empty";
+          }
           if (!regExp.hasMatch(value!)) {
-            return "Enter numbers only";
+            invalid2 = true;
+            return "Only numbers and dots are allowed";
           }
           if (value!.length > 18) {
-            return "Max input length is 18.";
+            invalid2 = true;
+            return "Max input length is 18 characters.";
+          } else {
+            invalid2 = false;
+            return null;
           }
-
-          return null;
         },
       ),
     );
@@ -672,18 +683,23 @@ class _AddRestaurantsState extends State<AddRestaurants> {
               color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
         ),
         validator: (value) {
-          if (value!.isEmpty) {
-            return "field cant be empty";
-          }
           String pattern = r'^[0-9.]+$';
           RegExp regExp = new RegExp(pattern);
+          if (value!.isEmpty) {
+            invalid2 = true;
+            return "Field cant be empty";
+          }
           if (!regExp.hasMatch(value!)) {
-            return "Enter numbers Only";
+            invalid2 = true;
+            return "Only numbers and dots are allowed";
           }
           if (value!.length > 18) {
-            return "Max length is 18.";
+            invalid2 = true;
+            return "Max input length is 18 characters.";
+          } else {
+            invalid2 = false;
+            return null;
           }
-          return null;
         },
       ),
     );
@@ -733,17 +749,18 @@ class _AddRestaurantsState extends State<AddRestaurants> {
               color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
         ),
         validator: (value) {
-          if (value!.isEmpty) {
-            return "Phone number cant be empty";
-          }
           if (RegExp(r"[a-zA-Z!@#\$%^&*()_+|~=`{}\[\]:;'<>?,.\/\\-]")
               .hasMatch(value!)) {
+            invalid2 = true;
             return "No English letters or special characters allowed";
           }
           if (value!.length != 10) {
+            invalid2 = true;
             return "Length must be equal to 10";
+          } else {
+            invalid2 = false;
+            return null;
           }
-          return null;
         },
       ),
     );
@@ -793,20 +810,22 @@ class _AddRestaurantsState extends State<AddRestaurants> {
               color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
         ),
         validator: (value) {
-          if (value!.isEmpty) {
-            return "Resturant name cant be empty";
-          }
-          if (value!.length < 3) {
+          if (value!.length < 2) {
+            invalid2 = true;
             return "Min input length is 3 characters.";
           } else if (value!.length > 12) {
+            invalid2 = true;
             return "Max input length is 12 characters.";
           } else if (value.contains(new RegExp(r'[0-9]'))) {
+            invalid2 = true;
             return "No numbers allowed.";
           } else if (value.contains(new RegExp(r'[^a-zA-Z\s]'))) {
+            invalid2 = true;
             return "No special characters allowed.";
+          } else {
+            invalid2 = false;
+            return null;
           }
-
-          return null;
         },
       ),
     );
@@ -857,17 +876,22 @@ class _AddRestaurantsState extends State<AddRestaurants> {
         ),
         validator: (String? value) {
           if (value!.isEmpty) {
-            return "Resturant ID can't be empty.";
+            invalid2 = true;
+            return "Number can't be empty.";
           } else if (int.tryParse(value) == null) {
-            return "only numbers are allowed";
+            invalid2 = true;
+            return "Enter a valid number.";
           }
           // else if (value.contains(new RegExp(r'[^a-zA-Z\s]'))) {
           //   return "No special characters allowed.";
           // }
           else if (value.length > 6) {
-            return "Resturant ID can't be longer than 6 digits.";
+            invalid2 = true;
+            return "Number can't be longer than 6 digits.";
+          } else {
+            invalid2 = false;
+            return null;
           }
-          return null;
         },
       ),
     );
@@ -927,18 +951,24 @@ class _AddRestaurantsState extends State<AddRestaurants> {
 
           // RegExp regExp = new RegExp(pattern);
           if (value!.isEmpty) {
-            return "Resturant Description cant be empty";
+            invalid2 = true;
+            return "Field cant be empty";
           }
           if (!regex.hasMatch(value!)) {
-            return "Only letters and numbers are allowed!";
+            invalid2 = true;
+            return "Only letters and numbers are allowed";
           }
-          if (value!.length < 3) {
+          if (value!.length < 2) {
+            invalid2 = true;
             return "Min input length is 3 characters.";
           }
           if (value!.length > 120) {
+            invalid2 = true;
             return "Max input length is 120 characters.";
-          } else
+          } else {
+            invalid2 = false;
             return null;
+          }
         },
       ),
     );
