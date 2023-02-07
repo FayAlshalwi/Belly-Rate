@@ -138,7 +138,9 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                           vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: _current == index ? txt_color : button_color),
+                          color: _current == index
+                              ? button_color
+                              : Color.fromARGB(255, 105, 105, 105)),
                     );
                   },
                 ).toList(), // this was the part the I had to add
@@ -567,8 +569,6 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
     setState(() {});
   }
 
-  getRateValue() {}
-
   Future<bool> addRate({required String rate, required String restID}) async {
     final _firestore = FirebaseFirestore.instance;
     return await _firestore.collection("rating").add({
@@ -632,7 +632,7 @@ class StarWidget extends StatelessWidget {
       children: List.generate(total, (index) {
         var filled = index < activated;
         return Icon(
-          filled ? Icons.star : Icons.star_border,
+          filled ? Icons.star_rounded : Icons.star_border_rounded,
           color: Color.fromARGB(255, 216, 107, 147),
         );
       }).toList(),

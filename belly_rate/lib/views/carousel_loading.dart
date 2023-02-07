@@ -14,7 +14,7 @@ class CarouselLoading extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: 230,
+            height: 222,
             width: 100000,
             margin: EdgeInsets.fromLTRB(35, 10, 30, 0),
             decoration: BoxDecoration(

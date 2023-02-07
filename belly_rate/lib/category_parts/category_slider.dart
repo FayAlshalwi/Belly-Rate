@@ -201,13 +201,13 @@ class _CategorySliderState extends State<CategorySlider> {
   }
 
   List<Category> categoryList = [
-    Category(name: "American", icon: "asset/category_img/American.png"),
-    Category(name: "French", icon: "asset/category_img/other.png"),
-    Category(name: "Health food", icon: "asset/category_img/healthFood.png"),
-    Category(name: "Indian", icon: "asset/category_img/indian.png"),
-    Category(name: "Italian", icon: "asset/category_img/italian.png"),
-    Category(name: "Japanese", icon: "asset/category_img/Japanese.png"),
-    Category(name: "Lebanese", icon: "asset/category_img/Lebanese.png"),
-    Category(name: "Seafood", icon: "asset/category_img/seafood.png"),
+    Category(name: "American", icon: "asset/category_img/American1.png"),
+    Category(name: "French", icon: "asset/category_img/french.png"),
+    Category(name: "Health food", icon: "asset/category_img/healthFood3.png"),
+    Category(name: "Indian", icon: "asset/category_img/indian3.png"),
+    Category(name: "Italian", icon: "asset/category_img/italian2.png"),
+    Category(name: "Japanese", icon: "asset/category_img/Japanese3.png"),
+    Category(name: "Lebanese", icon: "asset/category_img/Lebanese1.png"),
+    Category(name: "Seafood", icon: "asset/category_img/seafood1.png"),
   ];
 }

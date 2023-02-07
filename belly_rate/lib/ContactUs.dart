@@ -340,13 +340,16 @@ class _ContactUsState extends State<ContactUs> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
+                SizedBox(
+                  height: 10,
+                ),
                 Image.asset(
-                  "asset/category_img/Wavy_Bus-31_Single-02.jpg",
+                  "asset/category_img/cusSer.png",
                   width: 250,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 0.0, right: 273.0, top: 8.0, bottom: 0.0),
+                      left: 0.0, right: 273.0, top: 0.0, bottom: 0.0),
                   child: Text(
                     "New Request",
                     textAlign: TextAlign.start,
