@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:belly_rate/category_parts/category_slider_homepage.dart';
-import 'package:belly_rate/category_parts/nearYou.dart';
 import 'package:belly_rate/favoritePage.dart';
 import 'package:belly_rate/history.dart';
 import 'package:firebase_auth/firebase_auth.dart';
