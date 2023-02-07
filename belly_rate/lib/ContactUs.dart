@@ -21,7 +21,8 @@ class _ContactUsState extends State<ContactUs> {
 
   TextEditingController textTitle = TextEditingController();
   TextEditingController textDescription = TextEditingController();
-
+  Color txt_color = Color(0xFF5a3769);
+  Color button_color = Color.fromARGB(255, 216, 107, 147);
   @override
   void initState() {
     // TODO: implement initState
@@ -329,138 +330,172 @@ class _ContactUsState extends State<ContactUs> {
       // width: 390,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Column(
-            children: [
-              Text(
-                "Add New Request",
-                style: ourTextStyle(color: mainColor(), fontSize: 20),
+        child: Column(
+          children: [
+            Image.asset(
+              "asset/category_img/Wavy_Bus-31_Single-02.jpg",
+              width: 250,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 0.0, right: 273.0, top: 8.0, bottom: 0.0),
+              child: Text(
+                "New Request",
+                textAlign: TextAlign.start,
+                style: ourTextStyle2(txt_size: 22, txt_color: txt_color),
               ),
-              Center(
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 5.0, right: 5.0, top: 2.0, bottom: 1.0),
+              child: Text(
+                "Kindly provide a detailed description of your problem, and our team will get back to you in as soon as possible.",
+                style: ourTextStyle2(
+                    txt_size: 15, txt_color: Color.fromARGB(235, 0, 0, 0)),
+              ),
+            ),
+            Container(
+              alignment: AlignmentDirectional.topStart,
+              margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
                 child: Text(
-                  "Please kindly provide a detailed description of your problem, and our team will get back to you in the shortest time possible."
-                  " We are always here to help and eager to assist you with any concerns you may have. Rest assured that we will do our best to provide a prompt "
-                  "and satisfactory solution to your issue.",
-                  style: ourTextStyle(color: Colors.black, fontSize: 14),
+                  "What is your issue?",
+                  textAlign: TextAlign.start,
+                  style: ourTextStyle2(txt_color: txt_color, txt_size: 16),
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              // TextFormField(
-              //   keyboardType: TextInputType.multiline,
-              //   controller: textTitle,
-              //   maxLines: 1,
-              //   decoration: InputDecoration(
-              //     border: OutlineInputBorder(),
-              //     labelText: 'Describe your problem',
-              //     labelStyle: ourTextStyle(
-              //       color: Colors.grey,
-              //       fontSize: 14.0,
-              //       // textAlign: TextAlign.center,
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 10,
-              // ),
-              TextFormField(
-                keyboardType: TextInputType.multiline,
-                controller: textDescription,
-                maxLines: 5,
-                maxLength: 120,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor())),
-                  labelText: 'Write your Problem here',
-                  labelStyle: ourTextStyle(
-                    color: Colors.grey,
-                    fontSize: 14.0,
-                    // textAlign: TextAlign.center,
+            ),
+            Container(
+              alignment: AlignmentDirectional.topStart,
+              margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black.withOpacity(0.13)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffeeeeee),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
                   ),
-                ),
+                ],
               ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: MaterialButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  color: Color.fromARGB(255, 216, 107, 147),
-                  onPressed: () {
-                    // if (textTitle.text.isEmpty) {
-                    //   CoolAlert.show(
-                    //     context: context,
-                    //     title: "Title Empty",
-                    //     type: CoolAlertType.error,
-                    //     text: "Please Fill Request Title",
-                    //     confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                    //   );
-                    //
-                    // } else
-                    if (textDescription.text.isEmpty) {
-                      CoolAlert.show(
-                        context: context,
-                        title: "Description Empty",
-                        type: CoolAlertType.error,
-                        text: "Please Fill Request Description",
-                        confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                      );
-                    } else {
-                      CoolAlert.show(
-                          context: context,
-                          type: CoolAlertType.confirm,
-                          text: 'Are you sure you want to submit this request?',
-                          confirmBtnText: 'Yes',
-                          cancelBtnText: 'Cancel',
-                          confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                          title: "Submit Request",
-                          onCancelBtnTap: () {
-                            Navigator.of(context).pop(true);
-                          },
-                          onConfirmBtnTap: () async {
-                            CoolAlert.show(
-                              context: context,
-                              type: CoolAlertType.loading,
-                              text: "Loading",
-                            );
-
-                            await addRequest();
-
-                            textDescription.clear();
-                            textTitle.clear();
-
-                            CoolAlert.show(
-                              title: "Success",
-                              context: context,
-                              type: CoolAlertType.success,
-                              text: "Request submitted successfully!",
-                              confirmBtnColor:
-                                  Color.fromARGB(255, 216, 107, 147),
-                              onConfirmBtnTap: () {
-                                Navigator.of(context).pop(true);
-                                Navigator.of(context).pop(true);
-                                Navigator.of(context).pop(true);
-                              },
-                            );
-                          });
-                    }
-                  },
-                  child: Text(
-                    "Submit Request",
-                    style: ourTextStyle(
-                      color: Colors.white, //Colors.orange,
-                      fontSize: 15,
+              child: Stack(
+                  //
+                  alignment: AlignmentDirectional.center,
+                  //
+                  children: [
+                    TextFormField(
+                      keyboardType: TextInputType.multiline,
+                      controller: textDescription,
+                      cursorColor: Colors.black,
+                      maxLines: 4,
+                      maxLength: 120,
+                      decoration: InputDecoration(
+                        errorStyle: TextStyle(height: 0),
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.only(bottom: 04, left: 0),
+                        hintText: "Write your Problem here",
+                        hintStyle: TextStyle(
+                            color: Color.fromRGBO(158, 158, 158, 1),
+                            fontSize: 14),
+                        // border: OutlineInputBorder(),
+                        // focusedBorder: OutlineInputBorder(
+                        //     borderSide: BorderSide(color: mainColor())),
+                        // labelText: 'Write  Problem here',
+                        labelStyle: ourTextStyle(
+                          color: Colors.grey,
+                          fontSize: 14.0,
+                          // textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
+                  ]),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: MaterialButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                color: Color.fromARGB(255, 216, 107, 147),
+                onPressed: () {
+                  // if (textTitle.text.isEmpty) {
+                  //   CoolAlert.show(
+                  //     context: context,
+                  //     title: "Title Empty",
+                  //     type: CoolAlertType.error,
+                  //     text: "Please Fill Request Title",
+                  //     confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
+                  //   );
+                  //
+                  // } else
+                  if (textDescription.text.isEmpty) {
+                    CoolAlert.show(
+                      context: context,
+                      title: "Description Empty",
+                      type: CoolAlertType.error,
+                      text: "Please Fill Request Description",
+                      confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
+                    );
+                  } else {
+                    CoolAlert.show(
+                        context: context,
+                        type: CoolAlertType.confirm,
+                        text: 'Are you sure you want to submit this request?',
+                        confirmBtnText: 'Yes',
+                        cancelBtnText: 'Cancel',
+                        confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
+                        title: "Submit Request",
+                        onCancelBtnTap: () {
+                          Navigator.of(context).pop(true);
+                        },
+                        onConfirmBtnTap: () async {
+                          CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.loading,
+                            text: "Loading",
+                          );
+
+                          await addRequest();
+
+                          textDescription.clear();
+                          textTitle.clear();
+
+                          CoolAlert.show(
+                            title: "Success",
+                            context: context,
+                            type: CoolAlertType.success,
+                            text: "Request submitted successfully!",
+                            confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
+                            onConfirmBtnTap: () {
+                              Navigator.of(context).pop(true);
+                              Navigator.of(context).pop(true);
+                              Navigator.of(context).pop(true);
+                            },
+                          );
+                        });
+                  }
+                },
+                child: Text(
+                  "Submit Request",
+                  style: ourTextStyle(
+                    color: Colors.white, //Colors.orange,
+                    fontSize: 15,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -514,5 +549,11 @@ class _ContactUsState extends State<ContactUs> {
     );
   }
 
-  Color mainColor() => const Color(0xFF5a3769);
+  TextStyle ourTextStyle2(
+      {required Color txt_color, required double txt_size}) {
+    return GoogleFonts.cairo(
+        color: txt_color, fontWeight: FontWeight.bold, fontSize: txt_size);
+  }
+
+  Color mainColor() => Color.fromARGB(249, 106, 68, 122);
 }

@@ -136,24 +136,24 @@ class _myProfile extends State<myProfile> {
             SizedBox(
               height: 40,
             ),
-            if(ourUser != null)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(100.0),
-              child: ourUser!.picture == null
-                  ? Image.network(
-                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-                      fit: BoxFit.cover,
-                      height: 150.0,
-                      width: 150.0,
-                    )
-                  : Image.network(
-                      "${ourUser!.picture}",
-                      fit: BoxFit.cover,
-                      height: 150.0,
-                      width: 150.0,
-                      // errorBuilder: ,
-                    ),
-            ),
+            if (ourUser != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(100.0),
+                child: ourUser!.picture == null
+                    ? Image.network(
+                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                        fit: BoxFit.cover,
+                        height: 150.0,
+                        width: 150.0,
+                      )
+                    : Image.network(
+                        "${ourUser!.picture}",
+                        fit: BoxFit.cover,
+                        height: 150.0,
+                        width: 150.0,
+                        // errorBuilder: ,
+                      ),
+              ),
             Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
               child: Text(
@@ -170,61 +170,7 @@ class _myProfile extends State<myProfile> {
                     txt_color: Colors.grey, fontSize: heightM * 0.6),
               ),
             ),
-            if(ourUser != null)
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12),
-              child: Center(
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: heightM * 1.5,
-                  child: Material(
-                    elevation: 10.0,
-                    borderRadius: BorderRadius.circular(5.0), //12
-                    color: Colors.transparent, //Colors.cyan.withOpacity(0.5),
-                    child: MaterialButton(
-                      minWidth: MediaQuery.of(context).size.width,
-                      color: button_color,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0)),
-                      splashColor: button_color,
-                      onPressed: () async {
-                        /// UpdateProfile
-                        Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        UpdateProfile(ourUser: ourUser)))
-                            .then((value) async {
-                          if (value) {
-                            var vari = await FirebaseFirestore.instance
-                                .collection("Users")
-                                .doc(user!.uid)
-                                .get();
-                            // Map<String,dynamic> userData = vari as Map<String,dynamic>;
-                            print("currentUser: ${vari.data()}");
-
-                            ourUser = OurUser(
-                              name: vari.data()!['name'],
-                              // first_name: vari.data()!['firstName'],
-                              picture: vari.data()!['picture'],
-                              phone_number: vari.data()!['phoneNumber'],
-                            );
-                            setState(() {});
-                          }
-                        });
-                      },
-                      child: Text('Update Profile',
-                          textAlign: TextAlign.center,
-                          style: getMyTextStyle(
-                              txt_color: Colors.white,
-                              fontSize: heightM * 0.6)),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            if(ourUser != null)
+            if (ourUser != null)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12),
                 child: Center(
@@ -242,15 +188,32 @@ class _myProfile extends State<myProfile> {
                             borderRadius: BorderRadius.circular(5.0)),
                         splashColor: button_color,
                         onPressed: () async {
-
+                          /// UpdateProfile
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      // ContactUsManger()));
-                                      ContactUs()));
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          UpdateProfile(ourUser: ourUser)))
+                              .then((value) async {
+                            if (value) {
+                              var vari = await FirebaseFirestore.instance
+                                  .collection("Users")
+                                  .doc(user!.uid)
+                                  .get();
+                              // Map<String,dynamic> userData = vari as Map<String,dynamic>;
+                              print("currentUser: ${vari.data()}");
+
+                              ourUser = OurUser(
+                                name: vari.data()!['name'],
+                                // first_name: vari.data()!['firstName'],
+                                picture: vari.data()!['picture'],
+                                phone_number: vari.data()!['phoneNumber'],
+                              );
+                              setState(() {});
+                            }
+                          });
                         },
-                        child: Text('Contact us',
+                        child: Text('Update Profile',
                             textAlign: TextAlign.center,
                             style: getMyTextStyle(
                                 txt_color: Colors.white,
@@ -260,6 +223,65 @@ class _myProfile extends State<myProfile> {
                   ),
                 ),
               ),
+            Spacer(
+              flex: 1000,
+            ),
+
+            if (ourUser != null)
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 0.0, right: 200.0, top: 12),
+                child: Center(
+                  child: Container(
+                    width: 190,
+                    height: heightM * 1.5,
+                    child: Material(
+                      borderRadius: BorderRadius.circular(55.0), //12
+                      color: Colors.transparent, //Colors.cyan.withOpacity(0.5),
+                      child: FloatingActionButton.extended(
+                        backgroundColor: Colors.green,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ContactUs()));
+                        },
+                        icon: Icon(
+                          Icons.contact_support_rounded,
+                          size: 24.0,
+                        ),
+                        label: Text('Contact us',
+                            textAlign: TextAlign.center,
+                            style: getMyTextStyle(
+                                txt_color: Colors.white,
+                                fontSize: heightM * 0.6)),
+                      ),
+
+                      // MaterialButton(
+                      //   minWidth: MediaQuery.of(context).size.width,
+                      //   color: button_color,
+                      //   shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(5.0)),
+                      //   splashColor: button_color,
+                      //   onPressed: () async {
+                      //     Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) =>
+                      //                 // ContactUsManger()));
+                      //                 ContactUs()));
+                      //   },
+                      //   child: Text('Contact us',
+                      //       textAlign: TextAlign.center,
+                      //       style: getMyTextStyle(
+                      //           txt_color: Colors.white,
+                      //           fontSize: heightM * 0.6)),
+                      // ),
+                    ),
+                  ),
+                ),
+              ),
+
             Spacer(),
             Spacer(),
             Spacer(),
