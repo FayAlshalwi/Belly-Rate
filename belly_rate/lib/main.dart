@@ -446,3 +446,37 @@ String updatephoto(String photo ){
 
   return "Profile updated successfully!";
 }
+
+String send_complaint_title(String title){
+final RegExp regex = RegExp(r"^[a-zA-Z0-9 \n.]+$");
+                    // RegExp regExp = new RegExp(pattern);
+                    if (title!.isEmpty) {
+                      return "Please enter complaint title";
+                    }
+                    if (!regex.hasMatch(title!)) {
+                      return "You cannot enter special characters !@#\%^&*()";
+                    }
+                    if (title!.length < 3) {
+                      return "Please enter at least 3 characters";
+                    }
+                  
+                      return "Success";
+                    
+}
+
+String send_complaint_desc(String description){
+final RegExp regex = RegExp(r"^[a-zA-Z0-9 \n.]+$");
+                    if (description!.isEmpty) {
+                      return "Please enter complain description";
+                    }
+                    if (!regex.hasMatch(description!)) {
+                      return "You cannot enter special characters !@#\%^&*()";
+                    }
+                    if (description!.length < 3) {
+                      return "Please enter at least 3 characters";
+                    }  
+                    else {
+                      return "Complaint sent successfully";
+                    }
+
+}

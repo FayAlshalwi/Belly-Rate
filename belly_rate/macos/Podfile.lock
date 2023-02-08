@@ -624,7 +624,7 @@ PODS:
     - Firebase/CoreOnly (~> 10.3.0)
     - firebase_core
     - FlutterMacOS
-  - firebase_core (2.4.0):
+  - firebase_core (2.4.1):
     - Firebase/CoreOnly (~> 10.3.0)
     - FlutterMacOS
   - firebase_storage (11.0.6):
@@ -748,6 +748,8 @@ PODS:
   - Libuv-gRPC/Interface (0.0.10)
   - location (0.0.1):
     - FlutterMacOS
+  - maps_launcher (0.0.1):
+    - FlutterMacOS
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
     - nanopb/encode (= 2.30909.0)
@@ -756,6 +758,9 @@ PODS:
   - path_provider_macos (0.0.1):
     - FlutterMacOS
   - PromisesObjC (2.1.1)
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - sqflite (0.0.2):
     - FlutterMacOS
     - FMDB (>= 2.7.5)
@@ -770,7 +775,9 @@ DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
   - geolocator_apple (from `Flutter/ephemeral/.symlinks/plugins/geolocator_apple/macos`)
   - location (from `Flutter/ephemeral/.symlinks/plugins/location/macos`)
+  - maps_launcher (from `Flutter/ephemeral/.symlinks/plugins/maps_launcher/macos`)
   - path_provider_macos (from `Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos`)
+  - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/macos`)
   - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/macos`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
 
@@ -812,8 +819,12 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/geolocator_apple/macos
   location:
     :path: Flutter/ephemeral/.symlinks/plugins/location/macos
+  maps_launcher:
+    :path: Flutter/ephemeral/.symlinks/plugins/maps_launcher/macos
   path_provider_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos
+  shared_preferences_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/macos
   sqflite:
     :path: Flutter/ephemeral/.symlinks/plugins/sqflite/macos
   url_launcher_macos:
@@ -825,7 +836,7 @@ SPEC CHECKSUMS:
   cloud_firestore: 5c41c92824477144bad281324e25ba3a258dbcc1
   Firebase: f92fc551ead69c94168d36c2b26188263860acd9
   firebase_auth: b5e8908c074c9397849b7704a4447e3537d9a1f8
-  firebase_core: 7bd6c8dabdeba26600cf939a5f59b20e78156d7c
+  firebase_core: 651a84636254f758b9b9367f27bef0801a3855a2
   firebase_storage: 4e2c8b54704e55e5190400e8929bd1dadabb267b
   FirebaseAppCheckInterop: 9fc57dfa08f0abb737b185ea065422b55355c909
   FirebaseAuth: 0e415d29d846c1dce2fb641e46f35e9888d9bec6
@@ -845,9 +856,11 @@ SPEC CHECKSUMS:
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   location: 7cdb0665bd6577d382b0a343acdadbcb7f964775
+  maps_launcher: f1a606d040d8938430ddb7ca836a0abd2c7a1d34
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   path_provider_macos: 3c0c3b4b0d4a76d2bf989a913c2de869c5641a19
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
+  shared_preferences_foundation: 297b3ebca31b34ec92be11acd7fb0ba932c822ca
   sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
   url_launcher_macos: 597e05b8e514239626bcf4a850fcf9ef5c856ec3
 

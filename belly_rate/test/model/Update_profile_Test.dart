@@ -83,6 +83,101 @@ void main() {
     expect(actual, "Profile updated successfully!");
     expect(actualname, "Profile updated successfully!");
     });
+    
+  });
+  group('send complain', () { 
+
+    String actual;
+    String title;
+    String Description;
+    String actualtitle;
+    String actualDescription;
+
+    test("empty complain title ", () {
+    //setup
+     title = "";
+     //do
+     actual =  send_complaint_title(title);
+     //test
+     expect(actual, "Please enter complaint title");
+    });
+
+    test("complain title with special characters", () {
+    //setup
+     title = "Help@";
+     //do
+     actual =  send_complaint_title(title);
+     //test
+     expect(actual, "You cannot enter special characters !@#\%^&*()");
+    });
+
+    test("complain title with less than 3 characters", () {
+    //setup
+     title = "Hi";
+     //do
+     actual =  send_complaint_title(title);
+     //test
+     expect(actual, "Please enter at least 3 characters");
+    });
+
+    test("complain title with special characters", () {
+    //setup
+     title = "Help@";
+     //do
+     actual =  send_complaint_title(title);
+     //test
+     expect(actual, "You cannot enter special characters !@#\%^&*()");
+    });
+
+    test("complain title with special characters", () {
+    //setup
+     title = "Help@";
+     //do
+     actual =  send_complaint_title(title);
+     //test
+     expect(actual, "You cannot enter special characters !@#\%^&*()");
+    });
+
+    test("empty description form", () {
+    //setup
+     Description = "";
+     //do
+     actual =  send_complaint_desc(Description);
+     //test
+     expect(actual, "Please enter complain description");
+    });
+
+      test("Description with special characters", () {
+    //setup
+     Description = "How I change my name@//”.";
+     //do
+     actual =  send_complaint_desc(Description);
+     //test
+     expect(actual, "You cannot enter special characters !@#\%^&*()");
+    });
+
+    test("Description with less than 3 characters", () {
+    //setup
+     Description = "Hi";
+     //do
+     actual =  send_complaint_desc(Description);
+     //test
+     expect(actual, "Please enter at least 3 characters");
+    });
+    
+
+    test("Valid title and description", () {
+    //setup
+    title ="Update help";
+    Description = "I need help to update my profile";
+     //do
+     actualtitle =  send_complaint_title(title);
+     actualDescription =  send_complaint_desc(Description);
+     //test
+     expect(actualtitle, "Success");
+     expect(actualDescription, "Complaint sent successfully");
+    });
+    
 
 
   });
