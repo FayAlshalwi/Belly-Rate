@@ -130,40 +130,44 @@ class _Favorite extends State<Favorite> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("${item.name}",
-                                    style: ourTextStyle(
-                                        txt_color: Color(0xFF5a3769),
-                                        txt_size: heightM * 0.6)),
-                                if (item.rate != null)
-                                  Text("${item.rate!.rate} / 5",
-                                      style: ourTextStyle(
-                                          txt_color: Color.fromARGB(
-                                              255, 216, 107, 147),
-                                          txt_size: heightM * 0.4)),
                                 Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 16.0,
-                                        bottom: 0.0,
-                                        top: 3.0,
-                                        right: 16.0),
-                                    child: item.rate!.rate == "0.5"
-                                        ? StarWidget5()
-                                        : item.rate!.rate == "1.5"
-                                            ? StarWidget15()
-                                            : item.rate!.rate == "2.5"
-                                                ? StarWidget25()
-                                                : item.rate!.rate == "3.5"
-                                                    ? StarWidget35()
-                                                    : item.rate!.rate == "4.5"
-                                                        ? StarWidget45()
-                                                        : StarWidget(
-                                                            activated: double
-                                                                    .tryParse(item
-                                                                        .rate!
-                                                                        .rate
-                                                                        .toString())!
-                                                                .toDouble(),
-                                                          ))
+                                        left: 3.0, right: 19.0),
+                                    child: Text("${item.name}",
+                                        style: ourTextStyle(
+                                            txt_color: Color(0xFF5a3769),
+                                            txt_size: heightM * 0.6))),
+                                if (item.rate != null)
+                                  // Text("${item.rate!.rate} / 5",
+                                  //     style: ourTextStyle(
+                                  //         txt_color: Color.fromARGB(
+                                  //             255, 216, 107, 147),
+                                  //         txt_size: heightM * 0.4)),
+                                  Positioned(
+                                      child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 0.0,
+                                              bottom: 0.0,
+                                              top: 0.0,
+                                              right: 16.0),
+                                          child: item.rate!.rate == "0.5"
+                                              ? StarWidget5()
+                                              : item.rate!.rate == "1.5"
+                                                  ? StarWidget15()
+                                                  : item.rate!.rate == "2.5"
+                                                      ? StarWidget25()
+                                                      : item.rate!.rate == "3.5"
+                                                          ? StarWidget35()
+                                                          : item.rate!.rate ==
+                                                                  "4.5"
+                                                              ? StarWidget45()
+                                                              : StarWidget(
+                                                                  activated: double.tryParse(item
+                                                                          .rate!
+                                                                          .rate
+                                                                          .toString())!
+                                                                      .toDouble(),
+                                                                )))
                               ],
                             ),
                           ),
@@ -175,7 +179,7 @@ class _Favorite extends State<Favorite> {
                     const Padding(
                       padding: EdgeInsets.only(
                           left: 16.0, bottom: 3.0, top: 3.0, right: 22.0),
-                      child: Icon(Icons.favorite,
+                      child: Icon(Icons.favorite_outline_rounded,
                           size: 28, color: Color.fromARGB(255, 216, 107, 147)),
                     ),
                 ],
