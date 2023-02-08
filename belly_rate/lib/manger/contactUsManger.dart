@@ -83,7 +83,8 @@ class _contactUsMangerState extends State<ContactUsManger> {
                               "In Progress",
                               style: ourTextStyle(
                                 color: requestsIndex != 0
-                                    ? Colors.black
+                                    ?const Color(0xFF5a3769)
+                                    // Colors.black
                                     : Colors.white,
                                 //Colors.orange,
                                 // fontWeight: FontWeight.w400,
@@ -113,7 +114,8 @@ class _contactUsMangerState extends State<ContactUsManger> {
                               "Completed",
                               style: ourTextStyle(
                                 color: requestsIndex != 1
-                                    ? Colors.black
+                                    ?const Color(0xFF5a3769) 
+                                    //Colors.black
                                     : Colors.white,
                                 //Colors.orange,
                                 fontSize: 15,
@@ -583,21 +585,23 @@ class _contactUsMangerState extends State<ContactUsManger> {
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5,
-                              child: Text("Request User : ${ticket.username}",
+                              child: //Text("Request User : ${ticket.username}",
+                              Text("User name: ${ticket.username}",
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: ourTextStyle(
-                                      color: button_color,
-                                      fontSize: heightM * 0.4)),
+                                      color:   Color.fromARGB(255, 216, 107, 147),
+                                      fontSize: 16)),
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5,
                               child: Text(
-                                  "Request Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                  //"Request Date: ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                    "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: ourTextStyle(
-                                      color: button_color,
+                                      color:  Color(0xFF5a3769),
                                       fontSize: heightM * 0.4)),
                             ),
                           ],

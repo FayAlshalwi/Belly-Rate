@@ -27,7 +27,7 @@ class _RequestDetailsState extends State<RequestDetails> {
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          "User Request Details",
+          "Request Detail",
           style: TextStyle(
             fontSize: 22,
             color: mainColor(),
