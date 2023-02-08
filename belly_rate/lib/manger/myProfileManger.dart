@@ -2,6 +2,7 @@ import 'package:belly_rate/auth/our_user_model.dart';
 import 'package:belly_rate/auth/signin_page.dart';
 import 'package:belly_rate/auth/signup_page.dart';
 import 'package:belly_rate/updateProfile.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -76,49 +77,65 @@ class _MyProfileManger extends State<MyProfileManger> {
               right: 15,
             ),
             onPressed: () async {
-              showDialog(
+               CoolAlert.show(
                   context: context,
-                  builder: (context) {
-                    return CupertinoAlertDialog(
-                      title: Text(
-                        "Logout",
-                        style: TextStyle(
-                          color: const Color(0xFF5a3769),
-                        ),
-                      ),
-                      content: Text("Are you sure you want to logout?"),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () async {
-                            await FirebaseAuth.instance.signOut();
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => const SignIn()),
-                            );
-                          },
-                          child: Text(
-                            "Yes",
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: const Color(0xFF5a3769),
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context); //close Dialog
-                          },
-                          child: Text(
-                            "Cancel",
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: const Color(0xFF5a3769),
-                            ),
-                          ),
-                        )
-                      ],
+                  type: CoolAlertType.confirm,
+                  text: 'Are you sure you want to logout?',
+                  confirmBtnText: 'Yes',
+                  cancelBtnText: 'Cancel',
+                  title: "Logout",
+                  onCancelBtnTap: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  onConfirmBtnTap: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => const SignIn()),
                     );
                   });
+              //showDialog(
+                  // context: context,
+                  // builder: (context) {
+                  //   return CupertinoAlertDialog(
+                  //     title: Text(
+                  //       "Logout",
+                  //       style: TextStyle(
+                  //         color: const Color(0xFF5a3769),
+                  //       ),
+                  //     ),
+                  //     content: Text("Are you sure you want to logout?"),
+                  //     actions: <Widget>[
+                  //       TextButton(
+                  //         onPressed: () async {
+                  //           await FirebaseAuth.instance.signOut();
+                  //           Navigator.of(context).pushReplacement(
+                  //             MaterialPageRoute(
+                  //                 builder: (context) => const SignIn()),
+                  //           );
+                  //         },
+                  //         child: Text(
+                  //           "Yes",
+                  //           style: TextStyle(
+                  //             fontSize: 15,
+                  //             color: const Color(0xFF5a3769),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       TextButton(
+                  //         onPressed: () {
+                  //           Navigator.pop(context); //close Dialog
+                  //         },
+                  //         child: Text(
+                  //           "Cancel",
+                  //           style: TextStyle(
+                  //             fontSize: 15,
+                  //             color: const Color(0xFF5a3769),
+                  //           ),
+                  //         ),
+                  //       )
+                  //     ],
+                  //   );
+                  // });
             },
             icon: Icon(
               Icons.logout_outlined,
