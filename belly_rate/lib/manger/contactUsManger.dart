@@ -712,7 +712,8 @@ class _contactUsMangerState extends State<ContactUsManger> {
                   child: TextFormField(
                     keyboardType: TextInputType.multiline,
                     controller: text,
-                    maxLines: 3,
+                    maxLines: 4,
+                    cursorColor: Colors.black,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Write your Reply here',
@@ -722,6 +723,7 @@ class _contactUsMangerState extends State<ContactUsManger> {
                         // textAlign: TextAlign.center,
                       ),
                     ),
+                    maxLength:120 ,
                   ),
                 ),
                 Padding(

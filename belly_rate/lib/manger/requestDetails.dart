@@ -245,7 +245,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                           child: TextFormField(
                             keyboardType: TextInputType.multiline,
                             controller: text,
-                            maxLines: 3,
+                            maxLines: 4,
+                            maxLength: 120,
                             onChanged: (_) {
                               _formtext.currentState!.validate();
                             },
@@ -275,6 +276,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                               }
                             },
                             decoration: InputDecoration(
+                               
                               border: OutlineInputBorder(),
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: mainColor())),
@@ -282,10 +284,10 @@ class _RequestDetailsState extends State<RequestDetails> {
                                   ourTextStyle(color: Colors.red, fontSize: 13),
                               labelText: 'Write your Reply here',
                               labelStyle: ourTextStyle(
-                                color: Colors.grey,
-                                fontSize: 14.0,
-                                // textAlign: TextAlign.center,
-                              ),
+                              color: Colors.grey,
+                              fontSize: 14.0,
+                            ),
+
                             ),
                           ),
                         ),
