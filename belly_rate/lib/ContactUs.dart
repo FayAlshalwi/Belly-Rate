@@ -19,7 +19,8 @@ class _ContactUsState extends State<ContactUs> {
   int requestsIndex = 0;
   User? user;
   OurUser? ourUser;
-  bool invalid = false;
+  bool invalidD = false;
+  bool invalidT = false;
 
   TextEditingController textTitle = TextEditingController();
   TextEditingController textDescription = TextEditingController();
@@ -365,22 +366,22 @@ class _ContactUsState extends State<ContactUs> {
 
                     // RegExp regExp = new RegExp(pattern);
                     if (value!.isEmpty) {
-                      invalid = true;
+                      invalidT = true;
                       return "Title cant be empty";
                     }
                     if (!regex.hasMatch(value!)) {
-                      invalid = true;
+                      invalidT = true;
                       return "Special characters are not allowed";
                     }
                     if (value!.length < 3) {
-                      invalid = true;
+                      invalidT = true;
                       return "Min input length is 3 characters.";
                     }
                     if (value!.length > 25) {
-                      invalid = true;
+                      invalidT = true;
                       return "Max input length is 25 characters.";
                     } else {
-                      invalid = false;
+                      invalidT = false;
                       return null;
                     }
                   },
@@ -415,22 +416,22 @@ class _ContactUsState extends State<ContactUs> {
 
                     // RegExp regExp = new RegExp(pattern);
                     if (value!.isEmpty) {
-                      invalid = true;
+                      invalidD = true;
                       return "Description cant be empty";
                     }
                     if (!regex.hasMatch(value!)) {
-                      invalid = true;
+                      invalidD = true;
                       return "Only letters and numbers are allowed";
                     }
                     if (value!.length < 3) {
-                      invalid = true;
+                      invalidD = true;
                       return "Min input length is 3 characters.";
                     }
                     if (value!.length > 120) {
-                      invalid = true;
+                      invalidD = true;
                       return "Max input length is 120 characters.";
                     } else {
-                      invalid = false;
+                      invalidD = false;
                       return null;
                     }
                   },
@@ -471,7 +472,7 @@ class _ContactUsState extends State<ContactUs> {
                     //   );
                     //
                     // } else
-                    if (textDescription.text.isEmpty || invalid == true) {
+                    if (textDescription.text.isEmpty || invalidD == true) {
                       CoolAlert.show(
                         context: context,
                         title: "Description is invalid",
@@ -479,7 +480,7 @@ class _ContactUsState extends State<ContactUs> {
                         text: "Please enter a valid Request Description",
                         confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                       );
-                    } else if (textTitle.text.isEmpty || invalid == true) {
+                    } else if (textTitle.text.isEmpty || invalidT == true) {
                       CoolAlert.show(
                         context: context,
                         title: "Title is not valid",

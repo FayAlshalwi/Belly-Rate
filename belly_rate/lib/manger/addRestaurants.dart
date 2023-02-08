@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +9,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import '../category_parts/restaurant_model.dart';
 import 'HomePageManger.dart';
 import 'mapPage.dart';
 
@@ -24,7 +26,13 @@ class AddRestaurants extends StatefulWidget {
 }
 
 class _AddRestaurantsState extends State<AddRestaurants> {
-  bool invalid2 = false;
+  bool invalidID = false;
+  bool invalidName = false;
+  bool invalidDes = false;
+  bool invalidPHnum = false;
+  bool invalidLat = false;
+  bool invalidLong = false;
+
   TextEditingController restaurantDescription = TextEditingController();
   TextEditingController restaurantLat = TextEditingController();
   TextEditingController restaurantLong = TextEditingController();
@@ -35,6 +43,8 @@ class _AddRestaurantsState extends State<AddRestaurants> {
   String restaurantLongAuto = "";
   List<File?> _imageFiles = [];
   List<String> _imageFilesString = [];
+  List<String> _listCheckResID = [];
+
   final List<String> _listCategory = [
     "",
     "Italian",
@@ -57,6 +67,13 @@ class _AddRestaurantsState extends State<AddRestaurants> {
   final _formKeyPhone = GlobalKey<FormState>();
   final _formKeyLat = GlobalKey<FormState>();
   final _formKeyLong = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    CheckResID();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -351,17 +368,17 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             ),
             color: Color.fromARGB(255, 216, 107, 147),
             onPressed: () async {
-              if (restaurantId.text.isEmpty || invalid2 == true) {
+              if (restaurantId.text.isEmpty || invalidID == true) {
                 CoolAlert.show(
                   context: context,
-                  title: "Resturant Name is invalid",
+                  title: "Resturant ID is invalid",
                   type: CoolAlertType.error,
-                  text: "Please enter a valid Resturant name",
+                  text: "Please enter a valid Resturant ID",
                   confirmBtnTextStyle:
                       ourTextStyle(txt_color: Colors.white, txt_size: 13),
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
-              } else if (restaurantName.text.isEmpty || invalid2 == true) {
+              } else if (restaurantName.text.isEmpty || invalidName == true) {
                 CoolAlert.show(
                   context: context,
                   title: "Resturant Name is invalid",
@@ -372,7 +389,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
               } else if (restaurantDescription.text.isEmpty ||
-                  invalid2 == true) {
+                  invalidDes == true) {
                 CoolAlert.show(
                   context: context,
                   title: "Resturant Description is invalid",
@@ -380,7 +397,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   text: "Please enter a valid Resturant Description",
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
-              } else if (_selectedCategory.isEmpty || invalid2 == true) {
+              } else if (_selectedCategory.isEmpty) {
                 CoolAlert.show(
                   context: context,
                   title: "Resturant category is invalid Empty",
@@ -389,7 +406,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
               } else if (restaurantPhoneNumber.text.isEmpty ||
-                  invalid2 == true) {
+                  invalidPHnum == true) {
                 CoolAlert.show(
                   context: context,
                   title: "Phone Number is invalid",
@@ -397,7 +414,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   text: "Please enter a valid Phone Number",
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
-              } else if (_selectedPriceAvg.isEmpty || invalid2 == true) {
+              } else if (_selectedPriceAvg.isEmpty) {
                 CoolAlert.show(
                   context: context,
                   title: "Price Average is invalid",
@@ -406,9 +423,16 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
               } else if (_selectedOption == 1 &&
-                  (restaurantLat.text.isEmpty ||
-                      restaurantLong.text.isEmpty ||
-                      invalid2 == true)) {
+                  (restaurantLat.text.isEmpty || restaurantLong.text.isEmpty)) {
+                CoolAlert.show(
+                  context: context,
+                  title: "Restaurant Location is not valid",
+                  type: CoolAlertType.error,
+                  text: "Please enter a valid restaurant Location",
+                  confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
+                );
+              } else if (_selectedOption == 1 &&
+                  (invalidLat == true || invalidLong == true)) {
                 CoolAlert.show(
                   context: context,
                   title: "Restaurant Location is not valid",
@@ -417,9 +441,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                 );
               } else if (_selectedOption == 2 &&
-                  (restaurantLatAuto.isEmpty ||
-                      restaurantLongAuto.isEmpty ||
-                      invalid2 == true)) {
+                  (restaurantLatAuto.isEmpty || restaurantLongAuto.isEmpty)) {
                 CoolAlert.show(
                   context: context,
                   title: "Restaurant Location is invalid",
@@ -630,18 +652,18 @@ class _AddRestaurantsState extends State<AddRestaurants> {
           String pattern = r'^[0-9.]+$';
           RegExp regExp = new RegExp(pattern);
           if (value!.isEmpty) {
-            invalid2 = true;
-            return "Field cant be empty";
+            invalidLat = true;
+            return "field cant be empty";
           }
           if (!regExp.hasMatch(value!)) {
-            invalid2 = true;
+            invalidLat = true;
             return "Enter numbers Only";
           }
           if (value!.length > 18) {
-            invalid2 = true;
+            invalidLat = true;
             return "Max input length is 18.";
           } else {
-            invalid2 = false;
+            invalidLat = false;
             return null;
           }
         },
@@ -696,18 +718,18 @@ class _AddRestaurantsState extends State<AddRestaurants> {
           String pattern = r'^[0-9.]+$';
           RegExp regExp = new RegExp(pattern);
           if (value!.isEmpty) {
-            invalid2 = true;
+            invalidLong = true;
             return "Field cant be empty";
           }
           if (!regExp.hasMatch(value!)) {
-            invalid2 = true;
+            invalidLong = true;
             return "Enter numbers Only";
           }
           if (value!.length > 18) {
-            invalid2 = true;
+            invalidLong = true;
             return "Max input length is 18.";
           } else {
-            invalid2 = false;
+            invalidLong = false;
             return null;
           }
         },
@@ -760,19 +782,19 @@ class _AddRestaurantsState extends State<AddRestaurants> {
         ),
         validator: (value) {
           if (value!.isEmpty) {
-            invalid2 = true;
+            invalidPHnum = true;
             return "Phone number cant be empty";
           }
           if (RegExp(r"[a-zA-Z!@#\$%^&*()_+|~=`{}\[\]:;'<>?,.\/\\-]")
               .hasMatch(value!)) {
-            invalid2 = true;
+            invalidPHnum = true;
             return "No English letters or special characters allowed";
           }
           if (value!.length != 10) {
-            invalid2 = true;
+            invalidPHnum = true;
             return "Phone number must be equal to 10";
           } else {
-            invalid2 = false;
+            invalidPHnum = false;
             return null;
           }
         },
@@ -825,23 +847,23 @@ class _AddRestaurantsState extends State<AddRestaurants> {
         ),
         validator: (value) {
           if (value!.isEmpty) {
-            invalid2 = true;
+            invalidName = true;
             return "Resturant Name cant be empty";
           }
           if (value!.length < 3) {
-            invalid2 = true;
+            invalidName = true;
             return "Min input length is 3 characters.";
           } else if (value!.length > 12) {
-            invalid2 = true;
+            invalidName = true;
             return "Max input length is 12 characters.";
           } else if (value.contains(new RegExp(r'[0-9]'))) {
-            invalid2 = true;
+            invalidName = true;
             return "No numbers allowed.";
           } else if (value.contains(new RegExp(r'[^a-zA-Z\s]'))) {
-            invalid2 = true;
+            invalidName = true;
             return "No special characters allowed.";
           } else {
-            invalid2 = false;
+            invalidName = false;
             return null;
           }
         },
@@ -894,20 +916,24 @@ class _AddRestaurantsState extends State<AddRestaurants> {
         ),
         validator: (String? value) {
           if (value!.isEmpty) {
-            invalid2 = true;
+            invalidID = true;
             return "Resuturant ID can't be empty.";
           } else if (int.tryParse(value) == null) {
-            invalid2 = true;
+            invalidID = true;
             return "Enter a valid Resuturant ID.";
           }
           // else if (value.contains(new RegExp(r'[^a-zA-Z\s]'))) {
           //   return "No special characters allowed.";
           // }
           else if (value.length > 6) {
-            invalid2 = true;
+            invalidID = true;
             return "Resuturant ID can't be longer than 6 digits.";
+          }
+          if (_listCheckResID.contains(value)) {
+            invalidID = true;
+            return "Restaurant ID is not unique.";
           } else {
-            invalid2 = false;
+            invalidID = false;
             return null;
           }
         },
@@ -969,22 +995,22 @@ class _AddRestaurantsState extends State<AddRestaurants> {
 
           // RegExp regExp = new RegExp(pattern);
           if (value!.isEmpty) {
-            invalid2 = true;
+            invalidDes = true;
             return "Resturant Description cant be empty";
           }
           if (!regex.hasMatch(value!)) {
-            invalid2 = true;
+            invalidDes = true;
             return "special character are not allowed";
           }
           if (value!.length < 3) {
-            invalid2 = true;
+            invalidDes = true;
             return "Min input length is 3 characters.";
           }
           if (value!.length > 120) {
-            invalid2 = true;
+            invalidDes = true;
             return "Max input length is 120 characters.";
           } else {
-            invalid2 = false;
+            invalidDes = false;
             return null;
           }
         },
@@ -1123,6 +1149,25 @@ class _AddRestaurantsState extends State<AddRestaurants> {
       fontWeight: FontWeight.bold,
       fontSize: txt_size,
     );
+  }
+
+  Future CheckResID() async {
+    final _firestore = FirebaseFirestore.instance;
+    final _firebaseAuth = FirebaseAuth.instance;
+
+    final restaurants = await FirebaseFirestore.instance
+        .collection('Restaurants')
+        // .where("ID", isEqualTo: restaurantId)
+        .get();
+
+    for (var res in restaurants.docs) {
+      // final body = json.encode(Category.data().toString());
+      // log("Res: ${body}");
+      // final restaurant = restaurantFromJson(Category.data().toString());
+      final restaurant = Restaurant.fromJson(res.data()) as Restaurant;
+      _listCheckResID.add(restaurant.id!);
+    }
+    setState(() {});
   }
 
   Color mainColor() => const Color(0xFF5a3769);
