@@ -101,14 +101,17 @@ class _AddRestaurantsState extends State<AddRestaurants> {
   Widget buildForm(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-              child: Text(
-            "Enter the information for the restaurant you wish to add.",
-            style: ourTextStyle(txt_color: mainColor(), txt_size: 18),
-          )),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: Center(
+        //       child: Text(
+        //     "Enter the information for the restaurant you wish to add.",
+        //     style: ourTextStyle(txt_color: mainColor(), txt_size: 18),
+        //   )),
+        // ),
+        
+         Padding(
+        padding: const EdgeInsets.all(8.0),),
 
         Form(
             key: _formKeyId,
@@ -187,6 +190,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                 textEditingController: restaurantPhoneNumber,
                 ourLabelText: "Restaurant Phone Number",
                 keyboardType: TextInputType.number)),
+                
 
         /// Price Avg - drop down
         Container(
@@ -245,7 +249,8 @@ class _AddRestaurantsState extends State<AddRestaurants> {
           // padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
           child: Center(
               child: Text(
-            "What method would you like to use to add the location of the restaurant?",
+            // "What method would you like to use to add the location of the restaurant?",
+             "Choose method to add restaurant location:",
             style: ourTextStyle(txt_color: mainColor(), txt_size: 15),
           )),
         ),
@@ -305,7 +310,8 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                       child: buildContainerTextFieldLong(
                           textEditingController: restaurantLong,
                           ourLabelText: "Restaurant Long",
-                          keyboardType: TextInputType.number))),
+                          keyboardType: TextInputType.number
+                          ))),
             ],
           ),
         if (_selectedOption == 2)
@@ -320,7 +326,8 @@ class _AddRestaurantsState extends State<AddRestaurants> {
           child: Row(
             children: [
               Text(
-                "Add image to the restaurant: (min 1 - max 4)",
+                // "Add image to the restaurant: (min 1 - max 4)",
+                "Add restaurant photos ( 4 photos are required)",
                 style: ourTextStyle(txt_color: mainColor(), txt_size: 15),
               ),
             ],
@@ -667,6 +674,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             return null;
           }
         },
+        maxLength: 18,
       ),
     );
   }
@@ -733,6 +741,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             return null;
           }
         },
+         maxLength: 18,
       ),
     );
   }
@@ -798,7 +807,9 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             return null;
           }
         },
+        maxLength: 10,
       ),
+      
     );
   }
 
@@ -867,6 +878,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             return null;
           }
         },
+        maxLength: 12,
       ),
     );
   }
@@ -937,6 +949,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             return null;
           }
         },
+        maxLength: 6,
       ),
     );
   }
@@ -1014,6 +1027,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             return null;
           }
         },
+        maxLength: 120,
       ),
     );
   }

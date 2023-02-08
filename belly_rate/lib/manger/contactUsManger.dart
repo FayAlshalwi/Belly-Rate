@@ -34,7 +34,7 @@ class _contactUsMangerState extends State<ContactUsManger> {
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          "User Request",
+          "User Requests",
           style: TextStyle(
             fontSize: 22,
             color: mainColor(),
