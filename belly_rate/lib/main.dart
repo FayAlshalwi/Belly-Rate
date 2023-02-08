@@ -45,7 +45,7 @@ void main() async {
 
   final periodicTimer = Timer.periodic(
     //
-    const Duration(seconds: 10),
+    const Duration(seconds: 100),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
@@ -272,3 +272,41 @@ void ContentOfNotification(String RestaurantId) async {
 
   createNotification(NotificationContent, RestaurantId, Photo, name);
 }
+
+// String send_complaint_title(String title){
+// final RegExp regex = RegExp(r"^[a-zA-Z0-9 \n.]+$");
+//                     // RegExp regExp = new RegExp(pattern);
+//                     if (title!.isEmpty) {
+//                       return "Please enter complaint title";
+//                     }
+//                     if (!regex.hasMatch(title!)) {
+//                       return "You cannot enter special characters !@#\%^&*()";
+//                     }
+//                     if (title!.length < 3) {
+//                       return "Please enter at least 3 characters";
+//                     }
+//                     if (title!.length > 25) {
+//                       return "Please enter at least 3 characters";
+//                     } else {
+//                       return "Success";
+//                     }
+// }
+
+// String send_complaint_desc(String description){
+// final RegExp regex = RegExp(r"^[a-zA-Z0-9 \n.]+$");
+//                     if (description!.isEmpty) {
+//                       return "Please enter complain description";
+//                     }
+//                     if (!regex.hasMatch(description!)) {
+//                       return "You cannot enter special characters !@#\%^&*()";
+//                     }
+//                     if (description!.length < 3) {
+//                       return "Please enter at least 3 characters";
+//                     }
+//                     if (description!.length > 120) {
+//                       return "Max input length is 120 characters.";
+//                     } else {
+//                       return "Success";
+//                     }
+
+// }
