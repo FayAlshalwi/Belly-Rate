@@ -81,17 +81,6 @@ class _history extends State<history> {
                   color: Color(0xFF5a3769),
                   secondRingColor: Colors.grey.shade700,
                   thirdRingColor: Color.fromARGB(255, 216, 107, 147)),
-
-              //   LoadingAnimationWidget.hexagonDots(
-              //   color: Color.fromARGB(255, 216, 107, 147),
-              //   size: 35,
-              // )
-
-              // LoadingAnimationWidget.twistingDots(
-              //   leftDotColor: const Color(0xFF5a3769),
-              //   rightDotColor: const Color.fromARGB(255, 216, 107, 147),
-              //   size: 20,
-              // ),
             )
           : ListView.builder(
               itemCount: historyList.length,
@@ -114,11 +103,12 @@ class _history extends State<history> {
 
                 return Padding(
                   padding: const EdgeInsets.only(
-                      left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+                      left: 16.0, bottom: 5.0, top: 8.0, right: 16.0),
                   child: Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
+                    margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,7 +146,7 @@ class _history extends State<history> {
 
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 15.0,
+                                      left: 10.0,
                                       bottom: 15.0,
                                       top: 15.0,
                                       right: 19.0),
@@ -165,21 +155,51 @@ class _history extends State<history> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text("${item.restaurant?.name}",
-                                          style: ourTextStyle(
-                                              txt_color: Color(0xFF5a3769),
-                                              txt_size: heightM * 0.6)),
-                                      Text("${formattedDate}",
-                                          maxLines: 4,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: ourTextStyle(
-                                              txt_color: Colors.grey.shade700,
-                                              txt_size: heightM * 0.4)),
+                                      Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 4.0,
+                                          ),
+                                          child: Text(
+                                              "${item.restaurant?.name}",
+                                              style: ourTextStyle(
+                                                  txt_color: Color(0xFF5a3769),
+                                                  txt_size: heightM * 0.6))),
+                                      Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 4.0,
+                                          ),
+                                          child: Text("${formattedDate}",
+                                              maxLines: 4,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: ourTextStyle(
+                                                  txt_color:
+                                                      Colors.grey.shade700,
+                                                  txt_size: heightM * 0.4))),
                                       if (item.rate != null)
-                                        Text("${item.rate!.rate} / 5.0",
-                                            style: ourTextStyle(
-                                                txt_color: button_color,
-                                                txt_size: heightM * 0.4)),
+                                        Positioned(
+                                            child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 0.0,
+                                                    bottom: 0.0,
+                                                    top: 0.0,
+                                                    right: 0.0),
+                                                child: item.rate!.rate == "0.5"
+                                                    ? StarWidget5()
+                                                    : item.rate!.rate == "1.5"
+                                                        ? StarWidget15()
+                                                        : item.rate!.rate ==
+                                                                "2.5"
+                                                            ? StarWidget25()
+                                                            : item.rate!.rate ==
+                                                                    "3.5"
+                                                                ? StarWidget35()
+                                                                : item.rate!.rate ==
+                                                                        "4.5"
+                                                                    ? StarWidget45()
+                                                                    : StarWidget(
+                                                                        activated:
+                                                                            double.tryParse(item.rate!.rate.toString())!.toDouble(),
+                                                                      )))
                                     ],
                                   ),
                                 ),
@@ -455,6 +475,7 @@ class _history extends State<history> {
                                     right: 1.0),
                                 margin: EdgeInsets.fromLTRB(0, 110, 0, 0),
                                 content: AwesomeSnackbarContent(
+                                  color: button_color,
                                   title: 'Rated',
                                   message:
                                       'You rated this restaurant previously!',
@@ -475,15 +496,6 @@ class _history extends State<history> {
                             padding: EdgeInsets.all(2),
                             shape: CircleBorder(),
                           ),
-                        // const Padding(
-                        //   padding: EdgeInsets.only(
-                        //       left: 19.0, bottom: 3.0, top: 3.0, right: 30.0),
-                        //   child: Icon(
-                        //     Icons.star,
-                        //     size: 25,
-                        //     color: Color.fromARGB(255, 216, 107, 147),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
