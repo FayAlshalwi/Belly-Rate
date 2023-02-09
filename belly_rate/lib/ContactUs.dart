@@ -617,6 +617,7 @@ class _ContactUsState extends State<ContactUs> {
                       //
                       children: [
                         TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           keyboardType: TextInputType.multiline,
                           controller: textDescription,
                           cursorColor: Colors.black,
@@ -626,7 +627,7 @@ class _ContactUsState extends State<ContactUs> {
                             _formdescription.currentState!.validate();
                           },
                           validator: (value) {
-                            final RegExp regex = RegExp(r"^[a-zA-Z0-9\n.]+$");
+                            final RegExp regex = RegExp(r"^[a-zA-Z0-9 \n.]+$");
 
                             // RegExp regExp = new RegExp(pattern);
                             if (value!.isEmpty) {

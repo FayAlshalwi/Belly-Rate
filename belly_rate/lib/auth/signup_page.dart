@@ -33,7 +33,7 @@ class _SignUpPageState extends State<SignUpPage> {
   String? _code;
   late QuerySnapshot<Map<String, dynamic>> res;
   List numbers = [];
-
+  final _formPass = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
 
   void initState() {
@@ -63,8 +63,6 @@ class _SignUpPageState extends State<SignUpPage> {
       // resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-          child: Form(
-        key: formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,62 +104,66 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            Container(
-              alignment: AlignmentDirectional.center,
-              width: 380,
-              height: 60,
-              margin: EdgeInsets.fromLTRB(23, 02, 10, 10),
-              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.black.withOpacity(0.13)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xffeeeeee),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
+            Form(
+                key: _formPass,
+                child: Container(
+                  alignment: AlignmentDirectional.center,
+                  width: 380,
+                  height: 60,
+                  margin: EdgeInsets.fromLTRB(23, 02, 10, 10),
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.black.withOpacity(0.13)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xffeeeeee),
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Stack(alignment: AlignmentDirectional.center, children: [
-                TextFormField(
-                  keyboardType: TextInputType.text,
-                  onChanged: (value) {
-                    formKey.currentState?.validate();
-                    print(first_name.text);
-                  },
-                  validator: (value) {
-                    final regExp = RegExp(r'^[ a-zA-Z]+$');
-                    String text = first_name.text;
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    } else if (!regExp.hasMatch(text.trim())) {
-                      return 'You cannot enter special characters and numbers';
-                    } else if (value.length <= 2) {
-                      return "Please enter at least 3 characters";
-                    }
-                  },
+                  child:
+                      Stack(alignment: AlignmentDirectional.center, children: [
+                    TextFormField(
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        _formPass.currentState?.validate();
+                        print(first_name.text);
+                      },
+                      validator: (value) {
+                        final regExp = RegExp(r'^[ a-zA-Z]+$');
+                        String text = first_name.text;
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your name';
+                        } else if (!regExp.hasMatch(text.trim())) {
+                          return 'You cannot enter special characters and numbers';
+                        } else if (value.length <= 2) {
+                          return "Please enter at least 3 characters";
+                        }
+                      },
 
-                  maxLength: 15,
-                  controller: first_name,
-                  cursorColor: Colors.black,
-                  // keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    errorStyle: TextStyle(height: 0),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    contentPadding: EdgeInsets.only(bottom: 04, left: 0),
-                    hintText: "Your Name",
-                    hintStyle: TextStyle(
-                        color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
-                  ),
-                ),
-              ]),
-            ),
+                      maxLength: 15,
+                      controller: first_name,
+                      cursorColor: Colors.black,
+                      // keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        errorStyle: TextStyle(height: 0),
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.only(bottom: 04, left: 0),
+                        hintText: "Your Name",
+                        hintStyle: TextStyle(
+                            color: Color.fromRGBO(158, 158, 158, 1),
+                            fontSize: 16),
+                      ),
+                    ),
+                  ]),
+                )),
             Container(
               margin: const EdgeInsets.fromLTRB(15, 0, 0, 0),
               child: Padding(
@@ -173,103 +175,106 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            Container(
-              alignment: AlignmentDirectional.center,
-              width: 380,
-              height: 60,
-              margin: EdgeInsets.fromLTRB(23, 02, 10, 10),
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.black.withOpacity(0.13)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xffeeeeee),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
+            Form(
+                key: formKey,
+                child: Container(
+                  alignment: AlignmentDirectional.center,
+                  width: 380,
+                  height: 60,
+                  margin: EdgeInsets.fromLTRB(23, 02, 10, 10),
+                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.black.withOpacity(0.13)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xffeeeeee),
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Stack(
-                alignment: AlignmentDirectional.center,
-                children: [
-                  InternationalPhoneNumberInput(
-                    initialValue: PhoneNumber(isoCode: 'SA', dialCode: '+966'),
-                    onInputChanged: (PhoneNumber number) {
-                      formKey.currentState?.validate();
-                      setState(() {
-                        phonenum = number;
+                  child: Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: [
+                      InternationalPhoneNumberInput(
+                        initialValue:
+                            PhoneNumber(isoCode: 'SA', dialCode: '+966'),
+                        onInputChanged: (PhoneNumber number) {
+                          formKey.currentState?.validate();
+                          setState(() {
+                            phonenum = number;
 
-                        phoneNumber = number.phoneNumber!;
-                        print("phoneNumber");
-                        print(phoneNumber);
-                      });
+                            phoneNumber = number.phoneNumber!;
+                            print("phoneNumber");
+                            print(phoneNumber);
+                          });
 
-                      print(number.phoneNumber);
-                    },
-                    onInputValidated: (bool value) {
-                      print(value);
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty ||
-                          value == null ||
-                          value.trim() == '') {
-                        return 'Please enter your phone number';
-                      } else if (value.length > 11 || value.length < 11) {
-                        return 'Please enter 9 numbers';
-                      } else if (true) {
-                        for (int i = 0; i < numbers.length; i++) {
-                          print(numbers[i]);
-                          if (numbers[i] == phoneNumber) {
-                            return 'You already have an account, please sign in';
+                          print(number.phoneNumber);
+                        },
+                        onInputValidated: (bool value) {
+                          print(value);
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty ||
+                              value == null ||
+                              value.trim() == '') {
+                            return 'Please enter your phone number';
+                          } else if (value.length > 11 || value.length < 11) {
+                            return 'Please enter 9 numbers';
+                          } else if (true) {
+                            for (int i = 0; i < numbers.length; i++) {
+                              print(numbers[i]);
+                              if (numbers[i] == phoneNumber) {
+                                return 'You already have an account, please sign in';
+                              }
+                            }
                           }
-                        }
-                      }
-                    },
-                    selectorConfig: SelectorConfig(
-                      useEmoji: true,
-                      selectorType: PhoneInputSelectorType.DIALOG,
-                    ),
-                    ignoreBlank: false,
-                    autoValidateMode: AutovalidateMode.onUserInteraction,
-                    selectorTextStyle: TextStyle(color: Colors.black),
-                    textFieldController: phone,
-                    formatInput: true,
-                    maxLength: 11,
-                    keyboardType: TextInputType.numberWithOptions(
-                        signed: true, decimal: true),
-                    cursorColor: Colors.black,
-                    inputDecoration: InputDecoration(
-                      errorStyle: TextStyle(height: 0),
-                      contentPadding: EdgeInsets.only(bottom: 15, left: 0),
-                      border: InputBorder.none,
-                      hintText: '5XXXXXXXX',
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      hintStyle: TextStyle(
-                          color: Color.fromRGBO(158, 158, 158, 1),
-                          fontSize: 16),
-                    ),
-                    onSaved: (PhoneNumber number) {
-                      print('On Saved: $number');
-                    },
+                        },
+                        selectorConfig: SelectorConfig(
+                          useEmoji: true,
+                          selectorType: PhoneInputSelectorType.DIALOG,
+                        ),
+                        ignoreBlank: false,
+                        autoValidateMode: AutovalidateMode.onUserInteraction,
+                        selectorTextStyle: TextStyle(color: Colors.black),
+                        textFieldController: phone,
+                        formatInput: true,
+                        maxLength: 11,
+                        keyboardType: TextInputType.numberWithOptions(
+                            signed: true, decimal: true),
+                        cursorColor: Colors.black,
+                        inputDecoration: InputDecoration(
+                          errorStyle: TextStyle(height: 0),
+                          contentPadding: EdgeInsets.only(bottom: 15, left: 0),
+                          border: InputBorder.none,
+                          hintText: '5XXXXXXXX',
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          hintStyle: TextStyle(
+                              color: Color.fromRGBO(158, 158, 158, 1),
+                              fontSize: 16),
+                        ),
+                        onSaved: (PhoneNumber number) {
+                          print('On Saved: $number');
+                        },
+                      ),
+                      Positioned(
+                        left: 90,
+                        top: 8,
+                        bottom: 8,
+                        child: Container(
+                          height: 40,
+                          width: 1,
+                          color: Colors.black.withOpacity(0.13),
+                        ),
+                      )
+                    ],
                   ),
-                  Positioned(
-                    left: 90,
-                    top: 8,
-                    bottom: 8,
-                    child: Container(
-                      height: 40,
-                      width: 1,
-                      color: Colors.black.withOpacity(0.13),
-                    ),
-                  )
-                ],
-              ),
-            ),
+                )),
             SizedBox(
               height: heightM * 0.5,
             ),
@@ -299,7 +304,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   onTap: (startLoading, stopLoading, btnState) async {
                     if (btnState == ButtonState.idle) {
                       formKey.currentState?.save();
-                      if (formKey.currentState!.validate()) {
+                      _formPass.currentState?.save();
+                      if (formKey.currentState!.validate() &&
+                          _formPass.currentState!.validate()) {
                         startLoading();
 
                         if (phone.text.isNotEmpty) {
@@ -379,7 +386,7 @@ class _SignUpPageState extends State<SignUpPage> {
             )
           ],
         ),
-      )),
+      ),
     );
   }
 
