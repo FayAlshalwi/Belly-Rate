@@ -93,7 +93,6 @@ class _Favorite extends State<Favorite> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ///
                   Expanded(
                     child: InkWell(
                       onTap: () {
@@ -118,8 +117,6 @@ class _Favorite extends State<Favorite> {
                                     width: heightM * 2.5,
                                     fit: BoxFit.fill),
                               )),
-
-                          ///
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 15.0,
@@ -138,11 +135,6 @@ class _Favorite extends State<Favorite> {
                                             txt_color: Color(0xFF5a3769),
                                             txt_size: heightM * 0.6))),
                                 if (item.rate != null)
-                                  // Text("${item.rate!.rate} / 5",
-                                  //     style: ourTextStyle(
-                                  //         txt_color: Color.fromARGB(
-                                  //             255, 216, 107, 147),
-                                  //         txt_size: heightM * 0.4)),
                                   Positioned(
                                       child: Padding(
                                           padding: const EdgeInsets.only(

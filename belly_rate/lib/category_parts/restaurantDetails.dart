@@ -534,15 +534,15 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                     ),
                   ),
                 ),
-              if (widget.restaurant.rate != null)
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16.0, bottom: 3.0, top: 20.0, right: 16.0),
-                  child: Text("Your Rate: ${widget.restaurant.rate?.rate}",
-                      style: ourTextStyle(
-                          txt_color: Color.fromARGB(255, 216, 107, 147),
-                          txt_size: heightM * 0.55)),
-                ),
+              // if (widget.restaurant.rate != null)
+              //   Padding(
+              //     padding: const EdgeInsets.only(
+              //         left: 16.0, bottom: 3.0, top: 20.0, right: 16.0),
+              //     child: Text("Your Rate: ${widget.restaurant.rate?.rate}",
+              //         style: ourTextStyle(
+              //             txt_color: Color.fromARGB(255, 216, 107, 147),
+              //             txt_size: heightM * 0.55)),
+              //   ),
             ],
           )
         ],
