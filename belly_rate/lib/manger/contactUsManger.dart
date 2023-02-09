@@ -83,7 +83,8 @@ class _contactUsMangerState extends State<ContactUsManger> {
                               "In Progress",
                               style: ourTextStyle(
                                 color: requestsIndex != 0
-                                    ? Colors.black
+                                    ? const Color(0xFF5a3769)
+                                    // Colors.black
                                     : Colors.white,
                                 //Colors.orange,
                                 // fontWeight: FontWeight.w400,
@@ -113,7 +114,8 @@ class _contactUsMangerState extends State<ContactUsManger> {
                               "Completed",
                               style: ourTextStyle(
                                 color: requestsIndex != 1
-                                    ? Colors.black
+                                    ? const Color(0xFF5a3769)
+                                    //Colors.black
                                     : Colors.white,
                                 //Colors.orange,
                                 fontSize: 15,
@@ -332,7 +334,7 @@ class _contactUsMangerState extends State<ContactUsManger> {
 
     return Padding(
       padding:
-          const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+          const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 2.0, right: 16.0),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -358,18 +360,19 @@ class _contactUsMangerState extends State<ContactUsManger> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        width: 50,
-                        height: 50,
+                        width: 55,
+                        height: 55,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.black, width: 2)),
+                            border:
+                                Border.all(color: Color(0xFF5a3769), width: 2)),
                         child: Center(
                           child: Text(
                             "${ticket.username!.substring(0, 1).toUpperCase()}",
-                            style:
-                                ourTextStyle(fontSize: 20, color: Colors.black
-                                    // fontWeight: FontWeight.bold
-                                    ),
+                            style: ourTextStyle(
+                                fontSize: 25, color: Color(0xFF5a3769)
+                                // fontWeight: FontWeight.bold
+                                ),
                           ),
                         ),
                       ),
@@ -379,7 +382,7 @@ class _contactUsMangerState extends State<ContactUsManger> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(
-                            left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                            left: 16.0, bottom: 1.0, top: 1.0, right: 16.0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -395,33 +398,32 @@ class _contactUsMangerState extends State<ContactUsManger> {
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5,
-                              child: Text("Request User : ${ticket.username}",
+                              child: Text("${ticket.username}",
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: ourTextStyle(
-                                      color: button_color,
-                                      fontSize: heightM * 0.4)),
+                                      color: button_color, fontSize: 16)),
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5,
                               child: Text(
-                                  "Request Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                  "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: ourTextStyle(
-                                      color: button_color,
+                                      color: Color(0xFF5a3769),
                                       fontSize: heightM * 0.4)),
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child: Text(
-                                  "Answer Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: ourTextStyle(
-                                      color: mainColor(),
-                                      fontSize: heightM * 0.4)),
-                            ),
+                            // SizedBox(
+                            //   width: MediaQuery.of(context).size.width * 0.5,
+                            //   child: Text(
+                            //       "Answer Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
+                            //       maxLines: 2,
+                            //       overflow: TextOverflow.ellipsis,
+                            //       style: ourTextStyle(
+                            //           color: mainColor(),
+                            //           fontSize: heightM * 0.4)),
+                            // ),
                           ],
                         ),
                       ),
@@ -520,7 +522,7 @@ class _contactUsMangerState extends State<ContactUsManger> {
 
     return Padding(
       padding:
-          const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+          const EdgeInsets.only(left: 16.0, bottom: 1.0, top: 1.0, right: 16.0),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -546,18 +548,19 @@ class _contactUsMangerState extends State<ContactUsManger> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        width: 50,
-                        height: 50,
+                        width: 55,
+                        height: 55,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.black, width: 2)),
+                            border:
+                                Border.all(color: Color(0xFF5a3769), width: 2)),
                         child: Center(
                           child: Text(
                             "${ticket.username!.substring(0, 1).toUpperCase()}",
-                            style:
-                                ourTextStyle(fontSize: 20, color: Colors.black
-                                    // fontWeight: FontWeight.bold
-                                    ),
+                            style: ourTextStyle(
+                                fontSize: 25, color: Color(0xFF5a3769)
+                                // fontWeight: FontWeight.bold
+                                ),
                           ),
                         ),
                       ),
@@ -583,21 +586,24 @@ class _contactUsMangerState extends State<ContactUsManger> {
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5,
-                              child: Text("Request User : ${ticket.username}",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: ourTextStyle(
-                                      color: button_color,
-                                      fontSize: heightM * 0.4)),
+                              child: //Text("Request User : ${ticket.username}",
+                                  Text("${ticket.username}",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: ourTextStyle(
+                                          color: Color.fromARGB(
+                                              255, 216, 107, 147),
+                                          fontSize: 16)),
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5,
                               child: Text(
-                                  "Request Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                  //"Request Date: ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                  "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: ourTextStyle(
-                                      color: button_color,
+                                      color: Color(0xFF5a3769),
                                       fontSize: heightM * 0.4)),
                             ),
                           ],
@@ -708,7 +714,8 @@ class _contactUsMangerState extends State<ContactUsManger> {
                   child: TextFormField(
                     keyboardType: TextInputType.multiline,
                     controller: text,
-                    maxLines: 3,
+                    maxLines: 4,
+                    cursorColor: Colors.black,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Write your Reply here',
@@ -718,6 +725,7 @@ class _contactUsMangerState extends State<ContactUsManger> {
                         // textAlign: TextAlign.center,
                       ),
                     ),
+                    maxLength: 120,
                   ),
                 ),
                 Padding(

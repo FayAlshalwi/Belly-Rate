@@ -109,9 +109,10 @@ class _AddRestaurantsState extends State<AddRestaurants> {
         //     style: ourTextStyle(txt_color: mainColor(), txt_size: 18),
         //   )),
         // ),
-        
-         Padding(
-        padding: const EdgeInsets.all(8.0),),
+
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+        ),
 
         Form(
             key: _formKeyId,
@@ -190,7 +191,6 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                 textEditingController: restaurantPhoneNumber,
                 ourLabelText: "Restaurant Phone Number",
                 keyboardType: TextInputType.number)),
-                
 
         /// Price Avg - drop down
         Container(
@@ -250,7 +250,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
           child: Center(
               child: Text(
             // "What method would you like to use to add the location of the restaurant?",
-             "Choose method to add restaurant location:",
+            "Choose method to add restaurant location:",
             style: ourTextStyle(txt_color: mainColor(), txt_size: 15),
           )),
         ),
@@ -310,8 +310,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                       child: buildContainerTextFieldLong(
                           textEditingController: restaurantLong,
                           ourLabelText: "Restaurant Long",
-                          keyboardType: TextInputType.number
-                          ))),
+                          keyboardType: TextInputType.number))),
             ],
           ),
         if (_selectedOption == 2)
@@ -662,11 +661,11 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             invalidLat = true;
             return "field cant be empty";
           }
-          if (!regExp.hasMatch(value!)) {
+          if (!regExp.hasMatch(value)) {
             invalidLat = true;
             return "Enter numbers Only";
           }
-          if (value!.length > 18) {
+          if (value.length > 18) {
             invalidLat = true;
             return "Max input length is 18.";
           } else {
@@ -729,11 +728,11 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             invalidLong = true;
             return "Field cant be empty";
           }
-          if (!regExp.hasMatch(value!)) {
+          if (!regExp.hasMatch(value)) {
             invalidLong = true;
             return "Enter numbers Only";
           }
-          if (value!.length > 18) {
+          if (value.length > 18) {
             invalidLong = true;
             return "Max input length is 18.";
           } else {
@@ -741,7 +740,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             return null;
           }
         },
-         maxLength: 18,
+        maxLength: 18,
       ),
     );
   }
@@ -795,11 +794,11 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             return "Phone number cant be empty";
           }
           if (RegExp(r"[a-zA-Z!@#\$%^&*()_+|~=`{}\[\]:;'<>?,.\/\\-]")
-              .hasMatch(value!)) {
+              .hasMatch(value)) {
             invalidPHnum = true;
             return "No English letters or special characters allowed";
           }
-          if (value!.length != 10) {
+          if (value.length != 10) {
             invalidPHnum = true;
             return "Phone number must be equal to 10";
           } else {
@@ -809,7 +808,6 @@ class _AddRestaurantsState extends State<AddRestaurants> {
         },
         maxLength: 10,
       ),
-      
     );
   }
 
@@ -861,10 +859,10 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             invalidName = true;
             return "Resturant Name cant be empty";
           }
-          if (value!.length < 3) {
+          if (value.length < 3) {
             invalidName = true;
             return "Min input length is 3 characters.";
-          } else if (value!.length > 12) {
+          } else if (value.length > 12) {
             invalidName = true;
             return "Max input length is 12 characters.";
           } else if (value.contains(new RegExp(r'[0-9]'))) {
@@ -1011,15 +1009,15 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             invalidDes = true;
             return "Resturant Description cant be empty";
           }
-          if (!regex.hasMatch(value!)) {
+          if (!regex.hasMatch(value)) {
             invalidDes = true;
             return "special character are not allowed";
           }
-          if (value!.length < 3) {
+          if (value.length < 3) {
             invalidDes = true;
             return "Min input length is 3 characters.";
           }
-          if (value!.length > 120) {
+          if (value.length > 120) {
             invalidDes = true;
             return "Max input length is 120 characters.";
           } else {

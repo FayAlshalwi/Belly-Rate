@@ -1,3 +1,4 @@
+import 'package:belly_rate/manger/requestDetails.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +20,14 @@ class _ContactUsState extends State<ContactUs> {
   int requestsIndex = 0;
   User? user;
   OurUser? ourUser;
-
-  TextEditingController textTitle = TextEditingController();
-  TextEditingController textDescription = TextEditingController();
+  bool invalidD = false;
+  bool invalidT = false;
   Color txt_color = Color(0xFF5a3769);
   Color button_color = Color.fromARGB(255, 216, 107, 147);
+  TextEditingController textTitle = TextEditingController();
+  TextEditingController textDescription = TextEditingController();
+  final _formtext = GlobalKey<FormState>();
+  final _formdescription = GlobalKey<FormState>();
   @override
   void initState() {
     // TODO: implement initState
@@ -50,8 +54,6 @@ class _ContactUsState extends State<ContactUs> {
 
   @override
   Widget build(BuildContext context) {
-    double heightM = MediaQuery.of(context).size.height / 30;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -81,7 +83,7 @@ class _ContactUsState extends State<ContactUs> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
-                    color: requestsIndex == 0 ? mainColor() : Colors.white,
+                    color: requestsIndex == 0 ? button_color : Colors.white,
                     onPressed: () {
                       setState(() {
                         requestsIndex = 0;
@@ -107,7 +109,7 @@ class _ContactUsState extends State<ContactUs> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
-                    color: requestsIndex == 1 ? mainColor() : Colors.white,
+                    color: requestsIndex == 1 ? button_color : Colors.white,
                     onPressed: () {
                       setState(() {
                         requestsIndex = 1;
@@ -142,9 +144,11 @@ class _ContactUsState extends State<ContactUs> {
                                 .sort((a, b) => b.status!.compareTo(a.status!));
                             TicketSupport ticket = _list[index];
                             if (ticket.status == "In Progress") {
-                              return buildInProgressCard(ticket);
+                              return buildContainerCardView(ticket);
+                              // return buildInProgressCard(ticket);
                             } else {
-                              return buildCompleteCard(ticket);
+                              return buildContainerCardViewCompletedNew(ticket);
+                              // return buildCompleteCard(ticket);
                             }
                           });
                     } else if (snapshot.hasError) {
@@ -159,14 +163,165 @@ class _ContactUsState extends State<ContactUs> {
     );
   }
 
-  Card buildCompleteCard(TicketSupport ticket) {
-    return Card(
-      child: ClipRect(
-        child: Banner(
-          message: "${ticket.status}",
-          location: BannerLocation.topEnd,
-          color: const Color.fromARGB(255, 216, 107, 147),
-          child: buildContainerCard(ticket),
+  Widget buildContainerCardView(TicketSupport ticket) {
+    final double heightM = MediaQuery.of(context).size.height / 30;
+
+    return Padding(
+      padding:
+          const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ///
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  /// RequestDetails
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => RequestDetails(
+                              isManger: false,
+                              ticket: ticket,
+                            )),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child: Text(
+                                "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle! : "No title"}",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: ourTextStyle(
+                                    color: Color(0xFF5a3769), fontSize: 16)),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: Text(
+                                "Request Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: ourTextStyle(
+                                    color: button_color,
+                                    fontSize: heightM * 0.4)),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: Text("Request Status : ${ticket.status}",
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: ourTextStyle(
+                                    color: button_color,
+                                    fontSize: heightM * 0.4)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildContainerCardViewCompletedNew(TicketSupport ticket) {
+    final double heightM = MediaQuery.of(context).size.height / 30;
+
+    return Padding(
+      padding:
+          const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ///
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  /// RequestDetails
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => RequestDetails(
+                              isManger: false,
+                              ticket: ticket,
+                            )),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child: Text(
+                                "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle! : "No title"}",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: ourTextStyle(
+                                    color: Color(0xFF5a3769), fontSize: 16)),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: Text(
+                                "Request Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: ourTextStyle(
+                                    color: button_color,
+                                    fontSize: heightM * 0.4)),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: Text("Request Status : ${ticket.status}",
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: ourTextStyle(
+                                    color: button_color,
+                                    fontSize: heightM * 0.4)),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: Text(
+                                "Answer Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: ourTextStyle(
+                                    color: mainColor(),
+                                    fontSize: heightM * 0.4)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -206,23 +361,6 @@ class _ContactUsState extends State<ContactUs> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                  //   child: Text(
-                  //     "Title:",
-                  //     style: ourTextStyle(
-                  //         color: const Color.fromARGB(255, 216, 107, 147),
-                  //         fontSize: 17),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                  //   child: Text(
-                  //     "${ticket.requestTitle}",
-                  //     style: ourTextStyle(color: mainColor(), fontSize: 15),
-                  //   ),
-                  // ),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: Text(
@@ -329,55 +467,135 @@ class _ContactUsState extends State<ContactUs> {
 
   Container addNewRequest(BuildContext context) {
     double heightM = MediaQuery.of(context).size.height / 30;
-    final formKey = GlobalKey<FormState>();
 
     return Container(
-        height: MediaQuery.of(context).size.height * 0.75,
-        // width: 390,
-        child: Form(
-          key: formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 10,
+      height: MediaQuery.of(context).size.height * 0.75,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Image.asset(
+              "asset/category_img/cusSer.png",
+              width: 230,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 0.0, right: 273.0, top: 0.0, bottom: 0.0),
+              child: Text(
+                "New Request",
+                textAlign: TextAlign.start,
+                style: ourTextStyle2(txt_size: 22, txt_color: txt_color),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 5.0, right: 5.0, top: 2.0, bottom: 1.0),
+              child: Text(
+                "Kindly provide a detailed description of your problem, and our team will get back to you in as soon as possible.",
+                style: ourTextStyle2(
+                    txt_size: 15, txt_color: Color.fromARGB(235, 0, 0, 0)),
+              ),
+            ),
+            Container(
+              alignment: AlignmentDirectional.topStart,
+              margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                child: Text(
+                  "Issue Title",
+                  textAlign: TextAlign.start,
+                  style: ourTextStyle2(txt_color: txt_color, txt_size: 16),
                 ),
-                Image.asset(
-                  "asset/category_img/cusSer.png",
-                  width: 250,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 0.0, right: 273.0, top: 0.0, bottom: 0.0),
-                  child: Text(
-                    "New Request",
-                    textAlign: TextAlign.start,
-                    style: ourTextStyle2(txt_size: 22, txt_color: txt_color),
+              ),
+            ),
+            Form(
+                key: _formtext,
+                child: Container(
+                  alignment: AlignmentDirectional.center,
+                  // width: 450,
+                  height: 60,
+                  // margin: EdgeInsets.fromLTRB(23, 02, 10, 10),
+                  margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
+
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.black.withOpacity(0.13)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xffeeeeee),
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 5.0, right: 5.0, top: 2.0, bottom: 1.0),
-                  child: Text(
-                    "Kindly provide a detailed description of your problem, and our team will get back to you in as soon as possible.",
-                    style: ourTextStyle2(
-                        txt_size: 15, txt_color: Color.fromARGB(235, 0, 0, 0)),
-                  ),
-                ),
-                Container(
-                  alignment: AlignmentDirectional.topStart,
-                  margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-                    child: Text(
-                      "What is your issue?",
-                      textAlign: TextAlign.start,
-                      style: ourTextStyle2(txt_color: txt_color, txt_size: 16),
+                  child:
+                      Stack(alignment: AlignmentDirectional.center, children: [
+                    TextFormField(
+                      controller: textTitle,
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        _formtext.currentState!.validate();
+                      },
+                      validator: (value) {
+                        final RegExp regex = RegExp(r"^[a-zA-Z0-9 \n.]+$");
+                        if (value == null || value.isEmpty) {
+                          invalidT = true;
+                          return "Title cant be empty";
+                        }
+                        if (!regex.hasMatch(value!)) {
+                          invalidT = true;
+                          return "Special characters are not allowed";
+                        }
+                        if (value!.length < 3) {
+                          invalidT = true;
+                          return "Minimum input length is 3 characters.";
+                        }
+                        if (value!.length > 25) {
+                          invalidT = true;
+                          return "Maximum input length is 25 characters.";
+                        } else {
+                          invalidT = false;
+                          return null;
+                        }
+                      },
+                      maxLength: 15,
+                      cursorColor: Colors.black,
+                      decoration: InputDecoration(
+                        errorStyle: TextStyle(height: 0),
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.only(bottom: 04, left: 0),
+                        hintText: "Enter issue title",
+                        hintStyle: TextStyle(
+                            color: Color.fromRGBO(158, 158, 158, 1),
+                            fontSize: 16),
+                      ),
                     ),
-                  ),
+                  ]),
+                )),
+            Container(
+              alignment: AlignmentDirectional.topStart,
+              margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                child: Text(
+                  "What is your issue?",
+                  textAlign: TextAlign.start,
+                  style: ourTextStyle2(txt_color: txt_color, txt_size: 16),
                 ),
-                Container(
+              ),
+            ),
+            Form(
+                key: _formdescription,
+                child: Container(
                   alignment: AlignmentDirectional.topStart,
                   margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -404,11 +622,31 @@ class _ContactUsState extends State<ContactUs> {
                           cursorColor: Colors.black,
                           maxLines: 4,
                           maxLength: 120,
+                          onChanged: (value) {
+                            _formdescription.currentState!.validate();
+                          },
                           validator: (value) {
-                            if (value!.isEmpty ||
-                                value == null ||
-                                value.trim() == '') {
-                              return 'Please enter your issue';
+                            final RegExp regex = RegExp(r"^[a-zA-Z0-9\n.]+$");
+
+                            // RegExp regExp = new RegExp(pattern);
+                            if (value!.isEmpty) {
+                              invalidD = true;
+                              return "Description cant be empty";
+                            }
+                            if (!regex.hasMatch(value!)) {
+                              invalidD = true;
+                              return "Only letters and numbers are allowed";
+                            }
+                            if (value!.length < 3) {
+                              invalidD = true;
+                              return "Minimum input length is 3 characters.";
+                            }
+                            if (value!.length > 120) {
+                              invalidD = true;
+                              return "Maximum input length is 120 characters.";
+                            } else {
+                              invalidD = false;
+                              return null;
                             }
                           },
                           decoration: InputDecoration(
@@ -431,83 +669,81 @@ class _ContactUsState extends State<ContactUs> {
                           ),
                         ),
                       ]),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Center(
-                  child: Container(
-                    child: LoadingBtn(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: heightM * 1.5,
-                      elevation: 10.0,
-                      color: button_color,
-                      borderRadius: 10,
-                      animate: true,
-                      //color: Colors.green,
-                      loader: Container(
-                        padding: const EdgeInsets.all(10),
-                        width: 40,
-                        height: 40,
-                        child: const CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      ),
-                      child: Text('Send Request',
-                          textAlign: TextAlign.center,
-                          style: ourTextStyle2(
-                              txt_color: Colors.white,
-                              txt_size: heightM * 0.6)),
-
-                      onTap: (startLoading, stopLoading, btnState) async {
-                        if (btnState == ButtonState.idle) {
-                          formKey.currentState?.save();
-                          if (formKey.currentState!.validate()) {
-                            CoolAlert.show(
-                                context: context,
-                                type: CoolAlertType.confirm,
-                                text:
-                                    'Are you sure you want to submit this request?',
-                                confirmBtnText: 'Yes',
-                                cancelBtnText: 'Cancel',
-                                confirmBtnColor:
-                                    Color.fromARGB(255, 216, 107, 147),
-                                title: "Submit Request",
-                                onCancelBtnTap: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                                onConfirmBtnTap: () async {
-                                  await addRequest();
-
-                                  textDescription.clear();
-                                  textTitle.clear();
-
-                                  CoolAlert.show(
-                                    title: "Success",
-                                    context: context,
-                                    type: CoolAlertType.success,
-                                    text: "Request submitted successfully!",
-                                    confirmBtnColor:
-                                        Color.fromARGB(255, 216, 107, 147),
-                                    onConfirmBtnTap: () {
-                                      Navigator.of(context).pop(true);
-                                      Navigator.of(context).pop(true);
-                                      Navigator.of(context).pop(true);
-                                    },
-                                  );
-                                });
-                            startLoading();
-                          }
-                        }
-                      },
+                )),
+            SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: Container(
+                child: LoadingBtn(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: heightM * 1.5,
+                  elevation: 10.0,
+                  color: button_color,
+                  borderRadius: 10,
+                  animate: true,
+                  //color: Colors.green,
+                  loader: Container(
+                    padding: const EdgeInsets.all(10),
+                    width: 40,
+                    height: 40,
+                    child: const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   ),
+                  child: Text('Send Request',
+                      textAlign: TextAlign.center,
+                      style: ourTextStyle2(
+                          txt_color: Colors.white, txt_size: heightM * 0.6)),
+
+                  onTap: (startLoading, stopLoading, btnState) async {
+                    if (btnState == ButtonState.idle) {
+                      if (_formtext.currentState!.validate() &&
+                          _formdescription.currentState!.validate()) {
+                        CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.confirm,
+                            text:
+                                'Are you sure you want to submit this request?',
+                            confirmBtnText: 'Yes',
+                            cancelBtnText: 'Cancel',
+                            confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
+                            title: "Submit Request",
+                            onCancelBtnTap: () {
+                              stopLoading();
+                              Navigator.of(context).pop(true);
+                            },
+                            onConfirmBtnTap: () async {
+                              await addRequest();
+
+                              textDescription.clear();
+                              textTitle.clear();
+
+                              CoolAlert.show(
+                                title: "Success",
+                                context: context,
+                                type: CoolAlertType.success,
+                                text: "Request submitted successfully!",
+                                confirmBtnColor:
+                                    Color.fromARGB(255, 216, 107, 147),
+                                onConfirmBtnTap: () {
+                                  Navigator.of(context).pop(true);
+                                  Navigator.of(context).pop(true);
+                                  stopLoading();
+                                  // Navigator.of(context).pop(true);
+                                },
+                              );
+                            });
+                      }
+                    }
+                  },
                 ),
-              ],
+              ),
             ),
-          ),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 
   Future<bool> addRequest() async {
@@ -515,7 +751,7 @@ class _ContactUsState extends State<ContactUs> {
     return await _firestore.collection("users_requests").add({
       'request_id': '',
       'UID': '${user?.uid}',
-      'user_name': '${ourUser!.name}',
+      'user_name': '${ourUser!.name ?? ""}',
       'request_title': "",
       'request_text': textDescription.text,
       "status": "In Progress",
