@@ -66,7 +66,7 @@ class _history extends State<history> {
         elevation: 0.0,
         centerTitle: true,
         title: const Text(
-          "Restaurant History",
+          "Recommendations History",
           style: TextStyle(
             fontSize: 22,
             color: const Color(0xFF5a3769),
