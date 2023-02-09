@@ -180,7 +180,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: MyApp._title,
-        home: user?.uid == null ? SignIn() : HomePage());
+        home: user?.uid == null ? SignIn() : getNewPage());
   }
 
   /// manger account :
