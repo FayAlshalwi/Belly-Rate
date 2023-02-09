@@ -617,7 +617,6 @@ class _ContactUsState extends State<ContactUs> {
                       //
                       children: [
                         TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           keyboardType: TextInputType.multiline,
                           controller: textDescription,
                           cursorColor: Colors.black,
@@ -630,7 +629,7 @@ class _ContactUsState extends State<ContactUs> {
                             final RegExp regex = RegExp(r"^[a-zA-Z0-9 \n.]+$");
 
                             // RegExp regExp = new RegExp(pattern);
-                            if (value!.isEmpty) {
+                            if (value == null || value.isEmpty) {
                               invalidD = true;
                               return "Description cant be empty";
                             }
@@ -698,6 +697,7 @@ class _ContactUsState extends State<ContactUs> {
                           txt_color: Colors.white, txt_size: heightM * 0.6)),
 
                   onTap: (startLoading, stopLoading, btnState) async {
+                    startLoading();
                     if (btnState == ButtonState.idle) {
                       if (_formtext.currentState!.validate() &&
                           _formdescription.currentState!.validate()) {
@@ -715,6 +715,7 @@ class _ContactUsState extends State<ContactUs> {
                               Navigator.of(context).pop(true);
                             },
                             onConfirmBtnTap: () async {
+                              startLoading();
                               await addRequest();
 
                               textDescription.clear();
@@ -753,7 +754,7 @@ class _ContactUsState extends State<ContactUs> {
       'request_id': '',
       'UID': '${user?.uid}',
       'user_name': '${ourUser!.name ?? ""}',
-      'request_title': "",
+      'request_title': textTitle.text,
       'request_text': textDescription.text,
       "status": "In Progress",
       'request_date_time': DateTime.now(),

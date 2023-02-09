@@ -87,7 +87,7 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                           padding: EdgeInsets.only(
                               left: 0.0, bottom: 0.0, top: 0.0, right: 0.0),
                           child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
                                   margin: EdgeInsets.fromLTRB(2, 2, 9, 2),
@@ -101,7 +101,7 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                   ),
                                 ),
                                 Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
                                         margin:
@@ -133,10 +133,11 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                             )),
                                   ],
                                 ),
-                                Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Container(
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Container(
                                         height: 27,
                                         width: item.far!.floor() < 10
                                             ? 85
@@ -148,8 +149,7 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                                 244, 216, 107, 147),
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20))),
-                                        child: Center(
-                                            child: Row(
+                                        child: Row(
                                           children: [
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(
@@ -168,9 +168,9 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                                         255, 255, 255, 255),
                                                     txt_size: heightM * 0.43))
                                           ],
-                                        )),
-                                      )
-                                    ])
+                                        ))
+                                  ],
+                                )
                               ]),
                         ),
                       ));
