@@ -14,6 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'HomePage.dart';
 import 'Notification.dart';
+import 'Onboarding_Screen.dart';
 import 'firebase_options.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
@@ -307,7 +308,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: MyApp._title,
-        home: user?.uid == null ? SignIn() : getNewPage());
+        home: user?.uid == null ? OnBoardingPage() : getNewPage());
   }
 
   /// manger account :
@@ -323,6 +324,7 @@ class _MyAppState extends State<MyApp> {
         return HomePage();
       }
     } else {
+      print("onbording ");
       return const SignIn();
     }
   }

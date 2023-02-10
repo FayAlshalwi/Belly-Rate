@@ -89,10 +89,7 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             Center(
-              child: Image.network(
-                  "https://my.messa.online/images_all/2022-login.gif",
-                  height: heightM * 8.50,
-                  fit: BoxFit.fill),
+              child: buildImage('asset/auth/2022-login.gif'),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
@@ -535,3 +532,7 @@ class _SignInState extends State<SignIn> {
         color: txt_color, fontWeight: FontWeight.bold, fontSize: txt_size);
   }
 }
+
+
+  Widget buildImage(String path) =>
+      Center(child: Image.asset(path, width: 350));
