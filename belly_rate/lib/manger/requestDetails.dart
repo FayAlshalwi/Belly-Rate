@@ -27,7 +27,7 @@ class _RequestDetailsState extends State<RequestDetails> {
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          "User Request Details",
+          "Request Details",
           style: TextStyle(
             fontSize: 22,
             color: mainColor(),
@@ -405,7 +405,10 @@ class _RequestDetailsState extends State<RequestDetails> {
           ),
         ),
       ),
+      
+      
     );
+    
   }
 
   Future<bool> replyRequest(
