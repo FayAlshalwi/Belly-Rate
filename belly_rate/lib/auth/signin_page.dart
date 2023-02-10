@@ -247,7 +247,6 @@ class _SignInState extends State<SignIn> {
                             verificationCompleted:
                                 (PhoneAuthCredential credential) {
                               stopLoading();
-
                               print("verificationCompleted: ${credential}");
                             },
                             verificationFailed: (FirebaseAuthException e) {
@@ -268,6 +267,7 @@ class _SignInState extends State<SignIn> {
                             },
                             codeSent:
                                 (String verificationId, int? resendToken) {
+                              stopLoading();
                               openSheet(context, heightM, button_color,
                                   txt_color, verificationId);
                             },
@@ -368,14 +368,14 @@ class _SignInState extends State<SignIn> {
                     underlineColor: button_color,
                     length: 6,
                     cursorColor: txt_color,
-                    clearAll: Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: Text(
-                        'clear all'.toUpperCase(),
-                        style: ourTextStyle(
-                            txt_color: txt_color, txt_size: heightM * 0.5),
-                      ),
-                    ),
+                    // clearAll: Padding(
+                    //   padding: const EdgeInsets.all(0.0),
+                    //   child: Text(
+                    //     'clear all'.toUpperCase(),
+                    //     style: ourTextStyle(
+                    //         txt_color: txt_color, txt_size: heightM * 0.5),
+                    //   ),
+                    // ),
                     onCompleted: (String value) {
                       setState(() {
                         _code = value;
@@ -402,11 +402,14 @@ class _SignInState extends State<SignIn> {
                           borderRadius: BorderRadius.circular(10.0), //12
                           // color: Color.fromARGB(0, 244, 67, 54),
                           child: MaterialButton(
-                            minWidth: MediaQuery.of(context).size.width,
+                            height: heightM * 1.2,
+                            minWidth: MediaQuery.of(context).size.width * 0.4,
                             color: Color.fromARGB(0, 0, 0, 0).withOpacity(0.7),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),
-                            onPressed: () => Navigator.of(context).pop(),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
                             child: Text('Back',
                                 textAlign: TextAlign.center,
                                 style: ourTextStyle(
@@ -426,13 +429,11 @@ class _SignInState extends State<SignIn> {
                               .transparent, //Colors.cyan.withOpacity(0.5),
                           child: LoadingBtn(
                             width: MediaQuery.of(context).size.width * 0.4,
-                            height: heightM * 1.9,
+                            height: heightM * 1.2,
                             color: button_color,
                             borderRadius: 10,
                             loader: Container(
                               padding: const EdgeInsets.all(10),
-                              width: 40,
-                              height: 40,
                               child: const CircularProgressIndicator(
                                 valueColor:
                                     AlwaysStoppedAnimation<Color>(Colors.white),

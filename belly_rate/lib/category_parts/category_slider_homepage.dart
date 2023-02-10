@@ -71,109 +71,125 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                 if (_restaurant.isNotEmpty) {
                   Restaurant item = _restaurant[index];
                   // print(item.location);
-                  return InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => RestaurantDetails(
-                                    category_name: item.category!,
-                                    restaurant: item,
-                                  )),
-                        );
-                      },
-                      child: Container(
-                        height: 90,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: 0.0, bottom: 0.0, top: 0.0, right: 0.0),
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => RestaurantDetails(
+                                        category_name: item.category!,
+                                        restaurant: item,
+                                      )),
+                            );
+                          },
+                          child: Container(
+                            height: 90,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 0.0, bottom: 0.0, top: 0.0, right: 0.0),
+                              child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(2, 2, 9, 2),
+                                      width: 70,
+                                      height: 70,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                            "${item.photos?.first}",
+                                            fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            margin: EdgeInsets.fromLTRB(
+                                                0, 10, 0, 0),
+                                            padding: EdgeInsets.only(
+                                                left: 0.0,
+                                                bottom: 0.0,
+                                                top: 0.0,
+                                                right: 0.0),
+                                            child: Text("${item.name}",
+                                                style: ourTextStyle(
+                                                    txt_color: txt_color,
+                                                    txt_size: heightM * 0.6))),
+                                        Container(
+                                            margin:
+                                                EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                            child: Text("${item.category}",
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Color.fromARGB(
+                                                      255, 63, 63, 63),
+                                                  fontWeight: FontWeight.w500,
+                                                )
+
+                                                // ourTextStyle(
+                                                //     txt_color: Color.fromARGB(
+                                                //         255, 116, 116, 116),
+                                                //     txt_size: heightM * 0.45, )
+
+                                                )),
+                                      ],
+                                    ),
+                                  ]),
+                            ),
+                          )),
+                      InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => RestaurantDetails(
+                                        category_name: item.category!,
+                                        restaurant: item,
+                                      )),
+                            );
+                          },
                           child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(2, 2, 9, 2),
-                                  width: 70,
-                                  height: 70,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                        "${item.photos?.first}",
-                                        fit: BoxFit.cover),
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        margin:
-                                            EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                        padding: EdgeInsets.only(
-                                            left: 0.0,
-                                            bottom: 0.0,
-                                            top: 0.0,
-                                            right: 0.0),
-                                        child: Text("${item.name}",
-                                            style: ourTextStyle(
-                                                txt_color: txt_color,
-                                                txt_size: heightM * 0.6))),
-                                    Container(
-                                        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                        child: Text("${item.category}",
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              color: Color.fromARGB(
-                                                  255, 63, 63, 63),
-                                              fontWeight: FontWeight.w500,
-                                            )
-
-                                            // ourTextStyle(
-                                            //     txt_color: Color.fromARGB(
-                                            //         255, 116, 116, 116),
-                                            //     txt_size: heightM * 0.45, )
-
-                                            )),
-                                  ],
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                        height: 27,
-                                        width: item.far!.floor() < 10
-                                            ? 85
-                                            : item.far!.floor() > 10
-                                                ? 95
-                                                : 107,
-                                        decoration: BoxDecoration(
-                                            color: Color.fromARGB(
-                                                244, 216, 107, 147),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))),
-                                        child: Row(
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  5, 0, 1, 0),
-                                              child: Icon(
-                                                Icons.location_on,
-                                                color: Colors.white,
-                                                size: 20,
-                                              ),
-                                            ),
-                                            Text(
-                                                "${item.far!.toStringAsFixed(2)} KM",
-                                                textAlign: TextAlign.center,
-                                                style: ourTextStyle(
-                                                    txt_color: Color.fromARGB(
-                                                        255, 255, 255, 255),
-                                                    txt_size: heightM * 0.43))
-                                          ],
-                                        ))
-                                  ],
+                                  height: 27,
+                                  width: item.far!.floor() < 10
+                                      ? 85
+                                      : item.far!.floor() > 10
+                                          ? 95
+                                          : 107,
+                                  decoration: BoxDecoration(
+                                      color: Color.fromARGB(244, 216, 107, 147),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: Center(
+                                      child: Row(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(5, 0, 1, 0),
+                                        child: Icon(
+                                          Icons.location_on,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                      ),
+                                      Text("${item.far!.toStringAsFixed(2)} KM",
+                                          textAlign: TextAlign.center,
+                                          style: ourTextStyle(
+                                              txt_color: Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              txt_size: heightM * 0.43))
+                                    ],
+                                  )),
                                 )
-                              ]),
-                        ),
-                      ));
+                              ]))
+                    ],
+                  );
                 } else
                   return Container();
               })),

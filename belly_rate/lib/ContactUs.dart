@@ -92,7 +92,9 @@ class _ContactUsState extends State<ContactUs> {
                     child: Text(
                       "New Request",
                       style: ourTextStyle(
-                        color: requestsIndex != 0 ? Color(0xFF5a3769): Colors.white,
+                        color: requestsIndex != 0
+                            ? Color(0xFF5a3769)
+                            : Colors.white,
                         //Colors.orange,
                         // fontWeight: FontWeight.w400,
                         fontSize: 15,
@@ -118,7 +120,9 @@ class _ContactUsState extends State<ContactUs> {
                     child: Text(
                       "Previous Requests",
                       style: ourTextStyle(
-                        color: requestsIndex != 1 ? Color(0xFF5a3769): Colors.white,
+                        color: requestsIndex != 1
+                            ? Color(0xFF5a3769)
+                            : Colors.white,
                         //Colors.orange,
                         fontSize: 15,
                       ),
@@ -144,7 +148,7 @@ class _ContactUsState extends State<ContactUs> {
                                 .sort((a, b) => b.status!.compareTo(a.status!));
                             TicketSupport ticket = _list[index];
                             if (ticket.status == "In Progress") {
-                              return buildContainerCardView(ticket);
+                              return buildContainerCardViewCompletedNew(ticket);
                               // return buildInProgressCard(ticket);
                             } else {
                               return buildContainerCardViewCompletedNew(ticket);
@@ -157,83 +161,6 @@ class _ContactUsState extends State<ContactUs> {
                       return Center(child: CircularProgressIndicator());
                     }
                   })
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildContainerCardView(TicketSupport ticket) {
-    final double heightM = MediaQuery.of(context).size.height / 30;
-
-    return Padding(
-      padding:
-          const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ///
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  /// RequestDetails
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => RequestDetails(
-                              isManger: false,
-                              ticket: ticket,
-                            )),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            child: Text(
-                                "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle! : "No title"}",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: ourTextStyle(
-                                    color: Color(0xFF5a3769), fontSize: 16)),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: Text(
-                                "Request Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: ourTextStyle(
-                                    color: button_color,
-                                    fontSize: heightM * 0.4)),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: Text("Request Status : ${ticket.status}",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: ourTextStyle(
-                                    color: button_color,
-                                    fontSize: heightM * 0.4)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -259,16 +186,180 @@ class _ContactUsState extends State<ContactUs> {
               child: InkWell(
                 onTap: () {
                   /// RequestDetails
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => RequestDetails(
-                              isManger: false,
-                              ticket: ticket,
-                            )),
-                  );
+                  showModalBottomSheet(
+                      useRootNavigator: false,
+                      isDismissible: true,
+                      enableDrag: true,
+                      context: context,
+                      // elevation: 20,
+                      isScrollControlled: false,
+                      builder: (context) {
+                        return Container(
+                            height: 360,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0)),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 4.0, bottom: 0.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0,
+                                                          right: 8.0),
+                                                  child: Text(
+                                                    "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle : "No Subject"}",
+                                                    style: TextStyle(
+                                                      fontSize: 22,
+                                                      color: mainColor(),
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 4,
+                                                          left: 8.0,
+                                                          right: 8.0),
+                                                  child: Text(
+                                                    "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))} - ${ticket.status}",
+                                                    style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: mainColor(),
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 17,
+                                                            left: 8.0,
+                                                            right: 8.0),
+                                                    child: Text(
+                                                      "Complaint description",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: mainColor(),
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    )),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0,
+                                                          top: 4,
+                                                          right: 8.0),
+                                                  child: Text(
+                                                    "${ticket.requestText}",
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      // color: mainColor(),
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                                if (ticket.status !=
+                                                    "In Progress")
+                                                  Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 17,
+                                                              left: 8.0,
+                                                              right: 8.0),
+                                                      child: Text(
+                                                        "Response",
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: mainColor(),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      )),
+                                                if (ticket.status !=
+                                                    "In Progress")
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0,
+                                                            top: 4,
+                                                            right: 8.0),
+                                                    child: Text(
+                                                      "${ticket.requestAnswer}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        // color: mainColor(),
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ));
+                      });
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //       builder: (context) => RequestDetails(
+                  //             isManger: false,
+                  //             ticket: ticket,
+                  //           )),
+                  // );
                 },
                 child: Row(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 55,
+                        height: 55,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border:
+                                Border.all(color: Color(0xFF5a3769), width: 2)),
+                        child: Center(
+                          child: Text(
+                            "${ticket.requestTitle!.substring(0, 1).toUpperCase()}",
+                            style: ourTextStyle(
+                                fontSize: 25, color: Color(0xFF5a3769)
+                                // fontWeight: FontWeight.bold
+                                ),
+                          ),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
@@ -277,7 +368,7 @@ class _ContactUsState extends State<ContactUs> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.7,
+                            // width: MediaQuery.of(context).size.width * 0.7,
                             child: Text(
                                 "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle! : "No title"}",
                                 maxLines: 1,
@@ -288,7 +379,7 @@ class _ContactUsState extends State<ContactUs> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.5,
                             child: Text(
-                                "Request Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: ourTextStyle(
@@ -297,23 +388,23 @@ class _ContactUsState extends State<ContactUs> {
                           ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.5,
-                            child: Text("Request Status : ${ticket.status}",
+                            child: Text("${ticket.status}",
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: ourTextStyle(
                                     color: button_color,
                                     fontSize: heightM * 0.4)),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: Text(
-                                "Answer Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: ourTextStyle(
-                                    color: mainColor(),
-                                    fontSize: heightM * 0.4)),
-                          ),
+                          // SizedBox(
+                          //   width: MediaQuery.of(context).size.width * 0.5,
+                          //   child: Text(
+                          //       "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
+                          //       maxLines: 2,
+                          //       overflow: TextOverflow.ellipsis,
+                          //       style: ourTextStyle(
+                          //           color: mainColor(),
+                          //           fontSize: heightM * 0.4)),
+                          // ),
                         ],
                       ),
                     ),
