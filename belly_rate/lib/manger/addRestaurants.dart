@@ -396,7 +396,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               ),
-              child: Text("Add Restaurant22",
+              child: Text("Add Restaurant",
                   textAlign: TextAlign.center,
                   style: ourTextStyle(
                       txt_color: Colors.white, txt_size: 22 * 0.6)),
@@ -459,23 +459,6 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   }
                 }
               },
-            ),
-          ),
-        ),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          child: MaterialButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            color: Color.fromARGB(255, 216, 107, 147),
-            onPressed: () async {},
-            child: Text(
-              "Add Restaurant",
-              style: ourTextStyle(
-                txt_color: Colors.white, //Colors.orange,
-                txt_size: 15,
-              ),
             ),
           ),
         ),

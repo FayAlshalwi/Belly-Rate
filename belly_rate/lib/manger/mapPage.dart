@@ -11,7 +11,6 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   String googleApikey = "AIzaSyBrMEnPRhkwUkMAwxVZtFHOA7e3w2Mj9bA";
-  // String googleApikey = "AIzaSyAGQPTmbpr1zukP0hKxLFf7ohIPKUHnPwU";
   GoogleMapController? mapController; //controller for Google map
   CameraPosition? cameraPosition;
   LatLng startLocation = LatLng(24.724945, 46.768963);
@@ -30,20 +29,16 @@ class _MapPageState extends State<MapPage> {
           ),
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.black),
-          // backgroundColor: Colors.deepPurpleAccent,
         ),
         body: Stack(children: [
           GoogleMap(
-            //Map widget from google_maps_flutter package
             zoomGesturesEnabled: true, //enable Zoom in, out on map
             initialCameraPosition: CameraPosition(
-              //innital position in map
               target: startLocation, //initial position
               zoom: 12.0, //initial zoom level
             ),
             mapType: MapType.normal, //map type
             onMapCreated: (controller) {
-              //method called when map is created
               setState(() {
                 mapController = controller;
               });
@@ -52,7 +47,6 @@ class _MapPageState extends State<MapPage> {
               cameraPosition = cameraPositiona; //when map is dragging
             },
             onCameraIdle: () async {
-              //when map drag stops
               setState(() {
                 lat = 0.0;
                 long = 0.0;
@@ -62,7 +56,6 @@ class _MapPageState extends State<MapPage> {
                   cameraPosition!.target.latitude,
                   cameraPosition!.target.longitude);
               setState(() {
-                //get place name from lat and lang
                 location = placemarks.first.administrativeArea.toString() +
                     ", " +
                     placemarks.first.street.toString();
@@ -72,14 +65,12 @@ class _MapPageState extends State<MapPage> {
             },
           ),
           Center(
-            //picker image on google map
             child: Image.asset(
               "asset/picker.png",
               width: 50,
             ),
           ),
           Positioned(
-              //widget to display location name
               bottom: 10,
               child: Padding(
                 padding: EdgeInsets.all(15),
