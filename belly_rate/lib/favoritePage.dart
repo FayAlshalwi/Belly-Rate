@@ -63,7 +63,7 @@ class _Favorite extends State<Favorite> {
         elevation: 0.0,
         centerTitle: true,
         title: const Text(
-          "Favorite Restaurant",
+          "Favorite Restaurants",
           style: TextStyle(
             fontSize: 22,
             color: const Color(0xFF5a3769),

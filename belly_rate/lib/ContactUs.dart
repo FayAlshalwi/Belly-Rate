@@ -63,7 +63,7 @@ class _ContactUsState extends State<ContactUs> {
           color: mainColor(),
         ),
         title: Text(
-          "Contact Us",
+          "Help and Support",
           style: TextStyle(
             fontSize: 22,
             color: mainColor(),
@@ -92,7 +92,7 @@ class _ContactUsState extends State<ContactUs> {
                     child: Text(
                       "New Request",
                       style: ourTextStyle(
-                        color: requestsIndex != 0 ? Colors.black : Colors.white,
+                        color: requestsIndex != 0 ? Color(0xFF5a3769): Colors.white,
                         //Colors.orange,
                         // fontWeight: FontWeight.w400,
                         fontSize: 15,
@@ -118,7 +118,7 @@ class _ContactUsState extends State<ContactUs> {
                     child: Text(
                       "Previous Requests",
                       style: ourTextStyle(
-                        color: requestsIndex != 1 ? Colors.black : Colors.white,
+                        color: requestsIndex != 1 ? Color(0xFF5a3769): Colors.white,
                         //Colors.orange,
                         fontSize: 15,
                       ),

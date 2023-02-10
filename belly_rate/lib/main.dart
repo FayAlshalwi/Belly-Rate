@@ -43,14 +43,141 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   signup();
-  // final periodicTimer = Timer.periodic(
+  // final periodicTime = Timer.periodic(
   //   //
-  //   const Duration(seconds: 60 * 12 * 14),
+  //   const Duration(minutes:1),
   //   (timer) {
   //     GetRecommendation();
   //     print('GetRecommendation timer');
   //   },
   // );
+
+  final periodicTimer = Timer.periodic(
+    //
+    const Duration(days:1),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+ final periodicTime2 = Timer.periodic(
+    //
+    const Duration(days:2),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+   final periodicTimer3 = Timer.periodic(
+    //
+    const Duration(days:3),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+    final periodicTimer4 = Timer.periodic(
+    //
+    const Duration(days:4),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+    final periodicTimer5 = Timer.periodic(
+    //
+    const Duration(days:5),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+   final periodicTimer6 = Timer.periodic(
+    //
+    const Duration(days:6),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+   final periodicTimer7 = Timer.periodic(
+    //
+    const Duration(days:7),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+  final periodicTimer8 = Timer.periodic(
+    //
+    const Duration(days:8),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+    final periodicTimer9 = Timer.periodic(
+    //
+    const Duration(days:9),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+  final periodicTimer10 = Timer.periodic(
+    //
+    const Duration(days:10),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+  final periodicTimer11 = Timer.periodic(
+    //
+    const Duration(days:11),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+   final periodicTimer12 = Timer.periodic(
+    //
+    const Duration(days:12),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+    final periodicTimer13 = Timer.periodic(
+    //
+    const Duration(days:13),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+    final periodicTimer14 = Timer.periodic(
+    //
+    const Duration(days:14),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+    final periodicTimer15 = Timer.periodic(
+    //
+    const Duration(days:15),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
   AwesomeNotifications().getGlobalBadgeCounter().then(
         (value) => AwesomeNotifications().setGlobalBadgeCounter(0),
       );
@@ -146,7 +273,7 @@ void main() async {
       // });
       // print("History 3 added");
     },
-  );
+  ); 
 
   runApp(MyApp());
 }

@@ -102,7 +102,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
             children: [
               CarouselSlider(
                 options: CarouselOptions(
-                    height: heightM * 8.0,
+                    height: heightM * 10.0,
                     onPageChanged: (index, reason) {
                       setState(() {
                         _current = index;
