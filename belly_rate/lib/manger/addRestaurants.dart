@@ -338,7 +338,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
           child: Row(
             children: [
               Text(
-                "Add restaurant photos ( 4 photos are required)",
+                "Add restaurant photos (4 photos are required)",
                 style: ourTextStyle(txt_color: mainColor(), txt_size: 15),
               ),
             ],
@@ -398,8 +398,10 @@ class _AddRestaurantsState extends State<AddRestaurants> {
               ),
               child: Text("Add Restaurant",
                   textAlign: TextAlign.center,
-                  style: ourTextStyle(
-                      txt_color: Colors.white, txt_size: 22 * 0.6)),
+                  style: getMyTextStyle(
+                                txt_color: Colors.white,
+                                fontSize: 25 * 0.6),
+                      ),
 
               onTap: (startLoading, stopLoading, btnState) async {
                 if (_formKeyId.currentState!.validate() &&
@@ -714,7 +716,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   validator: (value) {
                     if (value!.isEmpty) {
                       invalidPHnum = true;
-                      return "Phone number cant be empty";
+                      return "Please enter resturant Phone number";
                     }
                     if (RegExp(r"[a-zA-Z!@#\$%^&*()_+|~=`{}\[\]:;'<>?,.\/\\-]")
                         .hasMatch(value)) {
@@ -723,7 +725,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                     }
                     if (value.length != 10) {
                       invalidPHnum = true;
-                      return "Phone number must be equal to 10";
+                      return "Please enter 10 numbers";
                     } else {
                       invalidPHnum = false;
                       return null;
@@ -800,20 +802,22 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   validator: (value) {
                     if (value!.isEmpty) {
                       invalidName = true;
-                      return "Resturant Name cant be empty";
+                      return "Please enter resturant name";
                     }
                     if (value.length < 3) {
                       invalidName = true;
-                      return "Min input length is 3 characters.";
+                      return "Please enter at least 3 characters";
                     } else if (value.length > 12) {
                       invalidName = true;
                       return "Max input length is 12 characters.";
-                    } else if (value.contains(new RegExp(r'[0-9]'))) {
+                    } 
+                    //else if (value.contains(new RegExp(r'[0-9]'))) {
+                      //invalidName = true;
+                      //return "No numbers allowed.";
+                    //}
+                     else if (value.contains(new RegExp(r'[^a-zA-Z\s]'))) {
                       invalidName = true;
-                      return "No numbers allowed.";
-                    } else if (value.contains(new RegExp(r'[^a-zA-Z\s]'))) {
-                      invalidName = true;
-                      return "No special characters allowed.";
+                      return "You cannot enter special characters";
                     } else {
                       invalidName = false;
                       return null;
@@ -890,7 +894,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   validator: (value) {
                     if (value!.isEmpty) {
                       invalidID = true;
-                      return "Resuturant ID can't be empty.";
+                      return  "Please enter resturant ID";
                     } else if (int.tryParse(value) == null) {
                       invalidID = true;
                       return "Enter a valid Resuturant ID.";
@@ -981,15 +985,15 @@ class _AddRestaurantsState extends State<AddRestaurants> {
 
                     if (value!.isEmpty) {
                       invalidDes = true;
-                      return "Resturant Description cant be empty";
+                      return "Please enter resturant description";
                     }
                     if (!regex.hasMatch(value)) {
                       invalidDes = true;
-                      return "special character are not allowed";
+                      return "You cannot enter special characters";
                     }
                     if (value.length < 3) {
                       invalidDes = true;
-                      return "Min input length is 3 characters.";
+                      return "Please enter at least 3 characters";
                     }
                     if (value.length > 120) {
                       invalidDes = true;
@@ -1177,3 +1181,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
 
   Color mainColor() => const Color(0xFF5a3769);
 }
+ TextStyle getMyTextStyle({required Color txt_color, double fontSize = 22}) {
+    return GoogleFonts.cairo(
+        color: txt_color, fontSize: fontSize, fontWeight: FontWeight.bold);
+  }

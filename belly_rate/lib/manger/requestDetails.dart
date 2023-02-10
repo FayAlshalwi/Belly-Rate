@@ -19,7 +19,7 @@ class _RequestDetailsState extends State<RequestDetails> {
   TextEditingController text = TextEditingController();
   bool invalid1 = false;
   final _formtext = GlobalKey<FormState>();
-  // double heightM = MediaQuery.of(context).size.height / 30;
+  //double heightM = MediaQuery.of(context).size.height / 30;
 
   @override
   Widget build(BuildContext context) {
@@ -322,15 +322,17 @@ class _RequestDetailsState extends State<RequestDetails> {
                           child: Center(
                             child: Container(
                               child: LoadingBtn(
-                                width: MediaQuery.of(context).size.width * 0.6,
-                                height: 28 * 1.5,
+                               
+                      
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: 28 * 1.6,
                                 color: button_color,
                                 borderRadius: 10,
                                 animate: true,
                                 //color: Colors.green,
                                 loader: Container(
                                   padding: const EdgeInsets.all(10),
-                                  width: 40,
+                                  width: 80,
                                   height: 40,
                                   child: const CircularProgressIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
@@ -338,7 +340,9 @@ class _RequestDetailsState extends State<RequestDetails> {
                                   ),
                                 ),
                                 child:
-                                    Text("Reply", textAlign: TextAlign.center),
+                                    Text("Reply",textAlign: TextAlign.center,style: getMyTextStyle(
+                              txt_color: Colors.white,
+                              fontSize: 30 * 0.6)),
 
                                 onTap: (startLoading, stopLoading,
                                     btnState) async {
@@ -453,6 +457,10 @@ class _RequestDetailsState extends State<RequestDetails> {
       fontWeight: FontWeight.bold,
       fontSize: fontSize,
     );
+  }
+    TextStyle getMyTextStyle({required Color txt_color, double fontSize = 22}) {
+    return GoogleFonts.cairo(
+        color: txt_color, fontSize: fontSize, fontWeight: FontWeight.bold);
   }
 
   Color button_color = Color.fromARGB(255, 216, 107, 147);
