@@ -5,9 +5,8 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'HomePage.dart';
 
 class OnBoardingPage extends StatelessWidget {
-
   @override
-  Widget build(BuildContext context) => SafeArea(
+  Widget build(BuildContext context) => Container(
         child: IntroductionScreen(
           pages: [
             PageViewModel(
@@ -19,7 +18,7 @@ class OnBoardingPage extends StatelessWidget {
             PageViewModel(
               title: 'Featured Books',
               body: 'Available right at your fingerprints',
-                image: buildImage('asset/auth/2022-login.gif'),
+              image: buildImage('asset/auth/2022-login.gif'),
               decoration: getPageDecoration(),
             ),
             PageViewModel(
@@ -31,26 +30,30 @@ class OnBoardingPage extends StatelessWidget {
             PageViewModel(
               title: 'Today a reader, tomorrow a leader',
               body: 'Start your journey',
-              
-               footer: ButtonWidget(
-                 text: 'Start Reading',
-                 onClicked: () => goToHome(context),
-               ),
-                image: buildImage('asset/auth/2022-login.gif'),
+              footer: ButtonWidget(
+                text: 'Start Reading',
+                onClicked: () => goToHome(context),
+              ),
+              image: buildImage('asset/auth/2022-login.gif'),
               decoration: getPageDecoration(),
             ),
           ],
 
-         done: Text('Done', style: TextStyle(color: Color(0xFF5a3769),fontWeight: FontWeight.w600),selectionColor: Colors.grey,),
+          done: Text(
+            'Done',
+            style: TextStyle(
+                color: Color(0xFF5a3769), fontWeight: FontWeight.w600),
+            selectionColor: Colors.grey,
+          ),
           onDone: () => goToHome(context),
-         showSkipButton: true,
-          
-          skip: Text('Skip' ,style: TextStyle(color: Color(0xFF5a3769)) ),
+          showSkipButton: true,
+
+          skip: Text('Skip', style: TextStyle(color: Color(0xFF5a3769))),
           onSkip: () => goToHome(context),
-          next: Icon(Icons.arrow_forward , color: Color(0xFF5a3769)),
+          next: Icon(Icons.arrow_forward, color: Color(0xFF5a3769)),
           dotsDecorator: getDotDecoration(),
           onChange: (index) => print('Page $index selected'),
-          globalBackgroundColor:  Colors.white,
+          globalBackgroundColor: Colors.white,
           dotsFlex: 4,
           nextFlex: 0,
           // isProgressTap: false,
@@ -69,8 +72,7 @@ class OnBoardingPage extends StatelessWidget {
       Center(child: Image.asset(path, width: 350));
 
   DotsDecorator getDotDecoration() => DotsDecorator(
-    
-        color:   Colors.grey,
+        color: Colors.grey,
         activeColor: Color(0xFF5a3769),
         size: Size(10, 10),
         activeSize: Size(22, 10),
@@ -82,11 +84,14 @@ class OnBoardingPage extends StatelessWidget {
   PageDecoration getPageDecoration() => PageDecoration(
         titleTextStyle: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         bodyTextStyle: TextStyle(fontSize: 20),
-        //descriptionPadding: EdgeInsets.all(16).copyWith(bottom: 0),
-        imagePadding: EdgeInsets.all(24),
-        
+        contentMargin: const EdgeInsets.all(3.0),
+        imagePadding: EdgeInsets.fromLTRB(0, 70, 0, 0),
+        bodyAlignment: Alignment.topCenter,
+        imageFlex: 2,
+        bodyFlex: 1,
+        safeArea: 90,
         pageColor: Colors.white,
       );
-      
-        ButtonWidget({required String text, required void Function() onClicked}) {}
+
+  ButtonWidget({required String text, required void Function() onClicked}) {}
 }
