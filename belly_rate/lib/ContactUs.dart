@@ -438,7 +438,7 @@ class _ContactUsState extends State<ContactUs> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0, left: 8.0),
                 child: Text(
-                  "Issue Title",
+                  "Request Title",
                   textAlign: TextAlign.start,
                   style: ourTextStyle2(txt_color: txt_color, txt_size: 16),
                 ),

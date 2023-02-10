@@ -90,7 +90,7 @@ class _SignUpPageState extends State<SignUpPage> {
             Center(
               child: Image.network(
                   "http://www.highvincent.com/HighVin/ContentNew/images/login.png",
-                  height: heightM * 8.0,
+                  height: heightM * 10.0,
                   fit: BoxFit.fill),
             ),
             Container(
@@ -339,6 +339,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             },
                             codeSent:
                                 (String verificationId, int? resendToken) {
+                              stopLoading();
+
                               openSheet(context, heightM, button_color,
                                   txt_color, verificationId);
                             },
