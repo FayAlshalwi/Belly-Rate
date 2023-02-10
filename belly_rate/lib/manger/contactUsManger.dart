@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-
 import '../models/ticketSupport.dart';
 
 class ContactUsManger extends StatefulWidget {
@@ -177,23 +176,6 @@ class _contactUsMangerState extends State<ContactUsManger> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 8.0 , right: 8.0),
-                  //   child: Text(
-                  //     "Title:",
-                  //     style: ourTextStyle(
-                  //         color: const Color.fromARGB(255, 216, 107, 147), fontSize: 17),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 8.0 , right: 8.0),
-                  //   child: Text(
-                  //     "${ticket.requestTitle}",
-                  //     style: ourTextStyle(
-                  //         color: mainColor(), fontSize: 15),
-                  //   ),
-                  // ),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: Text(
@@ -226,7 +208,6 @@ class _contactUsMangerState extends State<ContactUsManger> {
                       style: ourTextStyle(color: mainColor(), fontSize: 15),
                     ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: Text(
@@ -243,7 +224,6 @@ class _contactUsMangerState extends State<ContactUsManger> {
                       style: ourTextStyle(color: mainColor(), fontSize: 15),
                     ),
                   ),
-
                   if (ticket.status != "In Progress")
                     ClipRRect(
                       borderRadius: BorderRadius.only(
