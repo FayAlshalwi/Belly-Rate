@@ -71,21 +71,32 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                 if (_restaurant.isNotEmpty) {
                   Restaurant item = _restaurant[index];
                   // print(item.location);
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => RestaurantDetails(
-                                        category_name: item.category!,
-                                        restaurant: item,
-                                      )),
-                            );
-                          },
-                          child: Container(
+                  return InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => RestaurantDetails(
+                                    category_name: item.category!,
+                                    restaurant: item,
+                                  )),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // InkWell(
+                          //     onTap: () {
+                          //       Navigator.of(context).push(
+                          //         MaterialPageRoute(
+                          //             builder: (context) => RestaurantDetails(
+                          //                   category_name: item.category!,
+                          //                   restaurant: item,
+                          //                 )),
+                          //       );
+                          //     },
+                          //     child:
+                          Container(
                             height: 90,
                             child: Padding(
                               padding: EdgeInsets.only(
@@ -141,18 +152,21 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                     ),
                                   ]),
                             ),
-                          )),
-                      InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => RestaurantDetails(
-                                        category_name: item.category!,
-                                        restaurant: item,
-                                      )),
-                            );
-                          },
-                          child: Row(
+                          ),
+
+                          // ),
+                          // InkWell(
+                          //     onTap: () {
+                          //       Navigator.of(context).push(
+                          //         MaterialPageRoute(
+                          //             builder: (context) => RestaurantDetails(
+                          //                   category_name: item.category!,
+                          //                   restaurant: item,
+                          //                 )),
+                          //       );
+                          //     },
+                          // child:
+                          Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Container(
@@ -187,9 +201,10 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                     ],
                                   )),
                                 )
-                              ]))
-                    ],
-                  );
+                              ])
+                          // )
+                        ],
+                      ));
                 } else
                   return Container();
               })),

@@ -365,14 +365,6 @@ class _SignInState extends State<SignIn> {
                     underlineColor: button_color,
                     length: 6,
                     cursorColor: txt_color,
-                    // clearAll: Padding(
-                    //   padding: const EdgeInsets.all(0.0),
-                    //   child: Text(
-                    //     'clear all'.toUpperCase(),
-                    //     style: ourTextStyle(
-                    //         txt_color: txt_color, txt_size: heightM * 0.5),
-                    //   ),
-                    // ),
                     onCompleted: (String value) {
                       setState(() {
                         _code = value;
@@ -391,11 +383,11 @@ class _SignInState extends State<SignIn> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
-                      height: heightM * 1.9,
+                      // height: heightM * 1.9,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
-                          elevation: 10.0,
+                          // elevation: 10.0,
                           borderRadius: BorderRadius.circular(10.0), //12
                           // color: Color.fromARGB(0, 244, 67, 54),
                           child: MaterialButton(
@@ -420,7 +412,7 @@ class _SignInState extends State<SignIn> {
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Material(
-                          elevation: 10.0,
+                          // elevation: 10.0,
                           borderRadius: BorderRadius.circular(10.0), //12
                           color: Colors
                               .transparent, //Colors.cyan.withOpacity(0.5),
@@ -533,6 +525,4 @@ class _SignInState extends State<SignIn> {
   }
 }
 
-
-  Widget buildImage(String path) =>
-      Center(child: Image.asset(path, width: 350));
+Widget buildImage(String path) => Center(child: Image.asset(path, width: 350));

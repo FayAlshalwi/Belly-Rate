@@ -1,4 +1,3 @@
-import 'package:belly_rate/manger/requestDetails.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -185,7 +184,6 @@ class _ContactUsState extends State<ContactUs> {
             Expanded(
               child: InkWell(
                 onTap: () {
-                  /// RequestDetails
                   showModalBottomSheet(
                       useRootNavigator: false,
                       isDismissible: true,
@@ -260,7 +258,7 @@ class _ContactUsState extends State<ContactUs> {
                                                             left: 8.0,
                                                             right: 8.0),
                                                     child: Text(
-                                                      "Complaint description",
+                                                      "Request description",
                                                       style: TextStyle(
                                                         fontSize: 16,
                                                         color: mainColor(),
@@ -330,13 +328,6 @@ class _ContactUsState extends State<ContactUs> {
                               ),
                             ));
                       });
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //       builder: (context) => RequestDetails(
-                  //             isManger: false,
-                  //             ticket: ticket,
-                  //           )),
-                  // );
                 },
                 child: Row(
                   children: [
@@ -395,16 +386,6 @@ class _ContactUsState extends State<ContactUs> {
                                     color: button_color,
                                     fontSize: heightM * 0.4)),
                           ),
-                          // SizedBox(
-                          //   width: MediaQuery.of(context).size.width * 0.5,
-                          //   child: Text(
-                          //       "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
-                          //       maxLines: 2,
-                          //       overflow: TextOverflow.ellipsis,
-                          //       style: ourTextStyle(
-                          //           color: mainColor(),
-                          //           fontSize: heightM * 0.4)),
-                          // ),
                         ],
                       ),
                     ),
@@ -418,147 +399,8 @@ class _ContactUsState extends State<ContactUs> {
     );
   }
 
-  Card buildInProgressCard(TicketSupport ticket) {
-    return Card(
-      child: ClipRect(
-        child: Banner(
-          message: "${ticket.status}",
-          location: BannerLocation.topEnd,
-          color: mainColor(),
-          child: buildContainerCard(ticket),
-        ),
-      ),
-    );
-  }
-
-  Container buildContainerCard(TicketSupport ticket) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: mainColor(),
-            width: 2.0,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0, bottom: 0.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "Subject:",
-                      style: ourTextStyle(
-                          color: const Color.fromARGB(255, 216, 107, 147),
-                          fontSize: 17),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "${ticket.requestText}",
-                      style: ourTextStyle(color: mainColor(), fontSize: 15),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "User:",
-                      style: ourTextStyle(
-                          color: const Color.fromARGB(255, 216, 107, 147),
-                          fontSize: 17),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "${ticket.username}",
-                      style: ourTextStyle(color: mainColor(), fontSize: 15),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "Request Date:",
-                      style: ourTextStyle(
-                          color: const Color.fromARGB(255, 216, 107, 147),
-                          fontSize: 17),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
-                      style: ourTextStyle(color: mainColor(), fontSize: 15),
-                    ),
-                  ),
-                  if (ticket.status != "In Progress")
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.4),
-                        borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(15.0),
-                          bottomLeft: Radius.circular(15.0),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Answer Date:",
-                                  style: ourTextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 216, 107, 147),
-                                      fontSize: 17),
-                                ),
-                                Text(
-                                  "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
-                                  style: ourTextStyle(
-                                      color: mainColor(), fontSize: 15),
-                                ),
-                                Text(
-                                  "Manger Answer:",
-                                  style: ourTextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 216, 107, 147),
-                                      fontSize: 17),
-                                ),
-                                Text(
-                                  ticket.requestAnswer!,
-                                  style: ourTextStyle(
-                                      color: mainColor(), fontSize: 15),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Container addNewRequest(BuildContext context) {
     double heightM = MediaQuery.of(context).size.height / 30;
-
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
       child: Padding(

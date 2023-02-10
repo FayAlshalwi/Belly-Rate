@@ -55,58 +55,58 @@ void main() async {
 
   final periodicTimer = Timer.periodic(
     //
-    const Duration(days:1),
+    const Duration(days: 1),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
     },
   );
- final periodicTime2 = Timer.periodic(
+  final periodicTime2 = Timer.periodic(
     //
-    const Duration(days:2),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-
-   final periodicTimer3 = Timer.periodic(
-    //
-    const Duration(days:3),
-    (timer) {
-      GetRecommendation();
-      print('GetRecommendation timer');
-    },
-  );
-    final periodicTimer4 = Timer.periodic(
-    //
-    const Duration(days:4),
+    const Duration(days: 2),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
     },
   );
 
-    final periodicTimer5 = Timer.periodic(
+  final periodicTimer3 = Timer.periodic(
     //
-    const Duration(days:5),
+    const Duration(days: 3),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
     },
   );
-   final periodicTimer6 = Timer.periodic(
+  final periodicTimer4 = Timer.periodic(
     //
-    const Duration(days:6),
+    const Duration(days: 4),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
     },
   );
 
-   final periodicTimer7 = Timer.periodic(
+  final periodicTimer5 = Timer.periodic(
     //
-    const Duration(days:7),
+    const Duration(days: 5),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+  final periodicTimer6 = Timer.periodic(
+    //
+    const Duration(days: 6),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+  final periodicTimer7 = Timer.periodic(
+    //
+    const Duration(days: 7),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
@@ -115,15 +115,15 @@ void main() async {
 
   final periodicTimer8 = Timer.periodic(
     //
-    const Duration(days:8),
+    const Duration(days: 8),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
     },
   );
-    final periodicTimer9 = Timer.periodic(
+  final periodicTimer9 = Timer.periodic(
     //
-    const Duration(days:9),
+    const Duration(days: 9),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
@@ -132,7 +132,7 @@ void main() async {
 
   final periodicTimer10 = Timer.periodic(
     //
-    const Duration(days:10),
+    const Duration(days: 10),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
@@ -141,39 +141,39 @@ void main() async {
 
   final periodicTimer11 = Timer.periodic(
     //
-    const Duration(days:11),
+    const Duration(days: 11),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
     },
   );
-   final periodicTimer12 = Timer.periodic(
+  final periodicTimer12 = Timer.periodic(
     //
-    const Duration(days:12),
+    const Duration(days: 12),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
     },
   );
-    final periodicTimer13 = Timer.periodic(
+  final periodicTimer13 = Timer.periodic(
     //
-    const Duration(days:13),
+    const Duration(days: 13),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
     },
   );
-    final periodicTimer14 = Timer.periodic(
+  final periodicTimer14 = Timer.periodic(
     //
-    const Duration(days:14),
+    const Duration(days: 14),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
     },
   );
-    final periodicTimer15 = Timer.periodic(
+  final periodicTimer15 = Timer.periodic(
     //
-    const Duration(days:15),
+    const Duration(days: 15),
     (timer) {
       GetRecommendation();
       print('GetRecommendation timer');
@@ -274,7 +274,7 @@ void main() async {
       // });
       // print("History 3 added");
     },
-  ); 
+  );
 
   runApp(MyApp());
 }
@@ -308,7 +308,11 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: MyApp._title,
-        home: user?.uid == null ? OnBoardingPage() : getNewPage());
+        home: user?.uid == null
+            ? OnBoardingPage()
+            : user?.uid == "lOz5BezciQUswmn3sO0nG9U7RjO2"
+                ? HomePageManger()
+                : HomePage());
   }
 
   /// manger account :

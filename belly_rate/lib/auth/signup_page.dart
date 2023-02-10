@@ -457,11 +457,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
-                      height: heightM * 1.9,
+                      // height: heightM * 1.9,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
-                          elevation: 10.0,
+                          // elevation: 10.0,
                           borderRadius: BorderRadius.circular(10.0), //12
                           // color: Color.fromARGB(0, 244, 67, 54),
                           child: MaterialButton(
@@ -484,7 +484,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Material(
-                          elevation: 10.0,
+                          // elevation: 10.0,
                           borderRadius: BorderRadius.circular(10.0), //12
                           color: Colors
                               .transparent, //Colors.cyan.withOpacity(0.5),
