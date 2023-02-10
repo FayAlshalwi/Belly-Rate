@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loading_btn/loading_btn.dart';
 import '../category_parts/restaurant_model.dart';
 import 'HomePageManger.dart';
 import 'mapPage.dart';
@@ -48,7 +49,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
     'American',
     'Lebanese',
     'Japanese',
-    'Other'
+    'French'
   ];
   final List<String> _listPriceAvg = ["", "Low", 'Medium', 'High'];
   String _selectedPriceAvg = "";
@@ -95,15 +96,6 @@ class _AddRestaurantsState extends State<AddRestaurants> {
   Widget buildForm(BuildContext context) {
     return Column(
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: Center(
-        //       child: Text(
-        //     "Enter the information for the restaurant you wish to add.",
-        //     style: ourTextStyle(txt_color: mainColor(), txt_size: 18),
-        //   )),
-        // ),
-
         Padding(
           padding: const EdgeInsets.all(8.0),
         ),
@@ -126,58 +118,66 @@ class _AddRestaurantsState extends State<AddRestaurants> {
             child: buildContainerTextFieldRestaurantDescription(
                 textEditingController: restaurantDescription,
                 ourLabelText: "Restaurant Description")),
-
-        /// Category - drop down
         Container(
-          alignment: AlignmentDirectional.center,
-          width: 380,
-          height: 60,
-          margin: const EdgeInsets.fromLTRB(23, 02, 10, 10),
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.black.withOpacity(0.13)),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0xffeeeeee),
-                blurRadius: 10,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: Text("Select Category",
-                      style:
-                          ourTextStyle(txt_color: mainColor(), txt_size: 13))),
-              SizedBox(width: 10),
-              Expanded(
-                child: DropdownButton<String>(
-                  value: _selectedCategory,
-                  isExpanded: true,
-                  items: _listCategory.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style:
-                            ourTextStyle(txt_color: mainColor(), txt_size: 13),
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedCategory = newValue!;
-                    });
-                  },
+            alignment: AlignmentDirectional.center,
+            margin: const EdgeInsets.fromLTRB(5, 02, 10, 10),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+            child: Column(
+              children: [
+                Container(
+                  alignment: AlignmentDirectional.topStart,
+                  margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                    child: Text(
+                      'Restaurnat category',
+                      textAlign: TextAlign.start,
+                      style: ourTextStyle(
+                          txt_color: Color(0xFF5a3769), txt_size: 16),
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
+                Container(
+                  alignment: AlignmentDirectional.center,
+                  height: 60,
+                  margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.black.withOpacity(0.13)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xffeeeeee),
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child:
+                      Stack(alignment: AlignmentDirectional.center, children: [
+                    DropdownButton<String>(
+                      value: _selectedCategory,
+                      isExpanded: true,
+                      items: _listCategory.map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedCategory = newValue!;
+                        });
+                      },
+                    )
+                  ]),
+                ),
+              ],
+            )),
 
         Form(
             key: _formKeyPhone,
@@ -188,138 +188,156 @@ class _AddRestaurantsState extends State<AddRestaurants> {
 
         /// Price Avg - drop down
         Container(
-          alignment: AlignmentDirectional.center,
-          width: 380,
-          height: 60,
-          margin: const EdgeInsets.fromLTRB(23, 02, 10, 10),
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.black.withOpacity(0.13)),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0xffeeeeee),
-                blurRadius: 10,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: Text("Select Price Average",
-                      style:
-                          ourTextStyle(txt_color: mainColor(), txt_size: 13))),
-              SizedBox(width: 10),
-              Expanded(
-                child: DropdownButton<String>(
-                  value: _selectedPriceAvg,
-                  isExpanded: true,
-                  items: _listPriceAvg.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style:
-                            ourTextStyle(txt_color: mainColor(), txt_size: 13),
+            alignment: AlignmentDirectional.center,
+            margin: const EdgeInsets.fromLTRB(5, 02, 10, 10),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+            child: Column(
+              children: [
+                Container(
+                  alignment: AlignmentDirectional.topStart,
+                  margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                    child: Text(
+                      "Price Average",
+                      textAlign: TextAlign.start,
+                      style: ourTextStyle(
+                          txt_color: Color(0xFF5a3769), txt_size: 16),
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: AlignmentDirectional.center,
+                  height: 60,
+                  margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.black.withOpacity(0.13)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xffeeeeee),
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
                       ),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedPriceAvg = newValue!;
-                    });
-                  },
+                    ],
+                  ),
+                  child:
+                      Stack(alignment: AlignmentDirectional.center, children: [
+                    DropdownButton<String>(
+                      value: _selectedPriceAvg,
+                      isExpanded: true,
+                      items: _listPriceAvg.map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedPriceAvg = newValue!;
+                        });
+                      },
+                    ),
+                  ]),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            )),
+        Container(
+            alignment: AlignmentDirectional.centerStart,
+            margin: const EdgeInsets.fromLTRB(3, 0, 3, 0),
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+            child: Column(
+              children: [
+                Container(
+                  alignment: AlignmentDirectional.centerStart,
+                  margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                    child: Text(
+                      "Choose method to add restaurant location",
+                      textAlign: TextAlign.start,
+                      style: ourTextStyle(
+                          txt_color: Color(0xFF5a3769), txt_size: 16),
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile(
+                          title: Text("Manually",
+                              style: ourTextStyle(
+                                  txt_color: mainColor(), txt_size: 15)),
+                          value: 1,
+                          groupValue: _selectedOption,
+                          activeColor: mainColor(),
+                          onChanged: (value) {
+                            restaurantLatAuto = "";
+                            restaurantLongAuto = "";
+                            setState(() {
+                              _selectedOption = value!;
+                            });
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          title: Text("From Map",
+                              style: ourTextStyle(
+                                  txt_color: mainColor(), txt_size: 15)),
+                          value: 2,
+                          groupValue: _selectedOption,
+                          activeColor: mainColor(),
+                          onChanged: (value) {
+                            restaurantLat.clear();
+                            restaurantLong.clear();
+                            setState(() {
+                              _selectedOption = value!;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )),
 
-        Container(
-          margin: const EdgeInsets.fromLTRB(23, 02, 10, 10),
-          // padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-          child: Center(
-              child: Text(
-            // "What method would you like to use to add the location of the restaurant?",
-            "Choose method to add restaurant location:",
-            style: ourTextStyle(txt_color: mainColor(), txt_size: 15),
-          )),
-        ),
-        Container(
-          child: Row(
-            children: [
-              Expanded(
-                child: RadioListTile(
-                  title: Text("Manually",
-                      style:
-                          ourTextStyle(txt_color: mainColor(), txt_size: 15)),
-                  value: 1,
-                  groupValue: _selectedOption,
-                  activeColor: mainColor(),
-                  onChanged: (value) {
-                    restaurantLatAuto = "";
-                    restaurantLongAuto = "";
-                    setState(() {
-                      _selectedOption = value!;
-                    });
-                  },
-                ),
-              ),
-              Expanded(
-                child: RadioListTile(
-                  title: Text("From Map",
-                      style:
-                          ourTextStyle(txt_color: mainColor(), txt_size: 15)),
-                  value: 2,
-                  groupValue: _selectedOption,
-                  activeColor: mainColor(),
-                  onChanged: (value) {
-                    restaurantLat.clear();
-                    restaurantLong.clear();
-                    setState(() {
-                      _selectedOption = value!;
-                    });
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
         if (_selectedOption == 1)
-          Row(
+          Column(
             children: [
-              Expanded(
-                  child: Form(
-                      key: _formKeyLat,
-                      child: buildContainerTextFieldLat(
-                          textEditingController: restaurantLat,
-                          ourLabelText: "Restaurant Lat",
-                          keyboardType: TextInputType.number))),
-              Expanded(
-                  child: Form(
-                      key: _formKeyLong,
-                      child: buildContainerTextFieldLong(
-                          textEditingController: restaurantLong,
-                          ourLabelText: "Restaurant Long",
-                          keyboardType: TextInputType.number))),
+              Form(
+                  key: _formKeyLat,
+                  child: buildContainerTextFieldLat(
+                      textEditingController: restaurantLat,
+                      ourLabelText: "Restaurant Latitude",
+                      keyboardType: TextInputType.number)),
+              Form(
+                  key: _formKeyLong,
+                  child: buildContainerTextFieldLong(
+                      textEditingController: restaurantLong,
+                      ourLabelText: "Restaurant Longitude",
+                      keyboardType: TextInputType.number)),
             ],
           ),
         if (_selectedOption == 2)
           buildContainerOpenMap(
-              textEditingController: restaurantPhoneNumber,
+              textEditingControllerLat: restaurantLat,
+              textEditingControllerLong: restaurantLong,
               ourLabelText: "Open Map"),
 
         /// add image text
         Container(
           margin: const EdgeInsets.fromLTRB(23, 02, 10, 10),
-          // padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
           child: Row(
             children: [
               Text(
-                // "Add image to the restaurant: (min 1 - max 4)",
                 "Add restaurant photos ( 4 photos are required)",
                 style: ourTextStyle(txt_color: mainColor(), txt_size: 15),
               ),
@@ -360,6 +378,90 @@ class _AddRestaurantsState extends State<AddRestaurants> {
         ),
 
         /// Add Restaurant
+        ///
+        Center(
+          child: Container(
+            child: LoadingBtn(
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: 24 * 1.5,
+              color: Color.fromARGB(255, 216, 107, 147),
+              borderRadius: 10,
+              animate: true,
+              //color: Colors.green,
+              loader: Container(
+                padding: const EdgeInsets.all(10),
+                width: 40,
+                height: 40,
+                child: const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
+              child: Text("Add Restaurant22",
+                  textAlign: TextAlign.center,
+                  style: ourTextStyle(
+                      txt_color: Colors.white, txt_size: 22 * 0.6)),
+
+              onTap: (startLoading, stopLoading, btnState) async {
+                if (_formKeyId.currentState!.validate() &&
+                    _formKeyName.currentState!.validate() &&
+                    _formKeyDes.currentState!.validate() &&
+                    _formKeyPhone.currentState!.validate() &&
+                    _formKeyLat.currentState!.validate() &&
+                    _formKeyLong.currentState!.validate()) {
+                  if (_imageFiles.length < 4) {
+                    CoolAlert.show(
+                      context: context,
+                      title: "Image's less than 4",
+                      type: CoolAlertType.error,
+                      text: "Please choose exactly 4 pictures ",
+                      confirmBtnColor: const Color.fromARGB(255, 216, 107, 147),
+                    );
+                  } else {
+                    startLoading();
+                    List<Future> futures = [];
+                    _imageFiles.forEach((photo) async {
+                      futures.add(addPhoto(photo!));
+                    });
+                    await Future.wait(futures);
+
+                    bool isGood = await addRestaurantMethod();
+
+                    if (isGood) {
+                      CoolAlert.show(
+                          context: context,
+                          title: "Restaurant Add",
+                          type: CoolAlertType.success,
+                          text: "Restaurant Added Successfully",
+                          confirmBtnColor:
+                              const Color.fromARGB(255, 216, 107, 147),
+                          onConfirmBtnTap: () {
+                            stopLoading();
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => HomePageManger()),
+                                (Route<dynamic> route) => false);
+                          });
+                    } else {
+                      CoolAlert.show(
+                          context: context,
+                          title: "Error",
+                          type: CoolAlertType.error,
+                          text: "Please Try Again",
+                          confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
+                          onConfirmBtnTap: () {
+                            stopLoading();
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          });
+                    }
+                  }
+                }
+              },
+            ),
+          ),
+        ),
         Container(
           width: MediaQuery.of(context).size.width * 0.8,
           child: MaterialButton(
@@ -367,143 +469,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
               borderRadius: BorderRadius.circular(10.0),
             ),
             color: Color.fromARGB(255, 216, 107, 147),
-            onPressed: () async {
-              if (restaurantId.text.isEmpty || invalidID == true) {
-                CoolAlert.show(
-                  context: context,
-                  title: "Resturant ID is invalid",
-                  type: CoolAlertType.error,
-                  text: "Please enter a valid Resturant ID",
-                  confirmBtnTextStyle:
-                      ourTextStyle(txt_color: Colors.white, txt_size: 13),
-                  confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                );
-              } else if (restaurantName.text.isEmpty || invalidName == true) {
-                CoolAlert.show(
-                  context: context,
-                  title: "Resturant Name is invalid",
-                  type: CoolAlertType.error,
-                  text: "Please enter a valid Resturant name",
-                  confirmBtnTextStyle:
-                      ourTextStyle(txt_color: Colors.white, txt_size: 13),
-                  confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                );
-              } else if (restaurantDescription.text.isEmpty ||
-                  invalidDes == true) {
-                CoolAlert.show(
-                  context: context,
-                  title: "Resturant Description is invalid",
-                  type: CoolAlertType.error,
-                  text: "Please enter a valid Resturant Description",
-                  confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                );
-              } else if (_selectedCategory.isEmpty) {
-                CoolAlert.show(
-                  context: context,
-                  title: "Resturant category is invalid Empty",
-                  type: CoolAlertType.error,
-                  text: "Please enter a valid resturant Category",
-                  confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                );
-              } else if (restaurantPhoneNumber.text.isEmpty ||
-                  invalidPHnum == true) {
-                CoolAlert.show(
-                  context: context,
-                  title: "Phone Number is invalid",
-                  type: CoolAlertType.error,
-                  text: "Please enter a valid Phone Number",
-                  confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                );
-              } else if (_selectedPriceAvg.isEmpty) {
-                CoolAlert.show(
-                  context: context,
-                  title: "Price Average is invalid",
-                  type: CoolAlertType.error,
-                  text: "Please enter a valid Price Average",
-                  confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                );
-              } else if (_selectedOption == 1 &&
-                  (restaurantLat.text.isEmpty || restaurantLong.text.isEmpty)) {
-                CoolAlert.show(
-                  context: context,
-                  title: "Restaurant Location is not valid",
-                  type: CoolAlertType.error,
-                  text: "Please enter a valid restaurant Location",
-                  confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                );
-              } else if (_selectedOption == 1 &&
-                  (invalidLat == true || invalidLong == true)) {
-                CoolAlert.show(
-                  context: context,
-                  title: "Restaurant Location is not valid",
-                  type: CoolAlertType.error,
-                  text: "Please enter a valid restaurant Location",
-                  confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                );
-              } else if (_selectedOption == 2 &&
-                  (restaurantLatAuto.isEmpty || restaurantLongAuto.isEmpty)) {
-                CoolAlert.show(
-                  context: context,
-                  title: "Restaurant Location is invalid",
-                  type: CoolAlertType.error,
-                  text: "Please enter a valid restaurant Location",
-                  confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                );
-              } else if (_imageFiles.length < 4) {
-                CoolAlert.show(
-                  context: context,
-                  title: "Restaurant Image is less than 4",
-                  type: CoolAlertType.error,
-                  text: "Please choose exactly 4 pictures ",
-                  confirmBtnColor: const Color.fromARGB(255, 216, 107, 147),
-                );
-              } else {
-                CoolAlert.show(
-                  context: context,
-                  title: "Loading ...",
-                  type: CoolAlertType.loading,
-                );
-                List<Future> futures = [];
-                _imageFiles.forEach((photo) async {
-                  futures.add(addPhoto(photo!));
-                });
-                await Future.wait(futures);
-
-                // _imageFiles.forEach((element) async {
-                //   await addPhoto(element!);
-                // });
-
-                bool isGood = await addRestaurantMethod();
-
-                if (isGood) {
-                  CoolAlert.show(
-                      context: context,
-                      title: "Restaurant Add",
-                      type: CoolAlertType.success,
-                      text: "Restaurant Added Successfully",
-                      confirmBtnColor: const Color.fromARGB(255, 216, 107, 147),
-                      onConfirmBtnTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => HomePageManger()),
-                            (Route<dynamic> route) => false);
-                      });
-                } else {
-                  CoolAlert.show(
-                      context: context,
-                      title: "Error",
-                      type: CoolAlertType.error,
-                      text: "Please Try Again",
-                      confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                      onConfirmBtnTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                      });
-                }
-              }
-            },
+            onPressed: () async {},
             child: Text(
               "Add Restaurant",
               style: ourTextStyle(
@@ -530,11 +496,6 @@ class _AddRestaurantsState extends State<AddRestaurants> {
       'phoneNumber': '${restaurantPhoneNumber.text}',
       'priceAvg': '${_selectedPriceAvg}',
       "photos": _imageFilesString,
-      // "photos": [
-      //   "item1",
-      //   "item2",
-      //   "item3",
-      // ],
     }).then((value) async {
       print("wwww ${value.id}");
       await _firestore
@@ -548,128 +509,90 @@ class _AddRestaurantsState extends State<AddRestaurants> {
     });
   }
 
-  ///Last Text Input
-  // Container buildContainerTextField(
-  //     {required TextEditingController textEditingController,required String ourLabelText ,TextInputType keyboardType = TextInputType.text }) {
-  //   return Container(
-  //         alignment: AlignmentDirectional.center,
-  //         width: 380,
-  //         // height: 80,
-  //         margin: const EdgeInsets.fromLTRB(23, 02, 10, 10),
-  //         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-  //         decoration: BoxDecoration(
-  //           color: Colors.white,
-  //           borderRadius: BorderRadius.circular(8),
-  //           border: Border.all(color: Colors.black.withOpacity(0.13)),
-  //           boxShadow: const [
-  //             BoxShadow(
-  //               color: Color(0xffeeeeee),
-  //               blurRadius: 10,
-  //               offset: Offset(0, 4),
-  //             ),
-  //           ],
-  //         ),
-  //         child: TextFormField(
-  //           keyboardType: keyboardType,
-  //           controller: textEditingController,
-  //           cursorColor: Colors.black,
-  //           // keyboardType: TextInputType.number,
-  //           decoration: InputDecoration(
-  //             errorStyle: TextStyle(height: 0),
-  //             border: InputBorder.none,
-  //             focusedBorder: InputBorder.none,
-  //             enabledBorder: InputBorder.none,
-  //             errorBorder: InputBorder.none,
-  //             disabledBorder: InputBorder.none,
-  //             contentPadding: const EdgeInsets.only(bottom: 04, left: 0),
-  //             labelText: ourLabelText,
-  //             labelStyle: ourTextStyle(txt_color: mainColor(), txt_size: 13),
-  //             hintStyle: const TextStyle(
-  //                 color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
-  //           ),
-  //           validator: (value) {
-  //             if (value!.length < 3) {
-  //               return "Min input length is 3 characters.";
-  //             }else  if (value!.length > 20) {
-  //               return "Max input length is 20 characters.";
-  //             } else if (value.contains(new RegExp(r'[0-9]'))) {
-  //               return "No numbers allowed.";
-  //             } else if (value.contains(new RegExp(r'[^a-zA-Z\s]'))) {
-  //               return "No special characters allowed.";
-  //             }
-  //             return null;
-  //           },
-  //         ),
-  //       );
-  // }
-  //
-  //
-
   Container buildContainerTextFieldLat(
       {required TextEditingController textEditingController,
       required String ourLabelText,
       TextInputType keyboardType = TextInputType.text}) {
     return Container(
-      alignment: AlignmentDirectional.center,
-      width: 380,
-      // height: 80,
-      margin: const EdgeInsets.fromLTRB(23, 02, 10, 10),
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.black.withOpacity(0.13)),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0xffeeeeee),
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: TextFormField(
-        keyboardType: keyboardType,
-        controller: textEditingController,
-        cursorColor: Colors.black,
-        onChanged: (_) {
-          _formKeyLat.currentState!.validate();
-        },
-        // keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          errorStyle: ourTextStyle(txt_color: Colors.red, txt_size: 13),
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          contentPadding: const EdgeInsets.only(bottom: 04, left: 0),
-          labelText: ourLabelText,
-          labelStyle: ourTextStyle(txt_color: mainColor(), txt_size: 13),
-          hintStyle: const TextStyle(
-              color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
-        ),
-        validator: (value) {
-          String pattern = r'^[0-9.]+$';
-          RegExp regExp = new RegExp(pattern);
-          if (value!.isEmpty) {
-            invalidLat = true;
-            return "field cant be empty";
-          }
-          if (!regExp.hasMatch(value)) {
-            invalidLat = true;
-            return "Enter numbers Only";
-          }
-          if (value.length > 18) {
-            invalidLat = true;
-            return "Max input length is 18.";
-          } else {
-            invalidLat = false;
-            return null;
-          }
-        },
-        maxLength: 18,
-      ),
-    );
+        alignment: AlignmentDirectional.center,
+        margin: const EdgeInsets.fromLTRB(5, 02, 10, 10),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        child: Column(
+          children: [
+            Container(
+              alignment: AlignmentDirectional.topStart,
+              margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                child: Text(
+                  ourLabelText,
+                  textAlign: TextAlign.start,
+                  style:
+                      ourTextStyle(txt_color: Color(0xFF5a3769), txt_size: 16),
+                ),
+              ),
+            ),
+            Container(
+              alignment: AlignmentDirectional.center,
+              height: 60,
+              margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black.withOpacity(0.13)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffeeeeee),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Stack(alignment: AlignmentDirectional.center, children: [
+                TextFormField(
+                  keyboardType: keyboardType,
+                  controller: textEditingController,
+                  onChanged: (value) {
+                    _formKeyLat.currentState!.validate();
+                  },
+                  validator: (value) {
+                    String pattern = r'^[0-9.]+$';
+                    RegExp regExp = new RegExp(pattern);
+                    if (value!.isEmpty) {
+                      invalidLat = true;
+                      return "Please enter latitude";
+                    }
+                    if (!regExp.hasMatch(value)) {
+                      invalidLat = true;
+                      return "Enter numbers Only";
+                    }
+                    if (value.length > 18) {
+                      invalidLat = true;
+                      return "Max input length is 18.";
+                    } else {
+                      invalidLat = false;
+                      return null;
+                    }
+                  },
+                  maxLength: 18,
+                  cursorColor: Colors.black,
+                  decoration: InputDecoration(
+                    errorStyle: TextStyle(height: 0),
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.only(bottom: 04, left: 0),
+                    hintStyle: TextStyle(
+                        color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
+                  ),
+                ),
+              ]),
+            ),
+          ],
+        ));
   }
 
   Container buildContainerTextFieldLong(
@@ -677,66 +600,85 @@ class _AddRestaurantsState extends State<AddRestaurants> {
       required String ourLabelText,
       TextInputType keyboardType = TextInputType.text}) {
     return Container(
-      alignment: AlignmentDirectional.center,
-      width: 380,
-      // height: 80,
-      margin: const EdgeInsets.fromLTRB(23, 02, 10, 10),
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.black.withOpacity(0.13)),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0xffeeeeee),
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: TextFormField(
-        keyboardType: keyboardType,
-        controller: textEditingController,
-        cursorColor: Colors.black,
-        onChanged: (_) {
-          _formKeyLong.currentState!.validate();
-        },
-        // keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          errorStyle: ourTextStyle(txt_color: Colors.red, txt_size: 13),
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          contentPadding: const EdgeInsets.only(bottom: 04, left: 0),
-          labelText: ourLabelText,
-          labelStyle: ourTextStyle(txt_color: mainColor(), txt_size: 13),
-          hintStyle: const TextStyle(
-              color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
-        ),
-        validator: (value) {
-          String pattern = r'^[0-9.]+$';
-          RegExp regExp = new RegExp(pattern);
-          if (value!.isEmpty) {
-            invalidLong = true;
-            return "Field cant be empty";
-          }
-          if (!regExp.hasMatch(value)) {
-            invalidLong = true;
-            return "Enter numbers Only";
-          }
-          if (value.length > 18) {
-            invalidLong = true;
-            return "Max input length is 18.";
-          } else {
-            invalidLong = false;
-            return null;
-          }
-        },
-        maxLength: 18,
-      ),
-    );
+        alignment: AlignmentDirectional.center,
+        margin: const EdgeInsets.fromLTRB(5, 02, 10, 10),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        child: Column(
+          children: [
+            Container(
+              alignment: AlignmentDirectional.topStart,
+              margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                child: Text(
+                  ourLabelText,
+                  textAlign: TextAlign.start,
+                  style:
+                      ourTextStyle(txt_color: Color(0xFF5a3769), txt_size: 16),
+                ),
+              ),
+            ),
+            Container(
+              alignment: AlignmentDirectional.center,
+              height: 60,
+              margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black.withOpacity(0.13)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffeeeeee),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Stack(alignment: AlignmentDirectional.center, children: [
+                TextFormField(
+                  keyboardType: keyboardType,
+                  controller: textEditingController,
+                  onChanged: (value) {
+                    _formKeyLong.currentState!.validate();
+                  },
+                  validator: (value) {
+                    String pattern = r'^[0-9.]+$';
+                    RegExp regExp = new RegExp(pattern);
+                    if (value!.isEmpty) {
+                      invalidLong = true;
+                      return "Please enter longitude";
+                    }
+                    if (!regExp.hasMatch(value)) {
+                      invalidLong = true;
+                      return "Enter numbers Only";
+                    }
+                    if (value.length > 18) {
+                      invalidLong = true;
+                      return "Max input length is 18.";
+                    } else {
+                      invalidLong = false;
+                      return null;
+                    }
+                  },
+                  maxLength: 18,
+                  cursorColor: Colors.black,
+                  decoration: InputDecoration(
+                    errorStyle: TextStyle(height: 0),
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.only(bottom: 04, left: 0),
+                    hintStyle: TextStyle(
+                        color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
+                  ),
+                ),
+              ]),
+            ),
+          ],
+        ));
   }
 
   Container buildContainerTextFieldPhoneNumber(
@@ -744,65 +686,85 @@ class _AddRestaurantsState extends State<AddRestaurants> {
       required String ourLabelText,
       TextInputType keyboardType = TextInputType.text}) {
     return Container(
-      alignment: AlignmentDirectional.center,
-      width: 380,
-      // height: 80,
-      margin: const EdgeInsets.fromLTRB(23, 02, 10, 10),
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.black.withOpacity(0.13)),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0xffeeeeee),
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: TextFormField(
-        keyboardType: keyboardType,
-        controller: textEditingController,
-        onChanged: (_) {
-          _formKeyPhone.currentState!.validate();
-        },
-        cursorColor: Colors.black,
-        // keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          errorStyle: ourTextStyle(txt_color: Colors.red, txt_size: 13),
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          contentPadding: const EdgeInsets.only(bottom: 04, left: 0),
-          labelText: ourLabelText,
-          labelStyle: ourTextStyle(txt_color: mainColor(), txt_size: 13),
-          hintStyle: const TextStyle(
-              color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
-        ),
-        validator: (value) {
-          if (value!.isEmpty) {
-            invalidPHnum = true;
-            return "Phone number cant be empty";
-          }
-          if (RegExp(r"[a-zA-Z!@#\$%^&*()_+|~=`{}\[\]:;'<>?,.\/\\-]")
-              .hasMatch(value)) {
-            invalidPHnum = true;
-            return "No English letters or special characters allowed";
-          }
-          if (value.length != 10) {
-            invalidPHnum = true;
-            return "Phone number must be equal to 10";
-          } else {
-            invalidPHnum = false;
-            return null;
-          }
-        },
-        maxLength: 10,
-      ),
-    );
+        alignment: AlignmentDirectional.center,
+        margin: const EdgeInsets.fromLTRB(5, 02, 10, 10),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        child: Column(
+          children: [
+            Container(
+              alignment: AlignmentDirectional.topStart,
+              margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                child: Text(
+                  ourLabelText,
+                  textAlign: TextAlign.start,
+                  style:
+                      ourTextStyle(txt_color: Color(0xFF5a3769), txt_size: 16),
+                ),
+              ),
+            ),
+            Container(
+              alignment: AlignmentDirectional.center,
+              height: 60,
+              margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black.withOpacity(0.13)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffeeeeee),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Stack(alignment: AlignmentDirectional.center, children: [
+                TextFormField(
+                  keyboardType: keyboardType,
+                  controller: textEditingController,
+                  onChanged: (value) {
+                    _formKeyPhone.currentState!.validate();
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      invalidPHnum = true;
+                      return "Phone number cant be empty";
+                    }
+                    if (RegExp(r"[a-zA-Z!@#\$%^&*()_+|~=`{}\[\]:;'<>?,.\/\\-]")
+                        .hasMatch(value)) {
+                      invalidPHnum = true;
+                      return "Only numbers allowed";
+                    }
+                    if (value.length != 10) {
+                      invalidPHnum = true;
+                      return "Phone number must be equal to 10";
+                    } else {
+                      invalidPHnum = false;
+                      return null;
+                    }
+                  },
+                  maxLength: 10,
+                  cursorColor: Colors.black,
+                  decoration: InputDecoration(
+                    errorStyle: TextStyle(height: 0),
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.only(bottom: 04, left: 0),
+                    hintText: "Enter phone number",
+                    hintStyle: TextStyle(
+                        color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
+                  ),
+                ),
+              ]),
+            ),
+          ],
+        ));
   }
 
   Container buildContainerTextFieldRestaurantName(
@@ -810,69 +772,89 @@ class _AddRestaurantsState extends State<AddRestaurants> {
       required String ourLabelText,
       TextInputType keyboardType = TextInputType.text}) {
     return Container(
-      alignment: AlignmentDirectional.center,
-      width: 380,
-      // height: 80,
-      margin: const EdgeInsets.fromLTRB(23, 02, 10, 10),
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.black.withOpacity(0.13)),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0xffeeeeee),
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: TextFormField(
-        keyboardType: keyboardType,
-        controller: textEditingController,
-        cursorColor: Colors.black,
-        onChanged: (_) {
-          _formKeyName.currentState!.validate();
-        },
-        // keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          errorStyle: ourTextStyle(txt_color: Colors.red, txt_size: 13),
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          contentPadding: const EdgeInsets.only(bottom: 04, left: 0),
-          labelText: ourLabelText,
-          labelStyle: ourTextStyle(txt_color: mainColor(), txt_size: 13),
-          hintStyle: const TextStyle(
-              color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
-        ),
-        validator: (value) {
-          if (value!.isEmpty) {
-            invalidName = true;
-            return "Resturant Name cant be empty";
-          }
-          if (value.length < 3) {
-            invalidName = true;
-            return "Min input length is 3 characters.";
-          } else if (value.length > 12) {
-            invalidName = true;
-            return "Max input length is 12 characters.";
-          } else if (value.contains(new RegExp(r'[0-9]'))) {
-            invalidName = true;
-            return "No numbers allowed.";
-          } else if (value.contains(new RegExp(r'[^a-zA-Z\s]'))) {
-            invalidName = true;
-            return "No special characters allowed.";
-          } else {
-            invalidName = false;
-            return null;
-          }
-        },
-        maxLength: 12,
-      ),
-    );
+        alignment: AlignmentDirectional.center,
+        margin: const EdgeInsets.fromLTRB(5, 02, 10, 10),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        child: Column(
+          children: [
+            Container(
+              alignment: AlignmentDirectional.topStart,
+              margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                child: Text(
+                  ourLabelText,
+                  textAlign: TextAlign.start,
+                  style:
+                      ourTextStyle(txt_color: Color(0xFF5a3769), txt_size: 16),
+                ),
+              ),
+            ),
+            Container(
+              alignment: AlignmentDirectional.center,
+              height: 60,
+              margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black.withOpacity(0.13)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffeeeeee),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Stack(alignment: AlignmentDirectional.center, children: [
+                TextFormField(
+                  keyboardType: keyboardType,
+                  controller: textEditingController,
+                  onChanged: (value) {
+                    _formKeyName.currentState!.validate();
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      invalidName = true;
+                      return "Resturant Name cant be empty";
+                    }
+                    if (value.length < 3) {
+                      invalidName = true;
+                      return "Min input length is 3 characters.";
+                    } else if (value.length > 12) {
+                      invalidName = true;
+                      return "Max input length is 12 characters.";
+                    } else if (value.contains(new RegExp(r'[0-9]'))) {
+                      invalidName = true;
+                      return "No numbers allowed.";
+                    } else if (value.contains(new RegExp(r'[^a-zA-Z\s]'))) {
+                      invalidName = true;
+                      return "No special characters allowed.";
+                    } else {
+                      invalidName = false;
+                      return null;
+                    }
+                  },
+                  maxLength: 12,
+                  cursorColor: Colors.black,
+                  decoration: InputDecoration(
+                    errorStyle: TextStyle(height: 0),
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.only(bottom: 04, left: 0),
+                    hintText: "Enter resturant name",
+                    hintStyle: TextStyle(
+                        color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
+                  ),
+                ),
+              ]),
+            ),
+          ],
+        ));
   }
 
   Container buildContainerTextFieldRestaurantId(
@@ -880,70 +862,86 @@ class _AddRestaurantsState extends State<AddRestaurants> {
       required String ourLabelText,
       TextInputType keyboardType = TextInputType.text}) {
     return Container(
-      alignment: AlignmentDirectional.center,
-      width: 380,
-      // height: 80,
-      margin: const EdgeInsets.fromLTRB(23, 02, 10, 10),
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.black.withOpacity(0.13)),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0xffeeeeee),
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: TextFormField(
-        keyboardType: keyboardType,
-        controller: textEditingController,
-        cursorColor: Colors.black,
-        onChanged: (_) {
-          _formKeyId.currentState!.validate();
-        },
-        // keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          errorStyle: ourTextStyle(txt_color: Colors.red, txt_size: 13),
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          contentPadding: const EdgeInsets.only(bottom: 04, left: 0),
-          labelText: ourLabelText,
-          labelStyle: ourTextStyle(txt_color: mainColor(), txt_size: 13),
-          hintStyle: const TextStyle(
-              color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
-        ),
-        validator: (String? value) {
-          if (value!.isEmpty) {
-            invalidID = true;
-            return "Resuturant ID can't be empty.";
-          } else if (int.tryParse(value) == null) {
-            invalidID = true;
-            return "Enter a valid Resuturant ID.";
-          }
-          // else if (value.contains(new RegExp(r'[^a-zA-Z\s]'))) {
-          //   return "No special characters allowed.";
-          // }
-          else if (value.length > 6) {
-            invalidID = true;
-            return "Resuturant ID can't be longer than 6 digits.";
-          }
-          if (_listCheckResID.contains(value)) {
-            invalidID = true;
-            return "Restaurant ID is not unique.";
-          } else {
-            invalidID = false;
-            return null;
-          }
-        },
-        maxLength: 6,
-      ),
-    );
+        alignment: AlignmentDirectional.center,
+        margin: const EdgeInsets.fromLTRB(5, 02, 10, 10),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        child: Column(
+          children: [
+            Container(
+              alignment: AlignmentDirectional.topStart,
+              margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                child: Text(
+                  ourLabelText,
+                  textAlign: TextAlign.start,
+                  style:
+                      ourTextStyle(txt_color: Color(0xFF5a3769), txt_size: 16),
+                ),
+              ),
+            ),
+            Container(
+              alignment: AlignmentDirectional.center,
+              height: 60,
+              margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black.withOpacity(0.13)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffeeeeee),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Stack(alignment: AlignmentDirectional.center, children: [
+                TextFormField(
+                  controller: textEditingController,
+                  keyboardType: keyboardType,
+                  onChanged: (value) {
+                    _formKeyId.currentState!.validate();
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      invalidID = true;
+                      return "Resuturant ID can't be empty.";
+                    } else if (int.tryParse(value) == null) {
+                      invalidID = true;
+                      return "Enter a valid Resuturant ID.";
+                    } else if (value.length > 6) {
+                      invalidID = true;
+                      return "Resuturant ID can't be longer than 6 digits.";
+                    }
+                    if (_listCheckResID.contains(value)) {
+                      invalidID = true;
+                      return "Restaurant ID is not unique.";
+                    } else {
+                      invalidID = false;
+                      return null;
+                    }
+                  },
+                  maxLength: 6,
+                  cursorColor: Colors.black,
+                  decoration: InputDecoration(
+                    errorStyle: TextStyle(height: 0),
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.only(bottom: 04, left: 0),
+                    hintText: "Enter resturant ID",
+                    hintStyle: TextStyle(
+                        color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
+                  ),
+                ),
+              ]),
+            ),
+          ],
+        ));
   }
 
   Container buildContainerTextFieldRestaurantDescription(
@@ -951,81 +949,97 @@ class _AddRestaurantsState extends State<AddRestaurants> {
       required String ourLabelText,
       TextInputType keyboardType = TextInputType.text}) {
     return Container(
-      alignment: AlignmentDirectional.center,
-      width: 380,
-      // height: 80,
-      margin: const EdgeInsets.fromLTRB(23, 02, 10, 10),
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.black.withOpacity(0.13)),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0xffeeeeee),
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: TextFormField(
-        keyboardType: TextInputType.multiline,
-        controller: textEditingController,
-        // maxLines: 5,
-        // expands: true,
-        maxLines: null,
-        minLines: null,
-        cursorColor: Colors.black,
-        onChanged: (_) {
-          _formKeyDes.currentState!.validate();
-        },
-        // keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          errorStyle: ourTextStyle(txt_color: Colors.red, txt_size: 13),
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          contentPadding: const EdgeInsets.only(bottom: 04, left: 0),
-          labelText: ourLabelText,
-          labelStyle: ourTextStyle(txt_color: mainColor(), txt_size: 13),
-          hintStyle: const TextStyle(
-              color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
-        ),
-        validator: (value) {
-          // String pattern = r'^[a-zA-Z0-9]+$';
-          // final RegExp regex = RegExp(r"^[a-zA-Z0-9 ]+$");
-          final RegExp regex = RegExp(r"^[a-zA-Z0-9 \n.]+$");
+        alignment: AlignmentDirectional.center,
+        margin: const EdgeInsets.fromLTRB(5, 02, 10, 10),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        child: Column(
+          children: [
+            Container(
+              alignment: AlignmentDirectional.topStart,
+              margin: EdgeInsets.fromLTRB(0, 0, 5, 2),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                child: Text(
+                  ourLabelText,
+                  textAlign: TextAlign.start,
+                  style:
+                      ourTextStyle(txt_color: Color(0xFF5a3769), txt_size: 16),
+                ),
+              ),
+            ),
+            Container(
+              alignment: AlignmentDirectional.center,
+              // height: 60,
+              margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black.withOpacity(0.13)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffeeeeee),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Stack(alignment: AlignmentDirectional.center, children: [
+                TextFormField(
+                  maxLines: null,
+                  minLines: null,
+                  keyboardType: TextInputType.multiline,
+                  controller: textEditingController,
+                  onChanged: (value) {
+                    _formKeyDes.currentState!.validate();
+                  },
+                  validator: (value) {
+                    final RegExp regex = RegExp(r"^[a-zA-Z0-9 \n.]+$");
 
-          // RegExp regExp = new RegExp(pattern);
-          if (value!.isEmpty) {
-            invalidDes = true;
-            return "Resturant Description cant be empty";
-          }
-          if (!regex.hasMatch(value)) {
-            invalidDes = true;
-            return "special character are not allowed";
-          }
-          if (value.length < 3) {
-            invalidDes = true;
-            return "Min input length is 3 characters.";
-          }
-          if (value.length > 120) {
-            invalidDes = true;
-            return "Max input length is 120 characters.";
-          } else {
-            invalidDes = false;
-            return null;
-          }
-        },
-        maxLength: 120,
-      ),
-    );
+                    if (value!.isEmpty) {
+                      invalidDes = true;
+                      return "Resturant Description cant be empty";
+                    }
+                    if (!regex.hasMatch(value)) {
+                      invalidDes = true;
+                      return "special character are not allowed";
+                    }
+                    if (value.length < 3) {
+                      invalidDes = true;
+                      return "Min input length is 3 characters.";
+                    }
+                    if (value.length > 120) {
+                      invalidDes = true;
+                      return "Max input length is 120 characters.";
+                    } else {
+                      invalidDes = false;
+                      return null;
+                    }
+                  },
+                  maxLength: 120,
+                  cursorColor: Colors.black,
+                  decoration: InputDecoration(
+                    errorStyle: TextStyle(height: 0),
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.only(bottom: 04, left: 0),
+                    hintText: "Enter resturant description",
+                    hintStyle: TextStyle(
+                        color: Color.fromRGBO(158, 158, 158, 1), fontSize: 16),
+                  ),
+                ),
+              ]),
+            ),
+          ],
+        ));
   }
 
   Widget buildContainerOpenMap(
-      {required TextEditingController textEditingController,
+      {required TextEditingController textEditingControllerLat,
+      required TextEditingController textEditingControllerLong,
       required String ourLabelText}) {
     return InkWell(
       onTap: () {
@@ -1040,6 +1054,8 @@ class _AddRestaurantsState extends State<AddRestaurants> {
               // nameLocation = value[2] ;
               restaurantLatAuto = value[0].toString();
               restaurantLongAuto = value[1].toString();
+              textEditingControllerLat.text = value[0].toString();
+              textEditingControllerLong.text = value[1].toString();
             });
           }
         });
