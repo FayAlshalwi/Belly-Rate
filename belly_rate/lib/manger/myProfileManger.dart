@@ -1,20 +1,13 @@
 import 'package:belly_rate/auth/our_user_model.dart';
-import 'package:belly_rate/auth/signin_page.dart';
-import 'package:belly_rate/auth/signup_page.dart';
 import 'package:belly_rate/updateProfile.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:belly_rate/auth/signin_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'contactUsManger.dart';
-
-
 
 class MyProfileManger extends StatefulWidget {
   MyProfileManger({Key? key}) : super(key: key);
@@ -77,7 +70,7 @@ class _MyProfileManger extends State<MyProfileManger> {
               right: 15,
             ),
             onPressed: () async {
-               CoolAlert.show(
+              CoolAlert.show(
                   context: context,
                   type: CoolAlertType.confirm,
                   text: 'Are you sure you want to logout?',
@@ -94,48 +87,48 @@ class _MyProfileManger extends State<MyProfileManger> {
                     );
                   });
               //showDialog(
-                  // context: context,
-                  // builder: (context) {
-                  //   return CupertinoAlertDialog(
-                  //     title: Text(
-                  //       "Logout",
-                  //       style: TextStyle(
-                  //         color: const Color(0xFF5a3769),
-                  //       ),
-                  //     ),
-                  //     content: Text("Are you sure you want to logout?"),
-                  //     actions: <Widget>[
-                  //       TextButton(
-                  //         onPressed: () async {
-                  //           await FirebaseAuth.instance.signOut();
-                  //           Navigator.of(context).pushReplacement(
-                  //             MaterialPageRoute(
-                  //                 builder: (context) => const SignIn()),
-                  //           );
-                  //         },
-                  //         child: Text(
-                  //           "Yes",
-                  //           style: TextStyle(
-                  //             fontSize: 15,
-                  //             color: const Color(0xFF5a3769),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       TextButton(
-                  //         onPressed: () {
-                  //           Navigator.pop(context); //close Dialog
-                  //         },
-                  //         child: Text(
-                  //           "Cancel",
-                  //           style: TextStyle(
-                  //             fontSize: 15,
-                  //             color: const Color(0xFF5a3769),
-                  //           ),
-                  //         ),
-                  //       )
-                  //     ],
-                  //   );
-                  // });
+              // context: context,
+              // builder: (context) {
+              //   return CupertinoAlertDialog(
+              //     title: Text(
+              //       "Logout",
+              //       style: TextStyle(
+              //         color: const Color(0xFF5a3769),
+              //       ),
+              //     ),
+              //     content: Text("Are you sure you want to logout?"),
+              //     actions: <Widget>[
+              //       TextButton(
+              //         onPressed: () async {
+              //           await FirebaseAuth.instance.signOut();
+              //           Navigator.of(context).pushReplacement(
+              //             MaterialPageRoute(
+              //                 builder: (context) => const SignIn()),
+              //           );
+              //         },
+              //         child: Text(
+              //           "Yes",
+              //           style: TextStyle(
+              //             fontSize: 15,
+              //             color: const Color(0xFF5a3769),
+              //           ),
+              //         ),
+              //       ),
+              //       TextButton(
+              //         onPressed: () {
+              //           Navigator.pop(context); //close Dialog
+              //         },
+              //         child: Text(
+              //           "Cancel",
+              //           style: TextStyle(
+              //             fontSize: 15,
+              //             color: const Color(0xFF5a3769),
+              //           ),
+              //         ),
+              //       )
+              //     ],
+              //   );
+              // });
             },
             icon: Icon(
               Icons.logout_outlined,
@@ -154,24 +147,24 @@ class _MyProfileManger extends State<MyProfileManger> {
             SizedBox(
               height: 40,
             ),
-            if(ourUser != null)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(100.0),
-              child: ourUser!.picture == null
-                  ? Image.network(
-                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-                      fit: BoxFit.cover,
-                      height: 150.0,
-                      width: 150.0,
-                    )
-                  : Image.network(
-                      "${ourUser!.picture}",
-                      fit: BoxFit.cover,
-                      height: 150.0,
-                      width: 150.0,
-                      // errorBuilder: ,
-                    ),
-            ),
+            if (ourUser != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(100.0),
+                child: ourUser!.picture == null
+                    ? Image.network(
+                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                        fit: BoxFit.cover,
+                        height: 150.0,
+                        width: 150.0,
+                      )
+                    : Image.network(
+                        "${ourUser!.picture}",
+                        fit: BoxFit.cover,
+                        height: 150.0,
+                        width: 150.0,
+                        // errorBuilder: ,
+                      ),
+              ),
             Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
               child: Text(
@@ -188,59 +181,59 @@ class _MyProfileManger extends State<MyProfileManger> {
                     txt_color: Colors.grey, fontSize: heightM * 0.6),
               ),
             ),
-            if(ourUser != null)
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12),
-              child: Center(
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: heightM * 1.5,
-                  child: Material(
-                    elevation: 10.0,
-                    borderRadius: BorderRadius.circular(5.0), //12
-                    color: Colors.transparent, //Colors.cyan.withOpacity(0.5),
-                    child: MaterialButton(
-                      minWidth: MediaQuery.of(context).size.width,
-                      color: button_color,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0)),
-                      splashColor: button_color,
-                      onPressed: () async {
-                        /// UpdateProfile
-                        Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        UpdateProfile(ourUser: ourUser)))
-                            .then((value) async {
-                          if (value) {
-                            var vari = await FirebaseFirestore.instance
-                                .collection("Users")
-                                .doc(user!.uid)
-                                .get();
-                            // Map<String,dynamic> userData = vari as Map<String,dynamic>;
-                            print("currentUser: ${vari.data()}");
+            if (ourUser != null)
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12),
+                child: Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: heightM * 1.5,
+                    child: Material(
+                      elevation: 10.0,
+                      borderRadius: BorderRadius.circular(5.0), //12
+                      color: Colors.transparent, //Colors.cyan.withOpacity(0.5),
+                      child: MaterialButton(
+                        minWidth: MediaQuery.of(context).size.width,
+                        color: button_color,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        splashColor: button_color,
+                        onPressed: () async {
+                          /// UpdateProfile
+                          Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          UpdateProfile(ourUser: ourUser)))
+                              .then((value) async {
+                            if (value) {
+                              var vari = await FirebaseFirestore.instance
+                                  .collection("Users")
+                                  .doc(user!.uid)
+                                  .get();
+                              // Map<String,dynamic> userData = vari as Map<String,dynamic>;
+                              print("currentUser: ${vari.data()}");
 
-                            ourUser = OurUser(
-                              name: vari.data()!['name'],
-                              // first_name: vari.data()!['firstName'],
-                              picture: vari.data()!['picture'],
-                              phone_number: vari.data()!['phoneNumber'],
-                            );
-                            setState(() {});
-                          }
-                        });
-                      },
-                      child: Text('Update Profile',
-                          textAlign: TextAlign.center,
-                          style: getMyTextStyle(
-                              txt_color: Colors.white,
-                              fontSize: heightM * 0.6)),
+                              ourUser = OurUser(
+                                name: vari.data()!['name'],
+                                // first_name: vari.data()!['firstName'],
+                                picture: vari.data()!['picture'],
+                                phone_number: vari.data()!['phoneNumber'],
+                              );
+                              setState(() {});
+                            }
+                          });
+                        },
+                        child: Text('Update Profile',
+                            textAlign: TextAlign.center,
+                            style: getMyTextStyle(
+                                txt_color: Colors.white,
+                                fontSize: heightM * 0.6)),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
 
             Spacer(),
             Spacer(),

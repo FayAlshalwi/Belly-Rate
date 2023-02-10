@@ -1,21 +1,15 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cool_alert/cool_alert.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../category_parts/restaurant_model.dart';
 import 'HomePageManger.dart';
 import 'mapPage.dart';
-
 import 'package:path/path.dart' as path;
 import 'package:firebase_core/firebase_core.dart';
-
 import 'package:firebase_storage/firebase_storage.dart';
 
 class AddRestaurants extends StatefulWidget {
