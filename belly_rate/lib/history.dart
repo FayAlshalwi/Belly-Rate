@@ -475,7 +475,7 @@ class _history extends State<history> {
                                     right: 1.0),
                                 margin: EdgeInsets.fromLTRB(0, 110, 0, 0),
                                 content: AwesomeSnackbarContent(
-                                  color: button_color,
+                                  color: Color.fromARGB(248, 218, 172, 180),
                                   title: 'Rated',
                                   message:
                                       'You rated this restaurant previously!',
