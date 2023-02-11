@@ -713,6 +713,16 @@ class _SignUpPageState extends State<SignUpPage> {
                                   // }
                                 }
                               }
+                              else{
+                                 stopLoading();
+                                CoolAlert.show(
+                                  context: context,
+                                  title: "Empty OTP",
+                                  type: CoolAlertType.error,
+                                  text: "Please, Enter OTP sent to your phone",
+                                  confirmBtnColor: button_color,
+                                );
+                              }
                             },
                             child: Text('Sign Up',
                                 textAlign: TextAlign.center,

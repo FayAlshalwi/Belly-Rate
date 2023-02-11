@@ -502,9 +502,9 @@ class _SignInState extends State<SignIn> {
                               } else{
                                 CoolAlert.show(
                                   context: context,
-                                  title: "Cody Empty",
+                                  title: "Empty OTP",
                                   type: CoolAlertType.error,
-                                  text: "Please Enter the Cody!",
+                                  text: "Please, Enter OTP sent to your phone",
                                   confirmBtnColor: button_color,
                                 );
                               }
