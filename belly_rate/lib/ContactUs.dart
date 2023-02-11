@@ -158,7 +158,24 @@ class _ContactUsState extends State<ContactUs> {
                             });
                       } else {
                         return Center(
-                          child: Text("hello"),
+          child: Column(
+        children: [
+          SizedBox(
+            height: 160,
+          ),
+          Image.asset(
+            'asset/category_img/NoRequests.png',
+            height: 230,
+          ),
+          Text("No Previous Requests",
+              style: TextStyle(
+                fontSize: 22,
+                color: Color.fromARGB(255, 0, 0, 0),
+                fontWeight: FontWeight.w600,
+              )),
+          
+        ],
+      )
                         );
                       }
                     } else if (snapshot.hasError) {
