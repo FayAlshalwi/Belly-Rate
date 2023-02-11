@@ -396,12 +396,12 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               ),
-              child: Text("Add Restaurant",
-                  textAlign: TextAlign.center,
-                  style: getMyTextStyle(
-                                txt_color: Colors.white,
-                                fontSize: 25 * 0.6),
-                      ),
+              child: Text(
+                "Add Restaurant",
+                textAlign: TextAlign.center,
+                style:
+                    getMyTextStyle(txt_color: Colors.white, fontSize: 25 * 0.6),
+              ),
 
               onTap: (startLoading, stopLoading, btnState) async {
                 if (_formKeyId.currentState!.validate() &&
@@ -476,7 +476,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
       'description': '${restaurantDescription.text}',
       'lat': '${_selectedOption == 1 ? restaurantLat.text : restaurantLatAuto}',
       'long':
-          '${_selectedOption == 1 ? restaurantLong.text : restaurantLong.text}',
+          '${_selectedOption == 1 ? restaurantLong.text : restaurantLongAuto}',
       'name': '${restaurantName.text}',
       'phoneNumber': '${restaurantPhoneNumber.text}',
       'priceAvg': '${_selectedPriceAvg}',
@@ -810,12 +810,12 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                     } else if (value.length > 12) {
                       invalidName = true;
                       return "Max input length is 12 characters.";
-                    } 
+                    }
                     //else if (value.contains(new RegExp(r'[0-9]'))) {
-                      //invalidName = true;
-                      //return "No numbers allowed.";
+                    //invalidName = true;
+                    //return "No numbers allowed.";
                     //}
-                     else if (value.contains(new RegExp(r'[^a-zA-Z\s]'))) {
+                    else if (value.contains(new RegExp(r'[^a-zA-Z\s]'))) {
                       invalidName = true;
                       return "You cannot enter special characters";
                     } else {
@@ -894,7 +894,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                   validator: (value) {
                     if (value!.isEmpty) {
                       invalidID = true;
-                      return  "Please enter resturant ID";
+                      return "Please enter resturant ID";
                     } else if (int.tryParse(value) == null) {
                       invalidID = true;
                       return "Enter a valid Resuturant ID.";
@@ -1043,6 +1043,8 @@ class _AddRestaurantsState extends State<AddRestaurants> {
               restaurantLongAuto = value[1].toString();
               textEditingControllerLat.text = value[0].toString();
               textEditingControllerLong.text = value[1].toString();
+              print("lattt= ${restaurantLatAuto}");
+              print("longg= ${restaurantLongAuto}");
             });
           }
         });
@@ -1181,7 +1183,8 @@ class _AddRestaurantsState extends State<AddRestaurants> {
 
   Color mainColor() => const Color(0xFF5a3769);
 }
- TextStyle getMyTextStyle({required Color txt_color, double fontSize = 22}) {
-    return GoogleFonts.cairo(
-        color: txt_color, fontSize: fontSize, fontWeight: FontWeight.bold);
-  }
+
+TextStyle getMyTextStyle({required Color txt_color, double fontSize = 22}) {
+  return GoogleFonts.cairo(
+      color: txt_color, fontSize: fontSize, fontWeight: FontWeight.bold);
+}
