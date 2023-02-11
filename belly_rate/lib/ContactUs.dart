@@ -137,23 +137,30 @@ class _ContactUsState extends State<ContactUs> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final _list = snapshot.data!;
-
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: _list.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            _list
-                                .sort((a, b) => b.status!.compareTo(a.status!));
-                            TicketSupport ticket = _list[index];
-                            if (ticket.status == "In Progress") {
-                              return buildContainerCardViewCompletedNew(ticket);
-                              // return buildInProgressCard(ticket);
-                            } else {
-                              return buildContainerCardViewCompletedNew(ticket);
-                              // return buildCompleteCard(ticket);
-                            }
-                          });
+                      if (_list.isNotEmpty) {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: _list.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              _list.sort(
+                                  (a, b) => b.status!.compareTo(a.status!));
+                              TicketSupport ticket = _list[index];
+                              if (ticket.status == "In Progress") {
+                                return buildContainerCardViewCompletedNew(
+                                    ticket);
+                                // return buildInProgressCard(ticket);
+                              } else {
+                                return buildContainerCardViewCompletedNew(
+                                    ticket);
+                                // return buildCompleteCard(ticket);
+                              }
+                            });
+                      } else {
+                        return Center(
+                          child: Text("hello"),
+                        );
+                      }
                     } else if (snapshot.hasError) {
                       return Text("Some thing went wrong! ${snapshot.error}");
                     } else {
