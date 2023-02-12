@@ -210,7 +210,13 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                   children: [
                     InkWell(
                         onTap: () {
-                          widget.restaurant.phoneNumber == "No phone number"
+                          // print("no phone ${widget.restaurant.phoneNumber!.trim().toString().toLowerCase() == "No phone number"!.trim().toString().toLowerCase()}") ;
+                          // print("no phone ${widget.restaurant.phoneNumber}") ;
+                          widget.restaurant.phoneNumber!
+                                      .trim()
+                                      .toString()
+                                      .toLowerCase() ==
+                                  "No phone number".toString().toLowerCase()
                               ? print("no phone")
                               : launchPhoneDialer(
                                   widget.restaurant.phoneNumber!);
