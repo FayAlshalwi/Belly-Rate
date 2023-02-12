@@ -472,7 +472,7 @@ class _AddRestaurantsState extends State<AddRestaurants> {
     final _firestore = FirebaseFirestore.instance;
     return await _firestore.collection("Restaurants").add({
       'ID': '',
-      'category': '${_selectedCategory}',
+      'category': '${_selectedCategory} restaurant',
       'description': '${restaurantDescription.text}',
       'lat': '${_selectedOption == 1 ? restaurantLat.text : restaurantLatAuto}',
       'long':
