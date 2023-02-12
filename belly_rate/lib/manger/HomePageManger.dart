@@ -47,15 +47,7 @@ class _HomePageManger extends State<HomePageManger> {
           margin: EdgeInsets.all(displayOfWidth * .05),
           height: displayOfWidth * .155,
           decoration: BoxDecoration(
-              color: Colors.white70,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(.07),
-                  blurRadius: 30,
-                  offset: Offset(0, 10),
-                ),
-              ],
-              borderRadius: BorderRadius.circular(50)),
+              color: Colors.white70, borderRadius: BorderRadius.circular(50)),
           child: ListView.builder(
               itemCount: 3,
               scrollDirection: Axis.horizontal,

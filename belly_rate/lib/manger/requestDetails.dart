@@ -247,13 +247,6 @@ class _RequestDetailsState extends State<RequestDetails> {
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                                 color: Colors.black.withOpacity(0.13)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xffeeeeee),
-                                blurRadius: 10,
-                                offset: Offset(0, 4),
-                              ),
-                            ],
                           ),
                           child: Stack(
                               //
@@ -322,8 +315,6 @@ class _RequestDetailsState extends State<RequestDetails> {
                           child: Center(
                             child: Container(
                               child: LoadingBtn(
-                               
-                      
                                 width: MediaQuery.of(context).size.width * 0.9,
                                 height: 28 * 1.6,
                                 color: button_color,
@@ -339,10 +330,11 @@ class _RequestDetailsState extends State<RequestDetails> {
                                         Colors.white),
                                   ),
                                 ),
-                                child:
-                                    Text("Reply",textAlign: TextAlign.center,style: getMyTextStyle(
-                              txt_color: Colors.white,
-                              fontSize: 30 * 0.6)),
+                                child: Text("Reply",
+                                    textAlign: TextAlign.center,
+                                    style: getMyTextStyle(
+                                        txt_color: Colors.white,
+                                        fontSize: 30 * 0.6)),
 
                                 onTap: (startLoading, stopLoading,
                                     btnState) async {
@@ -458,7 +450,8 @@ class _RequestDetailsState extends State<RequestDetails> {
       fontSize: fontSize,
     );
   }
-    TextStyle getMyTextStyle({required Color txt_color, double fontSize = 22}) {
+
+  TextStyle getMyTextStyle({required Color txt_color, double fontSize = 22}) {
     return GoogleFonts.cairo(
         color: txt_color, fontSize: fontSize, fontWeight: FontWeight.bold);
   }

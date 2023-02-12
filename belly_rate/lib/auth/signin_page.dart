@@ -112,13 +112,6 @@ class _SignInState extends State<SignIn> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.black.withOpacity(0.13)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xffeeeeee),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
-                  ),
-                ],
               ),
               child: Stack(
                 alignment: AlignmentDirectional.center,
@@ -429,13 +422,13 @@ class _SignInState extends State<SignIn> {
                               ),
                             ),
                             onTap: (startLoading, stopLoading, btnState) async {
-                              if(_code != null && _code!.isNotEmpty){
+                              if (_code != null && _code!.isNotEmpty) {
                                 if (btnState == ButtonState.idle) {
                                   startLoading();
                                   PhoneAuthCredential credential =
-                                  PhoneAuthProvider.credential(
-                                      verificationId: verificationId,
-                                      smsCode: _code!);
+                                      PhoneAuthProvider.credential(
+                                          verificationId: verificationId,
+                                          smsCode: _code!);
                                   try {
                                     await FirebaseAuth.instance
                                         .signInWithCredential(credential);
@@ -452,7 +445,7 @@ class _SignInState extends State<SignIn> {
                                         title: "No user correspond",
                                         type: CoolAlertType.error,
                                         text:
-                                        "User Not Exist! , Please Go to Sign Up Page",
+                                            "User Not Exist! , Please Go to Sign Up Page",
                                         confirmBtnColor: button_color,
                                       );
                                     } else if (error.toString().contains(
@@ -490,16 +483,17 @@ class _SignInState extends State<SignIn> {
                                     // }
 
                                   }
-                                  if (FirebaseAuth.instance.currentUser != null) {
+                                  if (FirebaseAuth.instance.currentUser !=
+                                      null) {
                                     stopLoading();
                                     Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
                                             builder: (context) => HomePage()),
-                                            (Route<dynamic> route) => false);
+                                        (Route<dynamic> route) => false);
                                   }
                                   stopLoading();
                                 }
-                              } else{
+                              } else {
                                 CoolAlert.show(
                                   context: context,
                                   title: "Empty OTP",
@@ -508,7 +502,6 @@ class _SignInState extends State<SignIn> {
                                   confirmBtnColor: button_color,
                                 );
                               }
-
                             },
                             child: Text('Sign In',
                                 textAlign: TextAlign.center,

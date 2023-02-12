@@ -158,25 +158,23 @@ class _ContactUsState extends State<ContactUs> {
                             });
                       } else {
                         return Center(
-          child: Column(
-        children: [
-          SizedBox(
-            height: 160,
-          ),
-          Image.asset(
-            'asset/category_img/NoRequests.png',
-            height: 230,
-          ),
-          Text("No Previous Requests",
-              style: TextStyle(
-                fontSize: 22,
-                color: Color.fromARGB(255, 0, 0, 0),
-                fontWeight: FontWeight.w600,
-              )),
-          
-        ],
-      )
-                        );
+                            child: Column(
+                          children: [
+                            SizedBox(
+                              height: 160,
+                            ),
+                            Image.asset(
+                              'asset/category_img/NoRequests.png',
+                              height: 230,
+                            ),
+                            Text("No Previous Requests",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  fontWeight: FontWeight.w600,
+                                )),
+                          ],
+                        ));
                       }
                     } else if (snapshot.hasError) {
                       return Text("Some thing went wrong! ${snapshot.error}");
@@ -482,13 +480,6 @@ class _ContactUsState extends State<ContactUs> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.black.withOpacity(0.13)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xffeeeeee),
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
                   ),
                   child:
                       Stack(alignment: AlignmentDirectional.center, children: [
@@ -560,13 +551,6 @@ class _ContactUsState extends State<ContactUs> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.black.withOpacity(0.13)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xffeeeeee),
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
                   ),
                   child: Stack(
                       //

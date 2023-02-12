@@ -116,13 +116,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.black.withOpacity(0.13)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xffeeeeee),
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
                   ),
                   child:
                       Stack(alignment: AlignmentDirectional.center, children: [
@@ -187,13 +180,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.black.withOpacity(0.13)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xffeeeeee),
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
                   ),
                   child: Stack(
                     alignment: AlignmentDirectional.center,
@@ -712,9 +698,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                   //   );
                                   // }
                                 }
-                              }
-                              else{
-                                 stopLoading();
+                              } else {
+                                stopLoading();
                                 CoolAlert.show(
                                   context: context,
                                   title: "Empty OTP",

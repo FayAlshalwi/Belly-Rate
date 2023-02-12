@@ -505,13 +505,6 @@ class _HomePage extends State<HomePage> {
           height: displayOfWidth * .144,
           decoration: BoxDecoration(
               color: Color.fromARGB(255, 255, 255, 255),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(.07),
-                  blurRadius: 30,
-                  offset: Offset(0, 10),
-                ),
-              ],
               borderRadius: BorderRadius.circular(50)),
           child: ListView.builder(
               itemCount: 4,
