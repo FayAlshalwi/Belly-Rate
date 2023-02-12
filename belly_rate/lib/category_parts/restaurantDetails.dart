@@ -480,7 +480,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                                             height: 15,
                                                           ),
                                                           Material(
-                                                              elevation: 10.0,
+                                                             // elevation: 5.0,
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
@@ -511,7 +511,8 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                                                               .center,
                                                                           style: ourTextStyle(
                                                                               txt_color: Colors.white,
-                                                                              txt_size: heightM * 0.6)))),
+                                                                              txt_size: heightM * 0.6)))
+                                                                              ),
                                                         ],
                                                       ),
                                                     ));
