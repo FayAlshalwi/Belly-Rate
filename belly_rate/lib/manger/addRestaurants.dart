@@ -670,13 +670,6 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.black.withOpacity(0.13)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xffeeeeee),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
-                  ),
-                ],
               ),
               child: Stack(alignment: AlignmentDirectional.center, children: [
                 TextFormField(
@@ -756,13 +749,6 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.black.withOpacity(0.13)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xffeeeeee),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
-                  ),
-                ],
               ),
               child: Stack(alignment: AlignmentDirectional.center, children: [
                 TextFormField(
@@ -848,13 +834,6 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.black.withOpacity(0.13)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xffeeeeee),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
-                  ),
-                ],
               ),
               child: Stack(alignment: AlignmentDirectional.center, children: [
                 TextFormField(
@@ -935,13 +914,6 @@ class _AddRestaurantsState extends State<AddRestaurants> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.black.withOpacity(0.13)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xffeeeeee),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
-                  ),
-                ],
               ),
               child: Stack(alignment: AlignmentDirectional.center, children: [
                 TextFormField(
@@ -1031,13 +1003,6 @@ class _AddRestaurantsState extends State<AddRestaurants> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: Colors.black.withOpacity(0.13)),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0xffeeeeee),
-              blurRadius: 10,
-              offset: Offset(0, 4),
-            ),
-          ],
         ),
         child: Row(
           children: [
