@@ -88,11 +88,15 @@ class _HomePage extends State<HomePage> {
       }
     });
 
+      AwesomeNotifications().getGlobalBadgeCounter().then(
+              (value) =>
+                  AwesomeNotifications().setGlobalBadgeCounter(0));
+
     AwesomeNotifications().actionStream.listen((notification) async {
       if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
         AwesomeNotifications().getGlobalBadgeCounter().then(
               (value) =>
-                  AwesomeNotifications().setGlobalBadgeCounter(value - 1),
+                  AwesomeNotifications().setGlobalBadgeCounter(0),
             );
       }
 
@@ -244,6 +248,7 @@ class _HomePage extends State<HomePage> {
   }
 
   userlocation() async {
+    
     print('inside userlocation method');
 
     Location location = new Location();
@@ -268,6 +273,7 @@ class _HomePage extends State<HomePage> {
         return LocationData;
       }
     }
+    location.enableBackgroundMode(enable: true);
     location.onLocationChanged.listen((LocationData currentLocation) async {
       final _firestore = FirebaseFirestore.instance;
       final _firebaseAuth = FirebaseAuth.instance;
