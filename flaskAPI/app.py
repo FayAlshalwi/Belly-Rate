@@ -133,9 +133,10 @@ def rate():
         request_data = json.loads(request_data.decode('utf-8'))
         rate = request_data['rating']
         response = f'hi {rate} this is python!'
-        with open("rating_final.csv", "a") as f:
+        with open("rating_final-2.csv", "a") as f:
             csv.writer(f).writerow(rate)
             f.close()
+        print("written succesffully")
         return "Done"
     if(request.method == 'GET'):
         # # value from flutter

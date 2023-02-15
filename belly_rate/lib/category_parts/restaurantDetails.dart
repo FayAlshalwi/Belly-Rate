@@ -480,7 +480,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                                             height: 15,
                                                           ),
                                                           Material(
-                                                             // elevation: 5.0,
+                                                              // elevation: 5.0,
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
@@ -511,8 +511,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                                                               .center,
                                                                           style: ourTextStyle(
                                                                               txt_color: Colors.white,
-                                                                              txt_size: heightM * 0.6)))
-                                                                              ),
+                                                                              txt_size: heightM * 0.6)))),
                                                         ],
                                                       ),
                                                     ));
@@ -600,12 +599,13 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
           .collection("rating")
           .doc(value.id)
           .update({"rateID": value.id});
+      // final uri = Uri.parse('http://127.0.0.1:5000/ratings');
 
       final uri =
           Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
       final response = await post(uri,
           body: json.encode({
-            'rating': [user?.uid, restID, rate, rate, rate]
+            'rating': [user?.uid, restID, rate]
           }));
       return true;
     }).catchError((error) {
