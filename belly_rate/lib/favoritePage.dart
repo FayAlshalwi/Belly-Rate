@@ -285,7 +285,7 @@ class _Favorite extends State<Favorite> {
         print(element.toJson());
       });
 
-      rates.removeWhere((element) => double.parse(element.rate!) <= 3);
+      rates.removeWhere((element) => double.parse(element.rate!) <= 3.5);
       print("${rates.length} __");
       addResttoList(rates, FavoriteListBase);
       if (rates.isNotEmpty) {

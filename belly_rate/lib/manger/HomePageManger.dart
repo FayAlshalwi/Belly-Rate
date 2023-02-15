@@ -37,7 +37,7 @@ class _HomePageManger extends State<HomePageManger> {
 
     List<String> listOfStrings = [
       'Home',
-      'Requests',
+      'Complaints',
       'Profile',
     ];
 

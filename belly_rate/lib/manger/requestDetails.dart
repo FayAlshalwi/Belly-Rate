@@ -89,7 +89,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                               padding: const EdgeInsets.only(
                                   top: 12, left: 8.0, right: 8.0),
                               child: Text(
-                                "Request Date",
+                                "Complaint Date",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: mainColor(),
@@ -114,7 +114,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                               padding: const EdgeInsets.only(
                                   top: 12, left: 8.0, right: 8.0),
                               child: Text(
-                                "Request description",
+                                "Complaint description",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: mainColor(),
@@ -369,7 +369,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                                               context: context,
                                               type: CoolAlertType.success,
                                               text:
-                                                  "Request Replied successfully!",
+                                                  "Complaint Replied successfully!",
                                               confirmBtnColor: Color.fromARGB(
                                                   255, 216, 107, 147),
                                               onConfirmBtnTap: () {

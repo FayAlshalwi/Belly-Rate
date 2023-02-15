@@ -521,9 +521,11 @@ class _history extends State<history> {
 
       final uri =
           Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
+      // final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+
       final response = await post(uri,
           body: json.encode({
-            'rating': [user?.uid, restID, rate, rate, rate]
+            'rating': [user?.uid, restID, rate]
           }));
       return true;
     }).catchError((error) {
