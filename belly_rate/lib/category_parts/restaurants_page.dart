@@ -150,7 +150,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                                       item.rateAVGNum != "0"
                                           ? item.rateAVG != null &&
                                                   item.rateAVGNum != null
-                                              ? "${item.rateAVG ?? " - "} / 5 (${item.rateAVGNum ?? " - "})"
+                                              ? "${item.rateAVG!.substring(0, 3)} / 5 (${item.rateAVGNum ?? " - "})"
                                               : " "
                                           : "No Rating Yet",
                                       style: ourTextStyle(
