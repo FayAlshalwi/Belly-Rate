@@ -442,7 +442,7 @@ class _ContactUsState extends State<ContactUs> {
               child: Text(
                 "New Complaint",
                 textAlign: TextAlign.start,
-                style: ourTextStyle2(txt_size: 22, txt_color: txt_color),
+                style: ourTextStyle2(txt_size: 20, txt_color: txt_color),
               ),
             ),
             Padding(
