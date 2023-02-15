@@ -89,7 +89,7 @@ class _ContactUsState extends State<ContactUs> {
                       });
                     },
                     child: Text(
-                      "New Request",
+                      "New Complaint",
                       style: ourTextStyle(
                         color: requestsIndex != 0
                             ? Color(0xFF5a3769)
@@ -117,7 +117,7 @@ class _ContactUsState extends State<ContactUs> {
                       });
                     },
                     child: Text(
-                      "Previous Requests",
+                      "Previous Complaints",
                       style: ourTextStyle(
                         color: requestsIndex != 1
                             ? Color(0xFF5a3769)
@@ -167,7 +167,7 @@ class _ContactUsState extends State<ContactUs> {
                               'asset/category_img/NoRequests.png',
                               height: 230,
                             ),
-                            Text("No Previous Requests",
+                            Text("No Previous Complaints",
                                 style: TextStyle(
                                   fontSize: 22,
                                   color: Color.fromARGB(255, 0, 0, 0),
@@ -280,7 +280,7 @@ class _ContactUsState extends State<ContactUs> {
                                                             left: 8.0,
                                                             right: 8.0),
                                                     child: Text(
-                                                      "Request description",
+                                                      "Complaint description",
                                                       style: TextStyle(
                                                         fontSize: 16,
                                                         color: mainColor(),
@@ -440,7 +440,7 @@ class _ContactUsState extends State<ContactUs> {
               padding: const EdgeInsets.only(
                   left: 0.0, right: 273.0, top: 0.0, bottom: 0.0),
               child: Text(
-                "New Request",
+                "New Complaint",
                 textAlign: TextAlign.start,
                 style: ourTextStyle2(txt_size: 22, txt_color: txt_color),
               ),
@@ -460,7 +460,7 @@ class _ContactUsState extends State<ContactUs> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0, left: 8.0),
                 child: Text(
-                  "Request Title",
+                  "Complaint Title",
                   textAlign: TextAlign.start,
                   style: ourTextStyle2(txt_color: txt_color, txt_size: 16),
                 ),
@@ -495,15 +495,15 @@ class _ContactUsState extends State<ContactUs> {
                           invalidT = true;
                           return "Title cant be empty";
                         }
-                        if (!regex.hasMatch(value!)) {
+                        if (!regex.hasMatch(value)) {
                           invalidT = true;
                           return "Special characters are not allowed";
                         }
-                        if (value!.length < 3) {
+                        if (value.length < 3) {
                           invalidT = true;
                           return "Minimum input length is 3 characters.";
                         }
-                        if (value!.length > 25) {
+                        if (value.length > 25) {
                           invalidT = true;
                           return "Maximum input length is 25 characters.";
                         } else {
@@ -574,15 +574,15 @@ class _ContactUsState extends State<ContactUs> {
                               invalidD = true;
                               return "Description cant be empty";
                             }
-                            if (!regex.hasMatch(value!)) {
+                            if (!regex.hasMatch(value)) {
                               invalidD = true;
                               return "Only letters and numbers are allowed";
                             }
-                            if (value!.length < 3) {
+                            if (value.length < 3) {
                               invalidD = true;
                               return "Minimum input length is 3 characters.";
                             }
-                            if (value!.length > 120) {
+                            if (value.length > 120) {
                               invalidD = true;
                               return "Maximum input length is 120 characters.";
                             } else {
@@ -632,7 +632,7 @@ class _ContactUsState extends State<ContactUs> {
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   ),
-                  child: Text('Send Request',
+                  child: Text('Send Complaint',
                       textAlign: TextAlign.center,
                       style: ourTextStyle2(
                           txt_color: Colors.white, txt_size: heightM * 0.6)),
@@ -646,11 +646,11 @@ class _ContactUsState extends State<ContactUs> {
                             context: context,
                             type: CoolAlertType.confirm,
                             text:
-                                'Are you sure you want to submit this request?',
+                                'Are you sure you want to submit this Complaint?',
                             confirmBtnText: 'Yes',
                             cancelBtnText: 'Cancel',
                             confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                            title: "Submit Request",
+                            title: "Submit Complaint",
                             onCancelBtnTap: () {
                               stopLoading();
                               Navigator.of(context).pop(true);
@@ -694,7 +694,7 @@ class _ContactUsState extends State<ContactUs> {
     return await _firestore.collection("users_requests").add({
       'request_id': '',
       'UID': '${user?.uid}',
-      'user_name': '${ourUser!.name ?? ""}',
+      'user_name': '${ourUser!.name}',
       'request_title': textTitle.text,
       'request_text': textDescription.text,
       "status": "In Progress",
