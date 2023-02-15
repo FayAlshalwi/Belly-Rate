@@ -78,17 +78,17 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
               CoolAlert.show(
                   context: context,
                   type: CoolAlertType.info,
-                  text: '\$: Low \n \$\$: Average \n \$\$\$: High',
+                  text: ' \$: 50-100 SAR \n \$\$: 101-200 SAR \n \$\$\$: +201 SAR ',
                   confirmBtnText: 'Ok',
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                  title: "Price Description",
+                  title: "Average Price Per Person",
                   onConfirmBtnTap: () async {
                     Navigator.of(context).pop(true);
                   });
             },
             icon: Icon(
               Icons.info_outline_rounded,
-              color: const Color(0xFF5a3769),
+              color: Colors.white,
               size: 28,
             ),
           )
