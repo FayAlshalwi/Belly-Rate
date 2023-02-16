@@ -78,7 +78,8 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
               CoolAlert.show(
                   context: context,
                   type: CoolAlertType.info,
-                  text: ' \$: 50-100 SAR \n \$\$: 101-200 SAR \n \$\$\$: +201 SAR ',
+                  text:
+                      ' \$: 50-100 SAR \n \$\$: 101-200 SAR \n \$\$\$: +201 SAR ',
                   confirmBtnText: 'Ok',
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                   title: "Average Price Per Person",
@@ -155,7 +156,8 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
               children: [
                 Text("${widget.restaurant.name}",
                     style: ourTextStyle(
-                        txt_color: Color(0xFF5a3769), txt_size: heightM * 0.8)),
+                        txt_color: Color(0xFF5a3769),
+                        txt_size: heightM * 0.75)),
                 if (widget.restaurant.rate != null)
                   Container(
                     margin: const EdgeInsets.symmetric(
