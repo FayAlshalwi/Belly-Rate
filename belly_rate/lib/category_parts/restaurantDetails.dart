@@ -185,12 +185,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
           Padding(
               padding: const EdgeInsets.only(
                   left: 16.0, bottom: 0.0, top: 0.0, right: 16.0),
-              child: Text(
-                  "${getBuildPriceAvg(widget.restaurant)}"
-                  // == '\$\$'
-                  //     ? " \$\$\$-\$\$"
-                  //     : "b"
-                  ,
+              child: Text("${getBuildPriceAvg(widget.restaurant)}",
                   style: ourTextStyle(
                       txt_color: Color.fromARGB(255, 216, 107, 147),
                       txt_size: heightM * 0.6))),
@@ -264,7 +259,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                 double.parse(widget.restaurant.lat!),
                                 double.parse(widget.restaurant.long!));
                           },
-                          child: Text("Open with Google Maps",
+                          child: Text("Open with Maps",
                               style: ourTextStyle(
                                   txt_color: Colors.grey,
                                   txt_size: heightM * 0.55)),
@@ -296,7 +291,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                           onPressed: () async {
                             print("qqq");
                             String rating = "0";
-
+                            print(widget.restaurant.id);
                             showModalBottomSheet<dynamic>(
                               context: context,
                               isScrollControlled: true,
