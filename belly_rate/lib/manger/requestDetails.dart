@@ -270,15 +270,15 @@ class _RequestDetailsState extends State<RequestDetails> {
                                       invalid1 = true;
                                       return "Reply cant be empty";
                                     }
-                                    if (!regex.hasMatch(value!)) {
+                                    if (!regex.hasMatch(value)) {
                                       invalid1 = true;
                                       return "special characters are not allowed";
                                     }
-                                    if (value!.length < 3) {
+                                    if (value.length < 3) {
                                       invalid1 = true;
                                       return "Min input length is 3 characters.";
                                     }
-                                    if (value!.length > 120) {
+                                    if (value.length > 120) {
                                       invalid1 = true;
                                       return "Max input length is 120 characters.";
                                     } else {
