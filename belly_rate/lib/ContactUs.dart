@@ -438,7 +438,7 @@ class _ContactUsState extends State<ContactUs> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 0.0, right: 273.0, top: 0.0, bottom: 0.0),
+                  left: 0.0, right: 273.0, top: 1.0, bottom: 0.0),
               child: Text(
                 "New Complaint",
                 textAlign: TextAlign.start,
@@ -621,7 +621,7 @@ class _ContactUsState extends State<ContactUs> {
                   height: heightM * 1.5,
                   elevation: 10.0,
                   color: button_color,
-                  borderRadius: 10,
+                  borderRadius: 5,
                   animate: true,
                   //color: Colors.green,
                   loader: Container(

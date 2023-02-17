@@ -113,9 +113,8 @@ class _history extends State<history> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ///
-                        Expanded(
-                          child: InkWell(
+                        ///                      
+                          InkWell(
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -176,8 +175,8 @@ class _history extends State<history> {
                                                       Colors.grey.shade700,
                                                   txt_size: heightM * 0.4))),
                                       if (item.rate != null)
-                                        Expanded(
-                                            child: Padding(
+                                    
+                                            Padding(
                                                 padding: EdgeInsets.only(
                                                     left: 0.0,
                                                     bottom: 0.0,
@@ -199,14 +198,16 @@ class _history extends State<history> {
                                                                     : StarWidget(
                                                                         activated:
                                                                             double.tryParse(item.rate!.rate.toString())!.toDouble(),
-                                                                      )))
+                                                                      ))
+                                                                      
+                                                                    
                                     ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
+                        
 
                         ///
                         if (item.rate == null)
