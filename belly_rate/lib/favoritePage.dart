@@ -133,7 +133,7 @@ class _Favorite extends State<Favorite> {
                                     child: Text("${item.name}",
                                         style: ourTextStyle(
                                             txt_color: Color(0xFF5a3769),
-                                            txt_size: heightM * 0.6))),
+                                            txt_size: heightM * 0.55))),
                                 if (item.rate != null)
                                   Positioned(
                                       child: Padding(
@@ -182,14 +182,6 @@ class _Favorite extends State<Favorite> {
       );
     } else if (FavoriteList.length == 0 && isWrong) {
       return Center(
-        child: LoadingAnimationWidget.discreteCircle(
-            size: 35,
-            color: Color(0xFF5a3769),
-            secondRingColor: Colors.grey.shade700,
-            thirdRingColor: Color.fromARGB(255, 216, 107, 147)),
-      );
-    } else {
-      return Center(
           child: Column(
         children: [
           SizedBox(
@@ -219,6 +211,14 @@ class _Favorite extends State<Favorite> {
           )
         ],
       ));
+    } else {
+      return Center(
+        child: LoadingAnimationWidget.discreteCircle(
+            size: 35,
+            color: Color(0xFF5a3769),
+            secondRingColor: Colors.grey.shade700,
+            thirdRingColor: Color.fromARGB(255, 216, 107, 147)),
+      );
     }
   }
 
