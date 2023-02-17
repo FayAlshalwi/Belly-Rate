@@ -34,7 +34,7 @@ class _contactUsMangerState extends State<ContactUsManger> {
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          "User Requests",
+          "User Complaints",
           style: TextStyle(
             fontSize: 22,
             color: mainColor(),
@@ -84,10 +84,7 @@ class _contactUsMangerState extends State<ContactUsManger> {
                               style: ourTextStyle(
                                 color: requestsIndex != 0
                                     ? const Color(0xFF5a3769)
-                                    // Colors.black
                                     : Colors.white,
-                                //Colors.orange,
-                                // fontWeight: FontWeight.w400,
                                 fontSize: 15,
                               ),
                             ),
@@ -156,364 +153,380 @@ class _contactUsMangerState extends State<ContactUsManger> {
     );
   }
 
-  Container buildContainerCard(TicketSupport ticket) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: mainColor(),
-            width: 2.0,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0, bottom: 0.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 8.0 , right: 8.0),
-                  //   child: Text(
-                  //     "Title:",
-                  //     style: ourTextStyle(
-                  //         color: const Color.fromARGB(255, 216, 107, 147), fontSize: 17),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 8.0 , right: 8.0),
-                  //   child: Text(
-                  //     "${ticket.requestTitle}",
-                  //     style: ourTextStyle(
-                  //         color: mainColor(), fontSize: 15),
-                  //   ),
-                  // ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "Subject:",
-                      style: ourTextStyle(
-                          color: const Color.fromARGB(255, 216, 107, 147),
-                          fontSize: 17),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "${ticket.requestText}",
-                      style: ourTextStyle(color: mainColor(), fontSize: 15),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "User:",
-                      style: ourTextStyle(
-                          color: const Color.fromARGB(255, 216, 107, 147),
-                          fontSize: 17),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "${ticket.username}",
-                      style: ourTextStyle(color: mainColor(), fontSize: 15),
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "Request Date:",
-                      style: ourTextStyle(
-                          color: const Color.fromARGB(255, 216, 107, 147),
-                          fontSize: 17),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
-                      style: ourTextStyle(color: mainColor(), fontSize: 15),
-                    ),
-                  ),
-
-                  if (ticket.status != "In Progress")
-                    ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: ticket.status != "In Progress"
-                            ? Radius.circular(15.0)
-                            : Radius.circular(0.0),
-                        bottomRight: ticket.status != "In Progress"
-                            ? Radius.circular(15.0)
-                            : Radius.circular(0.0),
-                      ),
-                      child: Container(
-                        color: Colors.cyan.withOpacity(0.2),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: Row(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Answer Date:",
-                                    style: ourTextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 216, 107, 147),
-                                        fontSize: 17),
-                                  ),
-                                  Text(
-                                    "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
-                                    style: ourTextStyle(
-                                        color: mainColor(), fontSize: 15),
-                                  ),
-                                  Text(
-                                    "Manger Answer:",
-                                    style: ourTextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 216, 107, 147),
-                                        fontSize: 17),
-                                  ),
-                                  Text(
-                                    ticket.requestAnswer!,
-                                    style: ourTextStyle(
-                                        color: mainColor(), fontSize: 15),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            if (ticket.status == "In Progress")
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(15.0),
-                  bottomRight: Radius.circular(15.0),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    ///
-                    _showBottomSheet(context, ticket.requestId!);
-                  },
-                  child: Container(
-                    color: mainColor(),
-                    width: 500,
-                    child: Center(
-                        child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "write Your Reply here",
-                        style: ourTextStyle(color: Colors.white, fontSize: 13),
-                      ),
-                    )),
-                  ),
-                ),
-              )
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget buildContainerCardViewCompleted(TicketSupport ticket) {
     final double heightM = MediaQuery.of(context).size.height / 30;
 
     return Padding(
       padding:
-          const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 2.0, right: 16.0),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ///
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  /// RequestDetails
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => RequestDetails(
-                              ticket: ticket,
-                            )),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 55,
-                        height: 55,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border:
-                                Border.all(color: Color(0xFF5a3769), width: 2)),
-                        child: Center(
-                          child: Text(
-                            "${ticket.username!.substring(0, 1).toUpperCase()}",
-                            style: ourTextStyle(
-                                fontSize: 25, color: Color(0xFF5a3769)
-                                // fontWeight: FontWeight.bold
-                                ),
+          const EdgeInsets.only(left: 16.0, bottom: 1.0, top: 3.0, right: 16.0),
+      child: Container(
+          height: 90,
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                          useRootNavigator: false,
+                          isDismissible: true,
+                          enableDrag: true,
+                          context: context,
+                          isScrollControlled: false,
+                          builder: (context) {
+                            return Container(
+                                height: 430,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(18.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20.0)),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 4.0, bottom: 0.0),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 8.0,
+                                                              right: 8.0),
+                                                      child: Text(
+                                                        "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle : "No Subject"}",
+                                                        style: TextStyle(
+                                                          fontSize: 22,
+                                                          color: mainColor(),
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 4,
+                                                              left: 8.0,
+                                                              right: 8.0),
+                                                      child: Text(
+                                                        "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))} - ${ticket.status}",
+                                                        style: TextStyle(
+                                                          fontSize: 13,
+                                                          color: mainColor(),
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 12,
+                                                              left: 8.0,
+                                                              right: 8.0),
+                                                      child: Text(
+                                                        "From",
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: mainColor(),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 8.0,
+                                                              top: 4,
+                                                              right: 8.0),
+                                                      child: Text(
+                                                        "${ticket.username}",
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 12,
+                                                              left: 8.0,
+                                                              right: 8.0),
+                                                      child: Text(
+                                                        "Request description",
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: mainColor(),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 8.0,
+                                                              top: 4,
+                                                              right: 8.0),
+                                                      child: Text(
+                                                        "${ticket.requestText!.isNotEmpty ? ticket.requestText : "No Subject"}",
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    if (ticket.status !=
+                                                        "In Progress")
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          bottomLeft: ticket
+                                                                      .status !=
+                                                                  "In Progress"
+                                                              ? Radius.circular(
+                                                                  15.0)
+                                                              : Radius.circular(
+                                                                  0.0),
+                                                          bottomRight: ticket
+                                                                      .status !=
+                                                                  "In Progress"
+                                                              ? Radius.circular(
+                                                                  15.0)
+                                                              : Radius.circular(
+                                                                  0.0),
+                                                        ),
+                                                        child: Row(
+                                                          children: [
+                                                            Container(
+                                                                width: 394,
+                                                                child: Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .start,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .only(
+                                                                          top:
+                                                                              12,
+                                                                          right:
+                                                                              8.0),
+                                                                      child:
+                                                                          Text(
+                                                                        "Answer Date",
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          color:
+                                                                              mainColor(),
+                                                                          fontWeight:
+                                                                              FontWeight.w700,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .only(
+                                                                          left:
+                                                                              8.0,
+                                                                          top:
+                                                                              4,
+                                                                          right:
+                                                                              8.0),
+                                                                      child:
+                                                                          Text(
+                                                                        "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight:
+                                                                              FontWeight.w400,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .only(
+                                                                          top:
+                                                                              12,
+                                                                          right:
+                                                                              8.0),
+                                                                      child:
+                                                                          Text(
+                                                                        "Manger Answer",
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          color:
+                                                                              mainColor(),
+                                                                          fontWeight:
+                                                                              FontWeight.w700,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .only(
+                                                                          left:
+                                                                              8.0,
+                                                                          top:
+                                                                              4,
+                                                                          right:
+                                                                              8.0),
+                                                                      child:
+                                                                          Text(
+                                                                        "${ticket.requestAnswer}",
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight:
+                                                                              FontWeight.w400,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                )),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ));
+                          });
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 8,
+                          ),
+                          child: Container(
+                            width: 55,
+                            height: 55,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                    color: Color(0xFF5a3769), width: 2)),
+                            child: Center(
+                              child: Text(
+                                "${ticket.requestTitle!.substring(0, 1).toUpperCase()}",
+                                style: ourTextStyle(
+                                    fontSize: 25, color: Color(0xFF5a3769)),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-
-                    ///
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16.0, bottom: 1.0, top: 1.0, right: 16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.7,
-                              child: Text(
-                                  "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle! : "No title"}",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: ourTextStyle(
-                                      color: Color(0xFF5a3769), fontSize: 16)),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 16.0,
+                                bottom: 9.0,
+                                top: 12.0,
+                                right: 16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                  child: Text(
+                                      "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle! : "No title"}",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700,
+                                          color: Color(0xFF5a3769))),
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 2.0,
+                                      top: 3.0,
+                                    ),
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: Text(
+                                        "${ticket.username}",
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color.fromARGB(
+                                                255, 216, 107, 147)),
+                                      ),
+                                    )),
+                                Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 3.0,
+                                      top: 3.0,
+                                    ),
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: Text(
+                                          "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: heightM * 0.4,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF5a3769))),
+                                    )),
+                              ],
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child: Text("${ticket.username}",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: ourTextStyle(
-                                      color: button_color, fontSize: 16)),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child: Text(
-                                  "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: ourTextStyle(
-                                      color: Color(0xFF5a3769),
-                                      fontSize: heightM * 0.4)),
-                            ),
-                            // SizedBox(
-                            //   width: MediaQuery.of(context).size.width * 0.5,
-                            //   child: Text(
-                            //       "Answer Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
-                            //       maxLines: 2,
-                            //       overflow: TextOverflow.ellipsis,
-                            //       style: ourTextStyle(
-                            //           color: mainColor(),
-                            //           fontSize: heightM * 0.4)),
-                            // ),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-
-            // ///
-            // if (item.rate == null)
-            //   InkWell(
-            //     onTap: () {
-            //       print("qqq");
-            //       String rating = "";
-            //
-            //       showModalBottomSheet<dynamic>(
-            //         context: context,
-            //         isScrollControlled: true,
-            //         backgroundColor: Colors.transparent,
-            //         builder: (context) => Container(
-            //           //change the height of the bottom sheet
-            //           height: MediaQuery.of(context).size.height * 0.22,
-            //           decoration: const BoxDecoration(
-            //             color: Colors.white,
-            //             borderRadius: BorderRadius.only(
-            //               topLeft: Radius.circular(25.0),
-            //               topRight: Radius.circular(25.0),
-            //             ),
-            //           ),
-            //           //content of the bottom sheet
-            //           child: Column(
-            //             // mainAxisAlignment:
-            //             //     MainAxisAlignment.spaceEvenly,
-            //             children: [
-            //               const SizedBox(
-            //                 height: 15,
-            //               ),
-            //               const SizedBox(
-            //                 height: 50,
-            //                 child: Text(
-            //                   "Rate & Review",
-            //                   style: TextStyle(
-            //                       fontSize: 25,
-            //                       fontWeight: FontWeight.bold,
-            //                       color: Color(0xFF5a3769)),
-            //                 ),
-            //               ),
-            //               RatingBar.builder(
-            //                 minRating: 1,
-            //                 direction: Axis.horizontal,
-            //                 allowHalfRating: true,
-            //                 glowColor: Color(0xFF5a3769),
-            //                 itemCount: 5,
-            //                 itemPadding:
-            //                 EdgeInsets.symmetric(horizontal: 4.0),
-            //                 itemBuilder: (context, _) => Icon(
-            //                   Icons.star,
-            //                   color: Colors.amber,
-            //                 ),
-            //                 onRatingUpdate: (double value) {
-            //                   rating = value.toString();
-            //                   print(rating);
-            //                 },
-            //               ),
-            //               SizedBox(
-            //                 height: 15,
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            //       );
-            //     },
-            //     child: const Padding(
-            //       padding: EdgeInsets.only(
-            //           left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-            //       child:
-            //       Icon(Icons.star_border, color: Colors.pinkAccent),
-            //     ),
-            //   ),
-            //
-            // if (item.rate != null)
-            //   const Padding(
-            //     padding: EdgeInsets.only(
-            //         left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-            //     child: Icon(Icons.star, color: Colors.pinkAccent),
-            //   ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 
@@ -522,307 +535,121 @@ class _contactUsMangerState extends State<ContactUsManger> {
 
     return Padding(
       padding:
-          const EdgeInsets.only(left: 16.0, bottom: 1.0, top: 1.0, right: 16.0),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ///
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  /// RequestDetails
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => RequestDetails(
-                              ticket: ticket,
-                            )),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 55,
-                        height: 55,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border:
-                                Border.all(color: Color(0xFF5a3769), width: 2)),
-                        child: Center(
-                          child: Text(
-                            "${ticket.username!.substring(0, 1).toUpperCase()}",
-                            style: ourTextStyle(
-                                fontSize: 25, color: Color(0xFF5a3769)
-                                // fontWeight: FontWeight.bold
-                                ),
+          const EdgeInsets.only(left: 16.0, bottom: 1.0, top: 3.0, right: 16.0),
+      child: Container(
+          height: 90,
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => RequestDetails(
+                                  ticket: ticket,
+                                )),
+                      );
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 8,
+                          ),
+                          child: Container(
+                            width: 55,
+                            height: 55,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                    color: Color(0xFF5a3769), width: 2)),
+                            child: Center(
+                              child: Text(
+                                "${ticket.requestTitle!.substring(0, 1).toUpperCase()}",
+                                style: ourTextStyle(
+                                    fontSize: 25, color: Color(0xFF5a3769)),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-
-                    ///
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.7,
-                              child: Text(
-                                  "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle! : "No title"}",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: ourTextStyle(
-                                      color: Color(0xFF5a3769), fontSize: 16)),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child: //Text("Request User : ${ticket.username}",
-                                  Text("${ticket.username}",
-                                      maxLines: 2,
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 16.0,
+                                bottom: 9.0,
+                                top: 12.0,
+                                right: 16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                  child: Text(
+                                      "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle! : "No title"}",
+                                      maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: ourTextStyle(
-                                          color: Color.fromARGB(
-                                              255, 216, 107, 147),
-                                          fontSize: 16)),
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700,
+                                          color: Color(0xFF5a3769))),
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 2.0,
+                                      top: 3.0,
+                                    ),
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: Text(
+                                        "${ticket.username}",
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color.fromARGB(
+                                                255, 216, 107, 147)),
+                                      ),
+                                    )),
+                                Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 3.0,
+                                      top: 3.0,
+                                    ),
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: Text(
+                                          "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: heightM * 0.4,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF5a3769))),
+                                    )),
+                              ],
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child: Text(
-                                  //"Request Date: ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
-                                  "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: ourTextStyle(
-                                      color: Color(0xFF5a3769),
-                                      fontSize: heightM * 0.4)),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            // ///
-            // if (item.rate == null)
-            //   InkWell(
-            //     onTap: () {
-            //       print("qqq");
-            //       String rating = "";
-            //
-            //       showModalBottomSheet<dynamic>(
-            //         context: context,
-            //         isScrollControlled: true,
-            //         backgroundColor: Colors.transparent,
-            //         builder: (context) => Container(
-            //           //change the height of the bottom sheet
-            //           height: MediaQuery.of(context).size.height * 0.22,
-            //           decoration: const BoxDecoration(
-            //             color: Colors.white,
-            //             borderRadius: BorderRadius.only(
-            //               topLeft: Radius.circular(25.0),
-            //               topRight: Radius.circular(25.0),
-            //             ),
-            //           ),
-            //           //content of the bottom sheet
-            //           child: Column(
-            //             // mainAxisAlignment:
-            //             //     MainAxisAlignment.spaceEvenly,
-            //             children: [
-            //               const SizedBox(
-            //                 height: 15,
-            //               ),
-            //               const SizedBox(
-            //                 height: 50,
-            //                 child: Text(
-            //                   "Rate & Review",
-            //                   style: TextStyle(
-            //                       fontSize: 25,
-            //                       fontWeight: FontWeight.bold,
-            //                       color: Color(0xFF5a3769)),
-            //                 ),
-            //               ),
-            //               RatingBar.builder(
-            //                 minRating: 1,
-            //                 direction: Axis.horizontal,
-            //                 allowHalfRating: true,
-            //                 glowColor: Color(0xFF5a3769),
-            //                 itemCount: 5,
-            //                 itemPadding:
-            //                 EdgeInsets.symmetric(horizontal: 4.0),
-            //                 itemBuilder: (context, _) => Icon(
-            //                   Icons.star,
-            //                   color: Colors.amber,
-            //                 ),
-            //                 onRatingUpdate: (double value) {
-            //                   rating = value.toString();
-            //                   print(rating);
-            //                 },
-            //               ),
-            //               SizedBox(
-            //                 height: 15,
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            //       );
-            //     },
-            //     child: const Padding(
-            //       padding: EdgeInsets.only(
-            //           left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-            //       child:
-            //       Icon(Icons.star_border, color: Colors.pinkAccent),
-            //     ),
-            //   ),
-            //
-            // if (item.rate != null)
-            //   const Padding(
-            //     padding: EdgeInsets.only(
-            //         left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-            //     child: Icon(Icons.star, color: Colors.pinkAccent),
-            //   ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showBottomSheet(BuildContext context, String ticketID) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Container(
-            width: 500,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    keyboardType: TextInputType.multiline,
-                    controller: text,
-                    maxLines: 4,
-                    cursorColor: Colors.black,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Write your Reply here',
-                      labelStyle: ourTextStyle(
-                        color: Colors.grey,
-                        fontSize: 14.0,
-                        // textAlign: TextAlign.center,
-                      ),
-                    ),
-                    maxLength: 120,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: MaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      color: button_color,
-                      onPressed: () {
-                        if (text.text.isNotEmpty) {
-                          CoolAlert.show(
-                              context: context,
-                              type: CoolAlertType.confirm,
-                              text:
-                                  'Are you sure you want to reply on this request?',
-                              confirmBtnText: 'Yes',
-                              cancelBtnText: 'Cancel',
-                              confirmBtnColor:
-                                  Color.fromARGB(255, 216, 107, 147),
-                              title: "Submit Reply",
-                              onCancelBtnTap: () {
-                                Navigator.of(context).pop(true);
-                              },
-                              onConfirmBtnTap: () async {
-                                CoolAlert.show(
-                                  context: context,
-                                  type: CoolAlertType.loading,
-                                  text: "Loading",
-                                );
-
-                                await replyRequest(
-                                    text_m: text.text, requestId: ticketID);
-
-                                text.clear();
-
-                                CoolAlert.show(
-                                  title: "Success",
-                                  context: context,
-                                  type: CoolAlertType.success,
-                                  text: "Request Replied successfully!",
-                                  confirmBtnColor:
-                                      Color.fromARGB(255, 216, 107, 147),
-                                  onConfirmBtnTap: () {
-                                    Navigator.of(context).pop(true);
-                                    Navigator.of(context).pop(true);
-                                    Navigator.of(context).pop(true);
-                                    Navigator.of(context).pop(true);
-                                  },
-                                );
-                              });
-                        } else {
-                          CoolAlert.show(
-                            context: context,
-                            title: "Text Empty",
-                            type: CoolAlertType.error,
-                            text: "Please Fill Request Reply",
-                            confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                          );
-                        }
-                      },
-                      child: Text(
-                        "Reply on Request",
-                        style: ourTextStyle(
-                          color: Colors.white, //Colors.orange,
-                          fontSize: 15,
-                        ),
-                      ),
+                      ],
                     ),
                   ),
                 ),
               ],
             ),
-          ),
-        );
-      },
+          )),
     );
-  }
-
-  Future<bool> replyRequest(
-      {required String text_m, required String requestId}) async {
-    final _firestore = FirebaseFirestore.instance;
-    try {
-      await _firestore.collection("users_requests").doc(requestId).update(
-        {
-          "status": "Completed",
-          "request_answer": text_m,
-          "answer_date_time": DateTime.now(),
-        },
-      );
-      text.clear();
-      return true;
-    } catch (e) {
-      return false;
-    }
   }
 
   Stream<List<TicketSupport>> getRequest() {

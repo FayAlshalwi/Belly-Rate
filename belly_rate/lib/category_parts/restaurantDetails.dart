@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:belly_rate/category_parts/restaurant_model.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
@@ -78,17 +78,18 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
               CoolAlert.show(
                   context: context,
                   type: CoolAlertType.info,
-                  text: '\$: Low \n \$\$: Average \n \$\$\$: High',
+                  text:
+                      '\$: 50-100 SAR \n \$\$: 101-200 SAR \n \$\$\$: +201 SAR ',
                   confirmBtnText: 'Ok',
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                  title: "Price Description",
+                  title: "Average Price Per Person",
                   onConfirmBtnTap: () async {
                     Navigator.of(context).pop(true);
                   });
             },
             icon: Icon(
               Icons.info_outline_rounded,
-              color: const Color(0xFF5a3769),
+              color:  Color(0xFF5a3769),
               size: 28,
             ),
           )
@@ -102,7 +103,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
             children: [
               CarouselSlider(
                 options: CarouselOptions(
-                    height: heightM * 8.0,
+                    height: heightM * 10.0,
                     onPageChanged: (index, reason) {
                       setState(() {
                         _current = index;
@@ -155,7 +156,8 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
               children: [
                 Text("${widget.restaurant.name}",
                     style: ourTextStyle(
-                        txt_color: Color(0xFF5a3769), txt_size: heightM * 0.8)),
+                        txt_color: Color(0xFF5a3769),
+                        txt_size: heightM * 0.75)),
                 if (widget.restaurant.rate != null)
                   Container(
                     margin: const EdgeInsets.symmetric(
@@ -183,12 +185,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
           Padding(
               padding: const EdgeInsets.only(
                   left: 16.0, bottom: 0.0, top: 0.0, right: 16.0),
-              child: Text(
-                  "${getBuildPriceAvg(widget.restaurant)}"
-                  // == '\$\$'
-                  //     ? " \$\$\$-\$\$"
-                  //     : "b"
-                  ,
+              child: Text("${getBuildPriceAvg(widget.restaurant)}",
                   style: ourTextStyle(
                       txt_color: Color.fromARGB(255, 216, 107, 147),
                       txt_size: heightM * 0.6))),
@@ -210,9 +207,16 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                   children: [
                     InkWell(
                         onTap: () {
-                          // item.phoneNumber == "No phone number"
-                          //     ? print("no phone")
-                          //     : launchPhoneDialer(item.phoneNumber!);
+                          // print("no phone ${widget.restaurant.phoneNumber!.trim().toString().toLowerCase() == "No phone number"!.trim().toString().toLowerCase()}") ;
+                          // print("no phone ${widget.restaurant.phoneNumber}") ;
+                          widget.restaurant.phoneNumber!
+                                      .trim()
+                                      .toString()
+                                      .toLowerCase() ==
+                                  "No phone number".toString().toLowerCase()
+                              ? print("no phone")
+                              : launchPhoneDialer(
+                                  widget.restaurant.phoneNumber!);
                         },
                         child: Icon(
                           Icons.call,
@@ -255,7 +259,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                 double.parse(widget.restaurant.lat!),
                                 double.parse(widget.restaurant.long!));
                           },
-                          child: Text("Open with Google Maps",
+                          child: Text("Open with Maps",
                               style: ourTextStyle(
                                   txt_color: Colors.grey,
                                   txt_size: heightM * 0.55)),
@@ -287,7 +291,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                           onPressed: () async {
                             print("qqq");
                             String rating = "0";
-
+                            print(widget.restaurant.id);
                             showModalBottomSheet<dynamic>(
                               context: context,
                               isScrollControlled: true,
@@ -473,7 +477,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                                             height: 15,
                                                           ),
                                                           Material(
-                                                              elevation: 10.0,
+                                                              // elevation: 5.0,
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
@@ -550,6 +554,16 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
     );
   }
 
+  Future<void> launchPhoneDialer(String contactNumber) async {
+    print(contactNumber);
+    final Uri _phoneUri = Uri(scheme: "tel", path: contactNumber);
+    try {
+      if (await canLaunchUrl(_phoneUri)) await launchUrl(_phoneUri);
+    } catch (error) {
+      throw ("Cannot dial");
+    }
+  }
+
   getRate() async {
     final UID = FirebaseAuth.instance.currentUser!.uid;
     final rateRes = await FirebaseFirestore.instance
@@ -582,12 +596,13 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
           .collection("rating")
           .doc(value.id)
           .update({"rateID": value.id});
+      // final uri = Uri.parse('http://127.0.0.1:5000/ratings');
 
       final uri =
           Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
       final response = await post(uri,
           body: json.encode({
-            'rating': [user?.uid, restID, rate, rate, rate]
+            'rating': [user?.uid, restID, rate]
           }));
       return true;
     }).catchError((error) {

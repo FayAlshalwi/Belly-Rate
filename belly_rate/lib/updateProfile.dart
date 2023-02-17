@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:belly_rate/myProfile.dart';
+import 'package:loading_btn/loading_btn.dart';
 import 'package:path/path.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:belly_rate/auth/our_user_model.dart';
@@ -162,13 +163,6 @@ class _UpdateProfile extends State<UpdateProfile> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: Colors.black.withOpacity(0.13)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xffeeeeee),
-                          blurRadius: 10,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
                     ),
                     child: Stack(
                         alignment: AlignmentDirectional.center,
@@ -229,13 +223,6 @@ class _UpdateProfile extends State<UpdateProfile> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: Colors.black.withOpacity(0.13)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xffeeeeee),
-                          blurRadius: 10,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
                     ),
                     child: Stack(
                         alignment: AlignmentDirectional.center,
@@ -266,68 +253,68 @@ class _UpdateProfile extends State<UpdateProfile> {
                   padding:
                       const EdgeInsets.only(left: 8.0, right: 8.0, top: 12),
                   child: Center(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
+                    child: LoadingBtn(
                       height: heightM * 1.5,
-                      child: Material(
-                        elevation: 10.0,
-                        borderRadius: BorderRadius.circular(5.0), //12
-                        color:
-                            Colors.transparent, //Colors.cyan.withOpacity(0.5),
-                        child: MaterialButton(
-                          minWidth: MediaQuery.of(context).size.width,
-                          color: Color.fromARGB(255, 216, 107, 147),
-                          // color: button_color,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0)),
-                          splashColor: button_color,
-                          // splashColor: button_color,
-                          onPressed: () async {
-                            if (formKey.currentState!.validate()) {
-                              CoolAlert.show(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      color: Color.fromARGB(255, 216, 107, 147),
+                      loader: Container(
+                        padding: const EdgeInsets.all(10),
+                        width: 40,
+                        height: 40,
+                        child: const CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      ),
+                      borderRadius: 5,
+                      // splashColor: button_color,
+                      // splashColor: button_color,
+                      onTap: (startLoading, stopLoading, btnState) async {
+                        if (formKey.currentState!.validate()) {
+                          startLoading();
+                          CoolAlert.show(
+                              context: context,
+                              type: CoolAlertType.confirm,
+                              text:
+                                  'Are you sure you want to update your profile?',
+                              confirmBtnText: 'Yes',
+                              cancelBtnText: 'Cancel',
+                              title: "Update Profile",
+                              onCancelBtnTap: () {
+                                stopLoading();
+                                Navigator.of(context).pop(true);
+                                // Navigator.of(context).pop(true);
+                              },
+                              onConfirmBtnTap: () async {
+                                await FirebaseFirestore.instance
+                                    .collection('Users')
+                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                    .update({
+                                  "name": first_name.text,
+                                });
+                                if (image != null) await addPhoto(image!);
+                                CoolAlert.show(
+                                  title: "Success",
                                   context: context,
-                                  type: CoolAlertType.confirm,
-                                  text:
-                                      'Are you sure you want to update your profile?',
-                                  confirmBtnText: 'Yes',
-                                  cancelBtnText: 'Cancel',
-                                  title: "Update Profile",
-                                  onCancelBtnTap: () {
+                                  type: CoolAlertType.success,
+                                  text: "Profile updated successfuly!",
+                                  confirmBtnColor:
+                                      Color.fromARGB(255, 216, 107, 147),
+                                  onConfirmBtnTap: () {
+                                    Navigator.of(context).pop(true);
                                     Navigator.of(context).pop(true);
                                     Navigator.of(context).pop(true);
                                   },
-                                  onConfirmBtnTap: () async {
-                                    await FirebaseFirestore.instance
-                                        .collection('Users')
-                                        .doc(FirebaseAuth
-                                            .instance.currentUser!.uid)
-                                        .update({
-                                      "name": first_name.text,
-                                    });
-                                    if (image != null) await addPhoto(image!);
-                                    CoolAlert.show(
-                                      title: "Success",
-                                      context: context,
-                                      type: CoolAlertType.success,
-                                      text: "Profile updated successfuly!",
-                                      confirmBtnColor:
-                                          Color.fromARGB(255, 216, 107, 147),
-                                      onConfirmBtnTap: () {
-                                        Navigator.of(context).pop(true);
-                                        Navigator.of(context).pop(true);
-                                        Navigator.of(context).pop(true);
-                                      },
-                                    );
-                                  });
-                            }
-                          },
-                          child: Text('Update',
-                              textAlign: TextAlign.center,
-                              style: getMyTextStyle(
-                                  txt_color: Colors.white,
-                                  fontSize: heightM * 0.6)),
-                        ),
-                      ),
+                                );
+                                stopLoading();
+                              });
+                        }
+                      },
+                      child: Text('Update',
+                          textAlign: TextAlign.center,
+                          style: getMyTextStyle(
+                              txt_color: Colors.white,
+                              fontSize: heightM * 0.6)),
                     ),
                   ),
                 ),

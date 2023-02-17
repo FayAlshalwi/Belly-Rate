@@ -1,38 +1,5 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'package:belly_rate/history.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:belly_rate/models/restaurantModesl.dart';
-import 'package:belly_rate/myProfile.dart';
-import 'package:belly_rate/views/carousel_loading.dart';
-import 'package:carousel_slider/carousel_controller.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:location/location.dart';
-import '../Notification.dart';
-import '../category_parts/category_slider.dart';
-import '../category_parts/category_slider_homepage.dart';
-import '../favoritePage.dart';
-import '../main.dart';
-
-import 'package:provider/provider.dart';
-
-import 'package:path/path.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:path/path.dart' as Path;
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter/material.dart';
-
 import 'addRestaurants.dart';
 import 'contactUsManger.dart';
 import 'myProfileManger.dart';
@@ -70,7 +37,7 @@ class _HomePageManger extends State<HomePageManger> {
 
     List<String> listOfStrings = [
       'Home',
-      'Requests',
+      'Complaints',
       'Profile',
     ];
 
@@ -80,15 +47,7 @@ class _HomePageManger extends State<HomePageManger> {
           margin: EdgeInsets.all(displayOfWidth * .05),
           height: displayOfWidth * .155,
           decoration: BoxDecoration(
-              color: Colors.white70,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(.07),
-                  blurRadius: 30,
-                  offset: Offset(0, 10),
-                ),
-              ],
-              borderRadius: BorderRadius.circular(50)),
+              color: Colors.white70, borderRadius: BorderRadius.circular(50)),
           child: ListView.builder(
               itemCount: 3,
               scrollDirection: Axis.horizontal,

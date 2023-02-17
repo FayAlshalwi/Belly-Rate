@@ -63,7 +63,7 @@ class _Favorite extends State<Favorite> {
         elevation: 0.0,
         centerTitle: true,
         title: const Text(
-          "Favorite Restaurant",
+          "Favorite Restaurants",
           style: TextStyle(
             fontSize: 22,
             color: const Color(0xFF5a3769),
@@ -84,7 +84,7 @@ class _Favorite extends State<Favorite> {
           Restaurant item = FavoriteList[index];
           return Padding(
             padding: const EdgeInsets.only(
-                left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+                left: 16.0, bottom: 2.0, top: 2.0, right: 16.0),
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
@@ -93,78 +93,72 @@ class _Favorite extends State<Favorite> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => RestaurantDetails(
-                                    category_name: item.category!,
-                                    restaurant: item,
-                                  )),
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10, bottom: 0, top: 0, right: 0),
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                child: Image.network("${item.photos?.first}",
-                                    height: heightM * 2.5,
-                                    width: heightM * 2.5,
-                                    fit: BoxFit.fill),
-                              )),
-                          Padding(
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => RestaurantDetails(
+                                  category_name: item.category!,
+                                  restaurant: item,
+                                )),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Padding(
                             padding: const EdgeInsets.only(
-                                left: 15.0,
-                                bottom: 15.0,
-                                top: 15.0,
-                                right: 19.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                                left: 10, bottom: 0, top: 0, right: 0),
+                            child: ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              child: Image.network("${item.photos?.first}",
+                                  height: heightM * 2.5,
+                                  width: heightM * 2.5,
+                                  fit: BoxFit.fill),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, bottom: 15.0, top: 15.0, right: 19.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 3.0, right: 19.0),
+                                  child: Text("${item.name}",
+                                      style: ourTextStyle(
+                                          txt_color: Color(0xFF5a3769),
+                                          txt_size: heightM * 0.55))),
+                              if (item.rate != null)
                                 Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 3.0, right: 19.0),
-                                    child: Text("${item.name}",
-                                        style: ourTextStyle(
-                                            txt_color: Color(0xFF5a3769),
-                                            txt_size: heightM * 0.6))),
-                                if (item.rate != null)
-                                  Positioned(
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 0.0,
-                                              bottom: 0.0,
-                                              top: 0.0,
-                                              right: 16.0),
-                                          child: item.rate!.rate == "0.5"
-                                              ? StarWidget5()
-                                              : item.rate!.rate == "1.5"
-                                                  ? StarWidget15()
-                                                  : item.rate!.rate == "2.5"
-                                                      ? StarWidget25()
-                                                      : item.rate!.rate == "3.5"
-                                                          ? StarWidget35()
-                                                          : item.rate!.rate ==
-                                                                  "4.5"
-                                                              ? StarWidget45()
-                                                              : StarWidget(
-                                                                  activated: double.tryParse(item
-                                                                          .rate!
-                                                                          .rate
-                                                                          .toString())!
-                                                                      .toDouble(),
-                                                                )))
-                              ],
-                            ),
+                                        left: 0.0,
+                                        bottom: 0.0,
+                                        top: 0.0,
+                                        right: 16.0),
+                                    child: item.rate!.rate == "0.5"
+                                        ? StarWidget5()
+                                        : item.rate!.rate == "1.5"
+                                            ? StarWidget15()
+                                            : item.rate!.rate == "2.5"
+                                                ? StarWidget25()
+                                                : item.rate!.rate == "3.5"
+                                                    ? StarWidget35()
+                                                    : item.rate!.rate == "4.5"
+                                                        ? StarWidget45()
+                                                        : StarWidget(
+                                                            activated: double
+                                                                    .tryParse(item
+                                                                        .rate!
+                                                                        .rate
+                                                                        .toString())!
+                                                                .toDouble(),
+                                                          ))
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   if (item.rate != null)
@@ -262,7 +256,7 @@ class _Favorite extends State<Favorite> {
         print(element.toJson());
       });
 
-      rates.removeWhere((element) => double.parse(element.rate!) <= 3);
+      rates.removeWhere((element) => double.parse(element.rate!) <= 3.5);
       print("${rates.length} __");
       addResttoList(rates, FavoriteListBase);
       if (rates.isNotEmpty) {

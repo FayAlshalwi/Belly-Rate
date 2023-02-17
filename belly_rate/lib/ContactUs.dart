@@ -1,4 +1,3 @@
-import 'package:belly_rate/manger/requestDetails.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +62,7 @@ class _ContactUsState extends State<ContactUs> {
           color: mainColor(),
         ),
         title: Text(
-          "Contact Us",
+          "Help and Support",
           style: TextStyle(
             fontSize: 22,
             color: mainColor(),
@@ -90,9 +89,11 @@ class _ContactUsState extends State<ContactUs> {
                       });
                     },
                     child: Text(
-                      "New Request",
+                      "New Complaint",
                       style: ourTextStyle(
-                        color: requestsIndex != 0 ? Colors.black : Colors.white,
+                        color: requestsIndex != 0
+                            ? Color(0xFF5a3769)
+                            : Colors.white,
                         //Colors.orange,
                         // fontWeight: FontWeight.w400,
                         fontSize: 15,
@@ -116,9 +117,11 @@ class _ContactUsState extends State<ContactUs> {
                       });
                     },
                     child: Text(
-                      "Previous Requests",
+                      "Previous Complaints",
                       style: ourTextStyle(
-                        color: requestsIndex != 1 ? Colors.black : Colors.white,
+                        color: requestsIndex != 1
+                            ? Color(0xFF5a3769)
+                            : Colors.white,
                         //Colors.orange,
                         fontSize: 15,
                       ),
@@ -134,106 +137,51 @@ class _ContactUsState extends State<ContactUs> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final _list = snapshot.data!;
-
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: _list.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            _list
-                                .sort((a, b) => b.status!.compareTo(a.status!));
-                            TicketSupport ticket = _list[index];
-                            if (ticket.status == "In Progress") {
-                              return buildContainerCardView(ticket);
-                              // return buildInProgressCard(ticket);
-                            } else {
-                              return buildContainerCardViewCompletedNew(ticket);
-                              // return buildCompleteCard(ticket);
-                            }
-                          });
+                      if (_list.isNotEmpty) {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: _list.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              _list.sort(
+                                  (a, b) => b.status!.compareTo(a.status!));
+                              TicketSupport ticket = _list[index];
+                              if (ticket.status == "In Progress") {
+                                return buildContainerCardViewCompletedNew(
+                                    ticket);
+                                // return buildInProgressCard(ticket);
+                              } else {
+                                return buildContainerCardViewCompletedNew(
+                                    ticket);
+                                // return buildCompleteCard(ticket);
+                              }
+                            });
+                      } else {
+                        return Center(
+                            child: Column(
+                          children: [
+                            SizedBox(
+                              height: 160,
+                            ),
+                            Image.asset(
+                              'asset/category_img/NoRequests.png',
+                              height: 230,
+                            ),
+                            Text("No Previous Complaints",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  fontWeight: FontWeight.w600,
+                                )),
+                          ],
+                        ));
+                      }
                     } else if (snapshot.hasError) {
                       return Text("Some thing went wrong! ${snapshot.error}");
                     } else {
                       return Center(child: CircularProgressIndicator());
                     }
                   })
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildContainerCardView(TicketSupport ticket) {
-    final double heightM = MediaQuery.of(context).size.height / 30;
-
-    return Padding(
-      padding:
-          const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ///
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  /// RequestDetails
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => RequestDetails(
-                              isManger: false,
-                              ticket: ticket,
-                            )),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            child: Text(
-                                "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle! : "No title"}",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: ourTextStyle(
-                                    color: Color(0xFF5a3769), fontSize: 16)),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: Text(
-                                "Request Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: ourTextStyle(
-                                    color: button_color,
-                                    fontSize: heightM * 0.4)),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: Text("Request Status : ${ticket.status}",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: ourTextStyle(
-                                    color: button_color,
-                                    fontSize: heightM * 0.4)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -258,17 +206,173 @@ class _ContactUsState extends State<ContactUs> {
             Expanded(
               child: InkWell(
                 onTap: () {
-                  /// RequestDetails
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => RequestDetails(
-                              isManger: false,
-                              ticket: ticket,
-                            )),
-                  );
+                  showModalBottomSheet(
+                      useRootNavigator: false,
+                      isDismissible: true,
+                      enableDrag: true,
+                      context: context,
+                      // elevation: 20,
+                      isScrollControlled: false,
+                      builder: (context) {
+                        return Container(
+                            height: 360,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0)),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 4.0, bottom: 0.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0,
+                                                          right: 8.0),
+                                                  child: Text(
+                                                    "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle : "No Subject"}",
+                                                    style: TextStyle(
+                                                      fontSize: 22,
+                                                      color: mainColor(),
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 4,
+                                                          left: 8.0,
+                                                          right: 8.0),
+                                                  child: Text(
+                                                    "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))} - ${ticket.status}",
+                                                    style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: mainColor(),
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 17,
+                                                            left: 8.0,
+                                                            right: 8.0),
+                                                    child: Text(
+                                                      "Complaint description",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: mainColor(),
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    )),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0,
+                                                          top: 4,
+                                                          right: 8.0),
+                                                  child: Text(
+                                                    "${ticket.requestText}",
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      // color: mainColor(),
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                                if (ticket.status !=
+                                                    "In Progress")
+                                                  Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 17,
+                                                              left: 8.0,
+                                                              right: 8.0),
+                                                      child: Text(
+                                                        "Response",
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: mainColor(),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      )),
+                                                if (ticket.status !=
+                                                    "In Progress")
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0,
+                                                            top: 4,
+                                                            right: 8.0),
+                                                    child: Text(
+                                                      "${ticket.requestAnswer}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        // color: mainColor(),
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ));
+                      });
                 },
                 child: Row(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 55,
+                        height: 55,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border:
+                                Border.all(color: Color(0xFF5a3769), width: 2)),
+                        child: Center(
+                          child: Text(
+                            "${ticket.requestTitle!.substring(0, 1).toUpperCase()}",
+                            style: ourTextStyle(
+                                fontSize: 25, color: Color(0xFF5a3769)
+                                // fontWeight: FontWeight.bold
+                                ),
+                          ),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 16.0, bottom: 3.0, top: 3.0, right: 16.0),
@@ -277,7 +381,7 @@ class _ContactUsState extends State<ContactUs> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.7,
+                            // width: MediaQuery.of(context).size.width * 0.7,
                             child: Text(
                                 "${ticket.requestTitle!.isNotEmpty ? ticket.requestTitle! : "No title"}",
                                 maxLines: 1,
@@ -288,7 +392,7 @@ class _ContactUsState extends State<ContactUs> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.5,
                             child: Text(
-                                "Request Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
+                                "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: ourTextStyle(
@@ -297,21 +401,11 @@ class _ContactUsState extends State<ContactUs> {
                           ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.5,
-                            child: Text("Request Status : ${ticket.status}",
+                            child: Text("${ticket.status}",
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: ourTextStyle(
                                     color: button_color,
-                                    fontSize: heightM * 0.4)),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: Text(
-                                "Answer Date : ${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: ourTextStyle(
-                                    color: mainColor(),
                                     fontSize: heightM * 0.4)),
                           ),
                         ],
@@ -327,147 +421,8 @@ class _ContactUsState extends State<ContactUs> {
     );
   }
 
-  Card buildInProgressCard(TicketSupport ticket) {
-    return Card(
-      child: ClipRect(
-        child: Banner(
-          message: "${ticket.status}",
-          location: BannerLocation.topEnd,
-          color: mainColor(),
-          child: buildContainerCard(ticket),
-        ),
-      ),
-    );
-  }
-
-  Container buildContainerCard(TicketSupport ticket) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: mainColor(),
-            width: 2.0,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0, bottom: 0.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "Subject:",
-                      style: ourTextStyle(
-                          color: const Color.fromARGB(255, 216, 107, 147),
-                          fontSize: 17),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "${ticket.requestText}",
-                      style: ourTextStyle(color: mainColor(), fontSize: 15),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "User:",
-                      style: ourTextStyle(
-                          color: const Color.fromARGB(255, 216, 107, 147),
-                          fontSize: 17),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "${ticket.username}",
-                      style: ourTextStyle(color: mainColor(), fontSize: 15),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "Request Date:",
-                      style: ourTextStyle(
-                          color: const Color.fromARGB(255, 216, 107, 147),
-                          fontSize: 17),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.requestDateTime!.millisecondsSinceEpoch))}",
-                      style: ourTextStyle(color: mainColor(), fontSize: 15),
-                    ),
-                  ),
-                  if (ticket.status != "In Progress")
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.4),
-                        borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(15.0),
-                          bottomLeft: Radius.circular(15.0),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Answer Date:",
-                                  style: ourTextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 216, 107, 147),
-                                      fontSize: 17),
-                                ),
-                                Text(
-                                  "${DateFormat('dd/MM/yyyy, hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(ticket.answerDateTime!.millisecondsSinceEpoch))}",
-                                  style: ourTextStyle(
-                                      color: mainColor(), fontSize: 15),
-                                ),
-                                Text(
-                                  "Manger Answer:",
-                                  style: ourTextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 216, 107, 147),
-                                      fontSize: 17),
-                                ),
-                                Text(
-                                  ticket.requestAnswer!,
-                                  style: ourTextStyle(
-                                      color: mainColor(), fontSize: 15),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Container addNewRequest(BuildContext context) {
     double heightM = MediaQuery.of(context).size.height / 30;
-
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
       child: Padding(
@@ -485,9 +440,9 @@ class _ContactUsState extends State<ContactUs> {
               padding: const EdgeInsets.only(
                   left: 0.0, right: 273.0, top: 0.0, bottom: 0.0),
               child: Text(
-                "New Request",
+                "New Complaint",
                 textAlign: TextAlign.start,
-                style: ourTextStyle2(txt_size: 22, txt_color: txt_color),
+                style: ourTextStyle2(txt_size: 21, txt_color: txt_color),
               ),
             ),
             Padding(
@@ -505,7 +460,7 @@ class _ContactUsState extends State<ContactUs> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0, left: 8.0),
                 child: Text(
-                  "Issue Title",
+                  "Complaint Title",
                   textAlign: TextAlign.start,
                   style: ourTextStyle2(txt_color: txt_color, txt_size: 16),
                 ),
@@ -525,13 +480,6 @@ class _ContactUsState extends State<ContactUs> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.black.withOpacity(0.13)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xffeeeeee),
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
                   ),
                   child:
                       Stack(alignment: AlignmentDirectional.center, children: [
@@ -547,15 +495,15 @@ class _ContactUsState extends State<ContactUs> {
                           invalidT = true;
                           return "Title cant be empty";
                         }
-                        if (!regex.hasMatch(value!)) {
+                        if (!regex.hasMatch(value)) {
                           invalidT = true;
                           return "Special characters are not allowed";
                         }
-                        if (value!.length < 3) {
+                        if (value.length < 3) {
                           invalidT = true;
                           return "Minimum input length is 3 characters.";
                         }
-                        if (value!.length > 25) {
+                        if (value.length > 25) {
                           invalidT = true;
                           return "Maximum input length is 25 characters.";
                         } else {
@@ -603,13 +551,6 @@ class _ContactUsState extends State<ContactUs> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.black.withOpacity(0.13)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xffeeeeee),
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
                   ),
                   child: Stack(
                       //
@@ -617,7 +558,6 @@ class _ContactUsState extends State<ContactUs> {
                       //
                       children: [
                         TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           keyboardType: TextInputType.multiline,
                           controller: textDescription,
                           cursorColor: Colors.black,
@@ -630,19 +570,19 @@ class _ContactUsState extends State<ContactUs> {
                             final RegExp regex = RegExp(r"^[a-zA-Z0-9 \n.]+$");
 
                             // RegExp regExp = new RegExp(pattern);
-                            if (value!.isEmpty) {
+                            if (value == null || value.isEmpty) {
                               invalidD = true;
                               return "Description cant be empty";
                             }
-                            if (!regex.hasMatch(value!)) {
+                            if (!regex.hasMatch(value)) {
                               invalidD = true;
                               return "Only letters and numbers are allowed";
                             }
-                            if (value!.length < 3) {
+                            if (value.length < 3) {
                               invalidD = true;
                               return "Minimum input length is 3 characters.";
                             }
-                            if (value!.length > 120) {
+                            if (value.length > 120) {
                               invalidD = true;
                               return "Maximum input length is 120 characters.";
                             } else {
@@ -692,12 +632,13 @@ class _ContactUsState extends State<ContactUs> {
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   ),
-                  child: Text('Send Request',
+                  child: Text('Send Complaint',
                       textAlign: TextAlign.center,
                       style: ourTextStyle2(
                           txt_color: Colors.white, txt_size: heightM * 0.6)),
 
                   onTap: (startLoading, stopLoading, btnState) async {
+                    startLoading();
                     if (btnState == ButtonState.idle) {
                       if (_formtext.currentState!.validate() &&
                           _formdescription.currentState!.validate()) {
@@ -705,16 +646,17 @@ class _ContactUsState extends State<ContactUs> {
                             context: context,
                             type: CoolAlertType.confirm,
                             text:
-                                'Are you sure you want to submit this request?',
+                                'Are you sure you want to submit this Complaint?',
                             confirmBtnText: 'Yes',
                             cancelBtnText: 'Cancel',
                             confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
-                            title: "Submit Request",
+                            title: "Submit Complaint",
                             onCancelBtnTap: () {
                               stopLoading();
                               Navigator.of(context).pop(true);
                             },
                             onConfirmBtnTap: () async {
+                              startLoading();
                               await addRequest();
 
                               textDescription.clear();
@@ -752,8 +694,8 @@ class _ContactUsState extends State<ContactUs> {
     return await _firestore.collection("users_requests").add({
       'request_id': '',
       'UID': '${user?.uid}',
-      'user_name': '${ourUser!.name ?? ""}',
-      'request_title': "",
+      'user_name': '${ourUser!.name}',
+      'request_title': textTitle.text,
       'request_text': textDescription.text,
       "status": "In Progress",
       'request_date_time': DateTime.now(),

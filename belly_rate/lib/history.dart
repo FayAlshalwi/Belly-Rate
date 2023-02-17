@@ -176,7 +176,7 @@ class _history extends State<history> {
                                                       Colors.grey.shade700,
                                                   txt_size: heightM * 0.4))),
                                       if (item.rate != null)
-                                        Positioned(
+                                        Expanded(
                                             child: Padding(
                                                 padding: EdgeInsets.only(
                                                     left: 0.0,
@@ -475,7 +475,7 @@ class _history extends State<history> {
                                     right: 1.0),
                                 margin: EdgeInsets.fromLTRB(0, 110, 0, 0),
                                 content: AwesomeSnackbarContent(
-                                  color: button_color,
+                                  color: Color.fromARGB(248, 218, 172, 180),
                                   title: 'Rated',
                                   message:
                                       'You rated this restaurant previously!',
@@ -521,9 +521,11 @@ class _history extends State<history> {
 
       final uri =
           Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
+      // final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+
       final response = await post(uri,
           body: json.encode({
-            'rating': [user?.uid, restID, rate, rate, rate]
+            'rating': [user?.uid, restID, rate]
           }));
       return true;
     }).catchError((error) {

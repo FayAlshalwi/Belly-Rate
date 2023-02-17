@@ -4,91 +4,127 @@ import json
 import numpy as np
 import pandas as pd
 import csv
-
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+import scipy.sparse
+import matplotlib.pyplot as plt
+import seaborn as sns
+from surprise import Dataset
+from surprise import Reader
+from surprise import SVD, SlopeOne, CoClustering, KNNBasic, KNNWithMeans, KNNWithZScore
+from surprise.model_selection import cross_validate
+import difflib
+import random
 response = ''
 app = Flask(__name__)
 
-data = pd.read_csv('rating_final.csv')
 
-# How many times has a user rated
-most_rated_users = data['userID'].value_counts()
-most_rated_users
+data = pd.read_csv('rating_final-2.csv')
+data.head()
 
-# How many times has a restaurant been rated
-most_rated_restaurants = data['placeID'].value_counts()
-most_rated_restaurants
+data.info()
 
-# How many users have rated more than n places ?
-n = 3
-user_counts = most_rated_users[most_rated_users > n]
-len(user_counts)
-user_counts
+location_data = pd.read_csv('geoplaces2.csv')
+location_data.head()
 
-# No. of ratings given
-user_counts.sum()
+location_data.info()
 
-# Retrieve all ratings given by the above users from the full data
-data_final = data[data['userID'].isin(user_counts.index)]
-data_final
+data = pd.merge(data, location_data[['placeID', 'name']], on='placeID')
+data = data[['userID', 'placeID' ,'name', 'rating']]
 
-# No. of users who have rated a resto
-data_grouped = data.groupby('placeID').agg({'userID': 'count'}).reset_index()
-data_grouped.rename(columns={'userID': 'score'}, inplace=True)
-data_sort = data_grouped.sort_values(['score', 'placeID'], ascending=False)
-data_sort.head()
+# load the first 5 rows
+data.head()
 
-# Let's rank them based on scores
-data_sort['Rank'] = data_sort['score'].rank(ascending=0, method='first')
-pop_recom = data_sort
-pop_recom.head()
+# Provide a score to each restaurant based on the count of their occurrence, i.e the place that occurs the most is more popular hence, scored high.
+placeID_count = data.groupby('placeID').count()['userID'].to_dict()
+data['placeScore'] = data['placeID'].map(placeID_count)
 
-print('Here are the most popular restaurants')
-pop_recom[['placeID', 'score', 'Rank']].head()
+# generate top 10 recommendations
+top_10_recommendations = pd.DataFrame(data['placeID'].value_counts()).reset_index().rename(columns = {'index' : 'placeID', 'placeID' : 'placeScore'}).iloc[ : 10]
+top_10_recommendations = pd.merge(data[['placeID','name']], top_10_recommendations, on='placeID', how='right').drop_duplicates()
 
-# Transform the data into a pivot table -> Format required for colab model
-pivot_data = data_final.pivot(index='userID', columns='placeID', values='rating').fillna(0)
-pivot_data.shape
-pivot_data.head()
+# Top 10 Recommendations
+top_10_recommendations
 
-# Create a user_index column to count the no. of users -> Change naming convention of user by using counter
-pivot_data['user_index'] = np.arange(0, pivot_data.shape[0], 1)
-pivot_data.head()
+# drop the placeScore
+data = data.drop('placeScore', axis=1)
+data.head()
 
-pivot_data.set_index(['user_index'], inplace=True)
-pivot_data.head()
+# Create a reader object
+reader = Reader(rating_scale=(0,5)) # The Reader class is used to parse a file containing ratings.
+rating_data = Dataset.load_from_df(data[['userID', 'placeID', 'rating']], reader)
 
-# Applying SVD method on a large sparse matrix -> To predict ratings for all resto that weren't rated by a user
-from scipy.sparse.linalg import svds
-
-# SVD
-U, s, VT = svds(pivot_data, k=10)
-
-# Construct diagonal array in SVD
-sigma = np.diag(s)
-
-# Applying SVD would output 3 parameters namely
-print("U = ", U)  # Orthogonal matrix
-print('************************************************')
-print("S = ", s)  # Singular values
-print('************************************************')
-print("VT = ", VT)  # Transpose of Orthogonal matrix
-
-# Predict ratings for all restaurants not rated by a user using SVD
-all_user_predicted_ratings = np.dot(np.dot(U, sigma), VT)
-
-# Predicted ratings
-pred_data = pd.DataFrame(all_user_predicted_ratings, columns=pivot_data.columns)
-pred_data.head()
+# using Singular Value Decomposition (Matrix Factorisation) to build the recommender system
+svd = SVD(verbose=True, n_epochs=100)
+svd_results = cross_validate(svd, rating_data, measures=['RMSE', 'MAE'], cv=3, verbose=True)
 
 
-num_recommendations = 3
-userID = 120
-print(pred_data)
-print(userID)
-print(userID)
-print(userID)
-print(pivot_data)
+# 1. Get the restaurant id from restaurant name
+def get_rest_id(rest_name, data):
+    
+    '''Returns the Restaurant ID (placeID) given the restaurant Name.'''
+    
+    rest_names = list(data['name'].values)
+    
+    # Using difflib find the restaurants that are closest to the input and extract the corresponding placeID
+    
+    closest_names = difflib.get_close_matches(rest_name, rest_names)
+    rest_id = data[data['name'] == closest_names[0]]['placeID'].iloc[0]
+    
+    return rest_id
 
+# 2. Predict the rating for this restaurant for a given user (b/w 0-2)
+def predict_rating(user_id, rest_name, data, model=SVD):
+    
+    # extract the restaurant id from the restaurant name
+    rest_id = get_rest_id(rest_name, data)
+    #print(rest_id)
+    
+    # make predictions
+    estimated_ratings = model.predict(uid = user_id, iid = rest_id)
+    
+    return estimated_ratings.est
+
+# 3. Generate Recommendations for a given user
+
+'''
+In this, we will take userID as the input and output the names of all the restaurants for which the given user is most likely to
+give a rating above a certain threshold rating (1.5 in this case).
+'''
+def recommend_restaurants(user_id, data=data, model=svd, threshold=3.4):
+    
+    # store the recommended restaurants along with the predicted ratings given by the user in a dictionary
+    recommended_restaurants = {}
+    
+    # Find all the unique restaurant names
+    unique_rest_names = list(np.unique(data['name'].values))
+    
+    # Shuffle the restaurant name list
+    #random.shuffle(unique_rest_names)
+    
+    # iterate over the list and generate ratings(predictions) for each restaurant and return only those which have a rating > threshold (1.5)
+    for rest_name in unique_rest_names:
+        
+        # generate predictions
+        #print(rest_name)
+        rating = predict_rating(user_id=user_id, rest_name=rest_name, data=data, model=svd)
+        
+        # check if rating > threshold
+        if rating > threshold:
+            
+            recommended_restaurants[rest_name] = np.round(rating,2)
+    
+    print("Generating Restaurant Recommendations for User ID {} : ".format(user_id))
+    
+    restaurant_names = np.array(list(recommended_restaurants.keys())).reshape(-1,1)
+    restaurant_ratings = np.array(list(recommended_restaurants.values())).reshape(-1,1)
+    
+    results = np.concatenate((restaurant_names, restaurant_ratings), axis=1)
+    results_df = pd.DataFrame(results, columns=['Restaurants', 'Rating (0-2)']).sort_values(by='Rating (0-2)', ascending=False)
+    
+    return results_df.reset_index().drop('index', axis=1)
+
+#Generate Recommendations using SVD , send userID and receive 3 restaurantID
 @app.route('/ratings', methods=['GET', 'POST'])
 def rate():  
     global response
@@ -97,63 +133,47 @@ def rate():
         request_data = json.loads(request_data.decode('utf-8'))
         rate = request_data['rating']
         response = f'hi {rate} this is python!'
-        with open("rating_final.csv", "a") as f:
+        with open("rating_final-2.csv", "a") as f:
             csv.writer(f).writerow(rate)
             f.close()
+        print("written succesffully")
         return "Done"
     if(request.method == 'GET'):
         # # value from flutter
         print(request.headers.get('usrID'))
-        uid = request.headers.get('usrID')
-        # table with index 
-        UserIDs = pd.DataFrame(data=data_final['userID'].drop_duplicates())
-        UserIDs['user_index'] = np.arange(0, pivot_data.shape[0],1)
-        UserIDs.set_index(['user_index'], inplace = True)
-        UserIDs
-        print(UserIDs[UserIDs['userID']==uid].index.values)
-
-        uid = 0
-        # if user has ratings
-        if (UserIDs[UserIDs['userID']== uid].index.values != None):
-            print(" not null")
-            print(UserIDs[UserIDs['userID']=='U1067'].index.values[0]) 
-            uid = UserIDs[UserIDs['userID']==uid].index.values[0]
-            user_index = UserIDs[UserIDs['userID']==uid].index.values - 1
-            sorted_user_ratings = pivot_data.iloc[user_index].sort_values(ascending=False)  # sort user ratings
-            sorted_user_predictions = pred_data.iloc[user_index].sort_values(ascending=False)  # sorted_user_predictions
-            temp = pd.concat([sorted_user_ratings, sorted_user_predictions], axis=1)
-            temp.index.name = 'Recommended Places'
-            temp.columns = ['user_ratings', 'user_predictions']
-            temp = temp.loc[temp.user_ratings == 0]
-            temp = temp.sort_values('user_predictions', ascending=False)
-            print('\n Below are the recommended places for user(user_id = {}):\n'.format(userID))
-            RecommendedPlaces = temp.head(num_recommendations)
-            Recommended = [RecommendedPlaces.index[0], RecommendedPlaces.index[1], RecommendedPlaces.index[2]]
-            json_str = json.dumps({'recommeneded': Recommended})
-            return json_str
-
-        # if user dont have ratings
+        userID = request.headers.get('usrID')
+        Recommendations = recommend_restaurants(user_id = userID)
+        # Rename columns
+        Recommendations.rename(columns = {'Restaurants':'name'}, inplace = True)
+        Recommendations.rename(columns = {'Rating (0-2)':'P_Rate'}, inplace = True)
+        # merge 
+        Recommendations = pd.merge(Recommendations, location_data[['name', 'placeID']], on='name')
+        Recommendations = Recommendations.head(3)
+        #convert placeID to array
+        array = Recommendations['placeID'].values
+        if (len(array)==3):
+            print("Collaborative Model")
+            print(len(array))
+            print(array[0])
+            print(array[1])
+            print(array[2])
+            listt = [array[0],array[1],array[2]]
+            return json.dumps(listt, cls=NpEncoder)
+ 
         else:
-            # top rated resturants
-            pop_recom[['placeID','score','Rank']].head()
-            print(pop_recom['placeID'][0])
-            print(pop_recom['placeID'][1])
-            print(pop_recom['placeID'][2])
-            print("null")
-            Recommended = [pop_recom['placeID'][0],pop_recom['placeID'][1],pop_recom['placeID'][2]]
-            print("the recomended resturants is")
-            print(Recommended)
-            return json.dumps(Recommended, cls=NpEncoder)
+            #Number of users who have rated a restaurant
+            data_grouped = data.groupby('placeID').agg({'userID':'count'}).reset_index()
+            data_grouped.rename(columns = {'userID': 'score'}, inplace = True )
+            data_sort = data_grouped.sort_values(['score','placeID'], ascending = False)
+            #Rank based on scores
+            data_sort['Rank'] = data_sort['score'].rank(ascending = 0, method = 'first')
+            print('Most popular restaurants')
+            print(data_sort['placeID'][0])
+            print(data_sort['placeID'][1])
+            print(data_sort['placeID'][2])
+            array = [data_sort['placeID'][0],data_sort['placeID'][1],data_sort['placeID'][2]]
+            return array
   
-
-userID = 120
-num_recommedations = 5
-print(pred_data)
-print(userID)
-print(userID)
-print(userID)
-print(pivot_data)
-# recommend(userID, pivot_data, pred_data, num_recommedations)
 
 def write(new):
     with open("rating_final.csv", "a") as f:
@@ -162,8 +182,6 @@ def write(new):
         ## close the opened csv file
         f.close()
 
-# newData = ["U115", "RAD", 5, 5, 5]
-# write(newData)
 
 class NpEncoder(json.JSONEncoder):
     def default(self, obj):

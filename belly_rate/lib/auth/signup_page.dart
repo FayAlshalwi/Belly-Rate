@@ -90,7 +90,7 @@ class _SignUpPageState extends State<SignUpPage> {
             Center(
               child: Image.network(
                   "http://www.highvincent.com/HighVin/ContentNew/images/login.png",
-                  height: heightM * 8.0,
+                  height: heightM * 10.0,
                   fit: BoxFit.fill),
             ),
             Container(
@@ -116,13 +116,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.black.withOpacity(0.13)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xffeeeeee),
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
                   ),
                   child:
                       Stack(alignment: AlignmentDirectional.center, children: [
@@ -187,13 +180,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.black.withOpacity(0.13)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xffeeeeee),
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
                   ),
                   child: Stack(
                     alignment: AlignmentDirectional.center,
@@ -339,6 +325,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             },
                             codeSent:
                                 (String verificationId, int? resendToken) {
+                              stopLoading();
+
                               openSheet(context, heightM, button_color,
                                   txt_color, verificationId);
                             },
@@ -439,14 +427,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     underlineColor: button_color,
                     length: 6,
                     cursorColor: txt_color,
-                    clearAll: Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: Text(
-                        'clear all'.toUpperCase(),
-                        style: ourTextStyle(
-                            txt_color: txt_color, txt_size: heightM * 0.5),
-                      ),
-                    ),
                     onCompleted: (String value) {
                       setState(() {
                         _code = value;
@@ -465,15 +445,16 @@ class _SignUpPageState extends State<SignUpPage> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
-                      height: heightM * 1.9,
+                      // height: heightM * 1.9,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
-                          elevation: 10.0,
+                          // elevation: 10.0,
                           borderRadius: BorderRadius.circular(10.0), //12
                           // color: Color.fromARGB(0, 244, 67, 54),
                           child: MaterialButton(
-                            minWidth: MediaQuery.of(context).size.width,
+                            height: heightM * 1.2,
+                            minWidth: MediaQuery.of(context).size.width * 0.4,
                             color: Color.fromARGB(0, 0, 0, 0).withOpacity(0.7),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),
@@ -491,13 +472,20 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Material(
-                          elevation: 10.0,
+                          // elevation: 10.0,
                           borderRadius: BorderRadius.circular(10.0), //12
                           color: Colors
                               .transparent, //Colors.cyan.withOpacity(0.5),
                           child: LoadingBtn(
+                            loader: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: const CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            ),
                             width: MediaQuery.of(context).size.width * 0.4,
-                            height: heightM * 1.9,
+                            height: heightM * 1.2,
                             color: button_color,
                             borderRadius: 10,
                             onTap: (startLoading, stopLoading, btnState) async {
@@ -710,6 +698,15 @@ class _SignUpPageState extends State<SignUpPage> {
                                   //   );
                                   // }
                                 }
+                              } else {
+                                stopLoading();
+                                CoolAlert.show(
+                                  context: context,
+                                  title: "Empty OTP",
+                                  type: CoolAlertType.error,
+                                  text: "Please, Enter OTP sent to your phone",
+                                  confirmBtnColor: button_color,
+                                );
                               }
                             },
                             child: Text('Sign Up',

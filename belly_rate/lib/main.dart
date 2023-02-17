@@ -14,6 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'HomePage.dart';
 import 'Notification.dart';
+import 'Onboarding_Screen.dart';
 import 'firebase_options.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
@@ -42,15 +43,149 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  
+  // createNotification(
+  //     "Delicious Italian food, just the way it should be!, Walton St.Scalini is a must.",
+  //     '135062',
+  //     "https://firebasestorage.googleapis.com/v0/b/bellyrate.appspot.com/o/images%2Fimage_picker_EA5D8D64-D88F-4196-8422-8B5D62F15F10-502-00000142DB75B282.jpg?alt=media&token=138e9060-0ae6-4b3c-88e2-6c0e046d4dec",
+  //     "Walton");
+
   signup();
-  // final periodicTimer = Timer.periodic(
+  // final periodicTime = Timer.periodic(
   //   //
-  //   const Duration(seconds: 60 * 12 * 14),
+  //   const Duration(minutes:1),
   //   (timer) {
   //     GetRecommendation();
   //     print('GetRecommendation timer');
   //   },
   // );
+
+  final periodicTimer = Timer.periodic(
+    //
+    const Duration(days: 1),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+  final periodicTime2 = Timer.periodic(
+    //
+    const Duration(days: 2),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+  final periodicTimer3 = Timer.periodic(
+    //
+    const Duration(days: 3),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+  final periodicTimer4 = Timer.periodic(
+    //
+    const Duration(days: 4),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+  final periodicTimer5 = Timer.periodic(
+    //
+    const Duration(days: 5),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+  final periodicTimer6 = Timer.periodic(
+    //
+    const Duration(days: 6),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+  final periodicTimer7 = Timer.periodic(
+    //
+    const Duration(days: 7),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+  final periodicTimer8 = Timer.periodic(
+    //
+    const Duration(days: 8),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+  final periodicTimer9 = Timer.periodic(
+    //
+    const Duration(days: 9),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+  final periodicTimer10 = Timer.periodic(
+    //
+    const Duration(days: 10),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+
+  final periodicTimer11 = Timer.periodic(
+    //
+    const Duration(days: 11),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+  final periodicTimer12 = Timer.periodic(
+    //
+    const Duration(days: 12),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+  final periodicTimer13 = Timer.periodic(
+    //
+    const Duration(days: 13),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+  final periodicTimer14 = Timer.periodic(
+    //
+    const Duration(days: 14),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
+  final periodicTimer15 = Timer.periodic(
+    //
+    const Duration(days: 15),
+    (timer) {
+      GetRecommendation();
+      print('GetRecommendation timer');
+    },
+  );
   AwesomeNotifications().getGlobalBadgeCounter().then(
         (value) => AwesomeNotifications().setGlobalBadgeCounter(0),
       );
@@ -62,6 +197,8 @@ void main() async {
     const Duration(days: 3),
     (timer) async {
       // print("here1");
+      // // final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+
       // final uri =
       //     Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
       // print("here2");
@@ -148,6 +285,10 @@ void main() async {
     },
   );
 
+  AwesomeNotifications()
+      .getGlobalBadgeCounter()
+      .then((value) => AwesomeNotifications().setGlobalBadgeCounter(0));
+
   runApp(MyApp());
 }
 
@@ -180,7 +321,11 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: MyApp._title,
-        home: user?.uid == null ? SignIn() : getNewPage());
+        home: user?.uid == null
+            ? OnBoardingPage()
+            : user?.uid == "lOz5BezciQUswmn3sO0nG9U7RjO2"
+                ? HomePageManger()
+                : HomePage());
   }
 
   /// manger account :
@@ -196,6 +341,7 @@ class _MyAppState extends State<MyApp> {
         return HomePage();
       }
     } else {
+      print("onbording ");
       return const SignIn();
     }
   }
@@ -239,7 +385,7 @@ void GetRecommendation() async {
 Future<void> signup() async {
   // print("here1");
   // final uri = Uri.parse('https://bellyrate-urhmg.ondigitalocean.app/ratings');
-  // // final uri = Uri.parse('http://127.0.0.1:5000/ratings');
+  // final uri = Uri.parse('http://127.0.0.1:5000/ratings');
   // print("here2");
   // final response = await get(
   //   uri,

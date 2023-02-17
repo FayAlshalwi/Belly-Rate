@@ -89,10 +89,7 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             Center(
-              child: Image.network(
-                  "https://my.messa.online/images_all/2022-login.gif",
-                  height: heightM * 8.50,
-                  fit: BoxFit.fill),
+              child: buildImage('asset/auth/2022-login.gif'),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
@@ -115,13 +112,6 @@ class _SignInState extends State<SignIn> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.black.withOpacity(0.13)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xffeeeeee),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
-                  ),
-                ],
               ),
               child: Stack(
                 alignment: AlignmentDirectional.center,
@@ -247,7 +237,6 @@ class _SignInState extends State<SignIn> {
                             verificationCompleted:
                                 (PhoneAuthCredential credential) {
                               stopLoading();
-
                               print("verificationCompleted: ${credential}");
                             },
                             verificationFailed: (FirebaseAuthException e) {
@@ -268,6 +257,7 @@ class _SignInState extends State<SignIn> {
                             },
                             codeSent:
                                 (String verificationId, int? resendToken) {
+                              stopLoading();
                               openSheet(context, heightM, button_color,
                                   txt_color, verificationId);
                             },
@@ -368,14 +358,6 @@ class _SignInState extends State<SignIn> {
                     underlineColor: button_color,
                     length: 6,
                     cursorColor: txt_color,
-                    clearAll: Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: Text(
-                        'clear all'.toUpperCase(),
-                        style: ourTextStyle(
-                            txt_color: txt_color, txt_size: heightM * 0.5),
-                      ),
-                    ),
                     onCompleted: (String value) {
                       setState(() {
                         _code = value;
@@ -394,19 +376,22 @@ class _SignInState extends State<SignIn> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
-                      height: heightM * 1.9,
+                      // height: heightM * 1.9,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
-                          elevation: 10.0,
+                          // elevation: 10.0,
                           borderRadius: BorderRadius.circular(10.0), //12
                           // color: Color.fromARGB(0, 244, 67, 54),
                           child: MaterialButton(
-                            minWidth: MediaQuery.of(context).size.width,
+                            height: heightM * 1.2,
+                            minWidth: MediaQuery.of(context).size.width * 0.4,
                             color: Color.fromARGB(0, 0, 0, 0).withOpacity(0.7),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),
-                            onPressed: () => Navigator.of(context).pop(),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
                             child: Text('Back',
                                 textAlign: TextAlign.center,
                                 style: ourTextStyle(
@@ -420,93 +405,102 @@ class _SignInState extends State<SignIn> {
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Material(
-                          elevation: 10.0,
+                          // elevation: 10.0,
                           borderRadius: BorderRadius.circular(10.0), //12
                           color: Colors
                               .transparent, //Colors.cyan.withOpacity(0.5),
                           child: LoadingBtn(
                             width: MediaQuery.of(context).size.width * 0.4,
-                            height: heightM * 1.9,
+                            height: heightM * 1.2,
                             color: button_color,
                             borderRadius: 10,
                             loader: Container(
                               padding: const EdgeInsets.all(10),
-                              width: 40,
-                              height: 40,
                               child: const CircularProgressIndicator(
                                 valueColor:
                                     AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             ),
                             onTap: (startLoading, stopLoading, btnState) async {
-                              if (btnState == ButtonState.idle) {
-                                startLoading();
-                                PhoneAuthCredential credential =
-                                    PhoneAuthProvider.credential(
-                                        verificationId: verificationId,
-                                        smsCode: _code!);
-                                try {
-                                  await FirebaseAuth.instance
-                                      .signInWithCredential(credential);
-                                } on FirebaseAuthException catch (error) {
-                                  Navigator.of(context).pop();
-                                  String Error = "";
-                                  print("e ${error}");
+                              if (_code != null && _code!.isNotEmpty) {
+                                if (btnState == ButtonState.idle) {
+                                  startLoading();
+                                  PhoneAuthCredential credential =
+                                      PhoneAuthProvider.credential(
+                                          verificationId: verificationId,
+                                          smsCode: _code!);
+                                  try {
+                                    await FirebaseAuth.instance
+                                        .signInWithCredential(credential);
+                                  } on FirebaseAuthException catch (error) {
+                                    Navigator.of(context).pop();
+                                    String Error = "";
+                                    print("e ${error}");
 
-                                  if (error
-                                      .toString()
-                                      .contains("does not exist")) {
-                                    CoolAlert.show(
-                                      context: context,
-                                      title: "No user correspond",
-                                      type: CoolAlertType.error,
-                                      text:
-                                          "User Not Exist! , Please Go to Sign Up Page",
-                                      confirmBtnColor: button_color,
-                                    );
-                                  } else if (error.toString().contains(
-                                      "The sms verification code used to create the phone auth credential is invalid")) {
-                                    CoolAlert.show(
-                                      context: context,
-                                      title: "Wrong OTP",
-                                      type: CoolAlertType.error,
-                                      text: "Invalid verification code",
-                                      confirmBtnColor: button_color,
-                                    );
-                                    Error = "Code Error !";
-                                  } else if (error.code ==
-                                      'invalid-verification-code') {
-                                    CoolAlert.show(
-                                      context: context,
-                                      title: "Wrong OTP",
-                                      type: CoolAlertType.error,
-                                      text: "Invalid verification code",
-                                      confirmBtnColor: button_color,
-                                    );
-                                    Error = "Wrong OTP entered";
+                                    if (error
+                                        .toString()
+                                        .contains("does not exist")) {
+                                      CoolAlert.show(
+                                        context: context,
+                                        title: "No user correspond",
+                                        type: CoolAlertType.error,
+                                        text:
+                                            "User Not Exist! , Please Go to Sign Up Page",
+                                        confirmBtnColor: button_color,
+                                      );
+                                    } else if (error.toString().contains(
+                                        "The sms verification code used to create the phone auth credential is invalid")) {
+                                      CoolAlert.show(
+                                        context: context,
+                                        title: "Wrong OTP",
+                                        type: CoolAlertType.error,
+                                        text: "Invalid verification code",
+                                        confirmBtnColor: button_color,
+                                      );
+                                      Error = "Code Error !";
+                                    } else if (error.code ==
+                                        'invalid-verification-code') {
+                                      CoolAlert.show(
+                                        context: context,
+                                        title: "Wrong OTP",
+                                        type: CoolAlertType.error,
+                                        text: "Invalid verification code",
+                                        confirmBtnColor: button_color,
+                                      );
+                                      Error = "Wrong OTP entered";
+                                    }
+
+                                    print("ddd_222 ${error}");
+
+                                    // if (e.code == 'invalid-verification-code') {
+                                    //   CoolAlert.show(
+                                    //     context: context,
+                                    //     title: "",
+                                    //     type: CoolAlertType.error,
+                                    //     text: "Error",
+                                    //     confirmBtnColor: button_color,
+                                    //   );
+                                    // }
+
                                   }
-
-                                  print("ddd_222 ${error}");
-
-                                  // if (e.code == 'invalid-verification-code') {
-                                  //   CoolAlert.show(
-                                  //     context: context,
-                                  //     title: "",
-                                  //     type: CoolAlertType.error,
-                                  //     text: "Error",
-                                  //     confirmBtnColor: button_color,
-                                  //   );
-                                  // }
-
-                                }
-                                if (FirebaseAuth.instance.currentUser != null) {
+                                  if (FirebaseAuth.instance.currentUser !=
+                                      null) {
+                                    stopLoading();
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePage()),
+                                        (Route<dynamic> route) => false);
+                                  }
                                   stopLoading();
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) => HomePage()),
-                                      (Route<dynamic> route) => false);
                                 }
-                                stopLoading();
+                              } else {
+                                CoolAlert.show(
+                                  context: context,
+                                  title: "Empty OTP",
+                                  type: CoolAlertType.error,
+                                  text: "Please, Enter OTP sent to your phone",
+                                  confirmBtnColor: button_color,
+                                );
                               }
                             },
                             child: Text('Sign In',
@@ -534,3 +528,5 @@ class _SignInState extends State<SignIn> {
         color: txt_color, fontWeight: FontWeight.bold, fontSize: txt_size);
   }
 }
+
+Widget buildImage(String path) => Center(child: Image.asset(path, width: 350));
