@@ -176,30 +176,31 @@ class _history extends State<history> {
                                                       Colors.grey.shade700,
                                                   txt_size: heightM * 0.4))),
                                       if (item.rate != null)
-                                        Expanded(
-                                            child: Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 0.0,
-                                                    bottom: 0.0,
-                                                    top: 0.0,
-                                                    right: 0.0),
-                                                child: item.rate!.rate == "0.5"
-                                                    ? StarWidget5()
-                                                    : item.rate!.rate == "1.5"
-                                                        ? StarWidget15()
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 0.0,
+                                                bottom: 0.0,
+                                                top: 0.0,
+                                                right: 0.0),
+                                            child: item.rate!.rate == "0.5"
+                                                ? StarWidget5()
+                                                : item.rate!.rate == "1.5"
+                                                    ? StarWidget15()
+                                                    : item.rate!.rate == "2.5"
+                                                        ? StarWidget25()
                                                         : item.rate!.rate ==
-                                                                "2.5"
-                                                            ? StarWidget25()
+                                                                "3.5"
+                                                            ? StarWidget35()
                                                             : item.rate!.rate ==
-                                                                    "3.5"
-                                                                ? StarWidget35()
-                                                                : item.rate!.rate ==
-                                                                        "4.5"
-                                                                    ? StarWidget45()
-                                                                    : StarWidget(
-                                                                        activated:
-                                                                            double.tryParse(item.rate!.rate.toString())!.toDouble(),
-                                                                      )))
+                                                                    "4.5"
+                                                                ? StarWidget45()
+                                                                : StarWidget(
+                                                                    activated: double.tryParse(item
+                                                                            .rate!
+                                                                            .rate
+                                                                            .toString())!
+                                                                        .toDouble(),
+                                                                  ))
                                     ],
                                   ),
                                 ),
@@ -211,6 +212,7 @@ class _history extends State<history> {
                         ///
                         if (item.rate == null)
                           MaterialButton(
+                            height: 30,
                             onPressed: () {
                               print("qqq");
                               String rating = "0";
@@ -454,7 +456,7 @@ class _history extends State<history> {
                             textColor: Colors.white,
                             child: Icon(
                               Icons.star,
-                              size: 25,
+                              size: 20,
                             ),
                             padding: EdgeInsets.all(2),
                             shape: CircleBorder(),

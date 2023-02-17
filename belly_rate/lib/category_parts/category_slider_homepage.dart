@@ -57,8 +57,8 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
     Color txt_color = Color(0xFF5a3769);
     return Container(
       // color: Color.fromARGB(255, 255, 255, 255),
-      width: 410,
-      height: 280,
+      width: 380,
+      height: 270,
       child: Scrollbar(
           thickness: 3.0,
           radius: const Radius.circular(20),
@@ -85,121 +85,91 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // InkWell(
-                          //     onTap: () {
-                          //       Navigator.of(context).push(
-                          //         MaterialPageRoute(
-                          //             builder: (context) => RestaurantDetails(
-                          //                   category_name: item.category!,
-                          //                   restaurant: item,
-                          //                 )),
-                          //       );
-                          //     },
-                          //     child:
                           Container(
                             height: 90,
                             child: Padding(
                               padding: EdgeInsets.only(
                                   left: 0.0, bottom: 0.0, top: 0.0, right: 0.0),
-                              child: Row(
-                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              child: Row(children: [
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(2, 2, 9, 2),
+                                  width: 70,
+                                  height: 70,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                        "${item.photos?.first}",
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      margin: EdgeInsets.fromLTRB(2, 2, 9, 2),
-                                      width: 70,
-                                      height: 70,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                            "${item.photos?.first}",
-                                            fit: BoxFit.cover),
-                                      ),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                            margin: EdgeInsets.fromLTRB(
-                                                0, 10, 0, 0),
-                                            padding: EdgeInsets.only(
-                                                left: 0.0,
-                                                bottom: 0.0,
-                                                top: 0.0,
-                                                right: 0.0),
-                                            child: Text("${item.name}",
-                                                style: ourTextStyle(
-                                                    txt_color: txt_color,
-                                                    txt_size: heightM * 0.6))),
-                                        Container(
-                                            margin:
-                                                EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                            child: Text("${item.category}",
-                                                style: TextStyle(
-                                                  fontSize: 13,
-                                                  color: Color.fromARGB(
-                                                      255, 63, 63, 63),
-                                                  fontWeight: FontWeight.w500,
-                                                )
-
-                                                // ourTextStyle(
-                                                //     txt_color: Color.fromARGB(
-                                                //         255, 116, 116, 116),
-                                                //     txt_size: heightM * 0.45, )
-
-                                                )),
-                                      ],
-                                    ),
-                                  ]),
+                                        margin:
+                                            EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                        child: Text("${item.name}",
+                                            style: ourTextStyle(
+                                                txt_color: txt_color,
+                                                txt_size: heightM * 0.6))),
+                                    Container(
+                                        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        child: Text("${item.category}",
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Color.fromARGB(
+                                                  255, 63, 63, 63),
+                                              fontWeight: FontWeight.w500,
+                                            ))),
+                                  ],
+                                ),
+                              ]),
                             ),
                           ),
 
-                          // ),
-                          // InkWell(
-                          //     onTap: () {
-                          //       Navigator.of(context).push(
-                          //         MaterialPageRoute(
-                          //             builder: (context) => RestaurantDetails(
-                          //                   category_name: item.category!,
-                          //                   restaurant: item,
-                          //                 )),
-                          //       );
-                          //     },
-                          // child:
                           Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Container(
-                                  height: 27,
-                                  width: item.far!.floor() < 10
-                                      ? 85
-                                      : item.far!.floor() > 10
-                                          ? 95
-                                          : 107,
-                                  decoration: BoxDecoration(
-                                      color: Color.fromARGB(244, 216, 107, 147),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20))),
-                                  child: Center(
-                                      child: Row(
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(5, 0, 1, 0),
-                                        child: Icon(
-                                          Icons.location_on,
-                                          color: Colors.white,
-                                          size: 20,
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 0.0,
+                                      bottom: 0.0,
+                                      top: 0.0,
+                                      right: 5.0),
+                                  child: Container(
+                                    // height: 27,
+                                    width: item.far!.floor() < 10
+                                        ? 85
+                                        : item.far!.floor() > 10
+                                            ? 95
+                                            : 107,
+                                    decoration: BoxDecoration(
+                                        color:
+                                            Color.fromARGB(244, 216, 107, 147),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))),
+                                    child: Center(
+                                        child: Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                          child: Icon(
+                                            Icons.location_on,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
                                         ),
-                                      ),
-                                      Text("${item.far!.toStringAsFixed(2)} KM",
-                                          textAlign: TextAlign.center,
-                                          style: ourTextStyle(
-                                              txt_color: Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              txt_size: heightM * 0.43))
-                                    ],
-                                  )),
+                                        Text(
+                                            "${item.far!.toStringAsFixed(2)} KM",
+                                            textAlign: TextAlign.center,
+                                            style: ourTextStyle(
+                                                txt_color: Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                txt_size: heightM * 0.43))
+                                      ],
+                                    )),
+                                  ),
                                 )
                               ])
                           // )
@@ -208,34 +178,6 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                 } else
                   return Container();
               })),
-    );
-  }
-
-  Widget buildContainerList(Color txt_color, double heightM, int index) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 120,
-        width: 120,
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.network(
-                  (_restaurant[index].photos?.first)!,
-                  height: 50,
-                  width: 50,
-                ),
-                Text(_restaurant[index].name!,
-                    style: ourTextStyle(
-                        txt_color: txt_color, txt_size: heightM * 0.6)),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 

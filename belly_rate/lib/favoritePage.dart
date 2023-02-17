@@ -164,9 +164,9 @@ class _Favorite extends State<Favorite> {
                   if (item.rate != null)
                     const Padding(
                       padding: EdgeInsets.only(
-                          left: 16.0, bottom: 3.0, top: 3.0, right: 22.0),
+                          left: 16.0, bottom: 3.0, top: 3.0, right: 12.0),
                       child: Icon(Icons.favorite_outline_rounded,
-                          size: 28, color: Color.fromARGB(255, 216, 107, 147)),
+                          size: 25, color: Color.fromARGB(255, 216, 107, 147)),
                     ),
                 ],
               ),

@@ -92,7 +92,7 @@ class _CategorySliderState extends State<CategorySlider> {
     double heightM = MediaQuery.of(context).size.height / 30;
     Color txt_color = Color(0xFF5a3769);
     return Container(
-      height: 120,
+      height: 98,
       child: Scrollbar(
         thickness: 5.0,
         radius: const Radius.circular(20),
@@ -171,14 +171,14 @@ class _CategorySliderState extends State<CategorySlider> {
                           )));
             },
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(2.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.asset(
                     categoryList[index].icon,
-                    height: 50,
-                    width: 50,
+                    height: 45,
+                    width: 45,
                   ),
                   Text(categoryList[index].name,
                       style: ourTextStyle(

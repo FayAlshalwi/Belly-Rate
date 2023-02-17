@@ -212,15 +212,14 @@ class _myProfile extends State<myProfile> {
                   if (ourUser != null)
                     Padding(
                       padding: const EdgeInsets.only(
-                          left: 0.0, right: 200.0, top: 12),
+                          left: 10.0, right: 200.0, top: 12),
                       child: Center(
                         child: Container(
                           width: 190,
                           height: heightM * 1.5,
                           child: Material(
-                            borderRadius: BorderRadius.circular(55.0), //12
-                            color: Colors
-                                .transparent, //Colors.cyan.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(55.0),
+                            color: Colors.transparent,
                             child: FloatingActionButton.extended(
                               backgroundColor: Color.fromARGB(255, 92, 195, 95),
                               onPressed: () {
@@ -239,27 +238,6 @@ class _myProfile extends State<myProfile> {
                                       txt_color: Colors.white,
                                       fontSize: heightM * 0.6)),
                             ),
-
-                            // MaterialButton(
-                            //   minWidth: MediaQuery.of(context).size.width,
-                            //   color: button_color,
-                            //   shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(5.0)),
-                            //   splashColor: button_color,
-                            //   onPressed: () async {
-                            //     Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //             builder: (context) =>
-                            //                 // ContactUsManger()));
-                            //                 ContactUs()));
-                            //   },
-                            //   child: Text('Contact us',
-                            //       textAlign: TextAlign.center,
-                            //       style: getMyTextStyle(
-                            //           txt_color: Colors.white,
-                            //           fontSize: heightM * 0.6)),
-                            // ),
                           ),
                         ),
                       ),

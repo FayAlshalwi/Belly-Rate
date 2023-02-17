@@ -94,9 +94,7 @@ class _ContactUsState extends State<ContactUs> {
                         color: requestsIndex != 0
                             ? Color(0xFF5a3769)
                             : Colors.white,
-                        //Colors.orange,
-                        // fontWeight: FontWeight.w400,
-                        fontSize: 15,
+                        fontSize: 14,
                       ),
                     ),
                   ),
@@ -123,7 +121,7 @@ class _ContactUsState extends State<ContactUs> {
                             ? Color(0xFF5a3769)
                             : Colors.white,
                         //Colors.orange,
-                        fontSize: 15,
+                        fontSize: 14,
                       ),
                     ),
                   ),
@@ -424,7 +422,7 @@ class _ContactUsState extends State<ContactUs> {
   Container addNewRequest(BuildContext context) {
     double heightM = MediaQuery.of(context).size.height / 30;
     return Container(
-      height: MediaQuery.of(context).size.height * 0.75,
+      height: MediaQuery.of(context).size.height * 0.8,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -434,11 +432,11 @@ class _ContactUsState extends State<ContactUs> {
             ),
             Image.asset(
               "asset/category_img/cusSer.png",
-              width: 230,
+              width: 200,
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 0.0, right: 273.0, top: 0.0, bottom: 0.0),
+                  left: 0.0, right: 230.0, top: 0.0, bottom: 0.0),
               child: Text(
                 "New Complaint",
                 textAlign: TextAlign.start,
@@ -470,11 +468,8 @@ class _ContactUsState extends State<ContactUs> {
                 key: _formtext,
                 child: Container(
                   alignment: AlignmentDirectional.center,
-                  // width: 450,
                   height: 60,
-                  // margin: EdgeInsets.fromLTRB(23, 02, 10, 10),
                   margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
-
                   padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                   decoration: BoxDecoration(
                     color: Colors.white,

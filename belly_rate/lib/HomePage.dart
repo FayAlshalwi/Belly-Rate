@@ -88,15 +88,14 @@ class _HomePage extends State<HomePage> {
       }
     });
 
-      AwesomeNotifications().getGlobalBadgeCounter().then(
-              (value) =>
-                  AwesomeNotifications().setGlobalBadgeCounter(0));
+    AwesomeNotifications()
+        .getGlobalBadgeCounter()
+        .then((value) => AwesomeNotifications().setGlobalBadgeCounter(0));
 
     AwesomeNotifications().actionStream.listen((notification) async {
       if (notification.channelKey == 'basic_channel' && Platform.isIOS) {
         AwesomeNotifications().getGlobalBadgeCounter().then(
-              (value) =>
-                  AwesomeNotifications().setGlobalBadgeCounter(0),
+              (value) => AwesomeNotifications().setGlobalBadgeCounter(0),
             );
       }
 
@@ -248,7 +247,6 @@ class _HomePage extends State<HomePage> {
   }
 
   userlocation() async {
-    
     print('inside userlocation method');
 
     Location location = new Location();
@@ -444,10 +442,7 @@ class _HomePage extends State<HomePage> {
                   items: imageSliders,
                 )),
           SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            height: 4,
+            height: 10,
           ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
@@ -462,9 +457,6 @@ class _HomePage extends State<HomePage> {
                 ),
               )),
           CategorySlider(),
-          SizedBox(
-            height: 4,
-          ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
               child: Align(
@@ -478,9 +470,6 @@ class _HomePage extends State<HomePage> {
                 ),
               )),
           RestaurantSlider(),
-          SizedBox(
-            height: 4,
-          ),
         ],
       )),
       //Favorite page container
