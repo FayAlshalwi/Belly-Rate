@@ -176,7 +176,7 @@ class _history extends State<history> {
                                                       Colors.grey.shade700,
                                                   txt_size: heightM * 0.4))),
                                       if (item.rate != null)
-                                        Positioned(
+                                        Expanded(
                                             child: Padding(
                                                 padding: EdgeInsets.only(
                                                     left: 0.0,

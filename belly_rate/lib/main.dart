@@ -43,11 +43,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  createNotification(
-      "Delicious Italian food, just the way it should be!, Walton St.Scalini is a must.",
-      '135062',
-      "https://firebasestorage.googleapis.com/v0/b/bellyrate.appspot.com/o/images%2Fimage_picker_EA5D8D64-D88F-4196-8422-8B5D62F15F10-502-00000142DB75B282.jpg?alt=media&token=138e9060-0ae6-4b3c-88e2-6c0e046d4dec",
-      "Walton");
+  
+  // createNotification(
+  //     "Delicious Italian food, just the way it should be!, Walton St.Scalini is a must.",
+  //     '135062',
+  //     "https://firebasestorage.googleapis.com/v0/b/bellyrate.appspot.com/o/images%2Fimage_picker_EA5D8D64-D88F-4196-8422-8B5D62F15F10-502-00000142DB75B282.jpg?alt=media&token=138e9060-0ae6-4b3c-88e2-6c0e046d4dec",
+  //     "Walton");
+
   signup();
   // final periodicTime = Timer.periodic(
   //   //

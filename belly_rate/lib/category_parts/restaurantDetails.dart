@@ -79,7 +79,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                   context: context,
                   type: CoolAlertType.info,
                   text:
-                      ' \$: 50-100 SAR \n \$\$: 101-200 SAR \n \$\$\$: +201 SAR ',
+                      '\$: 50-100 SAR \n \$\$: 101-200 SAR \n \$\$\$: +201 SAR ',
                   confirmBtnText: 'Ok',
                   confirmBtnColor: Color.fromARGB(255, 216, 107, 147),
                   title: "Average Price Per Person",
@@ -89,7 +89,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
             },
             icon: Icon(
               Icons.info_outline_rounded,
-              color: Colors.white,
+              color:  Color(0xFF5a3769),
               size: 28,
             ),
           )
