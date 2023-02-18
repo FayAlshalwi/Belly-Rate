@@ -489,219 +489,217 @@ class _SignUpPageState extends State<SignUpPage> {
                             color: button_color,
                             borderRadius: 10,
                             onTap: (startLoading, stopLoading, btnState) async {
-                                if (_code != null && _code!.isNotEmpty) {
-                              if (btnState == ButtonState.idle) {
-                                startLoading();
-                                 try {
-                                  PhoneAuthCredential credential =
-                                      PhoneAuthProvider.credential(
-                                          verificationId: verificationId,
-                                          smsCode: _code!);
+                              if (_code != null && _code!.isNotEmpty) {
+                                if (btnState == ButtonState.idle) {
+                                  startLoading();
+                                  try {
+                                    PhoneAuthCredential credential =
+                                        PhoneAuthProvider.credential(
+                                            verificationId: verificationId,
+                                            smsCode: _code!);
 
-                                  print("user  credential!!! ");
-                                  print("user  !!! ");
+                                    print("user  credential!!! ");
+                                    print("user  !!! ");
 
-                                  print(credential);
+                                    print(credential);
 
-                                  print("hiiiiiii");
-                                  final userCredential = await FirebaseAuth
-                                      .instance
-                                      .signInWithCredential(credential);
+                                    print("hiiiiiii");
+                                    final userCredential = await FirebaseAuth
+                                        .instance
+                                        .signInWithCredential(credential);
 
-                                  String firebaseToken =
-                                      await userCredential.user!.getIdToken();
-                                  print("firebaseToken");
-                                  print(firebaseToken);
+                                    String firebaseToken =
+                                        await userCredential.user!.getIdToken();
+                                    print("firebaseToken");
+                                    print(firebaseToken);
 
-                                  String userUid = userCredential.user!.uid;
-                                  print("user id userUid!!! @@@@");
-                                  print(userUid);
-                                  print("firstName");
-                                  print(first_name.text);
-                                  print("here1");
-                                  final uri = Uri.parse(
-                                      'https://bellyrate-urhmg.ondigitalocean.app/ratings');
-                                  print("here2");
-                                  final response = await get(
-                                    uri,
-                                    headers: <String, String>{
-                                      'usrID': FirebaseAuth
-                                          .instance.currentUser!.uid
-                                          .toString(),
-                                    },
-                                  );
-                                  print("here3");
-                                  print(response.body);
-                                  print("here");
-                                  var responseData = json.decode(response.body);
-                                  print(responseData[0].toString());
-                                  print(responseData[1].toString());
-                                  print(responseData[2].toString());
-                                  print("here4");
-                                  FirebaseFirestore.instance
-                                      .collection('Users')
-                                      .doc(userUid)
-                                      .set({
-                                    'name': first_name.text,
-                                    'phoneNumber': phoneNumber,
-                                    'uid': userUid,
-                                    'picture':
-                                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-                                    'rest': [
-                                      responseData[0].toString(),
-                                      responseData[1].toString(),
-                                      responseData[2].toString(),
-                                    ],
-                                  });
-                                  print("user added");
-                                  FirebaseFirestore.instance
-                                      .collection('Recommendation')
-                                      .doc()
-                                      .set({
-                                    'userId':
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                    'RestaurantId': responseData[0].toString(),
-                                    'Notified': false,
-                                    'Notified_location': false,
-                                    "Date_Of_Recommendation":
-                                        FieldValue.serverTimestamp(),
-                                  });
+                                    String userUid = userCredential.user!.uid;
+                                    print("user id userUid!!! @@@@");
+                                    print(userUid);
+                                    print("firstName");
+                                    print(first_name.text);
+                                    print("here1");
+                                    final uri = Uri.parse(
+                                        'https://bellyrate-urhmg.ondigitalocean.app/ratings');
+                                    print("here2");
+                                    final response = await get(
+                                      uri,
+                                      headers: <String, String>{
+                                        'usrID': FirebaseAuth
+                                            .instance.currentUser!.uid
+                                            .toString(),
+                                      },
+                                    );
+                                    print("here3");
+                                    print(response.body);
+                                    print("here");
+                                    var responseData =
+                                        json.decode(response.body);
+                                    print(responseData[0].toString());
+                                    print(responseData[1].toString());
+                                    print(responseData[2].toString());
+                                    print("here4");
+                                    FirebaseFirestore.instance
+                                        .collection('Users')
+                                        .doc(userUid)
+                                        .set({
+                                      'name': first_name.text,
+                                      'phoneNumber': phoneNumber,
+                                      'uid': userUid,
+                                      'picture':
+                                          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+                                      'rest': [
+                                        responseData[0].toString(),
+                                        responseData[1].toString(),
+                                        responseData[2].toString(),
+                                      ],
+                                    });
+                                    print("user added");
+                                    FirebaseFirestore.instance
+                                        .collection('Recommendation')
+                                        .doc()
+                                        .set({
+                                      'userId': FirebaseAuth
+                                          .instance.currentUser!.uid,
+                                      'RestaurantId':
+                                          responseData[0].toString(),
+                                      'Notified': false,
+                                      'Notified_location': false,
+                                      "Date_Of_Recommendation":
+                                          FieldValue.serverTimestamp(),
+                                    });
 
-                                  print("Recommendation 1 added");
+                                    print("Recommendation 1 added");
 
-                                  FirebaseFirestore.instance
-                                      .collection('Recommendation')
-                                      .doc()
-                                      .set({
-                                    'userId':
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                    'RestaurantId': responseData[1].toString(),
-                                    'Notified': false,
-                                    'Notified_location': false,
-                                    "Date_Of_Recommendation":
-                                        FieldValue.serverTimestamp(),
-                                  });
+                                    FirebaseFirestore.instance
+                                        .collection('Recommendation')
+                                        .doc()
+                                        .set({
+                                      'userId': FirebaseAuth
+                                          .instance.currentUser!.uid,
+                                      'RestaurantId':
+                                          responseData[1].toString(),
+                                      'Notified': false,
+                                      'Notified_location': false,
+                                      "Date_Of_Recommendation":
+                                          FieldValue.serverTimestamp(),
+                                    });
 
-                                  print("Recommendation 2 added");
+                                    print("Recommendation 2 added");
 
-                                  FirebaseFirestore.instance
-                                      .collection('Recommendation')
-                                      .doc()
-                                      .set({
-                                    'userId':
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                    'RestaurantId': responseData[2].toString(),
-                                    'Notified': false,
-                                    'Notified_location': false,
-                                    "Date_Of_Recommendation":
-                                        FieldValue.serverTimestamp(),
-                                  });
+                                    FirebaseFirestore.instance
+                                        .collection('Recommendation')
+                                        .doc()
+                                        .set({
+                                      'userId': FirebaseAuth
+                                          .instance.currentUser!.uid,
+                                      'RestaurantId':
+                                          responseData[2].toString(),
+                                      'Notified': false,
+                                      'Notified_location': false,
+                                      "Date_Of_Recommendation":
+                                          FieldValue.serverTimestamp(),
+                                    });
 
-                                  print("Recommendation 3 added");
+                                    print("Recommendation 3 added");
 
-                                  FirebaseFirestore.instance
-                                      .collection('History')
-                                      .doc()
-                                      .set({
-                                    'userId':
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                    'RestaurantId': responseData[0].toString(),
-                                    'Notified': false,
-                                    'Notified_location': false,
-                                    "Date_Of_Recommendation":
-                                        FieldValue.serverTimestamp(),
-                                  });
-                                  print("History 1 added");
-                                  FirebaseFirestore.instance
-                                      .collection('History')
-                                      .doc()
-                                      .set({
-                                    'userId':
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                    'RestaurantId': responseData[1].toString(),
-                                    'Notified': false,
-                                    'Notified_location': false,
-                                    "Date_Of_Recommendation":
-                                        FieldValue.serverTimestamp(),
-                                  });
-                                  print("History 2 added");
-                                  FirebaseFirestore.instance
-                                      .collection('History')
-                                      .doc()
-                                      .set({
-                                    'userId':
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                    'RestaurantId': responseData[2].toString(),
-                                    'Notified': false,
-                                    'Notified_location': false,
-                                    "Date_Of_Recommendation":
-                                        FieldValue.serverTimestamp(),
-                                  });
-                                  print("History 3 added");
-                                  CoolAlert.show(
-                                    context: context,
-                                    type: CoolAlertType.success,
-                                    text: 'Sign Up completed successfully!',
-                                  );
-                                  stopLoading();
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) => SignIn()),
-                                      (Route<dynamic> route) => false);
-                                } 
-                                 on FirebaseAuthException catch (error) {
-                                  stopLoading();
-                                  Navigator.of(context).pop();
-                                  String Error = "";
-                                  print("e ${error}");
-
-                                  if (error
-                                      .toString()
-                                      .contains("does not exist")) {
+                                    FirebaseFirestore.instance
+                                        .collection('History')
+                                        .doc()
+                                        .set({
+                                      'userId': FirebaseAuth
+                                          .instance.currentUser!.uid,
+                                      'RestaurantId':
+                                          responseData[0].toString(),
+                                      'Notified': false,
+                                      'Notified_location': false,
+                                      "Date_Of_Recommendation":
+                                          FieldValue.serverTimestamp(),
+                                    });
+                                    print("History 1 added");
+                                    FirebaseFirestore.instance
+                                        .collection('History')
+                                        .doc()
+                                        .set({
+                                      'userId': FirebaseAuth
+                                          .instance.currentUser!.uid,
+                                      'RestaurantId':
+                                          responseData[1].toString(),
+                                      'Notified': false,
+                                      'Notified_location': false,
+                                      "Date_Of_Recommendation":
+                                          FieldValue.serverTimestamp(),
+                                    });
+                                    print("History 2 added");
+                                    FirebaseFirestore.instance
+                                        .collection('History')
+                                        .doc()
+                                        .set({
+                                      'userId': FirebaseAuth
+                                          .instance.currentUser!.uid,
+                                      'RestaurantId':
+                                          responseData[2].toString(),
+                                      'Notified': false,
+                                      'Notified_location': false,
+                                      "Date_Of_Recommendation":
+                                          FieldValue.serverTimestamp(),
+                                    });
+                                    print("History 3 added");
                                     CoolAlert.show(
                                       context: context,
-                                      title: "No user correspond",
-                                      type: CoolAlertType.error,
-                                      text:
-                                          "User Not Exist! , Please Go to Sign Up Page",
-                                      confirmBtnColor: button_color,
+                                      type: CoolAlertType.success,
+                                      text: 'Sign Up completed successfully!',
                                     );
-                                  } else if (error.toString().contains(
-                                      "The sms verification code used to create the phone auth credential is invalid")) {
-                                    CoolAlert.show(
-                                      context: context,
-                                      title: "Wrong OTP",
-                                      type: CoolAlertType.error,
-                                      text: "Invalid verification code",
-                                      confirmBtnColor: button_color,
-                                    );
-                                    Error = "Code Error !";
-                                  } else if (error.code ==
-                                      'invalid-verification-code') {
-                                    CoolAlert.show(
-                                      context: context,
-                                      title: "Wrong OTP",
-                                      type: CoolAlertType.error,
-                                      text: "Invalid verification code",
-                                      confirmBtnColor: button_color,
-                                    );
-                                    Error = "Wrong OTP entered";
+                                    stopLoading();
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => SignIn()),
+                                        (Route<dynamic> route) => false);
+                                  } on FirebaseAuthException catch (error) {
+                                    stopLoading();
+                                    Navigator.of(context).pop();
+                                    String Error = "";
+                                    print("e ${error}");
+
+                                    if (error
+                                        .toString()
+                                        .contains("does not exist")) {
+                                      CoolAlert.show(
+                                        context: context,
+                                        title: "No user correspond",
+                                        type: CoolAlertType.error,
+                                        text:
+                                            "User Not Exist! , Please Go to Sign Up Page",
+                                        confirmBtnColor: button_color,
+                                      );
+                                    } else if (error.toString().contains(
+                                        "The sms verification code used to create the phone auth credential is invalid")) {
+                                      CoolAlert.show(
+                                        context: context,
+                                        title: "Wrong OTP",
+                                        type: CoolAlertType.error,
+                                        text: "Invalid verification code",
+                                        confirmBtnColor: button_color,
+                                      );
+                                      Error = "Code Error !";
+                                    } else if (error.code ==
+                                        'invalid-verification-code') {
+                                      CoolAlert.show(
+                                        context: context,
+                                        title: "Wrong OTP",
+                                        type: CoolAlertType.error,
+                                        text: "Invalid verification code",
+                                        confirmBtnColor: button_color,
+                                      );
+                                      Error = "Wrong OTP entered";
+                                    }
+                                    stopLoading();
+                                    print("ddd_222 ${error}");
                                   }
-                                  stopLoading();
-                                  print("ddd_222 ${error}");
-
-                                  // if (e.code == 'invalid-verification-code') {
-                                  //   CoolAlert.show(
-                                  //     context: context,
-                                  //     title: "",
-                                  //     type: CoolAlertType.error,
-                                  //     text: "Error",
-                                  //     confirmBtnColor: button_color,
-                                  //   );
-                                  // }
                                 }
-                              } 
-                              }else {
+                              } else {
+                                stopLoading();
+
                                 CoolAlert.show(
                                   context: context,
                                   title: "Empty OTP",
