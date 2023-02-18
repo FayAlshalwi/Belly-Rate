@@ -193,7 +193,7 @@ class _ContactUsState extends State<ContactUs> {
 
     return Padding(
       padding:
-          const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 8.0, right: 16.0),
+          const EdgeInsets.only(left: 16.0, bottom: 0.0, top: 8.0, right: 16.0),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -387,7 +387,7 @@ class _ContactUsState extends State<ContactUs> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: ourTextStyle(
-                                    color: Color(0xFF5a3769), fontSize: 16)),
+                                    color: Color(0xFF5a3769), fontSize: 16.5)),
                           ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.5,
@@ -396,20 +396,49 @@ class _ContactUsState extends State<ContactUs> {
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: ourTextStyle(
-                                    color: button_color,
-                                    fontSize: heightM * 0.4)),
+                                    color: Colors.grey,
+                                    fontSize: heightM * 0.45)),
                           ),
+                          if (ticket.status ==
+                                                    "In Progress")
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.5,
                             child: Text("${ticket.status}",
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: ourTextStyle(
-                                    color: button_color,
-                                    fontSize: heightM * 0.4)),
+                                    color: Color.fromARGB(255, 216, 107, 147),
+                                    fontSize: heightM * 0.45)),
                           ),
+                        if (ticket.status ==
+                                                    "Completed")
+                           SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: Text("${ticket.status}",
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: ourTextStyle(
+                                    color: Color.fromARGB(255, 216, 107, 147),
+                                    fontSize: heightM * 0.43)),
+                           ),
                         ],
                       ),
+                    ),
+                    if (ticket.status ==
+                                                    "In Progress")
+                    const Padding(
+                      padding: EdgeInsets.only(
+                          left: 16.0, bottom: 3.0, top: 3.0, right: 12.0),
+                      child: Icon(Icons.access_time,
+                          size: 32, color: Color.fromARGB(255, 216, 107, 147)),
+                    ),
+                    if (ticket.status ==
+                                                    "Completed")
+                                                    const Padding(
+                      padding: EdgeInsets.only(
+                          left: 16.0, bottom: 3.0, top: 3.0, right: 12.0),
+                      child: Icon(Icons.check_circle_outline_rounded,
+                          size: 32, color: Color.fromARGB(255, 216, 107, 147)),
                     ),
                   ],
                 ),
