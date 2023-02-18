@@ -493,15 +493,15 @@ class _ContactUsState extends State<ContactUs> {
                         final RegExp regex = RegExp(r"^[a-zA-Z0-9 \n.]+$");
                         if (value == null || value.isEmpty) {
                           invalidT = true;
-                          return "Title cant be empty";
+                          return "Please enter complaint title";
                         }
                         if (!regex.hasMatch(value)) {
                           invalidT = true;
-                          return "Special characters are not allowed";
+                          return "You cannot enter special characters !@#\%^&*()";
                         }
                         if (value.length < 3) {
                           invalidT = true;
-                          return "Minimum input length is 3 characters.";
+                          return "Please enter at least 3 characters";
                         }
                         if (value.length > 25) {
                           invalidT = true;
@@ -572,15 +572,15 @@ class _ContactUsState extends State<ContactUs> {
                             // RegExp regExp = new RegExp(pattern);
                             if (value == null || value.isEmpty) {
                               invalidD = true;
-                              return "Description cant be empty";
+                              return "Please enter your complaint";
                             }
                             if (!regex.hasMatch(value)) {
                               invalidD = true;
-                              return "Only letters and numbers are allowed";
+                              return "You cannot enter special characters !@#\%^&*()";
                             }
                             if (value.length < 3) {
                               invalidD = true;
-                              return "Minimum input length is 3 characters.";
+                              return "Please enter at least 3 characters";
                             }
                             if (value.length > 120) {
                               invalidD = true;
@@ -638,10 +638,11 @@ class _ContactUsState extends State<ContactUs> {
                           txt_color: Colors.white, txt_size: heightM * 0.6)),
 
                   onTap: (startLoading, stopLoading, btnState) async {
-                    startLoading();
+                    
                     if (btnState == ButtonState.idle) {
                       if (_formtext.currentState!.validate() &&
                           _formdescription.currentState!.validate()) {
+                            startLoading();
                         CoolAlert.show(
                             context: context,
                             type: CoolAlertType.confirm,
