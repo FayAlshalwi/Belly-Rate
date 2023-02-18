@@ -111,7 +111,7 @@ class _CategorySliderState extends State<CategorySlider> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        width: 111,
+        width: 95,
         child: Container(
           child: InkWell(
             onTap: () {
@@ -171,20 +171,24 @@ class _CategorySliderState extends State<CategorySlider> {
                           )));
             },
             child: Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Column(
+              padding: const EdgeInsets.all(0.0),
+              child: Container(
+                  child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  SizedBox(
+                    height: 7,
+                  ),
                   Image.asset(
                     categoryList[index].icon,
-                    height: 45,
-                    width: 45,
+                    height: 42,
+                    width: 42,
                   ),
                   Text(categoryList[index].name,
                       style: ourTextStyle(
                           txt_color: txt_color, txt_size: heightM * 0.6)),
                 ],
-              ),
+              )),
             ),
           ),
         ),

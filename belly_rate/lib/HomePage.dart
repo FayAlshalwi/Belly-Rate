@@ -442,7 +442,7 @@ class _HomePage extends State<HomePage> {
                   items: imageSliders,
                 )),
           SizedBox(
-            height: 10,
+            height: 12,
           ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
