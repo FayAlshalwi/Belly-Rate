@@ -241,9 +241,13 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                       children: [
                         InkWell(
                             onTap: () async {
-                              MapsLauncher.launchCoordinates(
-                                  double.parse(widget.restaurant.lat!),
-                                  double.parse(widget.restaurant.long!));
+
+                              openMap(widget.restaurant.location!, 
+                              widget.restaurant.id! );
+
+                              // MapsLauncher.launchCoordinates(
+                              //     double.parse(widget.restaurant.lat!),
+                              //     double.parse(widget.restaurant.long!));
                             },
                             child: const Icon(
                               Icons.location_on_outlined,
@@ -255,11 +259,14 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                         ),
                         InkWell(
                           onTap: () {
-                            MapsLauncher.launchCoordinates(
-                                double.parse(widget.restaurant.lat!),
-                                double.parse(widget.restaurant.long!));
+                             openMap(widget.restaurant.location!, 
+                              widget.restaurant.id! );
+                            // MapsLauncher.launchCoordinates(
+                            //     double.parse(widget.restaurant.lat!),
+                            //     double.parse(widget.restaurant.long!));
+
                           },
-                          child: Text("Open with Maps",
+                          child: Text("Open with Google Maps",
                               style: ourTextStyle(
                                   txt_color: Colors.grey,
                                   txt_size: heightM * 0.55)),
@@ -553,6 +560,34 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
       ),
     );
   }
+
+   Future<void> openMap(String RestaurantLocation , String RestaurantId )  async {
+
+    final _firestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+
+    print("inside open map");
+    print("11111111111111111111111111111111111111111");
+    print(RestaurantId);
+    print("11111111111111111111111111111111111111111");
+
+    final res = await _firestore
+      .collection('Restaurants')
+      .where("ID", isEqualTo: RestaurantId)
+      .get();
+
+    if (res.docs.isNotEmpty) {
+    String docid = res.docs[0].id;
+    print(docid);
+    var RestaurantLocation = res.docs[0]['location'];
+     print(RestaurantLocation);
+     
+     if (await canLaunch(RestaurantLocation) ){
+      await launch(RestaurantLocation);
+      } else {
+        throw 'Could not open the map.';
+         }}
+ }
 
   Future<void> launchPhoneDialer(String contactNumber) async {
     print(contactNumber);
