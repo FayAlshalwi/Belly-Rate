@@ -489,9 +489,10 @@ class _SignUpPageState extends State<SignUpPage> {
                             color: button_color,
                             borderRadius: 10,
                             onTap: (startLoading, stopLoading, btnState) async {
+                                if (_code != null && _code!.isNotEmpty) {
                               if (btnState == ButtonState.idle) {
                                 startLoading();
-                                try {
+                                 try {
                                   PhoneAuthCredential credential =
                                       PhoneAuthProvider.credential(
                                           verificationId: verificationId,
@@ -647,7 +648,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                       MaterialPageRoute(
                                           builder: (context) => SignIn()),
                                       (Route<dynamic> route) => false);
-                                } on FirebaseAuthException catch (error) {
+                                } 
+                                 on FirebaseAuthException catch (error) {
                                   stopLoading();
                                   Navigator.of(context).pop();
                                   String Error = "";
@@ -698,8 +700,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                   //   );
                                   // }
                                 }
-                              } else {
-                                stopLoading();
+                              } 
+                              }else {
                                 CoolAlert.show(
                                   context: context,
                                   title: "Empty OTP",
