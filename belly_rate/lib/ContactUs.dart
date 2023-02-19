@@ -478,7 +478,7 @@ class _ContactUsState extends State<ContactUs> {
               padding: const EdgeInsets.only(
                   left: 5.0, right: 5.0, top: 2.0, bottom: 1.0),
               child: Text(
-                "Kindly provide a detailed description of your problem, and our team will get back to you in as soon as possible.",
+                "Kindly provide a detailed description of your complaint, and our team will get back to you in as soon as possible.",
                 style: ourTextStyle2(
                     txt_size: 15, txt_color: Color.fromARGB(235, 0, 0, 0)),
               ),
@@ -550,7 +550,7 @@ class _ContactUsState extends State<ContactUs> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         contentPadding: EdgeInsets.only(bottom: 04, left: 0),
-                        hintText: "Enter issue title",
+                        hintText: "Enter complaint title",
                         hintStyle: TextStyle(
                             color: Color.fromRGBO(158, 158, 158, 1),
                             fontSize: 16),
@@ -564,7 +564,7 @@ class _ContactUsState extends State<ContactUs> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0, left: 8.0),
                 child: Text(
-                  "What is your issue?",
+                  "What is your complaint?",
                   textAlign: TextAlign.start,
                   style: ourTextStyle2(txt_color: txt_color, txt_size: 16),
                 ),
@@ -628,7 +628,7 @@ class _ContactUsState extends State<ContactUs> {
                             disabledBorder: InputBorder.none,
                             contentPadding:
                                 EdgeInsets.only(bottom: 04, left: 0),
-                            hintText: "Write your Problem here",
+                            hintText: "Write your complaint here",
                             hintStyle: TextStyle(
                                 color: Color.fromRGBO(158, 158, 158, 1),
                                 fontSize: 14),

@@ -529,9 +529,32 @@ class _contactUsMangerState extends State<ContactUsManger> {
           )),
     );
   }
+    Future<String> getusername(String userID ) async {
+    String name="";
+     try {
+    print('inside getusername');
+    final _firestore = FirebaseFirestore.instance;
+    final _firebaseAuth = FirebaseAuth.instance;
+
+    final res = await _firestore
+        .collection('Users')
+        .where("uid", isEqualTo: userID)
+        .get();
+
+         if (res.docs.isNotEmpty) {   
+          String name = res.docs[0]['name'];
+          print(name);
+            }   }
+
+        catch(e){
+        }
+
+    return name;
+  }
 
   Widget buildContainerCardView(TicketSupport ticket) {
     final double heightM = MediaQuery.of(context).size.height / 30;
+    String username = getusername(ticket.uid!).toString();
 
     return Padding(
       padding:
@@ -652,6 +675,8 @@ class _contactUsMangerState extends State<ContactUsManger> {
     );
   }
 
+
+
   Stream<List<TicketSupport>> getRequest() {
     return FirebaseFirestore.instance
         .collection('users_requests')
@@ -679,3 +704,5 @@ class _contactUsMangerState extends State<ContactUsManger> {
 
   Color mainColor() => const Color(0xFF5a3769);
 }
+
+
