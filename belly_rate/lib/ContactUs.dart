@@ -94,7 +94,7 @@ class _ContactUsState extends State<ContactUs> {
                         color: requestsIndex != 0
                             ? Color(0xFF5a3769)
                             : Colors.white,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                     ),
                   ),
@@ -121,7 +121,7 @@ class _ContactUsState extends State<ContactUs> {
                             ? Color(0xFF5a3769)
                             : Colors.white,
                         //Colors.orange,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                     ),
                   ),
@@ -394,21 +394,48 @@ class _ContactUsState extends State<ContactUs> {
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: ourTextStyle(
-                                    color: button_color,
+                                    color: Colors.grey,
                                     fontSize: heightM * 0.4)),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: Text("${ticket.status}",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: ourTextStyle(
-                                    color: button_color,
-                                    fontSize: heightM * 0.4)),
-                          ),
+                          if (ticket.status == "In Progress")
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: Text("${ticket.status}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: ourTextStyle(
+                                      color: Color.fromARGB(255, 216, 107, 147),
+                                      fontSize: heightM * 0.45)),
+                            ),
+                          if (ticket.status == "Completed")
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: Text("${ticket.status}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: ourTextStyle(
+                                      color: Color.fromARGB(255, 216, 107, 147),
+                                      fontSize: heightM * 0.43)),
+                            ),
                         ],
                       ),
                     ),
+                    if (ticket.status == "In Progress")
+                      const Padding(
+                        padding: EdgeInsets.only(
+                            left: 0.0, bottom: 3.0, top: 3.0, right: 0.0),
+                        child: Icon(Icons.access_time,
+                            size: 28,
+                            color: Color.fromARGB(255, 216, 107, 147)),
+                      ),
+                    if (ticket.status == "Completed")
+                      const Padding(
+                        padding: EdgeInsets.only(
+                            left: 0.0, bottom: 3.0, top: 3.0, right: 0.0),
+                        child: Icon(Icons.check_circle_outline_rounded,
+                            size: 28,
+                            color: Color.fromARGB(255, 216, 107, 147)),
+                      ),
                   ],
                 ),
               ),
@@ -436,7 +463,7 @@ class _ContactUsState extends State<ContactUs> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 0.0, right: 230.0, top: 0.0, bottom: 0.0),
+                  left: 0.0, right: 205.0, top: 0.0, bottom: 0.0),
               child: Text(
                 "New Complaint",
                 textAlign: TextAlign.start,
@@ -447,7 +474,7 @@ class _ContactUsState extends State<ContactUs> {
               padding: const EdgeInsets.only(
                   left: 5.0, right: 5.0, top: 2.0, bottom: 1.0),
               child: Text(
-                "Kindly provide a detailed description of your problem, and our team will get back to you in as soon as possible.",
+                "Kindly provide a detailed description of your complaint, and our team will get back to you in as soon as possible.",
                 style: ourTextStyle2(
                     txt_size: 15, txt_color: Color.fromARGB(235, 0, 0, 0)),
               ),
@@ -468,8 +495,11 @@ class _ContactUsState extends State<ContactUs> {
                 key: _formtext,
                 child: Container(
                   alignment: AlignmentDirectional.center,
+                  // width: 450,
                   height: 60,
+                  // margin: EdgeInsets.fromLTRB(23, 02, 10, 10),
                   margin: EdgeInsets.fromLTRB(2, 5, 5, 2),
+
                   padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -488,15 +518,15 @@ class _ContactUsState extends State<ContactUs> {
                         final RegExp regex = RegExp(r"^[a-zA-Z0-9 \n.]+$");
                         if (value == null || value.isEmpty) {
                           invalidT = true;
-                          return "Title cant be empty";
+                          return "Please enter complaint title";
                         }
                         if (!regex.hasMatch(value)) {
                           invalidT = true;
-                          return "Special characters are not allowed";
+                          return "You cannot enter special characters !@#\%^&*()";
                         }
                         if (value.length < 3) {
                           invalidT = true;
-                          return "Minimum input length is 3 characters.";
+                          return "Please enter at least 3 characters";
                         }
                         if (value.length > 25) {
                           invalidT = true;
@@ -516,7 +546,7 @@ class _ContactUsState extends State<ContactUs> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         contentPadding: EdgeInsets.only(bottom: 04, left: 0),
-                        hintText: "Enter issue title",
+                        hintText: "Enter complaint title",
                         hintStyle: TextStyle(
                             color: Color.fromRGBO(158, 158, 158, 1),
                             fontSize: 16),
@@ -530,7 +560,7 @@ class _ContactUsState extends State<ContactUs> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0, left: 8.0),
                 child: Text(
-                  "What is your issue?",
+                  "What is your complaint?",
                   textAlign: TextAlign.start,
                   style: ourTextStyle2(txt_color: txt_color, txt_size: 16),
                 ),
@@ -567,15 +597,15 @@ class _ContactUsState extends State<ContactUs> {
                             // RegExp regExp = new RegExp(pattern);
                             if (value == null || value.isEmpty) {
                               invalidD = true;
-                              return "Description cant be empty";
+                              return "Please enter your complaint";
                             }
                             if (!regex.hasMatch(value)) {
                               invalidD = true;
-                              return "Only letters and numbers are allowed";
+                              return "You cannot enter special characters !@#\%^&*()";
                             }
                             if (value.length < 3) {
                               invalidD = true;
-                              return "Minimum input length is 3 characters.";
+                              return "Please enter at least 3 characters";
                             }
                             if (value.length > 120) {
                               invalidD = true;
@@ -594,7 +624,7 @@ class _ContactUsState extends State<ContactUs> {
                             disabledBorder: InputBorder.none,
                             contentPadding:
                                 EdgeInsets.only(bottom: 04, left: 0),
-                            hintText: "Write your Problem here",
+                            hintText: "Write your complaint here",
                             hintStyle: TextStyle(
                                 color: Color.fromRGBO(158, 158, 158, 1),
                                 fontSize: 14),
@@ -616,7 +646,7 @@ class _ContactUsState extends State<ContactUs> {
                   height: heightM * 1.5,
                   elevation: 10.0,
                   color: button_color,
-                  borderRadius: 10,
+                  borderRadius: 5,
                   animate: true,
                   //color: Colors.green,
                   loader: Container(
@@ -633,10 +663,10 @@ class _ContactUsState extends State<ContactUs> {
                           txt_color: Colors.white, txt_size: heightM * 0.6)),
 
                   onTap: (startLoading, stopLoading, btnState) async {
-                    startLoading();
                     if (btnState == ButtonState.idle) {
                       if (_formtext.currentState!.validate() &&
                           _formdescription.currentState!.validate()) {
+                        startLoading();
                         CoolAlert.show(
                             context: context,
                             type: CoolAlertType.confirm,
@@ -651,7 +681,6 @@ class _ContactUsState extends State<ContactUs> {
                               Navigator.of(context).pop(true);
                             },
                             onConfirmBtnTap: () async {
-                              startLoading();
                               await addRequest();
 
                               textDescription.clear();

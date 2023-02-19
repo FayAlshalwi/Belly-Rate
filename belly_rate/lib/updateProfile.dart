@@ -27,7 +27,7 @@ class UpdateProfile extends StatefulWidget {
 
 class _UpdateProfile extends State<UpdateProfile> {
   TextEditingController phone = TextEditingController();
-  TextEditingController first_name = TextEditingController();
+  // TextEditingController first_name = TextEditingController();
   bool flag = false;
   File? image;
   @override
@@ -38,10 +38,11 @@ class _UpdateProfile extends State<UpdateProfile> {
     phone.text = "${widget.ourUser?.phone_number}";
   }
 
+  static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  static TextEditingController first_name = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-
     final Color txt_color = Color(0xFF5a3769);
     final Color button_color = Color.fromARGB(255, 216, 107, 147);
     final double heightM = MediaQuery.of(context).size.height / 30;

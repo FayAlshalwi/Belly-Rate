@@ -399,7 +399,7 @@ class _HomePage extends State<HomePage> {
           child: Column(
         children: [
           SizedBox(
-            height: 55,
+            height: 40,
           ),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
@@ -409,7 +409,7 @@ class _HomePage extends State<HomePage> {
                   "Recommended Restaurants",
                   style: TextStyle(
                       color: Color(0xFF5a3769),
-                      fontSize: 22,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold),
                 ),
               )),
@@ -452,7 +452,7 @@ class _HomePage extends State<HomePage> {
                   "Discover Restaurants",
                   style: TextStyle(
                       color: Color(0xFF5a3769),
-                      fontSize: 22,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold),
                 ),
               )),
@@ -465,7 +465,7 @@ class _HomePage extends State<HomePage> {
                   "Near you",
                   style: TextStyle(
                       color: Color(0xFF5a3769),
-                      fontSize: 22,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold),
                 ),
               )),

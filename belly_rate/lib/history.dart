@@ -68,7 +68,7 @@ class _history extends State<history> {
         title: const Text(
           "Recommendations History",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 20,
             color: const Color(0xFF5a3769),
             fontWeight: FontWeight.bold,
           ),
@@ -223,7 +223,7 @@ class _history extends State<history> {
                                 backgroundColor: Colors.transparent,
                                 builder: (context) => Container(
                                   height:
-                                      MediaQuery.of(context).size.height * 0.27,
+                                      MediaQuery.of(context).size.height * 0.3,
                                   decoration: const BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.only(
@@ -234,14 +234,14 @@ class _history extends State<history> {
                                   child: Column(
                                     children: [
                                       const SizedBox(
-                                        height: 15,
+                                        height: 30,
                                       ),
                                       const SizedBox(
                                         height: 30,
                                         child: Text(
                                           "Give a Rate",
                                           style: TextStyle(
-                                              fontSize: 25,
+                                              fontSize: 22,
                                               fontWeight: FontWeight.bold,
                                               color: Color(0xFF5a3769)),
                                         ),
@@ -258,7 +258,7 @@ class _history extends State<history> {
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: TextStyle(
-                                                          fontSize: 20,
+                                                          fontSize: 18,
 
                                                           // fontWeight: FontWeight.bold,
                                                           color: Color.fromARGB(
@@ -357,7 +357,7 @@ class _history extends State<history> {
                                                                           context)
                                                                       .size
                                                                       .height *
-                                                                  0.27,
+                                                                  0.3,
                                                               decoration:
                                                                   const BoxDecoration(
                                                                 color: Colors
@@ -376,7 +376,7 @@ class _history extends State<history> {
                                                               child: Column(
                                                                 children: [
                                                                   const SizedBox(
-                                                                    height: 28,
+                                                                    height: 30,
                                                                   ),
                                                                   const SizedBox(
                                                                     height: 50,
@@ -464,6 +464,7 @@ class _history extends State<history> {
 
                         if (item.rate != null)
                           MaterialButton(
+                            height: 30,
                             onPressed: () {
                               print("qqq");
                               final snackBar = SnackBar(
@@ -493,7 +494,7 @@ class _history extends State<history> {
                             textColor: Colors.white,
                             child: Icon(
                               Icons.star,
-                              size: 25,
+                              size: 20,
                             ),
                             padding: EdgeInsets.all(2),
                             shape: CircleBorder(),

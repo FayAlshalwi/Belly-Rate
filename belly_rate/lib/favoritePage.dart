@@ -65,7 +65,7 @@ class _Favorite extends State<Favorite> {
         title: const Text(
           "Favorite Restaurants",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 20,
             color: const Color(0xFF5a3769),
             fontWeight: FontWeight.bold,
           ),
@@ -164,7 +164,7 @@ class _Favorite extends State<Favorite> {
                   if (item.rate != null)
                     const Padding(
                       padding: EdgeInsets.only(
-                          left: 16.0, bottom: 3.0, top: 3.0, right: 12.0),
+                          left: 0.0, bottom: 0.0, top: 0.0, right: 12.0),
                       child: Icon(Icons.favorite_outline_rounded,
                           size: 25, color: Color.fromARGB(255, 216, 107, 147)),
                     ),

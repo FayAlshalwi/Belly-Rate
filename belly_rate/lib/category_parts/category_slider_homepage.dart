@@ -92,9 +92,9 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                   left: 0.0, bottom: 0.0, top: 0.0, right: 0.0),
                               child: Row(children: [
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(2, 2, 9, 2),
-                                  width: 70,
-                                  height: 70,
+                                  margin: EdgeInsets.fromLTRB(4, 2, 9, 2),
+                                  width: 60,
+                                  height: 60,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: Image.network(
@@ -111,7 +111,7 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                         child: Text("${item.name}",
                                             style: ourTextStyle(
                                                 txt_color: txt_color,
-                                                txt_size: heightM * 0.6))),
+                                                txt_size: heightM * 0.58))),
                                     Container(
                                         margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         child: Text("${item.category}",
@@ -135,14 +135,14 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                       left: 0.0,
                                       bottom: 0.0,
                                       top: 0.0,
-                                      right: 5.0),
+                                      right: 10.0),
                                   child: Container(
                                     // height: 27,
                                     width: item.far!.floor() < 10
-                                        ? 85
+                                        ? 75
                                         : item.far!.floor() > 10
-                                            ? 95
-                                            : 107,
+                                            ? 85
+                                            : 97,
                                     decoration: BoxDecoration(
                                         color:
                                             Color.fromARGB(244, 216, 107, 147),
@@ -157,7 +157,7 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                           child: Icon(
                                             Icons.location_on,
                                             color: Colors.white,
-                                            size: 20,
+                                            size: 16,
                                           ),
                                         ),
                                         Text(
@@ -166,7 +166,7 @@ class _RestaurantSliderState extends State<RestaurantSlider> {
                                             style: ourTextStyle(
                                                 txt_color: Color.fromARGB(
                                                     255, 255, 255, 255),
-                                                txt_size: heightM * 0.43))
+                                                txt_size: heightM * 0.4))
                                       ],
                                     )),
                                   ),

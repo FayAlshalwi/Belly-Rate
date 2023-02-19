@@ -67,7 +67,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
         titleTextStyle: const TextStyle(
           color: Color(0xFF5a3769),
           fontWeight: FontWeight.bold,
-          fontSize: 22,
+          fontSize: 20,
         ),
         actions: [
           IconButton(
@@ -89,7 +89,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
             },
             icon: Icon(
               Icons.info_outline_rounded,
-              color:  Color(0xFF5a3769),
+              color: Color(0xFF5a3769),
               size: 28,
             ),
           )
@@ -207,8 +207,6 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                   children: [
                     InkWell(
                         onTap: () {
-                          // print("no phone ${widget.restaurant.phoneNumber!.trim().toString().toLowerCase() == "No phone number"!.trim().toString().toLowerCase()}") ;
-                          // print("no phone ${widget.restaurant.phoneNumber}") ;
                           widget.restaurant.phoneNumber!
                                       .trim()
                                       .toString()
@@ -241,13 +239,8 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                       children: [
                         InkWell(
                             onTap: () async {
-
-                              openMap(widget.restaurant.location!, 
-                              widget.restaurant.id! );
-
-                              // MapsLauncher.launchCoordinates(
-                              //     double.parse(widget.restaurant.lat!),
-                              //     double.parse(widget.restaurant.long!));
+                              openMap(widget.restaurant.location!,
+                                  widget.restaurant.id!);
                             },
                             child: const Icon(
                               Icons.location_on_outlined,
@@ -259,12 +252,8 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                         ),
                         InkWell(
                           onTap: () {
-                             openMap(widget.restaurant.location!, 
-                              widget.restaurant.id! );
-                            // MapsLauncher.launchCoordinates(
-                            //     double.parse(widget.restaurant.lat!),
-                            //     double.parse(widget.restaurant.long!));
-
+                            openMap(widget.restaurant.location!,
+                                widget.restaurant.id!);
                           },
                           child: Text("Open with Google Maps",
                               style: ourTextStyle(
@@ -306,7 +295,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                               builder: (context) => Container(
                                 //change the height of the bottom sheet
                                 height:
-                                    MediaQuery.of(context).size.height * 0.27,
+                                    MediaQuery.of(context).size.height * 0.3,
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.only(
@@ -318,14 +307,14 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                 child: Column(
                                   children: [
                                     const SizedBox(
-                                      height: 35,
+                                      height: 25,
                                     ),
                                     const SizedBox(
                                       height: 30,
                                       child: Text(
                                         "Give a Rate",
                                         style: TextStyle(
-                                            fontSize: 25,
+                                            fontSize: 22,
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFF5a3769)),
                                       ),
@@ -341,7 +330,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                                     "How much do you rate ${widget.restaurant.name} restaurant?",
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                        fontSize: 20,
+                                                        fontSize: 18,
 
                                                         // fontWeight: FontWeight.bold,
                                                         color: Color.fromARGB(
@@ -429,7 +418,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                                           MediaQuery.of(context)
                                                                   .size
                                                                   .height *
-                                                              0.27,
+                                                              0.3,
                                                       decoration:
                                                           const BoxDecoration(
                                                         color: Colors.white,
@@ -446,7 +435,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                                       child: Column(
                                                         children: [
                                                           const SizedBox(
-                                                            height: 28,
+                                                            height: 35,
                                                           ),
                                                           const SizedBox(
                                                             height: 50,
@@ -561,10 +550,9 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
     );
   }
 
-   Future<void> openMap(String RestaurantLocation , String RestaurantId )  async {
-
+  Future<void> openMap(String RestaurantLocation, String RestaurantId) async {
     final _firestore = FirebaseFirestore.instance;
-  final _firebaseAuth = FirebaseAuth.instance;
+    final _firebaseAuth = FirebaseAuth.instance;
 
     print("inside open map");
     print("11111111111111111111111111111111111111111");
@@ -572,22 +560,23 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
     print("11111111111111111111111111111111111111111");
 
     final res = await _firestore
-      .collection('Restaurants')
-      .where("ID", isEqualTo: RestaurantId)
-      .get();
+        .collection('Restaurants')
+        .where("ID", isEqualTo: RestaurantId)
+        .get();
 
     if (res.docs.isNotEmpty) {
-    String docid = res.docs[0].id;
-    print(docid);
-    var RestaurantLocation = res.docs[0]['location'];
-     print(RestaurantLocation);
-     
-     if (await canLaunch(RestaurantLocation) ){
-      await launch(RestaurantLocation);
+      String docid = res.docs[0].id;
+      print(docid);
+      var RestaurantLocation = res.docs[0]['location'];
+      print(RestaurantLocation);
+
+      if (await canLaunch(RestaurantLocation)) {
+        await launch(RestaurantLocation);
       } else {
         throw 'Could not open the map.';
-         }}
- }
+      }
+    }
+  }
 
   Future<void> launchPhoneDialer(String contactNumber) async {
     print(contactNumber);

@@ -43,7 +43,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   // createNotification(
   //     "Delicious Italian food, just the way it should be!, Walton St.Scalini is a must.",
   //     '135062',
@@ -322,7 +322,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: MyApp._title,
         home: user?.uid == null
-            ? OnBoardingPage()
+            ? SignIn()
             : user?.uid == "lOz5BezciQUswmn3sO0nG9U7RjO2"
                 ? HomePageManger()
                 : HomePage());

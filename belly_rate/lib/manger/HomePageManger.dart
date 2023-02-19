@@ -66,7 +66,7 @@ class _HomePageManger extends State<HomePageManger> {
                         duration: Duration(seconds: 1),
                         curve: Curves.fastLinearToSlowEaseIn,
                         width: index == currentIndex
-                            ? displayOfWidth * .32
+                            ? displayOfWidth * .35
                             : displayOfWidth * .18,
                         alignment: Alignment.center,
                         child: AnimatedContainer(
@@ -75,7 +75,7 @@ class _HomePageManger extends State<HomePageManger> {
                           height:
                               index == currentIndex ? displayOfWidth * .12 : 0,
                           width:
-                              index == currentIndex ? displayOfWidth * .32 : 0,
+                              index == currentIndex ? displayOfWidth * .35 : 0,
                           decoration: BoxDecoration(
                             color: index == currentIndex
                                 ? Color(0xFFae96e82).withOpacity(.2)

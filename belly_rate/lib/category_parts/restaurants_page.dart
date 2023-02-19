@@ -58,7 +58,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
           titleTextStyle: TextStyle(
             color: const Color(0xFF5a3769),
             fontWeight: FontWeight.bold,
-            fontSize: 22,
+            fontSize: 20,
           ),
         ),
         body: Scrollbar(
@@ -110,7 +110,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                               Text("${item.name}",
                                   style: ourTextStyle(
                                       txt_color: Color(0xFF5a3769),
-                                      txt_size: heightM * 0.7)),
+                                      txt_size: heightM * 0.6)),
                               Text("${getBuildPriceAvg(item)}",
                                   style: ourTextStyle(
                                       txt_color: Colors.black,

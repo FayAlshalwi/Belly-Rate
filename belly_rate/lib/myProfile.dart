@@ -64,7 +64,7 @@ class _myProfile extends State<myProfile> {
         title: const Text(
           "My Profile",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 20,
             color: const Color(0xFF5a3769),
             fontWeight: FontWeight.bold,
           ),
