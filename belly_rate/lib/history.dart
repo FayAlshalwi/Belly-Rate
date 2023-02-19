@@ -99,7 +99,7 @@ class _history extends State<history> {
                 DateTime date = DateTime.fromMillisecondsSinceEpoch(
                     ((seconds * 1000).toInt()) + (nanoseconds ~/ 1000000));
 
-                String formattedDate = DateFormat('yyyy-MM-dd').format(date);
+                String formattedDate = DateFormat('dd-MM-yyy').format(date);
 
                 return Padding(
                   padding: const EdgeInsets.only(
