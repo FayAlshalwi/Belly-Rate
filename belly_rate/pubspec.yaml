@@ -62,6 +62,7 @@ dependencies:
   awesome_snackbar_content: ^0.1.0
   loading_btn: ^1.0.3
   introduction_screen: ^3.1.4
+  flutter_native_splash: ^2.2.16
   
 dev_dependencies:
   flutter_test:
@@ -89,6 +90,11 @@ dev_dependencies:
  
   
   firebase_auth: ^4.2.3
+
+flutter_native_splash:
+  image: "asset/BRLogo.png"
+  color: "#f9f9f9"
+ 
 
 flutter_icons:
   ios: true

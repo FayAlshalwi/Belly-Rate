@@ -322,7 +322,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: MyApp._title,
         home: user?.uid == null
-            ? OnBoardingPage()
+            ? SignIn()
             : user?.uid == "lOz5BezciQUswmn3sO0nG9U7RjO2"
                 ? HomePageManger()
                 : HomePage());
